@@ -1,0 +1,77 @@
+name: publish_docs
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+
+permissions:
+  contents: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Important: ensures tags are fetched
+
+      - name: Get last 2 tags in descending order
+        id: get_tags
+        run: |
+          # Ensure tags are up-to-date (especially if using shallow clones or older commits)
+          git fetch --tags
+
+          # Directly store last two tags into an array, sorted descending by version
+          tags_array=( $(git tag --list "v*" --sort=-version:refname | head -n 4) )
+
+          echo "Found tags (descending): ${tags_array[*]}"
+
+          # Iterate over the array
+          for tag in "${tags_array[@]}"; do
+            echo "Processing tag: $tag"
+          done
+
+          # Optionally set them as an output (joined by commas):
+          joined_tags="$(IFS=','; echo "${tags_array[*]}")"
+          echo "tags=$joined_tags" >> $GITHUB_OUTPUT
+
+      - name: Show usage of tags output
+        run: |
+          echo "Our last two tags are: ${{ steps.get_tags.outputs.tags }}"
+
+      - name: Configure Git Credentials
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: "3.x"
+
+      - name: Install mkdocs-material and mike
+        run: |
+          python -m pip install --upgrade pip
+          pip install mkdocs-material mike mkdocs-mermaid2-plugin
+
+      - name: Deploy docs for the last 2 tags
+        run: |
+          IFS=',' read -ra two_tags <<< "${{ steps.get_tags.outputs.tags }}"
+          latest="${two_tags[0]}"
+
+          for tag in "${two_tags[@]}"; do
+            echo "Deploying docs for $tag..."
+
+            # 1) Checkout the commit at this tag so that you get the correct doc files
+            git checkout "$tag"
+
+            # 2) Deploy docs from this snapshot
+            mike deploy "$tag" --push
+          done
+
+          # Make the first tag to be "latest," do:
+          mike set-default "$latest" --push
+          mike alias "$latest" latest --push
