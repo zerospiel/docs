@@ -1,0 +1,21 @@
+site_name: "My Docs"
+
+theme:
+  name: material
+  version:
+    provider: mike
+    default: latest
+
+extra:
+  version:
+    provider: mike
+    default: latest
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/PrashantR30/mike
+
+
+plugins:
+  - search
+  - mermaid2
+  - mike
