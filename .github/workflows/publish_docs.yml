@@ -25,7 +25,7 @@ jobs:
           git fetch --tags
 
           # Directly store last two tags into an array, sorted descending by version
-          tags_array=( $(git tag --list "v*" --sort=-version:refname | head -n 4) )
+          tags_array=( $(git tag --list "v*" --sort=-version:refname | head -n 1) )
 
           echo "Found tags (descending): ${tags_array[*]}"
 
