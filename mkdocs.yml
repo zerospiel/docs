@@ -34,14 +34,9 @@ extra_css:
 plugins:
   - search
 
-# nav:
-#   - Overview: README.md
-#   - section_1:
-#     - Page 1: section_1/page_1.md
-#     - Page 2: section_1/page_2.md
-#   - section_2:
-#     - Page 1: section_2/page_1.md
-#     - Page 2: section_2/page_2.md
+nav:
+  - Overview: guide_to_k0rdent_documentation.md
+
   
 
 
