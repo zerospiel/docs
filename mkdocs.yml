@@ -37,6 +37,9 @@ plugins:
 nav:
   - k0rdent: index.md
   - Guide to k0rdent documentation: guide_to_k0rdent_documentation.md
+  - Why k0rdent?: why_k0rdent.md
+  - k0rdent architecture: k0rdent_architecture.md
+  
 
   
 
