@@ -1,4 +1,4 @@
-site_name: Documentation
+esite_name: Documentation
 site_description: Documentation for k0rdent.
 site_author: Mirantis, Inc.
 
@@ -35,9 +35,9 @@ plugins:
   - search
 
 nav:
-  - k0rdent: index.md
-  - Guide to k0rdent:
-    - Guide to k0rdent documentation: guide_to_k0rdent_documentation.md
+  - Welcome to the k0rdent docs: index.md
+  - Guide to k0rdent documentation: guide_to_k0rdent_documentation.md
+  - k0rdent concepts:
     - Why k0rdent?: why_k0rdent.md
     - k0rdent architecture: k0rdent_architecture.md
   - QuickStarts and Tutorials:
@@ -45,7 +45,6 @@ nav:
     - QuickStart 1 - k0rdent pre-requisites: quickstart_1_k0rdent_prerequisites.md
     - QuickStart 2 - AWS infrastructure setup: quickstart_2_aws_infra_setup.md
     - QuickStart 3 - Deploy managed clusters on AWS: quickstart_3_deploy_managed_cluster_aws.md 
-  
 
 markdown_extensions:
   - pymdownx.highlight: {}
