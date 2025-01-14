@@ -43,11 +43,9 @@ nav:
   - QuickStarts and Tutorials:
     - Guide to Quickstarts and Tutorials: guide_to_quickstarts_and_tutorials.md
     - QuickStart 1 - k0rdent pre-requisites: quickstart_1_k0rdent_prerequisites.md
-    - QuickStart 2 - AWS infrastructure setup: quickstart_2_aws_infra_setup.md  
+    - QuickStart 2 - AWS infrastructure setup: quickstart_2_aws_infra_setup.md
+    - QuickStart 3 - Deploy managed clusters on AWS: quickstart_3_deploy_managed_cluster_aws.md 
   
-
-  
-
 
 markdown_extensions:
   - pymdownx.highlight: {}

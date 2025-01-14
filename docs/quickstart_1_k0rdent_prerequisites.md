@@ -29,7 +29,7 @@ sudo sh get-docker.sh
 
 ## Install kubectl
 
-The script will need the Kubernetes command line client so let’s get that installed next. You can find the full instructions [here](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/), but assuming you’re on an x86 machine, the basic instructions are:
+Our scripts will need the Kubernetes command line client. Full instructions for installing ```kubectl``` are [here](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/), but assuming you’re on an x86 machine, the basic instructions are:
 
 ```shell
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
@@ -38,7 +38,7 @@ sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
 ## Install clusterawsadm
 
-To simplify dealing with AWS, you’ll need the clusterawsadm tool. You can find all of the releases here, but assuming you’re working with Ubuntu on x86 hardware, it would be:
+k0rdent uses Cluster API (CAPI) to marshal clouds and infrastructures. For AWS, this means using the components from the Cluster API Provider AWS (CAPA) project. This QuickStart leverages ```clusterawsadm```, a CLI tool created by CAPA project that helps with AWS-specific tasks like IAM role, policy, and credential configuration. To install ```clusterawsadm``` on Ubuntu on x86 hardware:
 
 ```shell
 curl -LO https://github.com/kubernetes-sigs/cluster-api-provider-aws/releases/download/v2.7.1/clusterawsadm-linux-amd64
@@ -47,44 +47,42 @@ sudo install -o root -g root -m 0755 clusterawsadm-linux-amd64 /usr/local/bin/cl
 
 ## Install jq
 
-You’ll need the jq utility to monitor the installation, so let’s install that now:
+You’ll need the ```jq``` utility to process JSON from kubectl. Among other things, this helps you monitor steps in the installation process:
 
 ```shell
 sudo apt install jq
 ```
 
 ## Clone the Getting Started repo
-All of the scripts you’ll need to get started are in the [Getting Started repo](ttps://github.com/Mirantis/2a-demos) at https://github.com/Mirantis/2a-demos so let’s go ahead and clone that repo:
+All the scripts required for our QuickStart and Tutorials are in the [Getting Started repo](ttps://github.com/Mirantis/2a-demos) at https://github.com/Mirantis/2a-demos. Let's clone that repo:
 
 ```shell
 git clone https://github.com/Mirantis/2a-demos
 cd 2a-demos
 ```
 
-Now we’re ready to get started.
-
 # Create the management cluster
 
-Now we’re ready to create the k0rdent management cluster so we have somewhere to install the k0rdent components. Fortunately, the makefile takes care of that for you. Because we’re going to need to access Docker as root, let’s go ahead and change over to root:
+Now we’re ready to create the k0rdent management cluster. The makefile (in 2a-demos) does the work. Because we’re going to need to access Docker as root, let’s go ahead and change over to root:
 
 ```shell
 sudo su
 ```
 
-Now go ahead and bootstrap the management cluster:
+Now go ahead and bootstrap the management cluster using KinD:
 
 ```shell
 make bootstrap-kind-cluster
 ```
 
-If you want to specify a particular name for this cluster, you can specify the `KIND_CLUSTER_NAME` environment variable, as in:
+If you want to specify a particular name for this cluster, you can include it in an environment variable called `KIND_CLUSTER_NAME`:
 
 ```shell
 export KIND_CLUSTER_NAME=k0rdentdemo
 sudo make bootstrap-kind-cluster
 ```
 
-This command also sets up your `KUBECONFIG` and makes sure kubectl is pointing to the proper context, as you can see from the output:
+This command also sets up your `KUBECONFIG` and makes sure kubectl is pointing to the proper context:
 
 ```shell
 No kind clusters found.
@@ -102,7 +100,7 @@ Have a question, bug, or feature request? Let us know! https://kind.sigs.k8s.io/
 Switched to context "kind-hmc-management-local".
 ```
 
-You can see that everything is in place:
+Once you see this output, you can confirm the cluster is running by issuing a kubectl command:
 
 ```shell
 kubectl get pods --all-namespaces
@@ -164,5 +162,5 @@ Now add the Helm charts with custom Cluster and Service Templates:
 make push-helm-charts
 ```
 
-Now all the pre-requisites are in place, we can move on to setting up to [deploy our managed cluster on AWS](quickstart_2_aws_infra_setup.md).
+Now all the pre-requisites are in place, we can move on to setting up to [deploy managed clusters on AWS](quickstart_2_aws_infra_setup.md).
 
