@@ -1,42 +1,52 @@
-# QuickStart
+# Guide to QuickStarts and Tutorials
 
-## Installing and setting up k0rdent
+The following is a recipe for quickly installing k0rdent on a small laptop Kubernetes cluster and experiencing how it works. Emphasis is on quick and simple, not production-ready. Setting up k0rdent for production is detailed in the [Administrator Guide]().
 
-The following is a recipe for installing k0rdent and experiencing how it works. Emphasis is on quick and simple, not production-ready. If you are looking for best-practices used in creating a production-grade installation of k0rdent, please see the [Administrator Guide]().
+**Limitations and constraints** &mdash; our Quickstart and subsequent Tutorials assume:
 
-Getting k0rdent ready begins with a few steps:
+* You have access to a Linux laptop or VM running recent Ubuntu or another Debian distribution.
+* You have administrative-level access to an Amazon Web Services account &mdash; Our QuickStart setup will use Amazon Web Services as target infrastructure and create [k0s Kubernetes](https://k0sproject.io) clusters on AWS EC2 virtual machines, and subsequent Tutorials will re-use this setup.
 
-1. Setting up laptop pre-requisites
-2. Creating a management cluster &mdash; the QuickStart using Kubernetes-in-Docker (KinD) for this
-3. Installing k0rdent and necessary providers on the management cluster
+**Coming soon** &mdash; QuickStarts and Tutorials for other Kubernetes distros, clouds, and environments k0rdent supports, including:
 
-k0rdent uses ClusterAPI (CAPI) to manage infrastructure and clusters. For our QuickStart and the tutorials that follow, we're providing recipe steps and make-based automation for setting up k0rdent to deploy and manage [k0s Kubernetes](https://k0sproject.io) clusters on AWS, Azure, and vSphere virtual machines.
+* **AWS hosted** &mdash; k0s Kubernetes on AWS virtual machines (this QuickStart)
+* **AWS EKS managed** &mdash; Amazon Elastic Kubernetes Service 
+* **Azure hosted** &mdash; k0s Kubernetes on Azure virtual machines
+* **Azure AKS managed** &mdash; Azure Kubernetes Service
+* **vSphere hosted** &mdash; k0s Kubernetes on vSphere virtual machines
+* **OpenStack hosted** &mdash; k0s Kubernetes on OpenStack virtual machines
 
-Once initial steps are complete, we'll show how to add credentials you'll be able to deploy a non-production hosted cluster on AWS EC2. We will be adding QuickStart routes for Amazon EKS (that is, the Kubernetes target cluster is Amazon Elastic Kubernetes Service-flavored), Azure hosted (i.e., k0s Kubernetes on Azure VMs), Azure AKS (i.e., Azure Kubernetes Service-flavored target cluster), OpenStack hosted, VMware hosted, and other variants, very soon.
+## QuickStart
+
+Our QuickStart has three parts:
+
+* [QuickStart 1: k0rdent prerequisites](quickstart_1_k0rdent_prerequisites.md) &mdash; Here, we install pre-requisite applications, create a small laptop Kubernetes management cluster with KinD, clone the Getting Started repository and install it in the management cluster, and install k0rdent itself.
+* [QuickStart 2: AWS infrastructure setup](quickstart_2_aws_infra_setup.md) &mdash; Here, we set up the AWS roles, policies, users, and credentials k0rdent and and CAPA (ClusterAPI for AWS) need.
+* [QuickStart 3: Deploy a managed cluster on AWS](quickstart_3_deploy_managed_cluster_aws.md) &mdash; Here, we deploy your first clusters on AWS. We'll actually be deploying two small clusters to start, so that in the tutorials, below, we can demonstrate how k0rdent can perform multi-cluster operations. In fact, k0rdent can, in principle, enable control of dozens, hundreds, or thousands of clusters, distributed across multiple clouds and infrastructures.
 
 ## Tutorials
 
-Once you've completed setup and deployed a single cluster on AWS, additional tutorials are provided to walk you through important phases of using k0rdent, using AWS as target infrastructure. These include:
+Once you've completed the QuickStart and deployed our first clusters on AWS, we re-use the same setup in _additional Tutorials_ that walk you through important workflow steps for using k0rdent. These include:
 
-* Upgrade a Single Standalone Cluster (i.e., the AWS hosted cluster you just deployed)
-* Install a ServiceTemplate into a single cluster (adding services to the cluster to create a more complete platform)
-* Install a ServiceTemplate into multiple clusters (demonstrating k0rdent's ability to help you instantiate platforms at scale)
+* Upgrade a Single Standalone Cluster (i.e., apply upgrades to the AWS hosted cluster you just deployed)
+* Install a ServiceTemplate into a single cluster (add services to the cluster to create a more complete platform)
+* Install a ServiceTemplate into multiple clusters (leverage k0rdent to instantiate standardized platforms at scale)
 
-The above QuickStart and Tutorials focus on serving the needs of Platform Architects and Platform Engineering teams. They'll give you a feel of using k0rdent from first principles to define and instantiate Internal Development Platforms (IDPs) on clouds and infrastructure(s). 
+Initial Tutorials focus on serving the needs of Platform Architects and Platform Engineering teams. They'll give you a feel of using k0rdent from first principles to define and instantiate Internal Development Platforms (IDPs) on clouds and infrastructure(s). 
 
 ## k0rdent workflows
 
-Large organizations also need means of working at scale. For example, Platform Architects may use k0rdent to define platform templates, whereas Platform Leads and others will consume these templates to create and lifecycle manage platforms for their own teams and stakeholders.
+Large organizations also need means of working safely at scale &mdash; sharing innovative methods along 'golden paths,' enabling far-flung operations, keeping things simple and robust for innovation consumers (i.e., hiding complexity), and ensuring compliance, security, and standards. k0rdent is being engineered to enable at-scale operations much simpler. For example, Platform Architects can use k0rdent to define platform templates and approve these for use by others with conditional safeguards. Platform Leads and other authorized users can consume these templates (within constraints established by the Platform Architects) to create and lifecycle manage platforms for their own teams and stakeholders.
 
 Two tutorials demonstrate aspects of how k0rdent enables sharing for Platform Architects:
 
-* Approve a ClusterTemplate & InfraCredentials for a separate namespace (i.e., how to safely share a cluster template with a Platform Lead, while constraining how it can be used)
+* Approve a ClusterTemplate & InfraCredentials for a separate namespace (i.e., safely share a cluster template _and credentials enabling its use_ without making the template modifiable or the relevant credentials readable)
 * Approve a ServiceTemplate for a separate namespace (i.e., safely share a service template with others, while constraining how it can be used)
 
 Finally, two companion tutorials demonstrate how shared templates can be consumed (e.g., by Platform Leads) within appropriate guardrails.
 
-* Use an approved ClusterTemplate in a separate namespace
-* Use an approved ServiceTemplate in a separate namespace
+* Use an approved ClusterTemplate in a separate namespace (e.g., to instantiate a cluster for your team)
+* Use an approved ServiceTemplate in a separate namespace (e.g., to install services on such a cluster in a constrained way)
 
 Ready? [Let's discover how to use k0rdent!]()
 
