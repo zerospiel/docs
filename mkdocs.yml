@@ -36,10 +36,14 @@ plugins:
 
 nav:
   - k0rdent: index.md
-  - Guide to k0rdent documentation: guide_to_k0rdent_documentation.md
-  - Why k0rdent?: why_k0rdent.md
-  - k0rdent architecture: k0rdent_architecture.md
-  - Guide to Quickstarts and Tutorials: guide_to_quickstarts_and_tutorials.md
+  - Guide to k0rdent:
+    - Guide to k0rdent documentation: guide_to_k0rdent_documentation.md
+    - Why k0rdent?: why_k0rdent.md
+    - k0rdent architecture: k0rdent_architecture.md
+  - QuickStarts and Tutorials:
+    - Guide to Quickstarts and Tutorials: guide_to_quickstarts_and_tutorials.md
+    - QuickStart 1 - k0rdent pre-requisites: quickstart_1_k0rdent_prerequisites.md
+    - QuickStart 2 - AWS infrastructure setup: quickstart_2_aws_infra_setup.md  
   
 
   
