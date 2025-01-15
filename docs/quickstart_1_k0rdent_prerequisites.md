@@ -29,7 +29,7 @@ sudo sh get-docker.sh
 
 ## Install kubectl
 
-Our scripts will need the Kubernetes command line client. Full instructions for installing ```kubectl``` are [here](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/), but assuming you’re on an x86 machine, the basic instructions are:
+Our scripts will need the Kubernetes command line client. Full instructions for installing `kubectl` are [here](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/), but assuming you’re on an x86 machine, the basic instructions are:
 
 ```shell
 curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
@@ -38,7 +38,7 @@ sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
 
 ## Install clusterawsadm
 
-k0rdent uses Cluster API (CAPI) to marshal clouds and infrastructures. For AWS, this means using the components from the Cluster API Provider AWS (CAPA) project. This QuickStart leverages ```clusterawsadm```, a CLI tool created by CAPA project that helps with AWS-specific tasks like IAM role, policy, and credential configuration. To install ```clusterawsadm``` on Ubuntu on x86 hardware:
+k0rdent uses Cluster API (CAPI) to marshal clouds and infrastructures. For AWS, this means using the components from the Cluster API Provider AWS (CAPA) project. This QuickStart leverages `clusterawsadm`, a CLI tool created by CAPA project that helps with AWS-specific tasks like IAM role, policy, and credential configuration. To install ```clusterawsadm``` on Ubuntu on x86 hardware:
 
 ```shell
 curl -LO https://github.com/kubernetes-sigs/cluster-api-provider-aws/releases/download/v2.7.1/clusterawsadm-linux-amd64
@@ -47,18 +47,18 @@ sudo install -o root -g root -m 0755 clusterawsadm-linux-amd64 /usr/local/bin/cl
 
 ## Install jq
 
-You’ll need the ```jq``` utility to process JSON from kubectl. Among other things, this helps you monitor steps in the installation process:
+You’ll need the `jq` utility to process JSON from kubectl. Among other things, this helps you monitor steps in the installation process:
 
 ```shell
 sudo apt install jq
 ```
 
 ## Clone the Getting Started repo
-All the scripts required for our QuickStart and Tutorials are in the [Getting Started repo](ttps://github.com/Mirantis/2a-demos) at https://github.com/Mirantis/2a-demos. Let's clone that repo:
+All the scripts required for our QuickStart and Tutorials are in the [Getting Started repo](https://github.com/k0rdent/demos) at https://github.com/k0rdent/demos. Let's clone that repo:
 
 ```shell
-git clone https://github.com/Mirantis/2a-demos
-cd 2a-demos
+git clone https://github.com/k0rdent/demos
+cd demos
 ```
 
 # Create the management cluster

@@ -36,13 +36,17 @@ spec:
 
 As you can see, the template specifies what you need to deploy an app into the Kubernetes cluster: Helm chart information. Also, we’ve got the ServiceTemplateChain, which is similar to the ClusterTemplateChain in that it will specify upgrades (when appropriate).
 
+## Install the ServiceTemplate
+
 As before, we’ll start by installing the template into the management cluster so that k0rdent can use it to install to any of the managed clusters:
 
 ```shell
 make apply-servicetemplate-demo-ingress-nginx-4.11.0
 ```
 
-Then we’ll apply the ServiceTemplate to the aws-test2 cluster by referencing it in a YAML file:
+## Apply the ServiceTemplate
+
+Then we’ll apply the ServiceTemplate to the aws-test2 cluster by referencing it in the cluster's `ManagedCluster` YAML file:
 
 ```yaml
 apiVersion: hmc.mirantis.com/v1alpha1
@@ -66,21 +70,33 @@ spec:
     - template: demo-ingress-nginx-4.11.0
       name: ingress-nginx
       namespace: ingress-nginx
+```
 
+## Examine the template placeholders
 
-Notice that there are several placeholders in this template, in the form of ${PLACEHOLDERNAME}. These placeholders are what let you easily use these ServiceTemplates in different contexts.
-Otherwise, notice that we’re specifying an entire cluster. Yes, we’re just altering the existing cluster, but as with the upgrade task, we’re counting on k0rdent to reconcile the difference between the current state of the cluster and the desired state. And of course those differences include the addition of services, which references the ServiceTemplate and explains where it should go.
-Let’s go ahead and apply it to the management cluster:
+Notice that there are several placeholders in this template, in the form of ${PLACEHOLDERNAME}. k0rdent's template system propagates configuration specifics to populate templates correctly in context &mdash; eliminating manual changes, empowering reuse while preventing template proliferation, and helping you maintain 'single sources of truth'.
+
+For example, note that we're specifying an entire cluster in this `ManagedCluster' file. When we apply this file, we’re counting on k0rdent to reconcile the difference(s) between the current state of the cluster and the desired state. Of course, these differences include the fact that we're adding services, so our new `ManagedCluster` config references the ServiceTemplate for the service we're adding (NGINX) and states the namespace NGINX should be installed in.
+
+## Apply the ServiceTemplate via the ManagedCluster
+
+Let’s go ahead and apply this adjusted `ManagedCluster` to install it in the management cluster and install the service in the selected target cluster:
+
+```shell
 make apply-managed-cluster-aws-test2-0.0.1-ingress
-
+```
 
 You can watch for it to be installed:
+
+```shell
 watch KUBECONFIG="kubeconfigs/hmc-system-aws-test2.kubeconfig" PATH=$PATH:./bin kubectl get pods -n ingress-nginx
+```
 
 When it’s running, you’ll see the pod:
 
+```shell
 NAME                                        READY   STATUS    RESTARTS   AGE
 ingress-nginx-controller-86bd747cf9-dxbgq   1/1     Running   0          55s
+```
 
-
-This technique becomes even more powerful when you want to install into multiple clusters.
+This technique becomes even more powerful when you want to [install new services into multiple clusters](tutorial_3_install_service_template_into_multiple_clusters.md).
