@@ -1,4 +1,4 @@
-# k0rdent
+# Welcome to the k0rdent docs
 
 ## Introduction
 

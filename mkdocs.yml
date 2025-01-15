@@ -44,7 +44,11 @@ nav:
     - Guide to Quickstarts and Tutorials: guide_to_quickstarts_and_tutorials.md
     - QuickStart 1 - k0rdent pre-requisites: quickstart_1_k0rdent_prerequisites.md
     - QuickStart 2 - AWS infrastructure setup: quickstart_2_aws_infra_setup.md
-    - QuickStart 3 - Deploy managed clusters on AWS: quickstart_3_deploy_managed_cluster_aws.md 
+    - QuickStart 3 - Deploy managed clusters on AWS: quickstart_3_deploy_managed_cluster_aws.md
+    - Tutorial 1 - Upgrade a single cluster: tutorial_1_upgrade_single_cluster.md
+    - Tutorial 2 - Install a ServiceTemplate into a single cluster: tutorial_2_install_service_template_single_cluster.md
+    - Tutorial 3 - Install a ServiceTemplate into multiple clusters: tutorial_3_install_service_template_into_multiple_clusters.md
+
 
 
 
