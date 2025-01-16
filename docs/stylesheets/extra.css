@@ -8,6 +8,16 @@
   --md-footer-bg-color:         #3d90ce;
 }
 
+.md-header {
+  background-color: #526cfe;
+}
+
+.md-clipboard {
+  display: none;
+}
+
+
+
 .md-version__list {
   overflow: auto;
 }
