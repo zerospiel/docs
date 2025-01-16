@@ -51,9 +51,6 @@ nav:
 
 
 
-
-
-
 markdown_extensions:
   - pymdownx.highlight: {}
   - pymdownx.superfences: {}
