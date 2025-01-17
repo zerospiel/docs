@@ -108,4 +108,4 @@ KUBECONFIG="kubeconfigs/hmc-system-aws-test1.kubeconfig" PATH=$PATH:./bin kubect
 
 k0rdent not only lets you perform upgrades in a declarative way, but via ClusterTemplateChains, implements guardrail mechanisms that users can be made aware of available upgrades, and ensure that upgrades are processed safely, in proper order. k0s cluster rolling upgrades are efficient and avoid workload impacts.
 
-In [Tutorial 2 - Install a ServiceTemplate into a cluster](tutorial_2_install_service_template_into_single_cluster.md) we'll begin exploring ServiceTemplates &mdash; and see how services can be orchestrated onto clusters, creating complete platforms.
+In [Tutorial 2 - Install a ServiceTemplate into a cluster](tutorial_2_install_service_template_single_cluster.md) we'll begin exploring ServiceTemplates &mdash; and see how services can be orchestrated onto clusters, creating complete platforms.
