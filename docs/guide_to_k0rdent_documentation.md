@@ -12,8 +12,8 @@ k0rdent’s documentation has five main parts:
      * [**QuickStart 1 - k0rdent pre-requisites**](quickstart_1_k0rdent_prerequisites.md) Installation basics
      * [**QuickStart 2 - AWS infrastructure setup**](quickstart_1_k0rdent_prerequisites.md) Setting up an AWS test environment for k0rdent
      * [**QuickStart 3 - Deploy managed clusters on AWS**](quickstart_1_k0rdent_prerequisites.md) Deploying with ClusterTemplates and ManagedCluster objects
-     * [**Tutorial 1 - Upgrade a Single Standalone Cluster**](tutorial_1_upgrade_single_standalone_cluster.md)
-     * [**Tutorial 2 - Install a ServiceTemplate into a single standalone cluster**](tutorial_2_install_service_template_into_single_standalone_cluster.md)
+     * [**Tutorial 1 - Upgrade a Single Standalone Cluster**](tutorial_1_upgrade_single_cluster.md)
+     * [**Tutorial 2 - Install a ServiceTemplate into a single standalone cluster**](tutorial_2_install_service_template_single_cluster.md)
      * [**Tutorial 3 - Install a ServiceTemplate into multiple clusters**](tutorial_3_install_service_template_into_multiple_clusters.md)
      * [**Tutorial 4 - Approve a ClusterTemplate & InfraCredentials for a separate namespace**]()
      * [**Tutorial 5 - Approve a ServiceTemplate for a separate namespace**]()

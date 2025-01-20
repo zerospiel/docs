@@ -4,7 +4,7 @@ site_author: Mirantis, Inc.
 
 docs_dir: docs/
 repo_name: GitHub
-repo_url: https://..
+repo_url: https://github.com/k0rdent/kcm
 copyright:
   Copyright &copy; 2025 The k0rdent authors | Documentation distributed under <a href="https://creativecommons.org/licenses/by/4.0/legalcode.txt">CC-BY-4.0</a>.
 theme:
@@ -40,17 +40,15 @@ nav:
   - k0rdent concepts:
     - Why k0rdent?: why_k0rdent.md
     - k0rdent architecture: k0rdent_architecture.md
-  - QuickStarts and Tutorials:
+  - QuickStart:
     - Guide to Quickstarts and Tutorials: guide_to_quickstarts_and_tutorials.md
-    - QuickStart 1 - k0rdent pre-requisites: quickstart_1_k0rdent_prerequisites.md
-    - QuickStart 2 - AWS infrastructure setup: quickstart_2_aws_infra_setup.md
-    - QuickStart 3 - Deploy managed clusters on AWS: quickstart_3_deploy_managed_cluster_aws.md
-    - Tutorial 1 - Upgrade a single cluster: tutorial_1_upgrade_single_cluster.md
-    - Tutorial 2 - Install a ServiceTemplate into a single cluster: tutorial_2_install_service_template_single_cluster.md
-    - Tutorial 3 - Install a ServiceTemplate into multiple clusters: tutorial_3_install_service_template_into_multiple_clusters.md
-
-
-
+    - k0rdent pre-requisites: quickstart_1_k0rdent_prerequisites.md
+    - AWS infrastructure setup: quickstart_2_aws_infra_setup.md
+    - Deploy managed clusters on AWS: quickstart_3_deploy_managed_cluster_aws.md
+  - Tutorials:
+    - Upgrade a single cluster: tutorial_1_upgrade_single_cluster.md
+    - Install a ServiceTemplate into a single cluster: tutorial_2_install_service_template_single_cluster.md
+    - Install a ServiceTemplate into multiple clusters: tutorial_3_install_service_template_into_multiple_clusters.md
 
 
 
@@ -70,10 +68,24 @@ markdown_extensions:
   - def_list
 
 extra:
+  k8s_version: !!python/object/apply:os.getenv ["KUBERNETES_VERSION"]
   generator: false
-
-extra:
-  generator: false
+  social:
+    - icon: fontawesome/brands/github
+      link: https://github.com/k0sproject/k0s
+      name: k0s on GitHub
+    - icon: fontawesome/brands/x-twitter
+      link: https://x.com/k0sproject
+      name: k0s on X
+    - icon: fontawesome/brands/medium
+      link: https://medium.com/k0sproject
+      name: k0s on Medium
+    - icon: fontawesome/brands/slack
+      link: https://kubernetes.slack.com/archives/C07VAPJUECS
+      name: k0s on the k8s slack
+    - icon: fontawesome/solid/link
+      link: https://k0sproject.io/
+      name: k0s Website
   version:
     provider: mike
-    default: latest
+    default: stable
