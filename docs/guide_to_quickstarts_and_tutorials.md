@@ -28,8 +28,8 @@ Our QuickStart has three parts:
 
 Once you've completed the QuickStart and deployed your first clusters on AWS, we re-use the same setup in _additional Tutorials_ that walk you through important workflow steps for using k0rdent. These include:
 
-* [Tutorial 1 - Upgrade a Single Standalone Cluster](tutorial_1_upgrade_single_standalone_cluster.md) &mdash; Apply a rolling upgrade to one of your newly-deployed clusters
-* [Tutorial 2 - Install a ServiceTemplate into a single standalone cluster](tutorial_2_install_service_template_into_single_standalone_cluster.md) &mdash; Add services to a cluster to create a more complete platform
+* [Tutorial 1 - Upgrade a Single Standalone Cluster](tutorial_1_upgrade_single_cluster.md) &mdash; Apply a rolling upgrade to one of your newly-deployed clusters
+* [Tutorial 2 - Install a ServiceTemplate into a single standalone cluster](tutorial_2_install_service_template_single_cluster.md) &mdash; Add services to a cluster to create a more complete platform
 * [Tutorial 3 - Install a ServiceTemplate into multiple clusters](tutorial_3_install_service_template_into_multiple_clusters.md) &mdash; Leverage k0rdent to instantiate standardized platforms at scale
 
 Initial Tutorials focus on serving the needs of Platform Architects and Platform Engineering teams. They'll give you a feel of using k0rdent from first principles to define and instantiate Internal Development Platforms (IDPs) on clouds and infrastructure(s). 
