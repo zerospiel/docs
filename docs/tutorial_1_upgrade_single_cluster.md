@@ -57,7 +57,7 @@ make apply-clustertemplate-demo-aws-standalone-cp-0.0.2
 
 You’ll see that it creates the appropriate objects:
 
-```shell
+```console
 clustertemplate.hmc.mirantis.com/demo-aws-standalone-cp-0.0.2 created
 clustertemplatechain.hmc.mirantis.com/demo-aws-standalone-cp-0.0.2 created
 ```
@@ -67,7 +67,7 @@ clustertemplatechain.hmc.mirantis.com/demo-aws-standalone-cp-0.0.2 created
 Once we’ve installed this template, k0rdent knows the upgrade is available, which we can see by looking for available upgrades:
 
 ```shell
-make get-avaliable-upgrades
+make get-available-upgrades
 ```
 
 You should see a result like this. k0rdent traces the ClusterTemplateChain and determines that this upgrade can apply to both of your clusters:
