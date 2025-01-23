@@ -40,15 +40,12 @@ nav:
   - k0rdent concepts:
     - Why k0rdent?: why_k0rdent.md
     - k0rdent architecture: k0rdent_architecture.md
-  - QuickStart:
-    - Guide to Quickstarts and Tutorials: guide_to_quickstarts_and_tutorials.md
-    - k0rdent pre-requisites: quickstart_1_k0rdent_prerequisites.md
-    - AWS infrastructure setup: quickstart_2_aws_infra_setup.md
-    - Deploy managed clusters on AWS: quickstart_3_deploy_managed_cluster_aws.md
-  - Tutorials:
-    - Upgrade a single cluster: tutorial_1_upgrade_single_cluster.md
-    - Install a ServiceTemplate into a single cluster: tutorial_2_install_service_template_single_cluster.md
-    - Install a ServiceTemplate into multiple clusters: tutorial_3_install_service_template_into_multiple_clusters.md
+  - QuickStarts:
+    - Guide to Quickstarts: guide_to_quickstarts.md
+    - Set up Management Node and Cluster: quickstart_1_management_node_and_cluster.md
+    - Configure and Deploy to AWS: quickstart_2_AWS.md
+    - Configure and Deploy to Azure: quickstart_2_Azure.md
+
 
 
 
