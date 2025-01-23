@@ -5,8 +5,10 @@ site_author: Mirantis, Inc.
 docs_dir: docs/
 repo_name: GitHub
 repo_url: https://github.com/k0rdent/kcm
+
 copyright:
   Copyright &copy; 2025 The k0rdent authors | Documentation distributed under <a href="https://creativecommons.org/licenses/by/4.0/legalcode.txt">CC-BY-4.0</a>.
+
 theme:
   name: "material"
   highlightjs: true
@@ -45,7 +47,6 @@ nav:
     - Set up Management Node and Cluster: quickstart_1_management_node_and_cluster.md
     - Configure and Deploy to AWS: quickstart_2_AWS.md
     - Configure and Deploy to Azure: quickstart_2_Azure.md
-
 
 markdown_extensions:
   - pymdownx.highlight: {}
