@@ -47,8 +47,6 @@ nav:
     - Configure and Deploy to Azure: quickstart_2_Azure.md
 
 
-
-
 markdown_extensions:
   - pymdownx.highlight: {}
   - pymdownx.superfences: {}
