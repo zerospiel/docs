@@ -1,20 +1,40 @@
-# Installation
+# Creating a management cluster and installing k0rdent
 
-k0rdent installation is pretty straightforward. As discussed in Architecture, k0rdent runs in a management Kubernetes cluster, so installation involves creating that cluster and adding k0rdent to it. Creating managed clusters is handled by k0rdent itself. This section of the guide covers:
+## CNCF-certified Kubernetes
 
-- Creating the management cluster
-- Preparing k0rdent to create managed clusters on multiple providers
-- Creating and destroying managed clusters
-- Creating, testing, and approving cluster templates for use by others
-- Creating, testing, and approving service templates for use by others
-- Extended management configuration
-- Upgrading k0rdent
+k0rdent is designed to run on any CNCF-certified Kubernetes. This gives you great freedom in setting up k0rdent for convenient, secure, and reliable operations.
 
-## Prerequisites
+* Proof-of-concept scale k0rdent implementations can run on a beefy Linux desktop or laptop, using a single-node-capable CNCF Kubernetes distribution like [k0s](https://k0sproject.io), running natively as bare processes, or inside a container with [KinD](https://kind.sigs.k8s.io/).
+* More capacious implementations can run on multi-node Kubernetes clusters on bare metal or in clouds.
+* Production users can leverage cloud provider Kubernetes variants like Amazon EKS or Azure AKS to quickly create highly-reliable and scalable k0rdent management clusters.
+  
+## Mixed-use management clusters
 
-Before you can install k0rdent, you'll need to create the substrate in which it will run.
+k0rdent management clusters can also be mixed-use. For example, a cloud Kubernetes k0rdent management cluster can also be used as a 'mothership' environment for [k0smotron](https://k0smotron.io) hosted control planes managed by k0rdent, integrated with workers bootstrapped (also by k0rdent) on adjacent cloud VMs or on remote VMs, bare metal servers, or edge nodes.
 
-### Create the management cluster server
+## Where k0rdent management clusters can live
+
+k0rdent management clusters can live anywhere &mdash; connected via internet to the clusters they manage. Unlike prior generations of Kubernetes cluster managers, there's no technical need to co-locate a k0rdent manager with managed clusters on a single infrastructure. In fact, k0rdent is being built to manage multiple IDPs and platforms, providing a single point of control and visibility. Deciding where to put a management cluster (or multiple clusters) is best done by assessing the requirements of your use case. Considered in the abstract, a k0rdent management cluster should be:
+
+* Resilient and available
+* Accessible and secure
+* Easy to network
+* Scalable (particularly for mixed-use implementations)
+* Easy to operate with minimum overhead
+* Monitored and observable
+* Equipped for backup and disaster recovery
+
+And of course, where can these requirements be procured at reasonable cost?
+
+## Minimum requirements
+
+## Recommended requirements for production
+
+## Backing up a k0rdent management cluster
+
+
+
+  Create the management cluster server
 
 The k0rdent management cluster can run on a single Ubuntu server. Where that server resides isn't important, as long as it can reach the providers on which you want to run managed clusters. For example, you can run k0rdent in a management cluster on a VMware VM, and use it to create clusters on AWS, Azure, and so on. This platform independence makes it easier to manage multi-cloud installations. You can even run the management cluster on a (suitably performant) laptop.
 
