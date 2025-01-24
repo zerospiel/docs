@@ -48,10 +48,14 @@ nav:
     - Configure and Deploy to AWS: quickstart_2_AWS.md
     - Configure and Deploy to Azure: quickstart_2_Azure.md
   - Administrator Guide:
+<<<<<<< HEAD
     - Introduction: admin-install-intro.md
     - Creating a Management Cluster and Installing k0rdent: admin-create-mgmt-cluster-install-k0rdent.md
 
 
+=======
+    - k0rdent installation: admin-install.md
+>>>>>>> e13f66265ac9c126a13b9f16d2fdf7ba54287c61
 
 markdown_extensions:
   - pymdownx.highlight: {}
