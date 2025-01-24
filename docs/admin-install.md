@@ -618,8 +618,8 @@ k0rdent is able to deploy managed clusters as both EC2-based Kubernetes clusters
 	namespace: kcm-system
 	type: Opaque
 	stringData:
-	AccessKeyID: ***REMOVED***
-	SecretAccessKey: ***REMOVED***
+	AccessKeyID: EXAMPLE_ACCESS_KEY_ID
+	SecretAccessKey: EXAMPLE_SECRET_ACCESS_KEY
 	```
 
 	Apply the YAML to your cluster, making sure to add it to the namespace where the CAPA provider is running (currently kcm-system) so the controller can read it:
