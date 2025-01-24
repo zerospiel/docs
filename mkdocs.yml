@@ -47,6 +47,8 @@ nav:
     - Set up Management Node and Cluster: quickstart_1_management_node_and_cluster.md
     - Configure and Deploy to AWS: quickstart_2_AWS.md
     - Configure and Deploy to Azure: quickstart_2_Azure.md
+  - Administrator Guide:
+    - k0rdent installation: admin-install.md
 
 markdown_extensions:
   - pymdownx.highlight: {}
