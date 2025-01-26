@@ -62,7 +62,7 @@ The main components of k0rdent include:
 
 ## Quick Start
 
-See the [k0rdent Quick Start Guide](quick-start/installation.md).
+See the [k0rdent Quick Start Guide](guide-to-quickstarts.md).
 
 ## Supported Providers
 
@@ -70,10 +70,10 @@ k0rdent leverages the Cluster API provider ecosystem, the following
 providers have had `ProviderTemplates` created and validated, and more are
 in the works.
 
- * [AWS](quick-start/aws.md)
- * [Azure](quick-start/azure.md)
- * [vSphere](quick-start/vsphere.md)
- * [OpenStack](quick-start/openstack.md)
+ * [AWS](admin-prepare.md#aws)
+ * [Azure](admin-prepare.md#azure)
+ * [vSphere](admin-prepare.md#vsphere)
+ * [OpenStack](admin-prepare.md#openstack)
 
 ## Development Documentation
 

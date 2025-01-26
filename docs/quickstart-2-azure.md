@@ -2,9 +2,9 @@
 
 In this QuickStart unit, we'll be gathering information and performing preparatory steps to enable k0rdent (running on your management node) to manage clusters on Azure, and deploying a managed cluster.
 
-As noted in the [Guide to QuickStarts](guide_to_quickstarts.md), you'll need administrative access to an Azure account to complete this step. If you haven't yet created a management node and installed k0rdent, go back to [QuickStart 1 - Management node and cluster](quickstart_1_management_node_and_cluster.md).
+As noted in the [Guide to QuickStarts](guide-to-quickstarts.md), you'll need administrative access to an Azure account to complete this step. If you haven't yet created a management node and installed k0rdent, go back to [QuickStart 1 - Management node and cluster](quickstart-1-mgmt-node-and-cluster.md).
 
-Note that if you have already done our AWS QuickStart ([QuickStart 2 - AWS target environment](quickstart_2_AWS.md)) you can continue here with steps to add the ability to manage clusters on AWS. The k0rdent management cluster can accommodate multiple provider and credential setups, enabling management of multiple infrastructures. And even if your management node is external to Azure (for example, it could be on an AWS EC2 virtual machine), as long as you permit outbound traffic to all IP addresses from the management node, this should work fine. A big benefit of k0rdent is that it provides a single point of control and visibility across multiple clusters on multiple clouds and infrastructures.
+Note that if you have already done our AWS QuickStart ([QuickStart 2 - AWS target environment](quickstart-2-aws.md)) you can continue here with steps to add the ability to manage clusters on Azure. The k0rdent management cluster can accommodate multiple provider and credential setups, enabling management of multiple infrastructures. And even if your management node is external to Azure (for example, it could be on an AWS EC2 virtual machine), as long as you permit outbound traffic to all IP addresses from the management node, this should work fine. A big benefit of k0rdent is that it provides a single point of control and visibility across multiple clusters on multiple clouds and infrastructures.
 
 **Cloud Security 101 Note:** k0rdent requires _some_ but not _all_ permissions to manage Azure resources &mdash; doing so via the CAPZ (ClusterAPI for Azure) provider. So a best practice for using k0rdent with Azure (this pattern is repeated with other clouds and infrastructures) is to create a new k0rdent Azure Cluster Identity and Service Principal (SP) on your account with the particular permissions k0rdent and CAPZ require.
 
@@ -323,7 +323,7 @@ clusterdeployment.k0rdent.mirantis.com "my-azure-clusterdeployment1" deleted
 
 Now that you've finished the k0rdent QuickStart, we have some suggestions for what to do next:
 
-Check out the [Administrator Guide]() ...
+Check out the [Administrator Guide](admin-before.md) ...
 
 * For a more detailed view of k0rdent setup for production
 * For details about setting up k0rdent to manage clusters on VMware and OpenStack

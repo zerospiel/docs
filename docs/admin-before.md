@@ -54,7 +54,7 @@ By abstracting everything out to create a standard `Credential` object, users ne
 This enables the administrator to keep those credentials private, and to rotate them as necessary without disturbing users or
 their applications. The administrator simply updates the `Credential` object and everything continues to work.
 
-You can find more information on creating these `Credential`s in [the Credentials chapter](./admin_credentials.md).
+You can find more information on creating these `Credential`s in [the Credentials chapter](admin-credentials.md).
 
 ## k0rdent vs GitOps
 

@@ -1,6 +1,6 @@
 # QuckStart 1 - Set up Management Node and Cluster
 
-Please review the [Guide to QuickStarts](guide_to_quickstarts.md) for preliminaries. This QuickStart unit details setting up a single-VM environment for managing and interacting with k0rdent, and for hosting k0rdent components on a single-node local Kubernetes management cluster. Once k0rdent is installed on the management cluster, you can drive k0rdent by SSHing into the management node (kubectl is there and will be provisioned with the appropriate kubeconfig) or remotely by various means (e.g., install the management cluster kubeconfig in Lens or another Kubernetes dashboard on your laptop, tunnel across from your own local kubectl, etc.)
+Please review the [Guide to QuickStarts](guide-to-quickstarts.md) for preliminaries. This QuickStart unit details setting up a single-VM environment for managing and interacting with k0rdent, and for hosting k0rdent components on a single-node local Kubernetes management cluster. Once k0rdent is installed on the management cluster, you can drive k0rdent by SSHing into the management node (kubectl is there and will be provisioned with the appropriate kubeconfig) or remotely by various means (e.g., install the management cluster kubeconfig in Lens or another Kubernetes dashboard on your laptop, tunnel across from your own local kubectl, etc.)
 
 ## Install a single-node k0s cluster locally to work as k0rdent's management cluster
 
@@ -227,4 +227,4 @@ velero-8-1-0              true
 ```
 ## Next steps
 
-Your QuickStart management node is now complete, and k0rdent is installed and operational. Next, it's time to select [AWS](quickstart_2_AWS.md) or [Azure](quickstart_2_Azure.md) as an environment for hosting managed clusters.
+Your QuickStart management node is now complete, and k0rdent is installed and operational. Next, it's time to select [AWS](quickstart-2-aws.md) or [Azure](quickstart-2-azure.md) as an environment for hosting managed clusters.

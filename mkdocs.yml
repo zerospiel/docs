@@ -38,19 +38,22 @@ plugins:
 
 nav:
   - Welcome to the k0rdent docs: index.md
-  - Guide to k0rdent documentation: guide_to_k0rdent_documentation.md
   - k0rdent concepts:
-    - Why k0rdent?: why_k0rdent.md
-    - k0rdent architecture: k0rdent_architecture.md
+    - Why k0rdent?: why-k0rdent.md
+    - k0rdent architecture: k0rdent-architecture.md
   - QuickStarts:
-    - Guide to Quickstarts: guide_to_quickstarts.md
-    - Set up Management Node and Cluster: quickstart_1_management_node_and_cluster.md
-    - Configure and Deploy to AWS: quickstart_2_AWS.md
-    - Configure and Deploy to Azure: quickstart_2_Azure.md
+    - Guide to Quickstarts: guide-to-quickstarts.md
+    - Set up Management Node and Cluster: quickstart-1-mgmt-node-and-cluster.md
+    - Configure and Deploy to AWS: quickstart-2-aws.md
+    - Configure and Deploy to Azure: quickstart-2-azure.md
   - Administrator Guide:
     - Before you start: admin-before.md
     - Installing k0rdent: admin-installation.md
     - Prepare k0rdent to create managed clusters on multiple providers: admin-prepare.md
+    - k0rdent credentials management: admin-credentials.md
+    - Backing up k0rdent: admin-backup.md
+  - Reference:
+    - Glossary: glossary.md
 
 markdown_extensions:
   - pymdownx.highlight: {}

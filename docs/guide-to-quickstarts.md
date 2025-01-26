@@ -59,5 +59,5 @@ Plus (intermediate-term roadmap) tutorials for using k0rdent to create and manag
 * (As an authorized user) Leveraging shared cluster and service templates to lifecycle manage platforms (performing self-service)
 * ... and more
 
-Ready? [Let's discover how to use k0rdent!](quickstart_1_management_node_and_cluster.md)
+Ready? [Let's discover how to use k0rdent!](quickstart-1-mgmt-node-and-cluster.md)
 
