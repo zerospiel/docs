@@ -50,10 +50,12 @@ nav:
     - Before you start: admin-before.md
     - Installing k0rdent: admin-installation.md
     - Prepare k0rdent to create managed clusters on multiple providers: admin-prepare.md
+    - Creating clusters: admin-creating-clusters.md
     - k0rdent credentials management: admin-credentials.md
     - Backing up k0rdent: admin-backup.md
   - Reference:
     - Glossary: glossary.md
+    - Appendices: appendices.md
 
 markdown_extensions:
   - pymdownx.highlight: {}
