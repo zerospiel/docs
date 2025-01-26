@@ -53,6 +53,7 @@ nav:
     - Creating standalone clusters: admin-creating-clusters.md
     - Adopting clusters: admin-adopting-clusters.md
     - Hosted control planes: admin-hosted-control-planes.md
+    - Upgrading k0rdent: admin-upgrading-k0rdent.md
     - k0rdent credentials management: admin-credentials.md
     - Backing up k0rdent: admin-backup.md
   - Reference:
