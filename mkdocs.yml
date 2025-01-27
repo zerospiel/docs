@@ -74,6 +74,7 @@ nav:
   - Appendix:
     - Air-gapped installation: appendix-airgap.md
     - Extended management configuration: appendix-extend-mgmt.md
+    - Understanding the dry run: appendix-dryrun.md
 
 markdown_extensions:
   - pymdownx.highlight: {}
