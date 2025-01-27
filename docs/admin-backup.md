@@ -53,11 +53,11 @@ Before you create a scheduled backup, you need to perform a few preparatory step
    ---
    apiVersion: v1
    data:
-     # base64-encoded credentials, for the Amazon S3 in the following format:
+     # base64-encoded credentials for Amazon S3 in the following format:
      # [default]
-     # aws_access_key_id = <AWS_ACCESS_KEY>
-     # aws_secret_access_key = <AWS_SECRET_ACCESS_KEY>
-     cloud: W2RlZmF1bHRdCmF3c19hY2Nlc3Nfa2V5X2lkID0gPEFXU19BQ0NFU1NfS0VZPgphd3Nfc2VjcmV0X2FjY2Vzc19rZXkgPSA8QVdTX1NFQ1JFVF9BQ0NFU1NfS0VZPgo=
+     # aws_access_key_id = EXAMPLE_ACCESS_KEY_ID
+     # aws_secret_access_key = EXAMPLE_SECRET_ACCESS_KEY
+          cloud: W2RlZmF1bHRdCmF3c19hY2Nlc3Nfa2V5X2lkID0gRVhBTVBMRV9BQ0NFU1NfS0VZX0lECmF3c19zZWNyZXRfYWNjZXNzX2tleSA9IEVYQU1QTEVfU0VDUkVUX0FDQ0VTU19LRVkKICA=
    kind: Secret
    metadata:
      name: cloud-credentials

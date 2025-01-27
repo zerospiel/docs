@@ -55,6 +55,8 @@ nav:
     - Hosted control planes: admin-hosted-control-planes.md
     - Upgrading k0rdent: admin-upgrading-k0rdent.md
     - k0rdent credentials management: admin-credentials.md
+    - k0rdent Role Based Access Control (RBAC): admin-rbac.md
+    - k0rdent Observability and FinOps (KOF): admin-kof.md
     - Backing up k0rdent: admin-backup.md
   - Reference:
     - Glossary: glossary.md
