@@ -58,6 +58,17 @@ nav:
     - k0rdent Role Based Access Control (RBAC): admin-rbac.md
     - k0rdent Observability and FinOps (KOF): admin-kof.md
     - Backing up k0rdent: admin-backup.md
+  - User Guide:
+    - Creating clusters as a k0rdent user: user-create-cluster.md
+    - Creating and adding services to clusters as a k0rdent user: use-create-service.md
+  - k0rdent Templates Reference:
+    - Introduction to k0rdent templates: template-intro.md
+    - Using predefined templates: template-predefined.md
+    - Bring-your-own (BYO) templates: template-byo.md
+    - Templates for Amazon Web Services: template-aws.md
+    - Templates for Azure: template-azure.md
+    - Templates for OpenStack: template-openstack.md
+    - Templates for vSphere: template-vsphere.md
   - Reference:
     - Glossary: glossary.md
     - Appendices: appendices.md
