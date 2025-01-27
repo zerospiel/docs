@@ -49,17 +49,17 @@ Follow these steps to adopt an existing cluster:
     apiVersion: k0rdent.mirantis.com/v1alpha1
     kind: ClusterDeployment
     metadata:
-      name: <cluster-name>
-      namespace: <kcm-system-namespace>
+      name: <CLUSTER_NAME>
+      namespace: <NAMESPACE>
     spec:
-      template: adopted-cluster-<template-version>
-      credential: <credential-name>
-      dryRun: <"true" or "false" (default: "false")>
+      template: adopted-cluster-<VERSION>
+      credential: <CREDENTIAL_NAME>
+      dryRun: <BOOLEAN>
       config:
-        <cluster-configuration>
+        <CONFIGURATION>
     ```
 
-    Replace placeholders like `<cluster-name>` and `<credential-name>` with actual values. The `dryRun` flag is useful for testing the configuration without making changes to the cluster. For more details, see the [Dry Run](#understanding-the-dry-run) section.
+    Replace placeholders like `<CLUSTER_NAME>`, `<NAMESPACE>`, `<VERSION>`, `<CREDENTIAL_NAME>`, and `<CONFIGURATION>` with actual values. The `dryRun` flag is useful for testing the configuration without making changes to the cluster. For more details, see the [Dry Run](appendices.md#understanding-the-dry-run) section.
 
     You can also get a list of the available templates with:
 
@@ -114,7 +114,7 @@ Follow these steps to adopt an existing cluster:
     The output includes the current state and any conditions (for example, errors or progress updates). Review 
     this information to confirm that the adoption is successful.
 
-## What’s Happening Behind the Scenes?
+## What's Happening Behind the Scenes?
 
 When you adopt a cluster, k0rdent performs several actions:
 1. It validates the credentials and configuration provided in the `ClusterDeployment` object.
@@ -122,10 +122,10 @@ When you adopt a cluster, k0rdent performs several actions:
 3. It registers the adopted cluster within the k0rdent system, enabling it to be monitored and managed like 
    any k0rdent-deployed cluster.
 
-This process doesn’t change the adopted cluster’s existing workloads or configurations. Instead, it enhances your 
+This process doesn't change the adopted cluster's existing workloads or configurations. Instead, it enhances your 
 ability to manage the cluster through k0rdent.
 
 ## Additional Tips
 - If you encounter issues, double-check that kubeconfig file you used for the adopted cluster is valid 
-  and matches the cluster you’re trying to adopt.
-- Use the [`dryRun`](appendix.md#understanding-the-dry-run) option during the first attempt to validate the configuration without making actual changes.
+  and matches the cluster you're trying to adopt.
+- Use the [`dryRun`](appendices.md#understanding-the-dry-run) option during the first attempt to validate the configuration without making actual changes.
