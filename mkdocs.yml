@@ -71,7 +71,9 @@ nav:
     - Templates for vSphere: template-vsphere.md
   - Reference:
     - Glossary: glossary.md
-    - Appendices: appendices.md
+  - Appendix:
+    - Air-gapped installation: appendix-airgap.md
+    - Extended management configuration: appendix-extend-mgmt.md
 
 markdown_extensions:
   - pymdownx.highlight: {}
