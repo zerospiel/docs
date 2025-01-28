@@ -88,7 +88,7 @@ Follow these steps to deploy a standalone Kubernetes cluster tailored to your sp
         <cluster-configuration>
     ```
 
-    You will of course want to replace the placeholders with actual values. (For more information about `dryRun` see [Understanding the Dry Run](appendices.md#understanding-the-dry-run).) For example, this is a simple AWS infrastructure provider `ClusterDeployment`:
+    You will of course want to replace the placeholders with actual values. (For more information about `dryRun` see [Understanding the Dry Run](appendix-dryrun.md) For example, this is a simple AWS infrastructure provider `ClusterDeployment`:
 
     ```yaml
     apiVersion: k0rdent.mirantis.com/v1alpha1
