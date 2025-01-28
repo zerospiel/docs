@@ -61,7 +61,7 @@ nav:
     - Backing up k0rdent: admin-backup.md
   - User Guide:
     - Creating clusters as a k0rdent user: user-create-cluster.md
-    - Creating and adding services to clusters as a k0rdent user: use-create-service.md
+    - Creating and adding services to clusters as a k0rdent user: user-create-service.md
   - k0rdent Templates Reference:
     - Introduction to k0rdent templates: template-intro.md
     - Using predefined templates: template-predefined.md
