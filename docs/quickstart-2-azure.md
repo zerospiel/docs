@@ -108,6 +108,8 @@ kind: Secret
 metadata:
   name: azure-cluster-identity-secret
   namespace: kcm-system
+  labels:
+    k0rdent.mirantis.com/component: "kcm"
 stringData:
   clientSecret: SP_PASSWORD_SP_PASSWORD # Password retrieved from the Service Principal
 type: Opaque
@@ -129,10 +131,11 @@ Create a YAML file called `azure-cluster-identity.yaml`. Make sure that `.spec.c
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
 kind: AzureClusterIdentity
 metadata:
-  labels:
-    clusterctl.cluster.x-k8s.io/move-hierarchy: "true"
   name: azure-cluster-identity
   namespace: kcm-system
+  labels:
+    clusterctl.cluster.x-k8s.io/move-hierarchy: "true"
+    k0rdent.mirantis.com/component: "kcm"
 spec:
   allowedNamespaces: {}
   clientID: SP_APP_ID_SP_APP_ID # The App ID retrieved from the Service Principal above in Step 2
