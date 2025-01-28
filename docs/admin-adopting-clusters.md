@@ -128,4 +128,4 @@ ability to manage the cluster through k0rdent.
 ## Additional Tips
 - If you encounter issues, double-check that kubeconfig file you used for the adopted cluster is valid 
   and matches the cluster you're trying to adopt.
-- Use the [`dryRun`](appendices.md#understanding-the-dry-run) option during the first attempt to validate the configuration without making actual changes.
+- Use the [`dryRun`](appendix-dryrun.md) option during the first attempt to validate the configuration without making actual changes.
