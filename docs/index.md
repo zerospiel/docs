@@ -5,10 +5,10 @@
 k0rdent is focused on developing a consistent way to deploy and manage
 Kubernetes clusters at scale. One way to think of k0rdent is as a "super
 control plane" designed to manage other Kubernetes control planes. Another
-way to think of k0rdent is as a platform for Platform Engineering. If you
+way to think of k0rdent is as distributed container management environment for Platform Engineers. If you
 are building an internal developer platform (IDP), need a way to manage
 Kubernetes clusters at scale in a centralized place, create Golden Paths,
-etc. k0rdent is a great way to do that.
+etc., k0rdent can help you do that.
 
 Whether you want to manage Kubernetes clusters on-premises, in the cloud,
 or a combination of both, k0rdent provides a consistent way to do so. With
