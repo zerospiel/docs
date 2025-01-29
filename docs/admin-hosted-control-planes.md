@@ -291,7 +291,7 @@ Follow these steps to set up a k0smotron-hosted control plane on Azure:
       
 5. Manually update the `AzureCluster` object
 
-    Due to a limitation on k0smotron, (see [k0sproject/k0smotron#668](https://github.com/k0sproject/k0smotron/issues/668)), 
+    Due to a limitation in k0smotron, (see [k0sproject/k0smotron#668](https://github.com/k0sproject/k0smotron/issues/668)), 
     after applying the `ClusterDeployment` manifest, you must manually update the status of the `AzureCluster` object.
 
     Use the following command to set the `AzureCluster` object status to `Ready`:
@@ -347,7 +347,7 @@ Follow these steps to set up a k0smotron-hosted control plane on vSphere.
 2. Create the `ClusterDeployment` Manifest
 
 The `ClusterDeployment` manifest for vSphere-hosted control planes is similar to standalone control plane deployments. 
-For a detailed list of parameters, refer to the [template parameters](template.md) section.
+For a detailed list of parameters, refer to our discussion of [Template parameters for vSphere](template-vsphere.md).
 
 > **Important:**  
 > The vSphere provider requires you to specify the **control plane endpoint IP** before deploying the cluster. This IP 
