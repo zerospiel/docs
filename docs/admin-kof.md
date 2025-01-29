@@ -170,6 +170,7 @@ Follow these steps:
     spec:
         template: kof-storage
         config:
+            clusterLabels: {}
             ingress:
                 vmauth:
                     host: vmauth.storage.example.com
@@ -196,8 +197,9 @@ Follow these steps:
     spec:
         template: kof-collectors
         config:
+            clusterLabels: {}
             storage:
-            endpoint: vmauth.storage.example.com
+                endpoint: vmauth.storage.example.com
         collection:
             logLevel: info
             metrics:

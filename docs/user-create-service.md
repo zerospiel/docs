@@ -61,6 +61,7 @@ metadata:
   namespace: tenant42
 spec:
   config:
+    clusterLabels: {}
   template: aws-standalone-cp-0-0-3
   credential: aws-credential
   services:
@@ -98,6 +99,7 @@ metadata:
   namespace: kcm-system
 spec:
   config:
+    clusterLabels: {}
     clusterNetwork:
       pods:
         cidrBlocks:

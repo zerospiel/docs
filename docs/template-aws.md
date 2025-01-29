@@ -67,6 +67,7 @@ spec:
   template: aws-standalone-cp-0-0-5
   credential: aws-cred
   config:
+    clusterLabels: {}
     sshKeyName: foobar
     bastion:
       enabled: true
@@ -91,6 +92,7 @@ spec:
   template: aws-eks-0-0-3
   credential: aws-cred
   config:
+    clusterLabels: {}
     sshKeyName: foobar
     region: ${AWS_REGION}
     workersNumber: 1
@@ -105,7 +107,7 @@ This section covers setting up for a k0smotron hosted control plane on AWS.
 
 Before starting you must have:
 
--   A ,anagement Kubernetes cluster (v1.28+) deployed on AWS with kcm installed on it
+-   A management Kubernetes cluster (v1.28+) deployed on AWS with kcm installed on it
 -   A default default storage class configured on the management cluster
 -   A VPC ID for the worker nodes
 -   A Subnet ID which will be used along with AZ information
@@ -176,6 +178,7 @@ spec:
   template: aws-hosted-cp-0-0-4
   credential: aws-credential
   config:
+    clusterLabels: {}
     vpcID: vpc-0a000000000000000
     region: us-west-1
     publicIP: true
@@ -212,6 +215,7 @@ spec:
   template: aws-hosted-cp-0-0-4
   credential: aws-credential
   config:
+    clusterLabels: {}
     vpcID: "{{.spec.network.vpc.id}}"
     region: "{{.spec.region}}"
     subnets:

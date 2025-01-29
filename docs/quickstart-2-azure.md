@@ -250,6 +250,7 @@ spec:
   template: azure-standalone-cp-0-0-5 # name of the clustertemplate
   credential: azure-cluster-identity-cred
   config:
+    clusterLabels: {}
     location: "AZURE_LOCATION" # Select your desired Azure Location
     subscriptionID: SUBSCRIPTION_ID_SUBSCRIPTION_ID # Enter the Subscription ID used earlier
     controlPlane:

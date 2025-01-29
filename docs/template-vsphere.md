@@ -71,6 +71,7 @@ spec:
   template: vsphere-standalone-cp-0-0-2
   credential: vsphere-credential
   config:
+    clusterLabels: {}
     vsphere:
       server: vcenter.example.com
       thumbprint: "00:00:00"
@@ -79,7 +80,6 @@ spec:
       resourcePool: "/DC/host/vCluster/Resources/ResPool"
       folder: "/DC/vm/example"
     controlPlaneEndpointIP: "<VSPHERE_SERVER>"
-
     controlPlane:
       ssh:
         user: ubuntu
@@ -90,7 +90,6 @@ spec:
       memory: 4096
       vmTemplate: "/DC/vm/template"
       network: "/DC/network/Net"
-
     worker:
       ssh:
         user: ubuntu
@@ -192,6 +191,7 @@ spec:
   template: vsphere-hosted-cp-0-0-2
   credential: vsphere-credential
   config:
+    clusterLabels: {}
     vsphere:
       server: vcenter.example.com
       thumbprint: "00:00:00"

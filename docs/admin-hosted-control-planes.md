@@ -76,6 +76,7 @@ Follow these steps to set up a k0smotron-hosted control plane on AWS:
       template: aws-hosted-cp-0-0-3
       credential: aws-credential
       config:
+        clusterLabels: {}
         vpcID: vpc-0a000000000000000
         region: us-west-1
         publicIP: true
@@ -111,6 +112,7 @@ Follow these steps to set up a k0smotron-hosted control plane on AWS:
       template: aws-hosted-cp-0-0-3
       credential: aws-credential
       config:
+        clusterLabels: {}
         vpcID: "{{.spec.network.vpc.id}}"
         region: "{{.spec.region}}"
         subnets:
@@ -240,6 +242,7 @@ Follow these steps to set up a k0smotron-hosted control plane on Azure:
       template: azure-hosted-cp-0-0-2
       credential: azure-credential
       config:
+        clusterLabels: {}
         location: "westus"
         subscriptionID: ceb131c7-a917-439f-8e19-cd59fe247e03
         vmSize: Standard_A4_v2
@@ -265,6 +268,7 @@ Follow these steps to set up a k0smotron-hosted control plane on Azure:
       template: azure-hosted-cp-0-0-2
       credential: azure-credential
       config:
+        clusterLabels: {}
         location: "{{.spec.location}}"
         subscriptionID: "{{.spec.subscriptionID}}"
         vmSize: Standard_A4_v2
@@ -367,6 +371,7 @@ spec:
   template: vsphere-hosted-cp-0-0-2
   credential: vsphere-credential
   config:
+    clusterLabels: {}
     vsphere:
       server: vcenter.example.com
       thumbprint: "00:00:00"

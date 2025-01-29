@@ -117,6 +117,7 @@ Follow these steps to deploy a standalone Kubernetes cluster:
       template: aws-standalone-cp-0-0-3
       credential: aws-credential
       config:
+        clusterLabels: {}
         region: us-west-2
         controlPlane:
           instanceType: t3.small

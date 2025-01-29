@@ -101,6 +101,7 @@ Follow these steps to deploy a standalone Kubernetes cluster tailored to your sp
       credential: aws-credential
       dryRun: false
       config:
+        clusterLabels: {}
         region: us-west-2
         controlPlane:
           instanceType: t3.small
@@ -224,8 +225,10 @@ Similarly, the `AccessManagement` object must have properly configured `spec.acc
 > **Future Note:**  
 > Support for displaying all available `ClusterTemplates` for updates in the `ClusterDeployment` status is planned.
 
-## Scaling a Cluster , <!-- TODO -->
-## Upgrading a Single Standalone Cluster , <!-- TODO -->
+<!-- TODO
+## Scaling a Cluster 
+## Upgrading a Single Standalone Cluster 
+-->
 
 ## Cleanup
 

@@ -255,12 +255,13 @@ k0rdent is able to deploy managed clusters as both EC2-based Kubernetes clusters
 	spec:
 	  template: aws-standalone-cp-0-0-5
 	  credential: aws-cluster-identity-cred
-      config:
-	    region: us-east-2
-	    controlPlane:
-		  instanceType: t3.small
-	    worker:
-		  instanceType: t3.small
+    config:
+      clusterLabels: {}
+      region: us-east-2
+      controlPlane:
+        instanceType: t3.small
+      worker:
+        instanceType: t3.small
 	```
 
 	A couple of things to notice:
@@ -729,7 +730,7 @@ k0rdent is able to deploy managed clusters on OpenStack virtual machines. Follow
               name: ubuntu-22.04-x86_64
         authURL: <OS_AUTH_URL>
     ```
-    You can adjust `flavor`, `image` name, and `authURL` to match your OpenStack environment. For more information about the configuration options, see the [OpenStack Template Reference](template-openstack.md).
+    You can adjust `flavor`, `image` name, and `authURL` to match your OpenStack environment. For more information about the configuration options, see the [OpenStack Template Parameters](../clustertemplates/openstack/template-parameters.md).
 
     Apply the YAML to your management cluster:
 
@@ -953,7 +954,7 @@ To enable users to deploy managed clusers on vSphere, follow these steps:
           network: <VSPHERE_NETWORK>
     ```
 
-    For more information about the available configuration options, see the [vSphere Template Reference](template-vsphere.md).
+    For more information about the available configuration options, see the [vSphere Template Parameters](../clustertemplates/vsphere/template-parameters.md).
 
     Apply the YAML to your management cluster:
 
