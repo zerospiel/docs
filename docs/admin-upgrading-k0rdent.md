@@ -13,18 +13,18 @@ Upgrading k0rdent involves making upgrades to the `Management` object. To do tha
     apiVersion: k0rdent.mirantis.com/v1alpha1
     kind: Release
     metadata:
-    name: kcm-0-0-7
+      name: kcm-0-0-7
     annotations:
-        helm.sh/resource-policy: keep
+      helm.sh/resource-policy: keep
     labels:
-        k0rdent.mirantis.com/component: kcm
+      k0rdent.mirantis.com/component: kcm
     spec:
-    version: 0.0.7
-    kcm:
+      version: 0.0.7
+      kcm:
         template: kcm-0-0-7
-    capi:
+      capi:
         template: cluster-api-0-0-6
-    providers:
+      providers:
         - name: k0smotron
           template: k0smotron-0-0-6
         - name: cluster-api-provider-azure

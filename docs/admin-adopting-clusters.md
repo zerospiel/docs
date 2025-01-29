@@ -91,6 +91,7 @@ Follow these steps to adopt an existing cluster:
       template: adopted-cluster-0-0-2
       credential: my-cluster-credential
       dryRun: false
+      config: {}
     ```
 
 5. Apply the `ClusterDeployment` configuration

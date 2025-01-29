@@ -96,11 +96,9 @@ You'll see output that resembles what's below:
 
 Capture this output and secure the values it contains. We'll need several of these in a moment.
 
-## Create a Secret object with the SP password
+## Create a Secret object with the Azure credentials
 
-Now we'll create a new Secret to store the Service Principal password.
-
-Create a YAML file called `azure-cluster-identity-secret.yaml`, as follows, inserting the password for the Service Principal (represented by the placeholder `SP_PASSWORD_SP_PASSWORD` above):
+For self-managed Azure clusters (non-AKS) create a Secret object that stores the `clientSecret` (password) from the Service Principal. Create a YAML file called `azure-cluster-identity-secret.yaml`, as follows, inserting the password for the Service Principal (represented by the placeholder `SP_PASSWORD_SP_PASSWORD` above):
 
 ```yaml
 apiVersion: v1
@@ -115,6 +113,24 @@ stringData:
 type: Opaque
 ```
 
+For managed (AKS) clusters on Azure create the secret with the `AZURE_CLIENT_ID`, `AZURE_CLIENT_SECRET`, `AZURE_SUBSCRIPTION_ID` and `AZURE_TENANT_ID` keys set:
+
+```yaml
+apiVersion: v1
+kind: Secret
+metadata:
+  name: azure-aks-credential
+  namespace: kcm-system
+  labels:
+    k0rdent.mirantis.com/component: "kcm"
+stringData:
+  AZURE_CLIENT_ID: <SP_APP_ID_SP_APP_ID> # AppId retrieved from the Service Principal
+  AZURE_CLIENT_SECRET: <SP_PASSWORD_SP_PASSWORD> # Password retrieved from the Service Principal
+  AZURE_SUBSCRIPTION_ID: <SUBSCRIPTION_ID_SUBSCRIPTION_ID> # The ID of the Subscription
+  AZURE_TENANT_ID: <TENANT_ID_TENANT_ID_TENANT_ID> # TenantID retrieved from the Service Principal
+type: Opaque
+```
+
 Apply the YAML to the k0rdent management cluster using the following command:
 
 ```shell
@@ -122,6 +138,9 @@ kubectl apply -f azure-cluster-identity-secret.yaml
 ```
 
 ## Create the AzureClusterIdentity Object
+
+> INFO:
+> Skip this step for managed (AKS) clusters.
 
 This object defines the credentials k0rdent and CAPZ will use to manage Azure resources. It references the Secret you just created above.
 
@@ -162,7 +181,7 @@ azureclusteridentity.infrastructure.cluster.x-k8s.io/azure-cluster-identity crea
 
 Create a YAML with the specification of our credential and save it as `azure-cluster-identity-cred.yaml`.
 
-Note that `.spec.kind` must be `AzureClusterIdentity` and `.spec.name` must match `.metadata.name` of the AzureClusterIdentity object created in the previous step.
+Note that for non-AKS clusters `.spec.kind` must be `AzureClusterIdentity`, and `.spec.name` must match `.metadata.name` of the AzureClusterIdentity object created in the previous step.
 
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1alpha1
@@ -175,6 +194,23 @@ spec:
     apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
     kind: AzureClusterIdentity
     name: azure-cluster-identity
+    namespace: kcm-system
+```
+
+For AKS clusters, the `.spec.identityRef.kind` must be set to `Secret`, and `.spec.name` must match
+`.metadata.name` of the `Secret` object.
+
+```yaml
+apiVersion: k0rdent.mirantis.com/v1alpha1
+kind: Credential
+metadata:
+  name: azure-aks-credential
+  namespace: kcm-system
+spec:
+  identityRef:
+    apiVersion: v1
+    kind: Secret
+    name: azure-aks-credential
     namespace: kcm-system
 ```
 
@@ -257,6 +293,28 @@ spec:
       vmSize: Standard_A4_v2
     worker:
       vmSize: Standard_A4_v2
+```
+
+For AKS clusters, the `ClusterDeployment` looks like this:
+
+```yaml
+apiVersion: k0rdent.mirantis.com/v1alpha1
+kind: ClusterDeployment
+metadata:
+  name: my-azure-clusterdeployment1
+  namespace: kcm-system
+spec:
+  template: azure-aks-0-0-2
+  credential: azure-aks-credential
+  propagateCredentials: false # Should be set to `false`
+  config:
+    clusterLabels: {}
+    location: "westus" # Select your desired Azure Location (find it via `az account list-locations -o table`)
+    machinePools:
+      system:
+        vmSize: Standard_A4_v2
+      user:
+        vmSize: Standard_A4_v2
 ```
 
 ## Apply the ClusterDeployment to deploy the cluster
