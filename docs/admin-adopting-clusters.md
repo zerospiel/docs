@@ -59,7 +59,7 @@ Follow these steps to adopt an existing cluster:
         <CONFIGURATION>
     ```
 
-    Replace placeholders like `<CLUSTER_NAME>`, `<NAMESPACE>`, `<VERSION>`, `<CREDENTIAL_NAME>`, and `<CONFIGURATION>` with actual values. The `dryRun` flag is useful for testing the configuration without making changes to the cluster. For more details, see the [Dry Run](appendices.md#understanding-the-dry-run) section.
+    Replace placeholders like `<CLUSTER_NAME>`, `<NAMESPACE>`, `<VERSION>`, `<CREDENTIAL_NAME>`, and `<CONFIGURATION>` with actual values. The `dryRun` flag is useful for testing the configuration without making changes to the cluster. For more details, see the [Dry Run](appendix-dryrun.md) section.
 
     You can also get a list of the available templates with:
 
