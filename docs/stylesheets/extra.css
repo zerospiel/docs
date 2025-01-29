@@ -1,6 +1,6 @@
 :root {
-  --md-primary-fg-color:        #3d90ce;
-  --md-accent-fg-color:         #3d90ce;
+  --md-primary-fg-color:        #000;
+  --md-accent-fg-color:         #000;
 }
 
 :root > * {
@@ -9,14 +9,8 @@
 }
 
 .md-header {
-  background-color: #526cfe;
+  background-color: #000;
 }
-
-.md-clipboard {
-  display: none;
-}
-
-
 
 .md-version__list {
   overflow: auto;
@@ -97,4 +91,3 @@ ul.video-list .thumb {
   position: relative;
   float:left
 }
-

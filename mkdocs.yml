@@ -14,8 +14,10 @@ theme:
   highlightjs: true
   language: "en"
   custom_dir: docs/custom_theme
-  favicon: img/k0s_social.png
-  logo: img/k0s_social.png
+
+  favicon: img/favicon-32x32.png
+  logo: img/k0rdent-logo-horizontal-inverted.svg
+  
   palette:
     - scheme: default
       toggle:
@@ -33,8 +35,23 @@ theme:
 
 extra_css:
   - stylesheets/extra.css
+
 plugins:
   - search
+  - ezglossary:
+      section_config:
+        - name: demo
+          inline_refs: short
+  - macros:
+      j2_variable_start_string: "{{{"
+      j2_variable_end_string: "}}}"
+  - exclude:
+      glob:
+        - "*.etag"
+        - Dockerfile.serve-dev
+        - Makefile*
+        - requirements_pip.txt
+        - requirements.txt
 
 nav:
   - Welcome to the k0rdent docs: index.md
@@ -78,39 +95,43 @@ nav:
     - Understanding the dry run: appendix-dryrun.md
 
 markdown_extensions:
+  - callouts
+  - tables
+  - pymdownx.details
   - pymdownx.highlight: {}
   - pymdownx.superfences: {}
   - pymdownx.inlinehilite: {}
-  - toc:
-      permalink: "#"
-      toc_depth: 3
   - pymdownx.superfences:
       custom_fences:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
-  - admonition
+  - mdx_truly_sane_lists: # https://github.com/mkdocs/mkdocs/issues/545#issuecomment-522196661
+      nested_indent: 2
+      truly_sane: true
+  - toc:
+      permalink: "#"
+      toc_depth: 3
   - def_list
 
 extra:
-  k8s_version: !!python/object/apply:os.getenv ["KUBERNETES_VERSION"]
   generator: false
   social:
     - icon: fontawesome/brands/github
-      link: https://github.com/k0sproject/k0s
-      name: k0s on GitHub
+      link: https://github.com/k0rdent/kcm
+      name: k0rdent on GitHub
     - icon: fontawesome/brands/x-twitter
-      link: https://x.com/k0sproject
-      name: k0s on X
-    - icon: fontawesome/brands/medium
-      link: https://medium.com/k0sproject
-      name: k0s on Medium
-    - icon: fontawesome/brands/slack
-      link: https://kubernetes.slack.com/archives/C07VAPJUECS
-      name: k0s on the k8s slack
-    - icon: fontawesome/solid/link
-      link: https://k0sproject.io/
-      name: k0s Website
+      link: https://x.com/k0rdent
+      name: k0rdent on X
+    - icon: fontawesome/brands/bluesky
+      link: https://bsky.app/profile/k0rdent.bsky.social
+      name: k0rdent on BlueSky
+    - icon: fontawesome/brands/youtube
+      link: https://www.youtube.com/channel/UChXQ6kbvjnAtdZAQpl7Fo4A
+      name: k0rdent on YouTube
+    - icon: fontawesome/brands/linkedin
+      link: https://www.linkedin.com/company/k0rdent/
+      name: k0rdent on LinkedIn
   version:
     provider: mike
     default: stable
