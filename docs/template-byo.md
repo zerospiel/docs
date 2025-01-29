@@ -72,7 +72,7 @@ The controller automatically creates the `HelmChart` object based on the chartSp
 > referencing them. The `ClusterDeployment` can't reference the Template from another namespace (the creation request will
 > be declined by the admission webhook). All `ClusterTemplates` and `ServiceTemplates` shipped with kcm reside in the
 > system namespace (defaults to `kcm-system`). To get the instructions on how to distribute Templates along multiple
-> namespaces, read [Template Life Cycle Management](main.md#template-life-cycle-management).
+> namespaces, read [Template Life Cycle Management](template-intro.md#template-life-cycle-management).
 
 ### Example: Custom ClusterTemplate with the Chart Definition to Create a new HelmChart
 
