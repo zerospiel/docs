@@ -138,6 +138,7 @@ spec:
   template: azure-hosted-cp-0-0-2
   credential: azure-credential
   config:
+    clusterLabels: {}
     location: "westus"
     subscriptionID: SUBSCRIPTION_ID_SUBSCRIPTION_ID
     vmSize: Standard_A4_v2
@@ -160,6 +161,7 @@ spec:
   template: azure-hosted-cp-0-0-2
   credential: azure-credential
   config:
+    clusterLabels: {}
     location: "{{.spec.location}}"
     subscriptionID: "{{.spec.subscriptionID}}"
     vmSize: Standard_A4_v2

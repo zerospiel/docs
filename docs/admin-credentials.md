@@ -67,6 +67,7 @@ In order to pass credentials to k0rdent so it can take action, the folliowing ha
 	  template: aws-standalone-cp-0-0-5
 	  credential: aws-cluster-credential
       config:
+	    clusterLabels: {}
 	    region: us-east-2
 	    controlPlane:
 		  instanceType: t3.small

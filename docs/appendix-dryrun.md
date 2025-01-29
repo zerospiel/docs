@@ -32,6 +32,7 @@ spec:
   template: aws-standalone-cp-0-0-3
   credential: aws-credential
   config:
+    clusterLabels: {}
     region: us-east-2
     publicIP: true
     controlPlaneNumber: 1
