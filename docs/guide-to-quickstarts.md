@@ -30,7 +30,7 @@ QuickStart prerequisites are simple &mdash; you'll need:
     * (Optional) snapshot the machine in its virgin state
 * Administrative-level access to an AWS or Azure cloud account - Depending on which cloud environment you prefer. k0rdent will leverage this cloud to provide infrastructure for hosting managed clusters.
 
-Note: Ubuntu is a Debian distro and uses `apt` for package management. Other recent versions of 'enterprise' Linux should work with the following instructions as well, though you will need to adapt for different package managers and perhaps use slightly-different provider-recommended methods for installing required dependencies (e.g., Docker). Once you've installed k0rdent in the management cluster and have kubectl, Helm, and other resources connected, you'll mostly be dealing with Kubernetes, and everything should work the same way on any host OS.
+Note: Ubuntu is a Debian distro and uses `apt` for package management. Other recent versions of 'enterprise' Linux should work with the following instructions as well, though you will need to adapt for different package managers and perhaps use slightly-different provider-recommended methods for installing required dependencies (e.g., Helm). Once you've installed k0rdent in the management cluster and have kubectl, Helm, and other resources connected, you'll mostly be dealing with Kubernetes, and everything should work the same way on any host OS.
 
 ## Limitations
 
