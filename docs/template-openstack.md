@@ -64,7 +64,7 @@ Configurations for control plane and worker nodes are specified separately under
 | `securityGroups.filter.name`| `default`             | Security group for the instance.  |
 
 > [!NOTE]
-> Make sure `.spec.credential` references the `Credential` object (see [QuickStarts](quickstart.md))
+> Make sure `.spec.credential` references the `Credential` object.
 > The recommended minimum vCPU value for the control plane flavor is 2, while for the worker node flavor, it is 1. For detailed information, refer to the [machine-flavor CAPI docs](https://github.com/kubernetes-sigs/cluster-api-provider-openstack/blob/main/docs/book/src/clusteropenstack/configuration.md#machine-flavor).
 
 ### Example ClusterDeployment
