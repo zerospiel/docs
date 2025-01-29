@@ -219,7 +219,7 @@ the `aws-standalone-co-0.0.2` template, or it can be used as an upgrade from a c
 You wouldn't be able to use this template to update a cluster that uses any other `ClusterTemplate`.
 
 Similarly, the `AccessManagement` object must have properly configured `spec.accessRules` with a list of allowed 
-`ClusterTemplateChain` object names and their namespaces. For more information, see [Template Life Cycle Management](template.md).
+`ClusterTemplateChain` object names and their namespaces. For more information, see [Template Life Cycle Management](template-intro.md#template-life-cycle-management).
 
 > **Future Note:**  
 > Support for displaying all available `ClusterTemplates` for updates in the `ClusterDeployment` status is planned.
