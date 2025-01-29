@@ -390,4 +390,4 @@ spec:
           kube-vip.io/loadbalancerIPs: "172.16.0.10"
 ```
 
-For more information on these parameters, see the [Template Reference](template.md). 
+For more information on these parameters, see the [Template feference for vsphere](template-vsphere.md). 
