@@ -295,7 +295,7 @@ The following list contains `.spec.schedule` acceptable example values:
 
 ## Putting extra objects in a Backup
 
-If you need to back up objects other than those [backed up by default](overview.md#whats-included-in-the-backup),
+If you need to back up objects other than those [backed up by default](admin-backup.md#whats-included-in-the-backup),
 you can add the label `k0rdent.mirantis.com/component="kcm"` to these objects.
 
 All objects containing the label will be automatically added to the backup.
