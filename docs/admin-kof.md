@@ -1,6 +1,5 @@
 # k0rdent Observability and FinOps (kof)
 
-
 k0rdent Observability and FinOps ([kof](https://github.com/k0rdent/kof)) provides enterprise-grade observability
 and FinOps capabilities for k0rdent-managed Kubernetes clusters.
 It enables centralized metrics, logging, and cost management
