@@ -88,7 +88,7 @@ nav:
     - Templates for OpenStack: template-openstack.md
     - Templates for vSphere: template-vsphere.md
   - Known Issues:
-    - EKS: known-issues/eks.md
+    - EKS: known-issues-eks.md
   - Reference:
     - Glossary: glossary.md
   - Appendix:
