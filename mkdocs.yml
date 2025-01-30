@@ -37,6 +37,7 @@ extra_css:
   - stylesheets/extra.css
 
 plugins:
+  - callouts
   - search
   - ezglossary:
       section_config:
@@ -96,7 +97,6 @@ nav:
     - Understanding the dry run: appendix-dryrun.md
 
 markdown_extensions:
-  - callouts
   - tables
   - pymdownx.details
   - pymdownx.highlight: {}
