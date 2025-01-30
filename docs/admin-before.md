@@ -14,17 +14,13 @@ k0rdent deploys the cluster. When you delete it, k0rdent deletes it, and so on.
 
 Together, KCM and KSM interoperate to manifest a complete, template-driven system for defining and managing complete Internal Development Platforms (IDPs) comprising suites of services, plus a cluster and its components as realized on a particular cloud or infrastructure substrate. 
 
-[[[ DIAGRAM 1, SHOWING K0RDENT AND A CLUSTERDEPLOYMENT ]]]
-
 * **ClusterAPI providers**: ClusterAPI uses `providers` to manage different clouds and infrastructures, including bare metal. k0rdent ships with providers for AWS, Azure, OpenStack and vSphere, and you can add additional providers in order to control other clouds or infrastructures that ClusterAPI supports.
-
-[[[ DIAGRAM 2, WHICH TAKES DIAGRAM 1 AND ADDS IN THE DRIVERS ]]]
 
 * **Templates**: When you create a cluster, that cluster is based on a template, which specifies all of the various information about
 the cluster, such as where to find images, and so on. These templates get installed into k0rdent, but they don't do 
 anything until you reference them in a `ClusterDeployment` that represents an actual cluster.
 
-[[[ DIAGRAM 3, WHICH TAKES DIAGRAM 2 AND ADDS IN TEMPLATES AND CLUSTERDEPLOYMENTS ]]]
+![The Basic Architecture](./assets/k0rdent-basics-2.svg)
 
 k0rdent can also manage these clusters, upgrading, scaling them, or installing software and services.
 
@@ -33,7 +29,7 @@ you also use templates. These `ServiceTemplate`s are like `ClusterTemplate`s, in
 they're actually referenced, they don't do anything. When you reference a `ServiceTemplate` as part of a `ClusterDeployment`,
 k0rdent knows to install that service into that cluster.
 
-[[[ DIAGRAM 4, WHICH TAKES DIAGRAM 3 AND ADDS SERVICETEMPLATES AND SERVICES ]]]
+![Adding an application](./assets/k0rdent-basics-1.svg)
 
 These services can be actual services, such as Nginx or kyverno, or they can be user applications.
 
@@ -48,7 +44,7 @@ installed in the k0rdent management cluster. Depending on whether the target inf
 `Credential` might reference an access key and secret, or it might reference a service provider, but all of that gets abstracted
 out by the time you get to the `Credential`, which is what you'll actually reference.
 
-[[[ DIAGRAM 5, WHICH SHOWS THE DIFFERENT STRUCTURES THAT LEAD UP TO THE CREDENTIAL ]]]
+![Building a Credential](./assets/Credentials.svg)
 
 By abstracting everything out to create a standard `Credential` object, users never have to have access to actual credentials (lowercase "c").
 This enables the administrator to keep those credentials private, and to rotate them as necessary without disturbing users or
