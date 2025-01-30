@@ -100,55 +100,35 @@ metadata:
 spec:
   config:
     clusterLabels: {}
-    clusterNetwork:
-      pods:
-        cidrBlocks:
-        - 10.244.0.0/16
-      services:
-        cidrBlocks:
-        - 10.96.0.0/12
+    clusterIdentity:
+      name: aws-cluster-identity
+      namespace: kcm-system
     controlPlane:
-      iamInstanceProfile: control-plane.cluster-api-provider-aws.sigs.k8s.io
-      instanceType: ""
-    controlPlaneNumber: 3
-    k0s:
-      version: v1.27.2+k0s.0
-    publicIP: false
-    region: ""
-    sshKeyName: ""
+      amiID: ami-0eb9fdcf0d07bd5ef
+      instanceProfile: control-plane.cluster-api-provider-aws.sigs.k8s.io
+      instanceType: t3.small
+      controlPlaneNumber: 1
+      publicIP: true
+      region: ca-central-1
     worker:
-      amiID: ""
-      iamInstanceProfile: nodes.cluster-api-provider-aws.sigs.k8s.io
-      instanceType: ""
-    workersNumber: 2
-  template: aws-standalone-cp-0-0-3
-  credential: aws-credential
-  services:
-    - template: kyverno-3-2-6
-      name: kyverno
-      namespace: kyverno
-    - template: ingress-nginx-4-11-3
-      name: ingress-nginx
-      namespace: ingress-nginx
-  servicesPriority: 100
-  stopOnConflict: false
+      amiID: ami-0eb9fdcf0d07bd5ef
+      instanceProfile: nodes.cluster-api-provider-aws.sigs.k8s.io
+      instanceType: t3.small
+    workersNumber: 1
+  credential: aws-cluster-identity-cred
+  serviceSpec:
+    services:
+      - template: kyverno-3-2-6
+        name: kyverno
+        namespace: kyverno
+      - template: ingress-nginx-4-11-3
+        name: ingress-nginx
+        namespace: ingress-nginx
+    priority: 100
+  template: aws-standalone-cp-0-0-6
 ```
 
-In the example above the following fields are relevant to the deployment of beach-head services:
-
-```yaml
-  . . .
-  services:
-    - template: kyverno-3-2-6
-      name: kyverno
-      namespace: kyverno
-    - template: ingress-nginx-4-11-3
-      name: ingress-nginx
-      namespace: ingress-nginx
-  servicesPriority: 100
-  stopOnConflict: false
-  template: aws-standalone-cp-0-0-3
-```
+In the example above the fields under `serviceSpec` are relevant to the deployment of beach-head services.
 
 > NOTE:
 > Refer to the [Template Guide](template-intro.md) for more detail about these fields.
@@ -161,44 +141,53 @@ apiVersion: k0rdent.mirantis.com/v1alpha1
 kind: ServiceTemplate
 metadata:
   name: kyverno-3-2-6
-  namespace: kcm-system
+  annotations:
+    helm.sh/resource-policy: keep
 spec:
   helm:
     chartSpec:
       chart: kyverno
+      version: 3.2.6
       interval: 10m0s
       reconcileStrategy: ChartVersion
       sourceRef:
         kind: HelmRepository
         name: kcm-templates
       version: 3.2.6
+        name: k0rdent-templates
 ```
 
-The `kcm-templates` helm repository hosts the actual chart for kyverno version 3.2.6.
+The `k0rdent-templates` helm repository hosts the actual kyverno chart version 3.2.6.
 For more details see the [Bring your own Templates](template-byo.md) guide.
 
 ### Configuring Custom Values
 
-Helm values can be passed to each beach-head services with the `.spec.services[].values` field in the `ClusterDeployment` or `MultiClusterService` object. For example:
+Helm values can be passed to each beach-head services with the `.spec.serviceSpec.services[].values` field in the `ClusterDeployment` or `MultiClusterService` object. For example:
 
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1alpha1
 kind: ClusterDeployment
 metadata:
-  . . .
   name: my-clusterdeployment
   namespace: kcm-system
-  . . .
 spec:
   . . .
-  services:
-   . . .
-    - name: cert-manager
-      namespace: cert-manager
-      template: cert-manager-1-16-1
+  serviceSpec:
+    services:
+    - template: ingress-nginx-4-11-3
+      name: ingress-nginx
+      namespace: ingress-nginx
       values: |
-        crds:
-          enabled: true
+        ingress-nginx:
+          controller:
+            replicaCount: 3
+    - name: kyverno
+      namespace: kyverno
+      template: kyverno-3-2-6
+      values: |
+        kyverno:
+          admissionController:
+            replicas: 3
     - name: motel-regional
       namespace: motel
       template: motel-regional-0-1-1
@@ -213,13 +202,11 @@ spec:
         grafana:
           ingress:
             host: grafana.kcm0.example.net
-        cert-manager:
-          email: mail@example.net
-    - template: ingress-nginx-4-11-3
-      name: ingress-nginx
-      namespace: ingress-nginx
    . . .
 ```
+> NOTE: The values for ingress-nginx and kyverno start with the "ingress-nginx:" and "kyverno:" keys respectively because
+> the helm charts used by the ingress-nginx-4-11-3 and kyverno-3-2-6 `ServiceTemplates` use the official upstream
+> helm charts for ingress-nginx and kyverno as dependencies.
 
 ### Templating Custom Values
 
@@ -233,8 +220,8 @@ metadata:
   namespace: kcm-system
 spec:
   . . .
-  servicesPriority: 100
-  services:
+  serviceSpec:
+    services:
     - template: motel-0-1-0
       name: motel
       namespace: motel
@@ -244,6 +231,8 @@ spec:
       values: |
         controlPlaneEndpointHost: {{ .Cluster.spec.controlPlaneEndpoint.host }}
         controlPlaneEndpointPort: "{{ .Cluster.spec.controlPlaneEndpoint.port }}"
+    priority: 100
+    . . .        
 ```
 
 In this case, the host and port information will be fetched from the spec of the CAPI cluster that hosts this `ClusterDeployment`.
@@ -265,12 +254,15 @@ metadata:
   . . .
 spec:
   . . .
-  services:
-  - name: ingress-nginx
-    namespace: ingress-nginx
-    template: ingress-nginx-4-11-3
-  servicesPriority: 100
-  stopOnConflict: false
+  serviceSpec:
+    services:
+    - name: ingress-nginx
+      namespace: ingress-nginx
+      template: ingress-nginx-4-11-3
+    - name: kyverno
+      namespace: kyverno
+      template: kyverno-3-2-6
+    . . .
 status:
   . . .
   observedGeneration: 1
@@ -321,7 +313,7 @@ chapter, and more on `ServiceTemplate`s in the [Template Guide](template-intro.m
 
 ## Removing beach-head services
 
-To remove a beach-head service simply remove its entry from `.spec.services`.
+To remove a beach-head service simply remove its entry from `.spec.serviceSpec.services`.
 The example below removes `kyverno-3-2-6`, so its status also removed from `.status.services`.
 
 ```yaml
@@ -335,12 +327,13 @@ metadata:
   . . .
 spec:
   . . .
-  services:
-  - name: ingress-nginx
-    namespace: ingress-nginx
-    template: ingress-nginx-4-11-3
-  servicesPriority: 100
-  stopOnConflict: false
+  serviceSpec:
+    services:
+    - name: ingress-nginx
+      namespace: ingress-nginx
+      template: ingress-nginx-4-11-3
+    priority: 100
+    . . .
 status:
   . . .
   observedGeneration: 2
@@ -364,12 +357,16 @@ status:
 
 Here is an idea of the parameters involved.
 
-| Parameter                    | Example                | Description                                                                                   |
-|------------------------------|------------------------|-----------------------------------------------------------------------------------------------|
-| `.spec.servicesPriority`     | `100`                  | Sets the priority for the beach-head services defined in this spec (default: `100`)           |
-| `.spec.stopOnConflict`       | `false`                | Stops deployment of beach-head services upon first encounter of a conflict (default: `false`) |
-| `.spec.services[].template`  | `kyverno-3-2-6`        | Name of the `ServiceTemplate` object located in the same namespace                            |
-| `.spec.services[].name`      | `my-kyverno-release`   | Release name for the beach-head service                                                       |
-| `.spec.services[].namespace` | `my-kyverno-namespace` | Release namespace for the beach-head service (default: `.spec.services[].name`)               |
-| `.spec.services[].values`    | `replicas: 3`          | Helm values to be used with the template while deployed the beach-head services               | 
-| `.spec.services[].disable`   | `false`                | Disable handling of this beach-head service (default: `false`)                                |
+| Parameter                                 | Example                | Description                                                                                   |
+|-------------------------------------------|------------------------|-----------------------------------------------------------------------------------------------|
+| `.spec.serviceSpec.syncMode`              | `Continuous`           | Specifies how beach-head services are synced i the target cluster (default:`Continuous`)      |
+| `.spec.serviceSpec.DriftIgnore`           |                        | specifies resources to ignore for drift detection                                             |
+| `.spec.serviceSpec.DriftExclusions`       |                        | specifies specific configurations of resources to ignore for drift detection                  |
+| `.spec.serviceSpec.priority`              | `100`                  | Sets the priority for the beach-head services defined in this spec (default: `100`)           |
+| `.spec.serviceSpec.stopOnConflict`        | `false`                | Stops deployment of beach-head services upon first encounter of a conflict (default: `false`) |
+| `.spec.serviceSpec.services[].template`   | `kyverno-3-2-6`        | Name of the `ServiceTemplate` object located in the same namespace                            |
+| `.spec.serviceSpec.services[].name`       | `my-kyverno-release`   | Release name for the beach-head service                                                       |
+| `.spec.serviceSpec.services[].namespace`  | `my-kyverno-namespace` | Release namespace for the beach-head service (default: `.spec.services[].name`)               |
+| `.spec.serviceSpec.services[].values`     | `replicas: 3`          | Helm values to be used with the template while deployed the beach-head services               |
+| `.spec.serviceSpec.services[].valuesFrom` | ``                     | Can reference a ConfigMap or Secret containing helm values                                    |
+| `.spec.serviceSpec.services[].disable`    | `false`                | Disable handling of this beach-head service (default: `false`)                                |
