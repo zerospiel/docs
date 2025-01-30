@@ -67,3 +67,23 @@ In some ways that is very similar to GitOps, in which you commit definitions and
 ensure that reality matches the definition. We can say that k0rdent is GitOps-compatible, in the sense that you can (and should) consider storing k0rdent templates and YAML object definitions in Git repos, and can (and may want to) use GitOps tools like ArgoCD to modify and manage them upstream of k0rdent itself.
 
 The main difference is that k0rdent's way of representing clusters and services is fully compliant with Kubernetes-native tools like ClusterAPI, Sveltos and Helm. So you can, in fact, port much of what you do with k0rdent templates and objects directly to other solution environments that leverage these standard tools.
+
+# k0rdent initialization process
+
+![k0rdent initialization process](./assets/kcm-initialization.png)
+
+## The process
+
+The k0rdent initialization process involves tools such as Helm and FluxCD.
+
+1. [helm install kcm](../quick-start/installation.md#installation-via-helm) brings up the bootstrap components (yellow on the picture above)
+1. kcm-controller-manager sets up webhooks to validate its `CustomResource`s, then cert-manager handles the webhooks’ certificates
+1. kcm-controller-manager generates `Release` object corresponding to the kcm helm chart version
+1. kcm-controller-manager (or rather the [release-controller](https://github.com/k0rdent/kcm/blob/main/internal/controller/release_controller.go) inside it) generates template objects (`ProviderTemplate`/`ClusterTemplate`/`ServiceTemplate`) corresponding to a `Release` to be further processed
+1. kcm-controller-manager generates a `HelmRelease` object for every template from p.3 (Important: it includes also kcm helm chart itself)
+1. [Flux](https://github.com/fluxcd/flux2) (source-controller and helm-controller pods) reconciles the *HelmRelease* objects. In other words, it installs all the helm charts referred to in the templates.
+**After this point, the deployment is completely controlled by Flux.**
+1. kcm-controller-manager creates a `Management` object that refers to the above `Release` and the `ProviderTemplate` objects.
+The `Management` object represents the k0rdent management cluster as a whole.
+The management cluster Day-2 operations (such as [upgrade](admin-upgrading-kordent.md)) are  executed by manipulating the `Release` and `Management` objects.
+1. kcm-controller-manager generates an empty ``AccessManagement` object. `AccessManagement` defines [access rules](../template/main.md/#template-life-cycle-management) for `ClusterTemplate`/`ServiceTemplate` propagation across user namespaces. Further `AccessManagement` might be edited and used along with admin-created `ClusterTemplateChain` and `ServiceTemplaitChain` objects.
