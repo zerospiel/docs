@@ -78,6 +78,7 @@ nav:
   - User Guide:
     - Creating clusters as a k0rdent user: user-create-cluster.md
     - Creating and adding services to clusters as a k0rdent user: user-create-service.md
+    - Enabling drift detection: user-enable-drift-detection.md
   - k0rdent Templates Reference:
     - Introduction to k0rdent templates: template-intro.md
     - Using predefined templates: template-predefined.md
@@ -86,6 +87,8 @@ nav:
     - Templates for Azure: template-azure.md
     - Templates for OpenStack: template-openstack.md
     - Templates for vSphere: template-vsphere.md
+  - Known Issues:
+    - EKS: known-issues/eks.md
   - Reference:
     - Glossary: glossary.md
   - Appendix:
