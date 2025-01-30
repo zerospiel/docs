@@ -74,11 +74,11 @@ nav:
     - Upgrading k0rdent: admin-upgrading-k0rdent.md
     - k0rdent credentials management: admin-credentials.md
     - k0rdent Role Based Access Control (RBAC): admin-rbac.md
-    - k0rdent Observability and FinOps (KOF): admin-kof.md
     - Backing up k0rdent: admin-backup.md
   - User Guide:
     - Creating clusters as a k0rdent user: user-create-cluster.md
     - Creating and adding services to clusters as a k0rdent user: user-create-service.md
+    - Enabling drift detection: user-enable-drift-detection.md
   - k0rdent Templates Reference:
     - Introduction to k0rdent templates: template-intro.md
     - Using predefined templates: template-predefined.md
@@ -92,7 +92,6 @@ nav:
   - Reference:
     - Glossary: glossary.md
   - Appendix:
-    - Air-gapped installation: appendix-airgap.md
     - Extended management configuration: appendix-extend-mgmt.md
     - Understanding the dry run: appendix-dryrun.md
 
