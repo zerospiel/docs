@@ -1,6 +1,6 @@
 # Guide to QuickStarts
 
-The following QuickStart chapters provide a recipe for quickly installing and trying k0rdent. Setting up k0rdent for production is detailed in the [Administrator Guide]().
+The following QuickStart chapters provide a recipe for quickly installing and trying k0rdent. Setting up k0rdent for production is detailed in the [Administrator Guide](admin-before.md).
 
 ## What the QuickStart covers
 
