@@ -177,7 +177,7 @@ You should see something like this. It's important to save these credentials sec
 > WARNING:
 > You may encounter an issue where EKS machines are not created due to the `ControlPlaneIsStable` preflight check
 > failure during EKS cluster deployment. Please follow the
-> [instruction](../known-issues/eks.md#eks-machines-are-not-created-controlplaneisstable-preflight-check-failed)
+> [instruction](known-issues-eks.md#eks-machines-are-not-created-controlplaneisstable-preflight-check-failed)
 > to apply the workaround.
 
 ## Configure AWS IAM for k0rdent
