@@ -46,7 +46,7 @@ Follow these steps to deploy a standalone Kubernetes cluster:
     If the `Credential` you need doesn't yet exist, you can ask your cloud administrator to create it, or you can
     follow the instructions in the [Credential System](admin-credentials.md), as well as the specific instructions for your [target infrastructure](admin-prepare.md), to crete it yourself.
 
-    > **Tip:**  
+    > Tip: 
     > Double-check to make sure that your credentials have sufficient permissions to create resources on the target infrastructure.
 
 2. Select a Template

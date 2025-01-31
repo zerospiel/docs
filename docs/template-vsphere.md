@@ -175,7 +175,7 @@ handle it.
 The hosted CP template has mostly identical parameters to the standalone CP, and you can
 check them in the [template parameters](template-intro.md) section.
 
-> NOTE: **Important Note on Control Plane Endpoint IP Address**
+> NOTE:
 > The vSphere provider requires the control plane endpoint IP to be specified
 > before deploying the cluster. Ensure that this IP matches the IP assigned to
 > the k0smotron load balancer (LB) service. Provide the control plane endpoint
