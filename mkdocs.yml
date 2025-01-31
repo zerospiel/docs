@@ -71,7 +71,9 @@ nav:
     - Creating standalone clusters: admin-creating-clusters.md
     - Adopting clusters: admin-adopting-clusters.md
     - Hosted control planes: admin-hosted-control-planes.md
+    - Troubleshooting AWS VPCs: admin-troubleshooting-aws-vpcs.md
     - Using and creating service templates: admin-service-templates.md
+    - Creating multi-cluster services: admin-create-multiclusterservice.md
     - Upgrading k0rdent: admin-upgrading-k0rdent.md
     - k0rdent credentials management: admin-credentials.md
     - k0rdent Role Based Access Control (RBAC): admin-rbac.md
@@ -95,6 +97,7 @@ nav:
   - Appendix:
     - Extended management configuration: appendix-extend-mgmt.md
     - Understanding the dry run: appendix-dryrun.md
+    - Cloud provider credentials management in CAPI: appendix-providers.md
 
 markdown_extensions:
   - tables
