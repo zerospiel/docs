@@ -58,7 +58,7 @@ Follow these steps to set up a k0smotron-hosted control plane on AWS:
     kubectl get awsmachinetemplate <cluster-name>-worker-mt -o go-template='{{.spec.template.spec.ami.id}}'
     ```
 
-    > Tip:  
+    > TIP:  
     > If you want to use different VPCs or regions for your management and hosted clusters, you’ll need to configure additional networking, such as [VPC peering](https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/vpc-peering.html), to allow communication between them.
 
 
@@ -95,7 +95,7 @@ Follow these steps to set up a k0smotron-hosted control plane on AWS:
           - sg-0e000000000000000
     ```
 
-    > Note:  
+    > NOTE:  
     > The example above uses the `us-west-1` region, but you should use the region of your VPC.
 
 ### Generate the `ClusterDeployment` Manifest
@@ -353,7 +353,7 @@ Follow these steps to set up a k0smotron-hosted control plane on vSphere.
 The `ClusterDeployment` manifest for vSphere-hosted control planes is similar to standalone control plane deployments. 
 For a detailed list of parameters, refer to our discussion of [Template parameters for vSphere](template-vsphere.md).
 
-> Important: 
+> IMPORTANT: 
 > The vSphere provider requires you to specify the control plane endpoint IP before deploying the cluster. This IP 
 > address must match the one assigned to the k0smotron load balancer (LB) service.  
 > Use an annotation supported by your load balancer provider to assign the control plane endpoint IP to the k0smotron 
