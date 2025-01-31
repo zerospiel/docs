@@ -21,7 +21,7 @@ Follow these steps to set up a k0smotron-hosted control plane on AWS:
     - The Subnet ID and Availability Zone (AZ) for the worker nodes.
     - The AMI ID for the worker nodes (Amazon Machine Image ID for the desired OS and Kubernetes version).
 
-    > **Important:**  
+    > Important:  
     > All control plane components for your hosted cluster will reside in the management cluster. The management cluster 
       must have sufficient resources to handle these additional workloads.
 
@@ -58,7 +58,7 @@ Follow these steps to set up a k0smotron-hosted control plane on AWS:
     kubectl get awsmachinetemplate <cluster-name>-worker-mt -o go-template='{{.spec.template.spec.ami.id}}'
     ```
 
-    > **Tip:**  
+    > Tip:  
     > If you want to use different VPCs or regions for your management and hosted clusters, you’ll need to configure additional networking, such as [VPC peering](https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/vpc-peering.html), to allow communication between them.
 
 
@@ -95,10 +95,10 @@ Follow these steps to set up a k0smotron-hosted control plane on AWS:
           - sg-0e000000000000000
     ```
 
-    > **Note:**  
+    > Note:  
     > The example above uses the `us-west-1` region, but you should use the region of your VPC.
 
-    #### Generate the `ClusterDeployment` Manifest
+### Generate the `ClusterDeployment` Manifest
 
     To simplify the creation of a `ClusterDeployment` manifest, you can use the following template, which dyamically 
     inserts the appropriate values:
@@ -181,7 +181,7 @@ Follow these steps to set up a k0smotron-hosted control plane on Azure:
     - A [default storage class](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/) configured 
       on the management cluster to support Persistent Volumes.
 
-    > **Note:**  
+    > Note:  
     > All control plane components for managed clusters will run in the management cluster. Make sure the management cluster 
       has sufficient CPU, memory, and storage to handle the additional workload.
 
@@ -254,7 +254,7 @@ Follow these steps to set up a k0smotron-hosted control plane on Azure:
           securityGroupName: mgmt-cluster-node-nsg
     ```
 
-    #### Generate a `ClusterDeployment` Manifest
+### Generate the `ClusterDeployment` Manifest
 
     To simplify the creation of a `ClusterDeployment` manifest, you can use the following template, which dyamically inserts 
     the appropriate values:
@@ -353,8 +353,8 @@ Follow these steps to set up a k0smotron-hosted control plane on vSphere.
 The `ClusterDeployment` manifest for vSphere-hosted control planes is similar to standalone control plane deployments. 
 For a detailed list of parameters, refer to our discussion of [Template parameters for vSphere](template-vsphere.md).
 
-> **Important:**  
-> The vSphere provider requires you to specify the **control plane endpoint IP** before deploying the cluster. This IP 
+> Important: 
+> The vSphere provider requires you to specify the control plane endpoint IP before deploying the cluster. This IP 
 > address must match the one assigned to the k0smotron load balancer (LB) service.  
 > Use an annotation supported by your load balancer provider to assign the control plane endpoint IP to the k0smotron 
 > service. For example, the manifest below includes a `kube-vip` annotation.
@@ -395,4 +395,4 @@ spec:
           kube-vip.io/loadbalancerIPs: "172.16.0.10"
 ```
 
-For more information on these parameters, see the [Template feference for vsphere](template-vsphere.md). 
+For more information on these parameters, see the [Template reference for vsphere](template-vsphere.md). 
