@@ -78,12 +78,12 @@ spec:
 
 > WARNING:
 > When deploying EKS cluster please note that
-> [additional steps](admin-troubleshooting-vpc.md) may be needed for proper VPC removal.
+> [additional steps](admin-troubleshooting-aws-vpcs.md) may be needed for proper VPC removal.
 
 > WARNING:
 > You may encounter an issue where EKS machines are not created due to the `ControlPlaneIsStable` preflight check
 > failure during EKS cluster deployment. Please follow the
-> [instruction](known-issues/eks.md#eks-machines-are-not-created-controlplaneisstable-preflight-check-failed)
+> [instruction](known-issues-eks.md#eks-machines-are-not-created-controlplaneisstable-preflight-check-failed)
 > to apply the workaround.
 
 > WARNING:
