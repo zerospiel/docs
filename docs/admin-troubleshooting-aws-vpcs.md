@@ -22,20 +22,20 @@ When it is impossible to turn off GuardDuty or applying ownership tags is not pe
 Follow these steps.
 
 1. Look for the affected VPC. The sign of “stuck” VPC looks like a hidden “Delete” button.
-   ![Failed VPC deletion](../../assets/delete-vpc-fail.png)
+   ![Failed VPC deletion](/assets/delete-vpc-fail.png)
 
 2. Open “Network Interfaces” and attempt to detach an interface. You will see a disabled “Detach” button:
-![detach-network-interface-fail](../../assets/detach-network-interface-fail.png)
+![detach-network-interface-fail](/assets/detach-network-interface-fail.png)
 
 It is required to get to VPC endpoints screen and remove the end-point: 
-![delete-vpce](../../assets/delete-vpce.png)
+![delete-vpce](/assets/delete-vpce.png)
 
-![OK Endpoint deletion](../../assets/delete-endpoint-ok.png)
+![OK Endpoint deletion](/assets/delete-endpoint-ok.png)
 
 Wait until VPCE is completely removed, all network interfaces disappear.
-![No Network Interfaces](../../assets/no-network-interfaces.png)
+![No Network Interfaces](/assets/no-network-interfaces.png)
 
 Now VPC can be finally removed:
-![Failed VPC OK](../../assets/delete-vpc-ok.png)
+![Failed VPC OK](/assets/delete-vpc-ok.png)
 
 
