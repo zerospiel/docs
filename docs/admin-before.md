@@ -72,7 +72,7 @@ The main difference is that k0rdent's way of representing clusters and services 
 
 The k0rdent initialization process involves tools such as Helm and FluxCD.
 
-1. [helm install kcm](../quick-start/installation.md#installation-via-helm) brings up the bootstrap components (yellow on the picture above)
+1. [helm install kcm](admin-installation.md) brings up the bootstrap components (yellow on the picture above)
 1. kcm-controller-manager sets up webhooks to validate its `CustomResource`s, then cert-manager handles the webhooks’ certificates
 1. kcm-controller-manager generates `Release` object corresponding to the kcm helm chart version
 1. kcm-controller-manager (or rather the [release-controller](https://github.com/k0rdent/kcm/blob/main/internal/controller/release_controller.go) inside it) generates template objects (`ProviderTemplate`/`ClusterTemplate`/`ServiceTemplate`) corresponding to a `Release` to be further processed
@@ -81,5 +81,5 @@ The k0rdent initialization process involves tools such as Helm and FluxCD.
 **After this point, the deployment is completely controlled by Flux.**
 1. kcm-controller-manager creates a `Management` object that refers to the above `Release` and the `ProviderTemplate` objects.
 The `Management` object represents the k0rdent management cluster as a whole.
-The management cluster Day-2 operations (such as [upgrade](admin-upgrading-kordent.md)) are  executed by manipulating the `Release` and `Management` objects.
-1. kcm-controller-manager generates an empty ``AccessManagement` object. `AccessManagement` defines [access rules](../template/main.md/#template-life-cycle-management) for `ClusterTemplate`/`ServiceTemplate` propagation across user namespaces. Further `AccessManagement` might be edited and used along with admin-created `ClusterTemplateChain` and `ServiceTemplaitChain` objects.
+The management cluster Day-2 operations (such as [upgrade](admin-upgrading-k0rdent.md)) are  executed by manipulating the `Release` and `Management` objects.
+1. kcm-controller-manager generates an empty ``AccessManagement` object. `AccessManagement` defines [access rules](template-intro.md#template-life-cycle-management) for `ClusterTemplate`/`ServiceTemplate` propagation across user namespaces. Further `AccessManagement` might be edited and used along with admin-created `ClusterTemplateChain` and `ServiceTemplaitChain` objects.
