@@ -10,7 +10,7 @@ Note that if you have already done our AWS QuickStart ([QuickStart 2 - AWS targe
 
 In this section, we'll create and configure those identity abstractions, and perform other steps to make required credentials accessible to k0rdent in the management node. **Note: if you're working on a shared Azure account, please ensure that the Azure Cluster Identity and Service Principal are not already set up before creating new abstractions.**
 
-Creating user identity abstractions with minimal required permissions is one of several principle-of-least-privilege mechanisms used to help ensure security as organizations work with k0rdent at progressively greater scales. For more on k0rdent security best practices, please see the [Administrator Guide]().
+Creating user identity abstractions with minimal required permissions is one of several principle-of-least-privilege mechanisms used to help ensure security as organizations work with k0rdent at progressively greater scales. For more on k0rdent security best practices, please see the [Administrator Guide](admin-before.md).
 
 ## Install the Azure CLI (az)
 
@@ -391,4 +391,4 @@ Check out the [Administrator Guide](admin-before.md) ...
 * For details about setting up k0rdent to manage clusters on VMware and OpenStack
 * For details about using k0rdent with cloud Kubernetes distros: AWS EKS and Azure AKS
 
-Or check out the [Demos Repository]() for fast, makefile-driven demos of k0rdent's key features!
+Or check out the [Demos Repository](https://github.com/k0rdent/demos) for fast, makefile-driven demos of k0rdent's key features!
