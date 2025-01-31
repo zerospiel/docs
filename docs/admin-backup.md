@@ -112,7 +112,7 @@ Before you create a scheduled backup, you need to perform a few preparatory step
 
 Periodic backups are handled by a `ManagementBackup` object, which uses a [Cron](https://en.wikipedia.org/wiki/Cron) expression
 for its `.spec.schedule` field. 
-If you don't set the `.spec.schedule` field, Velero will instead work with  [backup on demand](#backup-on-demand).
+If you don't set the `.spec.schedule` field, Velero will instead work with  [backup on demand](#management-backup-on-demand).
 
 Optionally, set the name of the `BackupStorageLocation` `.spec.backup.storageLocation`.
 The default location is the `BackupStorageLocation` object with `.spec.default` set to `true`.
@@ -337,7 +337,7 @@ to simplify querying if required.
 If during the `kcm` upgrade a failure happens, a rollback operation
 should be performed to restore the `kcm` to its before-the-upgrade state:
 
-1. Follow the first 2 steps from the [restoration section](#general-case),
+1. Follow the first 2 steps from the [restoration section](#restoration),
    creating a clean `kcm` installation and `BackupStorageLocation`/`Secret`.
 
 1. > WARNING:
