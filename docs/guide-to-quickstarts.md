@@ -34,7 +34,7 @@ Note: Ubuntu is a Debian distro and uses `apt` for package management. Other rec
 
 ## Limitations
 
-This QuickStart guides you in quickly creating a minimal k0rdent working environment. Setting up k0rdent for production is detailed in the [Administrator Guide]().
+This QuickStart guides you in quickly creating a minimal k0rdent working environment. Setting up k0rdent for production is detailed in the [Administrator Guide](admin-before.md).
 
 The current QuickStart focuses on AWS and Amazon cloud environments, and guides in creating 'standalone' clusters &mdash; in k0rdent parlance, that means 'CNCF-certified Kubernetes clusters with control planes and workers hosted on cloud virtual machines.' The 'CNCF-certified Kubernetes cluster' is the [k0s Kubernetes distro](https://k0sproject.io).
 
