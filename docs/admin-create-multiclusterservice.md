@@ -75,7 +75,7 @@ spec:
   . . .
 ```
 
-NOTE: See [Deploy beach-head Services using Cluster Deployment](deploy-services-clusterdeployment.md) for how to use beach-head services with ClusterDeployment.
+NOTE: See [Deploy beach-head Services using Cluster Deployment](user-create-service.md) for how to use beach-head services with ClusterDeployment.
 Now the following `global-ingress` MultiClusterService object is created with the following spec:
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1alpha1
@@ -99,9 +99,9 @@ version 4.11.3 of ingress-nginx service on it.
 
 ### Configuring Custom Values
 
-Refer to "Configuring Custom Values" in [Deploy beach-head Services using Cluster Deployment](./deploy-services-clusterdeployment.md).
+Refer to "Configuring Custom Values" in [Deploy beach-head Services using Cluster Deployment](user-create-service.md#deployment-of-beach-head-services).
 ### Templating Custom Values
-Refer to "Templating Custom Values" in [Deploy beach-head Services using Cluster Deployment](./deploy-services-clusterdeployment.md).
+Refer to "Templating Custom Values" in [Deploy beach-head Services using Cluster Deployment](user-create-service.md#configuring-custom-values).
 ### Services Priority and Conflict
 
 The `.spec.serviceSpec.priority` field is used to specify the priority for the services managed by a ClusterDeployment or MultiClusterService object.
@@ -275,4 +275,4 @@ status:
 ```
 The status under `.status.services` for ClusterDeployment `dev-cluster-2` shows that it is managing ingress-nginx as expected since it has a higher priority.
 ## Parameter List
-Refer to "Parameter List" in [Deploy beach-head Services using Cluster Deployment](./deploy-services-clusterdeployment.md).
+Refer to "Parameter List" in [Deploy beach-head Services using Cluster Deployment](user-create-service.md#deployment-of-beach-head-services).
