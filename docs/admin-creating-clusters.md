@@ -30,7 +30,7 @@ Follow these steps to deploy a standalone Kubernetes cluster tailored to your sp
 
     Start by creating a `Credential` object that includes all required authentication details for your chosen infrastructure provider. Follow the instructions in the [chapter about credential management](admin-credentials.md), as well as the specific instructions for your [target infrastructure](admin-prepare.md).
 
-    > **Tip:**  
+    > TIP: 
     > Double-check to make sure that your credentials have sufficient permissions to create resources on the target infrastructure.
 
 2. Select a Template
@@ -138,7 +138,7 @@ Follow these steps to deploy a standalone Kubernetes cluster tailored to your sp
     kubectl -n <namespace> get cluster <cluster-name> -o=yaml
     ```
 
-    > Tip:  
+    > TIP:  
     > For a detailed view of the provisioning process, use the `clusterctl describe` command (note that this requires the [`clusterctl`](https://github.com/kubernetes-sigs/cluster-api/releases) CLI):
 
     ```shell
@@ -222,7 +222,7 @@ You wouldn't be able to use this template to update a cluster that uses any othe
 Similarly, the `AccessManagement` object must have properly configured `spec.accessRules` with a list of allowed 
 `ClusterTemplateChain` object names and their namespaces. For more information, see [Template Life Cycle Management](template-intro.md#template-life-cycle-management).
 
-> Future Note:  
+> NOTE:  
 > Support for displaying all available `ClusterTemplates` for updates in the `ClusterDeployment` status is planned.
 
 <!-- TODO

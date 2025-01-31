@@ -26,7 +26,7 @@ Follow these steps to adopt an existing cluster:
     provider. Follow the instructions in the [Credential System](admin-credentials.md), as well as the specific instructions 
     for your [target infrastructure](admin-prepare.md).
 
-    > Tip:  
+    > TIP:  
     > Double-check that your credentials have sufficient permissions to create resources on the target infrastructure.
 
 3. Configure the Adopted Cluster Template

@@ -181,7 +181,7 @@ Follow these steps to set up a k0smotron-hosted control plane on Azure:
     - A [default storage class](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/) configured 
       on the management cluster to support Persistent Volumes.
 
-    > Note:  
+    > NOTE:  
     > All control plane components for managed clusters will run in the management cluster. Make sure the management cluster 
       has sufficient CPU, memory, and storage to handle the additional workload.
 
