@@ -6,9 +6,13 @@ As noted in the [Guide to QuickStarts](guide-to-quickstarts.md), you'll need adm
 
 Note that if you have already done our AWS QuickStart ([QuickStart 2 - AWS target environment](quickstart-2-aws.md)) you can continue here with steps to add the ability to manage clusters on Azure. The k0rdent management cluster can accommodate multiple provider and credential setups, enabling management of multiple infrastructures. And even if your management node is external to Azure (for example, it could be on an AWS EC2 virtual machine), as long as you permit outbound traffic to all IP addresses from the management node, this should work fine. A big benefit of k0rdent is that it provides a single point of control and visibility across multiple clusters on multiple clouds and infrastructures.
 
-**Cloud Security 101 Note:** k0rdent requires _some_ but not _all_ permissions to manage Azure resources &mdash; doing so via the CAPZ (ClusterAPI for Azure) provider. So a best practice for using k0rdent with Azure (this pattern is repeated with other clouds and infrastructures) is to create a new k0rdent Azure Cluster Identity and Service Principal (SP) on your account with the particular permissions k0rdent and CAPZ require.
+> NOTE:
+> **Cloud Security 101:** k0rdent requires _some_ but not _all_ permissions to manage Azure resources &mdash; doing so via the CAPZ (ClusterAPI for Azure) provider. So a best practice for using k0rdent with Azure (this pattern is repeated with other clouds and infrastructures) is to create a new k0rdent Azure Cluster Identity and Service Principal (SP) on your account with the particular permissions k0rdent and CAPZ require.
 
-In this section, we'll create and configure those identity abstractions, and perform other steps to make required credentials accessible to k0rdent in the management node. **Note: if you're working on a shared Azure account, please ensure that the Azure Cluster Identity and Service Principal are not already set up before creating new abstractions.**
+In this section, we'll create and configure those identity abstractions, and perform other steps to make required credentials accessible to k0rdent in the management node.
+
+> NOTE:
+> If you're working on a shared Azure account, please ensure that the Azure Cluster Identity and Service Principal are not already set up before creating new abstractions.
 
 Creating user identity abstractions with minimal required permissions is one of several principle-of-least-privilege mechanisms used to help ensure security as organizations work with k0rdent at progressively greater scales. For more on k0rdent security best practices, please see the [Administrator Guide](admin-before.md).
 

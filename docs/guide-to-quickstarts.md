@@ -21,19 +21,24 @@ The QuickStart shows and briefly explains the hows, whys, and wherefores of manu
 QuickStart prerequisites are simple &mdash; you'll need:
 
 * A desktop or cloud virtual machine running a supported version of Ubuntu Server (e.g., [22.04.5 LTS, Jammy Jellyfish](https://releases.ubuntu.com/jammy/)) &mdash; This machine will be used to install a basic Kubernetes working environment, and to host a single-node k0s Kubernetes management cluster to host k0rdent components. For simplest setup, configure this machine as follows:
-
-    * A minimum of 32GB RAM, 8 vCPUs, 100GB SSD (e.g., AWS `t3.2xlarge` or equivalent)
-    * Set up for SSH access using keys (standard for cloud VMs)
-    * Set up for passwordless sudo (i.e., edit /etc/sudoers to configure your user to issue sudo commands without a password challenge)
-    * Inbound traffic - SSH (port 22) and ping from your laptop's IP address
-    * Outbound traffic - All to any IP address
-    * Apply all recent updates and upgrade local applications (sudo apt update/sudo apt upgrade)
-    * (Optional) snapshot the machine in its virgin state
-
+  * A minimum of 32GB RAM, 8 vCPUs, 100GB SSD (e.g., AWS `t3.2xlarge` or equivalent)
+  * Set up for SSH access using keys (standard for cloud VMs)
+  * Set up for passwordless sudo (i.e., edit /etc/sudoers to configure your user to issue sudo commands without a password challenge)
+  * Inbound traffic - SSH (port 22) and ping from your laptop's IP address
+  * Outbound traffic - All to any IP address
+  * Apply all recent updates and upgrade local applications (sudo apt update/sudo apt upgrade)
+  * (Optional) snapshot the machine in its virgin state
 * Administrative-level access to an AWS or Azure cloud account - Depending on which cloud environment you prefer. k0rdent will leverage this cloud to provide infrastructure for hosting managed clusters.
 
-> NOTE: 
-> Ubuntu is a Debian distro and uses `apt` for package management. Other recent versions of 'enterprise' Linux should work with the following instructions as well, though you will need to adapt for different package managers and perhaps use slightly-different provider-recommended methods for installing required dependencies (e.g., Helm). Once you've installed k0rdent in the management cluster and have kubectl, Helm, and other resources connected, you'll mostly be dealing with Kubernetes, and everything should work the same way on any host OS.
+> NOTE: Ubuntu is a Debian distro and uses `apt` for package management.
+> Other recent versions of 'enterprise' Linux should work with the
+> following instructions as well, though you will need to adapt for
+> different package managers and perhaps use slightly-different
+> provider-recommended methods for installing required dependencies
+> (e.g., Helm). Once you've installed k0rdent in the management cluster
+> and have kubectl, Helm, and other resources connected, you'll mostly
+> be dealing with Kubernetes, and everything should work the same way on
+> any host OS.
 
 ## Limitations
 
@@ -41,7 +46,7 @@ This QuickStart guides you in quickly creating a minimal k0rdent working environ
 
 The current QuickStart focuses on AWS and Amazon cloud environments, and guides in creating 'standalone' clusters &mdash; in k0rdent parlance, that means 'CNCF-certified Kubernetes clusters with control planes and workers hosted on cloud virtual machines.' The 'CNCF-certified Kubernetes cluster' is the [k0s Kubernetes distro](https://k0sproject.io).
 
-However: this is far from being all that k0rdent can do today. So ...
+k0rdent can do so much more today. Let's take a look at what's possible.
 
 ## Coming soon
 
