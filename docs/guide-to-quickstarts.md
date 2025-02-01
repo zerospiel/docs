@@ -32,7 +32,7 @@ QuickStart prerequisites are simple &mdash; you'll need:
 
 ### Supported Operating Systems
 
-Any linux based os that supports deploying [K0s](https://k0sproject.io/) will work, you may need to adjust the suggested commands.
+Any linux based os that supports deploying [k0s](https://k0sproject.io/) will work, you may need to adjust the suggested commands.
 
 
 | OS | Package Manager | Link|
