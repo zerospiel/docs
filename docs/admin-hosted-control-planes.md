@@ -21,9 +21,9 @@ Follow these steps to set up a k0smotron-hosted control plane on AWS:
     - The Subnet ID and Availability Zone (AZ) for the worker nodes.
     - The AMI ID for the worker nodes (Amazon Machine Image ID for the desired OS and Kubernetes version).
 
-    > Important:  
+    > IMPORTANT:  
     > All control plane components for your hosted cluster will reside in the management cluster. The management cluster 
-      must have sufficient resources to handle these additional workloads.
+    > must have sufficient resources to handle these additional workloads.
 
 2. Networking
 

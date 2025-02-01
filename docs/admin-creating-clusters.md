@@ -36,6 +36,7 @@ Follow these steps to deploy a standalone Kubernetes cluster tailored to your sp
 2. Select a Template
 
     Templates in k0rdent are predefined configurations that describe how the cluster should be set up. Templates include details such as:
+
     - The number and type of control plane and worker nodes.
     - Networking settings.
     - Regional deployment preferences.
@@ -68,6 +69,7 @@ Follow these steps to deploy a standalone Kubernetes cluster tailored to your sp
 3. Create a ClusterDeployment YAML Configuration
 
     The `ClusterDeployment` object is the main configuration file that defines your cluster's specifications. It includes:
+
     - The template to use.
     - The credentials for the infrastructure provider.
     - Optional customizations such as instance types, regions, and networking.
@@ -174,29 +176,29 @@ k0rdent will then realize the cluster is out of sync and will attempt to remedy 
 
 Follow these steps to update the `ClusterDeployment`:
 
-1. Patch the `ClusterDeployment` with the new template:
+  1. Patch the `ClusterDeployment` with the new template
 
-   Run the following command, replacing the placeholders with the appropriate values:
+    Run the following command, replacing the placeholders with the appropriate values:
 
-   ```shell
-   kubectl patch clusterdeployment.kcm <cluster-name> -n <namespace> --patch '{"spec":{"template":"<new-template-name>"}}' --type=merge
-   ```
+    ```shell
+    kubectl patch clusterdeployment.kcm <cluster-name> -n <namespace> --patch '{"spec":{"template":"<new-template-name>"}}' --type=merge
+    ```
 
-2. Check the status of the `ClusterDeployment`:
+  2. Check the status of the `ClusterDeployment`
 
-   After applying the patch, verify the status of the `ClusterDeployment` object:
+    After applying the patch, verify the status of the `ClusterDeployment` object:
 
-   ```shell
-   kubectl get clusterdeployment.kcm <cluster-name> -n <namespace>
-   ```
+    ```shell
+    kubectl get clusterdeployment.kcm <cluster-name> -n <namespace>
+    ```
 
-3. Inspect the detailed status:
+  3. Inspect the detailed status
 
-   For more details, use the `-o=yaml` option to check the `.status.conditions` field:
+    For more details, use the `-o=yaml` option to check the `.status.conditions` field:
 
-   ```shell
-   kubectl get clusterdeployment.kcm <cluster-name> -n <namespace> -o=yaml
-   ```
+    ```shell
+    kubectl get clusterdeployment.kcm <cluster-name> -n <namespace> -o=yaml
+    ```
 
 Note that not all updates are possible; `ClusterTemplateChain` objects limit what templates can be applied.  Consider,
 for example, this `ClusterTemplateChain`:

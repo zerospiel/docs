@@ -1,4 +1,4 @@
-# AWS VPC Not Removed
+# AWS VPC Not Removed When Deleting EKS Cluster
 
 A bug has been fixed in CAPA (Cluster API Provider AWS) for VPC removal: [kubernetes-sigs/cluster-api-provider-aws#5192](https://github.com/kubernetes-sigs/cluster-api-provider-aws/issues/5192)
 
@@ -22,20 +22,21 @@ When it is impossible to turn off GuardDuty or applying ownership tags is not pe
 Follow these steps.
 
 1. Look for the affected VPC. The sign of “stuck” VPC looks like a hidden “Delete” button.
-   ![Failed VPC deletion](assets/delete-vpc-fail.png)
+![Failed VPC deletion](assets/delete-vpc-fail.png)
 
 2. Open “Network Interfaces” and attempt to detach an interface. You will see a disabled “Detach” button:
 ![detach-network-interface-fail](assets/detach-network-interface-fail.png)
 
-It is required to get to VPC endpoints screen and remove the end-point: 
+3. It is required to get to VPC endpoints screen and remove the end-point: 
 ![delete-vpce](assets/delete-vpce.png)
 
+4. OK Endpoint deletion
 ![OK Endpoint deletion](assets/delete-endpoint-ok.png)
 
-Wait until VPCE is completely removed, all network interfaces disappear.
+5. Wait until VPCE is completely removed, all network interfaces disappear.
 ![No Network Interfaces](assets/no-network-interfaces.png)
 
-Now VPC can be finally removed:
+6. Now VPC can be finally removed:
 ![Failed VPC OK](assets/delete-vpc-ok.png)
 
 
