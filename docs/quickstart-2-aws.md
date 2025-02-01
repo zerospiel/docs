@@ -1,4 +1,3 @@
-
 # QuickStart 2 - AWS target environment
 
 In this QuickStart unit, we'll be gathering information and performing preparatory steps to enable k0rdent (running on your management node) to manage clusters on Amazon Web Services (AWS), and deploying our first managed cluster.
@@ -7,8 +6,12 @@ As noted in the [Guide to QuickStarts](guide-to-quickstarts.md), you'll need adm
 
 Note that if you have already done our Azure QuickStart ([QuickStart 2 - Azure target environment](quickstart-2-azure.md)) you can continue here with steps to add the ability to manage clusters on AWS. The k0rdent management cluster can accommodate multiple provider and credential setups, enabling management of multiple infrastructures. And even if your management node is external to AWS (for example, it could be on an Azure virtual machine), as long as you permit outbound traffic to all IP addresses from the management node, this should work fine. A big benefit of k0rdent is that it provides a single point of control and visibility across multiple clusters on multiple clouds and infrastructures.
 
-> CLOUD SECURITY 101 NOTE: 
-> k0rdent requires _some_ but not _all_ permissions to manage AWS &mdash; doing so via the CAPA (ClusterAPI for AWS) provider. So a best practice for using k0rdent with AWS (this pattern is repeated with other clouds and infrastructures) is to create a new 'k0rdent user' on your account with the particular permissions k0rdent and CAPA require.
+> NOTE:
+> **CLOUD SECURITY 101**: k0rdent requires _some_ but not _all_ permissions
+> to manage AWS &mdash; doing so via the CAPA (ClusterAPI for AWS) provider.
+> So a best practice for using k0rdent with AWS (this pattern is repeated
+> with other clouds and infrastructures) is to create a new 'k0rdent user'
+> on your account with the particular permissions k0rdent and CAPA require.
 
 In this section, we'll create and configure IAM for that user, and perform other steps to make that k0rdent user's credentials accessible to k0rdent in the management node.
 
@@ -178,11 +181,13 @@ You should see something like this. It's important to save these credentials sec
 }
 ```
 
+<!--
 > WARNING:
 > You may encounter an issue where EKS machines are not created due to the `ControlPlaneIsStable` preflight check
 > failure during EKS cluster deployment. Please follow the
 > [instruction](known-issues-eks.md#eks-machines-are-not-created-controlplaneisstable-preflight-check-failed)
 > to apply the workaround.
+-->
 
 ## Configure AWS IAM for k0rdent
 
