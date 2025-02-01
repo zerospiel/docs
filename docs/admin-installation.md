@@ -50,7 +50,7 @@ If you already have a Kubernetes cluster into which you want to install k0rdent,
 
 1. Deploy a Kubernetes cluster
 
-    The first step is to create the actual cluster itself. Again, the actual distribution used for the management cluster isn't important, as long as it's a CNCF-compliant distribution. That means you can use an existing EKS cluster, or whatever is your normal corporate standard. To make things simple this guide uses k0s, a small, convenient, and fully-functional distribution:
+    The first step is to create the actual cluster itself. Again, the actual distribution used for the management cluster isn't important, as long as it's a CNCF-compliant distribution. That means you can use an existing EKS cluster, or whatever is your normal corporate standard. To make things simple this guide uses [k0s](https://github.com/k0sproject/k0s/), a small, convenient, and fully-functional distribution:
 
     ```shell
     curl --proto '=https' --tlsv1.2 -sSf https://get.k0s.sh | sudo sh
@@ -73,7 +73,7 @@ If you already have a Kubernetes cluster into which you want to install k0rdent,
 
 2. Install kubectl
 
-    Everything you do in k0rdent is done by creating and manipulating Kubernetes objects, so you'll need to have `kubectl` installed:
+    Everything you do in k0rdent is done by creating and manipulating Kubernetes objects, so you'll need to have `kubectl` installed. You can find the [full install docs here](https://kubernetes.io/docs/tasks/tools/install-kubectl-linux/), or just follow these instructions:
 
     ```shell
     sudo apt-get update
@@ -112,7 +112,7 @@ If you already have a Kubernetes cluster into which you want to install k0rdent,
 
 4. Install Helm
 
-    The easiest way to install k0rdent is through its Helm chart, so let's get Helm installed:
+    The easiest way to install k0rdent is through its Helm chart, so let's get Helm installed. You can find the [full instructions here](https://helm.sh/docs/intro/install/), or use these instructions:
 
     ```shell
     curl -fsSL -o get_helm.sh https://raw.githubusercontent.com/helm/helm/main/scripts/get-helm-3
@@ -127,7 +127,7 @@ If you already have a Kubernetes cluster into which you want to install k0rdent,
 The actual management cluster is a Kubernetes cluster with the k0rdent application installed. The simplest way to install k0rdent is through its Helm chart.  You can find the latest release [here](https://github.com/k0rdent/kcm/tags), and from there you can deploy the Helm chart, as in:
 
 ```shell
-helm install kcm oci://ghcr.io/k0rdent/kcm/charts/kcm --version 0.0.7 -n kcm-system --create-namespace
+helm install kcm oci://ghcr.io/k0rdent/kcm/charts/kcm --version 0.1.0 -n kcm-system --create-namespace
 ```
 ```console
 WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: ./KUBECONFIG
