@@ -20,7 +20,7 @@ Together, KCM and KSM interoperate to manifest a complete, template-driven syste
 the cluster, such as where to find images, and so on. These templates get installed into k0rdent, but they don't do 
 anything until you reference them in a `ClusterDeployment` that represents an actual cluster.
 
-![The Basic Architecture](./assets/k0rdent-basics-2.svg)
+![The Basic Architecture](./assets/k0rdent-basics-1.svg)
 
 k0rdent can also manage these clusters, upgrading, scaling them, or installing software and services.
 
@@ -29,7 +29,7 @@ you also use templates. These `ServiceTemplate`s are like `ClusterTemplate`s, in
 they're actually referenced, they don't do anything. When you reference a `ServiceTemplate` as part of a `ClusterDeployment`,
 k0rdent knows to install that service into that cluster.
 
-![Adding an application](./assets/k0rdent-basics-1.svg)
+![Adding an application](./assets/k0rdent-basics-2.svg)
 
 These services can be actual services, such as Nginx or Kyverno, or they can be user applications.
 
@@ -52,9 +52,9 @@ their applications. The administrator simply updates the `Credential` object and
 
 You can find more information on creating these `Credential`s in [the Credentials chapter](admin-credentials.md).
 
-## k0rdent vs GitOps
+## k0rdent and GitOps
 
-At its heart, k0rdent is a way to declaratively specify what should be happening in the infrastructure and
+At its heart, k0rdent is a Kubernetes-native way to declaratively specify what should be happening in the infrastructure and
 have that maintained. In other words, if you want to, say, scale up a cluster, you would give that cluster a new
 definition that includes the additional nodes, and then k0rdent, seeing that reality doesn't match that definition, 
 will make it happen.

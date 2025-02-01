@@ -15,7 +15,7 @@ k0rdent is able to deploy managed clusters as both EC2-based Kubernetes clusters
 
     Follow the instructions in [Install k0rdent](admin-installation.md) to create a management cluster with k0rdent running.
 
-1. Install `clusterawsadm`
+2. Install `clusterawsadm`
 
     k0rdent uses the Cluster API (CAPI) to marshal clouds and infrastructures. For AWS, this means using the components from the Cluster API Provider AWS (CAPA) project. clusterawsadm, a CLI tool created by CAPA project, helps with AWS-specific tasks such as creating IAM roles and policies, as well as credential configuration. To install clusterawsadm on Ubuntu on x86 hardware, execute these commands:
 
@@ -24,7 +24,7 @@ k0rdent is able to deploy managed clusters as both EC2-based Kubernetes clusters
     sudo install -o root -g root -m 0755 clusterawsadm-linux-amd64 /usr/local/bin/clusterawsadm
     ```
 
-2. Configure AWS IAM
+3. Configure AWS IAM
 
     Next you'll need to create the IAM policies and service account k0rdent will use to take action within the AWS infrastructure. (Note that you only need to do this once.)
 
@@ -37,7 +37,7 @@ k0rdent is able to deploy managed clusters as both EC2-based Kubernetes clusters
     export AWS_SESSION_TOKEN=<YOUR_SESSION_TOKEN> # Optional. If you are using Multi-Factor Auth.
     ```
 
-3. Create the IAM CloudFormation 
+4. Create the IAM CloudFormation stack
 
 	Now use `clusterawsadm` to create the IAM CloudFormation stack:
 
@@ -45,7 +45,7 @@ k0rdent is able to deploy managed clusters as both EC2-based Kubernetes clusters
 	clusterawsadm bootstrap iam create-cloudformation-stack
 	```
 	
-4. Install the AWS CLI
+5. Install the AWS CLI
  
 	With the stack in place you can create the AWS IAM user. You can do this in the UI, but it's also possible to do it from the command line using the aws CLI tool.  Start by installing it, if you haven't already:
 
@@ -58,7 +58,7 @@ k0rdent is able to deploy managed clusters as both EC2-based Kubernetes clusters
 
 	The tool recognizes the environment variables you created earlier, so there's no need to login.
 
-5. Create the IAM user. 
+6. Create the IAM user. 
 
 	The actual `user-name` parameter is arbitrary; you can specify it as anything you like:
 
@@ -77,7 +77,7 @@ k0rdent is able to deploy managed clusters as both EC2-based Kubernetes clusters
 	}
 	```
 
-6. Assign the relevant policies
+7. Assign the relevant policies
  
 	You'll need to assign the following policies to the user you just created:
 
@@ -196,7 +196,7 @@ k0rdent is able to deploy managed clusters as both EC2-based Kubernetes clusters
 	kubectl apply -f aws-cluster-identity-secret.yaml -n kcm-system
 	```
 
-11. Create the `AWSClusterStaticIdentity`
+10. Create the `AWSClusterStaticIdentity`
 
 	Create the `AWSClusterStaticIdentity` object in a file named `aws-cluster-identity.yaml`:
 
@@ -219,7 +219,7 @@ k0rdent is able to deploy managed clusters as both EC2-based Kubernetes clusters
 	kubectl apply -f aws-cluster-identity.yaml  -n kcm-system
 	```
 
-12. Create the `Credential`
+11. Create the `Credential`
 
 	Finally, create the kcm `Credential` object, making sure to reference the `AWSClusterStaticIdentity` you just created:
 
@@ -242,7 +242,7 @@ k0rdent is able to deploy managed clusters as both EC2-based Kubernetes clusters
 	kubectl apply -f aws-cluster-identity-cred.yaml -n kcm-system
 	```
 
-13. Deploy a cluster
+12. Deploy a cluster
 
 	Make sure everything is configured properly by creating a `ClusterDeployment`. Start with a YAML file specifying the `ClusterDeployment`, as in:
 
@@ -264,14 +264,15 @@ k0rdent is able to deploy managed clusters as both EC2-based Kubernetes clusters
         instanceType: t3.small
 	```
 
-	A couple of things to notice:
-	- You're giving it an arbitrary name in `.metadata.name` (`my-aws-clusterdeployment1`)
-	- You're referencing the credential you created in the previous step, `aws-cluster-identity-cred`. This enables you to set up a system where users can take advantage of having access to the credentials to the AWS account without actually having those credentials in hand.
-	- You need to choose a template to use for the cluster, in this case `aws-standalone-cp-0-0-5`. You can get a list of available templates using:
-	
-    ```shell
-	kubectl get clustertemplate -n kcm-system
-	```
+  > NOTE:
+  > - You're giving it an arbitrary name in `.metadata.name` (`my-aws-clusterdeployment1`)
+  > - You're referencing the credential you created in the previous step, `aws-cluster-identity-cred`. This enables you to set up a system where users can take advantage of having access to the credentials to the AWS account without actually having those credentials in hand.
+  > - You need to choose a template to use for the cluster, in this case `aws-standalone-cp-0-0-5`. You can get a list of available templates using:
+
+  ```shell
+  kubectl get clustertemplate -n kcm-system
+  ```
+
 	```console
 	NAMESPACE    NAME                            VALID
 	kcm-system   adopted-cluster-0-0-2           true
@@ -351,11 +352,13 @@ Standalone clusters can be deployed on Azure instances. Follow these steps to ma
     In order for k0rdent to deploy and manage clusters, it needs to be able to work with Azure resources such as 
     compute, network, and identity. Make sure the subscription you're using has the following resource providers registered:
 
-    - `Microsoft.Compute`
-    - `Microsoft.Network`
-    - `Microsoft.ContainerService`
-    - `Microsoft.ManagedIdentity`
-    - `Microsoft.Authorization`
+    ```shell
+    Microsoft.Compute
+    Microsoft.Network
+    Microsoft.ContainerService
+    Microsoft.ManagedIdentity
+    Microsoft.Authorization
+    ```
 
     To register these providers, run the following commands in the Azure CLI:
 
@@ -611,15 +614,17 @@ k0rdent is able to deploy managed clusters on OpenStack virtual machines. Follow
 
     This credential should include:
 
-    - `OS_AUTH_URL`
-    - `OS_APPLICATION_CREDENTIAL_ID`
-    - `OS_APPLICATION_CREDENTIAL_SECRET`
-    - `OS_REGION_NAME`
-    - `OS_INTERFACE`
-    - `OS_IDENTITY_API_VERSION` (commonly `3`)
-    - `OS_AUTH_TYPE` (e.g., `v3applicationcredential`)
+    ```shell
+    OS_AUTH_URL
+    OS_APPLICATION_CREDENTIAL_ID
+    OS_APPLICATION_CREDENTIAL_SECRET
+    OS_REGION_NAME
+    OS_INTERFACE
+    OS_IDENTITY_API_VERSION
+    OS_AUTH_TYPE (e.g. v3applicationcredential)
+    ```
 
-    While it's possible to use a username and password instead of the Application Credential--adjust your YAML accordingly--an 
+    While it's possible to use a username and password instead of the Application Credential &mdash; adjust your YAML accordingly &mdash; an 
     Application Credential is strongly recommended because it limits scope and improves security over a raw username/password approach.
 
 4. Create the OpenStack Credentials Secret
@@ -787,9 +792,11 @@ To enable users to deploy managed clusers on vSphere, follow these steps:
     to manipulate vSphere resources. The user should have the following 
     required privileges:
 
-    - `Virtual machine`: Full permissions are required
-    - `Network`: `Assign network` is sufficient
-    - `Datastore`: The user should be able to manipulate virtual machine files and metadata
+    ```shell
+    Virtual machine: Full permissions are required
+    Network: Assign network is sufficient
+    Datastore: The user should be able to manipulate virtual machine files and metadata
+    ```
 
     In addition to that, specific CSI driver permissions are required. See
     [the official doc](https://docs.vmware.com/en/VMware-vSphere-Container-Storage-Plug-in/2.0/vmware-vsphere-csp-getting-started/GUID-0AB6E692-AA47-4B6A-8CEA-38B754E16567.html)
@@ -819,7 +826,9 @@ To enable users to deploy managed clusers on vSphere, follow these steps:
     `172.16.0.0/24` should have a DHCP range of `172.16.0.100-172.16.0.254` only) so that LoadBalancer services will not create any IP conflicts in the
     network.
 
-6. To enable k0rdent to access vSphere resources, create the appropriate credentials objects. For a full explanation of how Credentials work, see the [main Credentials chapter](admin-credentials.md) but for now, follow these steps:
+6. vSphere Credentials
+
+    To enable k0rdent to access vSphere resources, create the appropriate credentials objects. For a full explanation of how Credentials work, see the [main Credentials chapter](admin-credentials.md) but for now, follow these steps:
 
     Create a `Secret` Object with the username and password
 

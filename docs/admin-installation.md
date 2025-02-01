@@ -24,7 +24,7 @@ k0rdent management clusters can also be mixed-use. For example, a cloud Kubernet
 
 ### Where k0rdent management clusters can live
 
-k0rdent management clusters can live anywhere, so long as they are connected via internet to the clusters they manage. Unlike prior generations of Kubernetes cluster managers, there's no technical need to co-locate a k0rdent manager with managed clusters on a single infrastructure. In fact, k0rdent is being built to manage multiple IDPs and platforms, providing a single point of control and visibility. Deciding where to put a management cluster (or multiple clusters) is best done by assessing the requirements of your use case. Considered in the abstract, a k0rdent management cluster should be:
+k0rdent management clusters can live anywhere. Unlike prior generations of Kubernetes cluster managers, there's no technical need to co-locate a k0rdent manager with managed clusters on a single infrastructure. k0rdent provides a single point of control and visibility across any cloud, any infrastructure, anywhere, on-premise or off. Deciding where to put a management cluster (or multiple clusters) is best done by assessing the requirements of your use case. Considered in the abstract, a k0rdent management cluster should be:
 
 * Resilient and available
 * Accessible and secure
@@ -34,15 +34,22 @@ k0rdent management clusters can live anywhere, so long as they are connected via
 * Monitored and observable
 * Equipped for backup and disaster recovery
 
-And of course, where can these requirements be procured at reasonable cost? In many cases the simplest and most cost-effective way to run these clusters is on a provider such as Amazon Elastic Kubernetes Service or Azure Kubernetes Service, where many of these functions are handled for you.
+### Minimum requirements for single-node k0rdent management clusters for testing
 
-### Minimum requirements
+There isn't a strict minimum system requirement for k0rdent, but the following are recommended for a single node:
 
-[[[ TODO ]]]
+* A minimum of 32GB RAM
+* 8 cores
+* 100GB SSD
 
-### Recommended requirements for production
+This configuration is only sufficient for the base case.  If you will run k0rdent Observability and FinOps (KOF) you will need significantly more resources and in particular, much more storage.
 
-[[[ TODO ]]]
+### Recommended requirements for single-node k0rdent management clusters for production
+
+We do not recommend running k0rdent in production on a single node.  If you are running in production you will want a scale-out architecture.  These documents do not currently cover this case.
+
+> IMPORTANT:
+> Detailed instructions for deploying k0rdent management clusers into a multi-node configuration and scaling them as needed are COMING SOON!
 
 ### Create and prepare a Kubernetes cluster with k0s
 
@@ -132,11 +139,11 @@ helm install kcm oci://ghcr.io/k0rdent/kcm/charts/kcm --version 0.1.0 -n kcm-sys
 ```console
 WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: ./KUBECONFIG
 WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: ./KUBECONFIG
-Pulled: ghcr.io/mirantis/hmc/charts/hmc:0.0.3
+Pulled: ghcr.io/k0rdent/kcm/charts/kcm:0.1.0
 Digest: sha256:1f75e8e55c44d10381d7b539454c63b751f9a2ec6c663e2ab118d34c5a21087f
-NAME: hmc
+NAME: kcm
 LAST DEPLOYED: Mon Dec  9 00:32:14 2024
-NAMESPACE: hmc-system
+NAMESPACE: kcm-system
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
