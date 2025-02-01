@@ -1,6 +1,6 @@
 # Why k0rdent?
 
-k0rdent was developed to provide for the needs of platform engineers and the developers that they serve, as well as application workloads that they support. 
+k0rdent was developed to provide for the needs of platform engineers and the developers that they serve, and application workloads that they support. 
 
 ## Applications and Workloads
 
@@ -31,5 +31,5 @@ The increasingly distributed nature of modern infrastructure systems and the dem
 The open source ecosystem and especially kubernetes is mature and offers and increasing number tools that solve real problems. The open source ecosystem if leveraged correctly also supports building unique architectures to support a businesses needs whilst helping to avoid lock-in and architectural dead ends. All of these tools need to be selected, deployed and lifecycle managed in a way that is repeatable and traceable.
 
 * Open source prevents lock-in and support architectural self determination
-* Open source solutions allow for the build of unique solutions
+* Open source solutions allow for the building of unique solutions
 * Managing the complexity can be a challenge
