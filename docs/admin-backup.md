@@ -132,7 +132,7 @@ spec:
 
 ## Management Backup on Demand
 
-To create a single backup of the existing k0rdent managagement cluster informaiton, you can create a `ManagementBackup` object
+To create a single backup of the existing k0rdent management cluster information, you can create a `ManagementBackup` object
 using a YAML document and the `kubectl` CLI. The object then creates only one instance of a backup. For example you can backup
 to the location created earlier:
 
@@ -176,7 +176,7 @@ to familiarize yourself with potential limitations of the Velero backup system.
 In the event of disaster, you can restore from a backup by doing the following:
 
 1. Create a clean k0rdent installation, including `velero` and [its plugins](#customization). Specifically, you want to **avoid** creating a `Management` object
-   and similiar objects because they will be part of your restored cluster. You can remove these objects after
+   and similar objects because they will be part of your restored cluster. You can remove these objects after
    installation, but you can also install k0rdent without them in the first place:
 
     ```bash
@@ -293,7 +293,7 @@ The resulting `Restore` object:
    - '*'
 ```
 
-## Upgrades and rollback
+## Upgrades and rollbacks
 
 The Disaster Recovery Feature provides a way to create backups
 on each `kcm` upgrade automatically.
@@ -332,7 +332,7 @@ Automatically created backups have the following label
 with the name of the release before the upgrade as its value
 to simplify querying if required.
 
-### Rollback
+### Rollbacks
 
 If during the `kcm` upgrade a failure happens, a rollback operation
 should be performed to restore the `kcm` to its before-the-upgrade state:
@@ -384,7 +384,7 @@ should be performed to restore the `kcm` to its before-the-upgrade state:
 1. Wait until the `Restore` status is `Completed` and all `kcm` components are up and running.
 1. Optionally delete the created `ConfigMap`.
 
-## Caveats / Limitation
+## Caveats / Limitations
 
 The credentials stored in backups might and will get stale,
 so a proper rotation should be considered beforehand.

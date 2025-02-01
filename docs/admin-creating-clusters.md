@@ -4,7 +4,7 @@ Once you've installed k0rdent, you can use it to create, manage, update and even
 
 ## Deploying a Cluster
 
-k0rdent is designed to simplify the process of deploying and managing Kubernetes clusters across various cloud platforms. It does this through the use of `ClusterDeployment`s, which include all of the information k0rdent needs to know in order to create the cluste you're looking for. This `ClusterDeployment` system relies on predefined templates and credentials. 
+k0rdent is designed to simplify the process of deploying and managing Kubernetes clusters across various cloud platforms. It does this through the use of `ClusterDeployment`s, which include all of the information k0rdent needs to know in order to create the cluster you're looking for. This `ClusterDeployment` system relies on predefined templates and credentials. 
 
 A cluster deployment typically involves:
 
@@ -18,8 +18,8 @@ Follow these steps to deploy a standalone Kubernetes cluster tailored to your sp
 
     Credentials are essential for k0rdent to communicate with the infrastructure provider (for example, AWS, Azure, vSphere). These credentials enable k0rdent to provision resources such as virtual machines, networking components, and storage.
 
-    `Credential` objects are generally created haead of time and made available to users, so before you look into creating a
-    new one be sure what you're looking for doesn't already exist. You can see all of the existing `Credential` obects by 
+    `Credential` objects are generally created ahead of time and made available to users, so before you look into creating a
+    new one be sure what you're looking for doesn't already exist. You can see all of the existing `Credential` objects by 
     querying the management cluster:
 
     ```shell
@@ -88,7 +88,7 @@ Follow these steps to deploy a standalone Kubernetes cluster tailored to your sp
         <cluster-configuration>
     ```
 
-    You will of course want to replace the placeholders with actual values. (For more information about `dryRun` see [Understanding the Dry Run](appendix-dryrun.md) For example, this is a simple AWS infrastructure provider `ClusterDeployment`:
+    You will of course want to replace the placeholders with actual values. (For more information about `dryRun` see [Understanding the Dry Run](appendix-dryrun.md)) For example, this is a simple AWS infrastructure provider `ClusterDeployment`:
 
     ```yaml
     apiVersion: k0rdent.mirantis.com/v1alpha1

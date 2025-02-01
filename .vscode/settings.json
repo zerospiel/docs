@@ -1,0 +1,30 @@
+{
+    "cSpell.words": [
+        "admissionregistration",
+        "CAPI",
+        "CAPV",
+        "CAPZ",
+        "CLUSTERCLASS",
+        "clusterctl",
+        "clusterdeployment",
+        "clusterdeployments",
+        "clustertemplate",
+        "fluxcd",
+        "interoperating",
+        "kubeconfig",
+        "kyverno",
+        "mgmt",
+        "mutatingwebhookconfiguration",
+        "natgateways",
+        "rdent",
+        "resourcegroups",
+        "smotron",
+        "sproject",
+        "Sveltos",
+        "validatingwebhookconfiguration",
+        "velero",
+        "virtualnetworks",
+        "virtualnetworkssubnets",
+        "xlarge"
+    ]
+}
