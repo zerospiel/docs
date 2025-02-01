@@ -7,7 +7,7 @@ This chapter explains how that system works.
 
 In order to pass credentials to k0rdent so it can take action, the following has to happen:
 
-1. The lead cloud engineer or whoever has access to the actual provider credentials creates a `Secret` that includes that information. For example, for an AWS cluster, it might look like this:
+1. The lead platform engineer or whoever has access to the actual provider credentials creates a `Secret` that includes that information. For example, for an AWS cluster, it might look like this:
 
     ```yaml
     apiVersion: v1

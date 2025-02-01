@@ -42,71 +42,73 @@ Backups should be scheduled on a regular basis, depending on how often informati
 
 Before you create a scheduled backup, you need to perform a few preparatory steps:
 
-1. If no `velero` plugins have been installed as suggested
-   in the [corresponding section](#customization),
-   install it modifying the `Management` object:
+  1. If no `velero` plugins have been installed as suggested
+     in the [corresponding section](#customization),
+     install it by modifying the `Management` object:
+
+      ```yaml
+      apiVersion: k0rdent.mirantis.com/v1alpha1
+      kind: Management
+      metadata:
+        name: kcm
+      spec:
+        # ... 
+        core:
+          kcm:
+            config:
+              velero:
+                initContainers:
+                - name: velero-plugin-for-<provider-name>
+                  image: velero/velero-plugin-for-<provider-name>:<provider-plugin-tag>
+                  imagePullPolicy: IfNotPresent
+                  volumeMounts:
+                  - mountPath: /target
+                    name: plugins
+        # ...
+      ```
+
+ 2. Prepare a cloud storage location, such as an Amazon S3 bucket, to which to save backups.
+
+ 3. Create a [`BackupStorageLocation`](https://velero.io/docs/v1.15/api-types/backupstoragelocation/)
+    object referencing a `Secret` with credentials to access the cloud storage
+    (if the multiple credentials feature is supported by the plugin).
+
+    For example, if you are using Amazon S3, your `BackupStorageLocation` and the related `Secret` might look like this:
 
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
-    kind: Management
+    ---
+    apiVersion: v1
+    data:
+      # base64-encoded credentials for Amazon S3 in the following format:
+      # [default]
+      # aws_access_key_id = EXAMPLE_ACCESS_KEY_ID
+      # aws_secret_access_key = EXAMPLE_SECRET_ACCESS_KEY
+           cloud: W2RlZmF1bHRdCmF3c19hY2Nlc3Nfa2V5X2lkID0gRVhBTVBMRV9BQ0NFU1NfS0VZX0lECmF3c19zZWNyZXRfYWNjZXNzX2tleSA9IEVYQU1QTEVfU0VDUkVUX0FDQ0VTU19LRVkKICA=
+    kind: Secret
     metadata:
-      name: kcm
+      name: cloud-credentials
+      namespace: kcm-system
+    type: Opaque
+    ---
+    apiVersion: velero.io/v1
+    kind: BackupStorageLocation
+    metadata:
+      name: aws-s3
+      namespace: kcm-system
     spec:
-      # ... 
-      core:
-        kcm:
-          config:
-            velero:
-              initContainers:
-              - name: velero-plugin-for-<provider-name>
-                image: velero/velero-plugin-for-<provider-name>:<provider-plugin-tag>
-                imagePullPolicy: IfNotPresent
-                volumeMounts:
-                - mountPath: /target
-                  name: plugins
-      # ...
+      config:
+        region: <your-region-name>
+      default: true # optional, if not set, then storage location name must always be set in ManagementBackup
+      objectStorage:
+        bucket: <your-bucket-name>
+      provider: aws
+      backupSyncPeriod: 1m
+      credential:
+        name: cloud-credentials
+        key: cloud
     ```
-1. Prepare a cloud storage location, such as an Amazon S3 bucket, to which to save backups.
-2. Create a [`BackupStorageLocation`](https://velero.io/docs/v1.15/api-types/backupstoragelocation/)
-   object referencing a `Secret` with credentials to access the cloud storage
-   (if the multiple credentials feature is supported by the plugin).
 
-   For example, if you are using Amazon S3, your `BackupStorageLocation` and the related `Secret` might look like this:
-
-   ```yaml
-   ---
-   apiVersion: v1
-   data:
-     # base64-encoded credentials for Amazon S3 in the following format:
-     # [default]
-     # aws_access_key_id = EXAMPLE_ACCESS_KEY_ID
-     # aws_secret_access_key = EXAMPLE_SECRET_ACCESS_KEY
-          cloud: W2RlZmF1bHRdCmF3c19hY2Nlc3Nfa2V5X2lkID0gRVhBTVBMRV9BQ0NFU1NfS0VZX0lECmF3c19zZWNyZXRfYWNjZXNzX2tleSA9IEVYQU1QTEVfU0VDUkVUX0FDQ0VTU19LRVkKICA=
-   kind: Secret
-   metadata:
-     name: cloud-credentials
-     namespace: kcm-system
-   type: Opaque
-   ---
-   apiVersion: velero.io/v1
-   kind: BackupStorageLocation
-   metadata:
-     name: aws-s3
-     namespace: kcm-system
-   spec:
-     config:
-       region: <your-region-name>
-     default: true # optional, if not set, then storage location name must always be set in ManagementBackup
-     objectStorage:
-       bucket: <your-bucket-name>
-     provider: aws
-     backupSyncPeriod: 1m
-     credential:
-       name: cloud-credentials
-       key: cloud
-   ```
-
-   You can get more information how to build these objects at the [official Velero documentation](https://velero.io/docs/v1.15/locations).
+You can get more information how to build these objects at the [official Velero documentation](https://velero.io/docs/v1.15/locations).
 
 ### Create a Management Backup
 
@@ -151,19 +153,19 @@ The backup includes all of k0rdent `kcm` component resources, parts of the `cert
 components required for other components creation, and all the required resources
 of `CAPI` and the `ClusterDeployment`s currently in use in the management cluster.
 
-EXAMPLE: An example set of labels, and objects satisfying these labels will
-be included in the backup:
-
-```text
-cluster.x-k8s.io/cluster-name="cluster-deployment-name"
-cluster.x-k8s.io/provider="bootstrap-k0sproject-k0smotron"
-cluster.x-k8s.io/provider="cluster-api"
-cluster.x-k8s.io/provider="control-plane-k0sproject-k0smotron"
-cluster.x-k8s.io/provider="infrastructure-aws"
-controller.cert-manager.io/fao="true"
-helm.toolkit.fluxcd.io/name="cluster-deployment-name"
-k0rdent.mirantis.com/component="kcm"
-```
+> EXAMPLE: An example set of labels, and objects satisfying these labels will
+> be included in the backup:
+>
+> ```text
+> cluster.x-k8s.io/cluster-name="cluster-deployment-name"
+> cluster.x-k8s.io/provider="bootstrap-k0sproject-k0smotron"
+> cluster.x-k8s.io/provider="cluster-api"
+> cluster.x-k8s.io/provider="control-plane-k0sproject-k0smotron"
+> cluster.x-k8s.io/provider="infrastructure-aws"
+> controller.cert-manager.io/fao="true"
+> helm.toolkit.fluxcd.io/name="cluster-deployment-name"
+> k0rdent.mirantis.com/component="kcm"
+> ```
 
 ## Restoration
 
@@ -215,7 +217,7 @@ In the event of disaster, you can restore from a backup by doing the following:
 
 ### Caveats
 
-For some `CAPI` providers it is necessary to make changes to the `Restore`
+For some CAPI providers it is necessary to make changes to the `Restore`
 object due to the large number of different resources and logic in each provider.
 The resources described below are not excluded from a `ManagementBackup` by
 default to avoid logical dependencies on one or another provider
@@ -338,11 +340,10 @@ should be performed to restore the `kcm` to its before-the-upgrade state:
 
 1. Follow the first 2 steps from the [restoration section](#restoration),
    creating a clean `kcm` installation and `BackupStorageLocation`/`Secret`.
+> WARNING:
+> Please consider the [restoration caveats](#caveats) section before proceeding.
 
-1. > WARNING:
-   > Please consider the [restoration caveats](#caveats) section before proceeding.
-
-    Create the `ConfigMap` object with patches to revert the `Management`
+1.  Create the `ConfigMap` object with patches to revert the `Management`
     `.spec.release`, substitute the `<version-before-upgrade>` with
     the version of `kcm` before the upgrade, and create the `Restore` object
     propagating the `ConfigMap` to it:
@@ -462,13 +463,12 @@ and is enabled by default. There are 2 ways of customizing the chart values:
 
 1. Install using `helm` and add corresponding parameters to the `helm install` command.
 
-    NOTE:
+    > NOTE:
     Only a plugin is required during the restoration, the other parameters
     are optional to be set.
     
-    EXAMPLE: An example of `helm install` with a configured plugin, `BackupStorageLocation`
-    and propagated credentials:
-    
+    > EXAMPLE: An example of `helm install` with a configured plugin, `BackupStorageLocation`
+    > and propagated credentials:
     ```shell
     helm install kcm oci://ghcr.io/k0rdent/kcm/charts/kcm \
      --version <version> \
@@ -488,12 +488,11 @@ and is enabled by default. There are 2 ways of customizing the chart values:
     ```
 
 2. Create or modify the existing `Management` object in the `.spec.config.kcm`.
-    NOTE:
-    Only a plugin is required during the restoration, the other parameters
-    are optional to be set.
+    > NOTE:
+    > Only a plugin is required during the restoration, the other parameters
+    > are optional to be set.
     
-    EXAMPLE: An example of a `Management` object with a configured plugin and enabled metrics:
-    
+    > EXAMPLE: An example of a `Management` object with a configured plugin and enabled metrics:
     ```yaml
     apiVersion: k0rdent.mirantis.com/v1alpha1
     kind: Management
