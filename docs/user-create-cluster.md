@@ -14,7 +14,7 @@ Follow these steps to deploy a standalone Kubernetes cluster:
 
     k0rdent needs credentials to communicate with the infrastructure provider (for example, AWS, Azure, vSphere). These credentials enable k0rdent to provision resources such as virtual machines, networking components, and storage.
 
-    `Credential` objects are generally created ahead of time and made available to users. You can see all of the existing `Credential` obects by querying the management cluster:
+    `Credential` objects are generally created ahead of time and made available to users. You can see all of the existing `Credential` objects by querying the management cluster:
 
     ```shell
     kubectl get credentials -n accounting
@@ -46,7 +46,7 @@ Follow these steps to deploy a standalone Kubernetes cluster:
     If the `Credential` you need doesn't yet exist, you can ask your cloud administrator to create it, or you can
     follow the instructions in the [Credential System](admin-credentials.md), as well as the specific instructions for your [target infrastructure](admin-prepare.md), to crete it yourself.
 
-    > **Tip:**  
+    > Tip: 
     > Double-check to make sure that your credentials have sufficient permissions to create resources on the target infrastructure.
 
 2. Select a Template
@@ -105,7 +105,7 @@ Follow these steps to deploy a standalone Kubernetes cluster:
         <cluster-configuration>
     ```
 
-    You will of course want to replace the placeholders with actual values. (For more information about `dryRun` see [Understanding the Dry Run](appendix-dryrun.md) For example, this is a simple AWS infrastructure provider `ClusterDeployment`:
+    You will of course want to replace the placeholders with actual values. (For more information about `dryRun` see [Understanding the Dry Run](appendix-dryrun.md)) For example, this is a simple AWS infrastructure provider `ClusterDeployment`:
 
     ```yaml
     apiVersion: k0rdent.mirantis.com/v1alpha1

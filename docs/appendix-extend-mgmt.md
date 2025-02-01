@@ -22,7 +22,7 @@ spec:
 release: kcm-0-0-7
 ```
 
-As you can see, the `Management` object defines the providers that are available from wtihin k0rdent. Some of these are
+As you can see, the `Management` object defines the providers that are available from within k0rdent. Some of these are
 providers directly used by the user, such as aws, azure, and so on, and others are used internally
 by k0rdent, such as Sveltos.
 
@@ -30,7 +30,7 @@ To see what is included in a specific release, look at the `release.yaml` file i
 For example, here is the [v0.0.7 release.yaml](https://github.com/k0rdent/kcm/releases/download/v0.0.7/release.yaml).
 
 
-K0rdent allows you to customize its default configuration by modifying the spec of the `Management` object.
+k0rdent allows you to customize its default configuration by modifying the spec of the `Management` object.
 This enables you to manage the list of providers to deploy and adjust the default settings for core components.
 
 For detailed examples and use cases, refer to [Examples and Use Cases](#examples-and-use-cases)

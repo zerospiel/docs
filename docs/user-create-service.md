@@ -39,8 +39,8 @@ spec:
 ```
 
 Here you see a template called `project-ingress-nginx-4.11.0` that is meant to be deployed in the `tenant42` namespace.
-The `.spec.helm.chartSpec` spedifies the name of the Helm chart and where to find it, as well as the version and other 
-important information. The `ServiceTempateChain` shows that this template is also an upgrade path from version 4.10.0.
+The `.spec.helm.chartSpec` specifies the name of the Helm chart and where to find it, as well as the version and other 
+important information. The `ServiceTemplateChain` shows that this template is also an upgrade path from version 4.10.0.
 
 If you wanted to deploy this as an application, you would first go ahead and add it to the cluster in which you were
 working, so if you were to save this YAML to a file called `project-ingress.yaml` you could run this command on the management cluster:
@@ -240,7 +240,7 @@ In this case, the host and port information will be fetched from the spec of the
 ## Checking status
 
 The `.status.services` field of the `ClusterDeployment` object shows the status for each of the beach-head services.
-For example, if you were to `describe` the `ClusterDeploymen` with these services, you would see `condition`s that show
+For example, if you were to `describe` the `ClusterDeployment` with these services, you would see `condition`s that show
 status information, as in:
 
 ```yaml

@@ -165,7 +165,7 @@ If you have fewer pods than shown above, just wait a little while for all the po
 
 ## Verify that KCM provider and related templates are available
 
-k0rdent KCM leverages CAPI to manage Kubernetes cluster assembly and host infrastructure. CAPI requires infrastructure providers for different clouds and infrastructure types. These are delivered and referenced within k0rdent using templates, instantied in the management cluster as objects. Before continuing, verify that default provider template objects are installed and verified. Other templates are also stored as provider templates in this namespace &mdash; for example, the templates that determine setup of KCM itself and other parts of the k0rdent system (e.g., projectsveltos, which is a component of k0rdent Service Manager (KSM, see below)) as well as the k0smotron subsystem, which enables creation and lifecycle management of managed clusters that use Kubernetes-hosted control planes (i.e., control planes as pods):
+k0rdent KCM leverages CAPI to manage Kubernetes cluster assembly and host infrastructure. CAPI requires infrastructure providers for different clouds and infrastructure types. These are delivered and referenced within k0rdent using templates, instantiated in the management cluster as objects. Before continuing, verify that default provider template objects are installed and verified. Other templates are also stored as provider templates in this namespace &mdash; for example, the templates that determine setup of KCM itself and other parts of the k0rdent system (e.g., projectsveltos, which is a component of k0rdent Service Manager (KSM, see below)) as well as the k0smotron subsystem, which enables creation and lifecycle management of managed clusters that use Kubernetes-hosted control planes (i.e., control planes as pods):
 
 ```shell
 kubectl get providertemplate -n kcm-system   # list providertemplate objects in the kcm-system namespace
@@ -186,7 +186,7 @@ projectsveltos-X-Y-Z                 true
 
 ## Verify that KCM ClusterTemplate objects are available
 
-CAPI also requires control plane and bootstrap (worker node) providers to construct and/or manage different Kubernetes cluster distros and variants. Again, these providers are delivered and referenced within k0rdent using templates, instantied in the management cluster as `ClusterTemplate` objects. Before continuing, verify that default ClusterTemplate objects are installed and verified:
+CAPI also requires control plane and bootstrap (worker node) providers to construct and/or manage different Kubernetes cluster distros and variants. Again, these providers are delivered and referenced within k0rdent using templates, instantiated in the management cluster as `ClusterTemplate` objects. Before continuing, verify that default ClusterTemplate objects are installed and verified:
 
 ```shell
 kubectl get clustertemplate -n kcm-system   # list clustertemplate objects in the kcm-system namespace

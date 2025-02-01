@@ -234,7 +234,7 @@ status:
       status: "False"
       type: ingress-nginx.ingress-nginx/SveltosHelmReleaseReady
 ```
-The status under `.status.services` for ClusterDeployment `dev-cluster-1` shows that it is managing kyverno but unable to manage ingress-nginx because
+The status under `.status.services` for ClusterDeployment `dev-cluster-1` shows that it is managing Kyverno but unable to manage ingress-nginx because
 another object with higher priority is managing it, so it shows a conflict instead.
 EXAMPLE: Status for `dev-cluster-2` ClusterDeployment (only sections relevant to beach-head services):
 ```yaml

@@ -4,7 +4,7 @@ Once you've installed k0rdent, you can use it to create, manage, update and even
 
 ## Deploying a Cluster
 
-k0rdent is designed to simplify the process of deploying and managing Kubernetes clusters across various cloud platforms. It does this through the use of `ClusterDeployment`s, which include all of the information k0rdent needs to know in order to create the cluste you're looking for. This `ClusterDeployment` system relies on predefined templates and credentials. 
+k0rdent is designed to simplify the process of deploying and managing Kubernetes clusters across various cloud platforms. It does this through the use of `ClusterDeployment`s, which include all of the information k0rdent needs to know in order to create the cluster you're looking for. This `ClusterDeployment` system relies on predefined templates and credentials. 
 
 A cluster deployment typically involves:
 
@@ -18,8 +18,8 @@ Follow these steps to deploy a standalone Kubernetes cluster tailored to your sp
 
     Credentials are essential for k0rdent to communicate with the infrastructure provider (for example, AWS, Azure, vSphere). These credentials enable k0rdent to provision resources such as virtual machines, networking components, and storage.
 
-    `Credential` objects are generally created haead of time and made available to users, so before you look into creating a
-    new one be sure what you're looking for doesn't already exist. You can see all of the existing `Credential` obects by 
+    `Credential` objects are generally created ahead of time and made available to users, so before you look into creating a
+    new one be sure what you're looking for doesn't already exist. You can see all of the existing `Credential` objects by 
     querying the management cluster:
 
     ```shell
@@ -30,7 +30,7 @@ Follow these steps to deploy a standalone Kubernetes cluster tailored to your sp
 
     Start by creating a `Credential` object that includes all required authentication details for your chosen infrastructure provider. Follow the instructions in the [chapter about credential management](admin-credentials.md), as well as the specific instructions for your [target infrastructure](admin-prepare.md).
 
-    > **Tip:**  
+    > TIP: 
     > Double-check to make sure that your credentials have sufficient permissions to create resources on the target infrastructure.
 
 2. Select a Template
@@ -88,7 +88,7 @@ Follow these steps to deploy a standalone Kubernetes cluster tailored to your sp
         <cluster-configuration>
     ```
 
-    You will of course want to replace the placeholders with actual values. (For more information about `dryRun` see [Understanding the Dry Run](appendix-dryrun.md) For example, this is a simple AWS infrastructure provider `ClusterDeployment`:
+    You will of course want to replace the placeholders with actual values. (For more information about `dryRun` see [Understanding the Dry Run](appendix-dryrun.md)) For example, this is a simple AWS infrastructure provider `ClusterDeployment`:
 
     ```yaml
     apiVersion: k0rdent.mirantis.com/v1alpha1
@@ -138,7 +138,7 @@ Follow these steps to deploy a standalone Kubernetes cluster tailored to your sp
     kubectl -n <namespace> get cluster <cluster-name> -o=yaml
     ```
 
-    > **Tip:**  
+    > TIP:  
     > For a detailed view of the provisioning process, use the `clusterctl describe` command (note that this requires the [`clusterctl`](https://github.com/kubernetes-sigs/cluster-api/releases) CLI):
 
     ```shell
@@ -222,7 +222,7 @@ You wouldn't be able to use this template to update a cluster that uses any othe
 Similarly, the `AccessManagement` object must have properly configured `spec.accessRules` with a list of allowed 
 `ClusterTemplateChain` object names and their namespaces. For more information, see [Template Life Cycle Management](template-intro.md#template-life-cycle-management).
 
-> **Future Note:**  
+> NOTE:  
 > Support for displaying all available `ClusterTemplates` for updates in the `ClusterDeployment` status is planned.
 
 <!-- TODO

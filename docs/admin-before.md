@@ -2,7 +2,7 @@
 
 Before you start working with k0rdent, it helps to understand a few basics.
 
-## How K0rdent works
+## How k0rdent works
 
 k0rdent has several important subsystems, notably:
 
@@ -31,7 +31,7 @@ k0rdent knows to install that service into that cluster.
 
 ![Adding an application](./assets/k0rdent-basics-1.svg)
 
-These services can be actual services, such as Nginx or kyverno, or they can be user applications.
+These services can be actual services, such as Nginx or Kyverno, or they can be user applications.
 
 ## How Credentials work
 
@@ -82,4 +82,4 @@ The k0rdent initialization process involves tools such as Helm and FluxCD.
 1. kcm-controller-manager creates a `Management` object that refers to the above `Release` and the `ProviderTemplate` objects.
 The `Management` object represents the k0rdent management cluster as a whole.
 The management cluster Day-2 operations (such as [upgrade](admin-upgrading-k0rdent.md)) are  executed by manipulating the `Release` and `Management` objects.
-1. kcm-controller-manager generates an empty ``AccessManagement` object. `AccessManagement` defines [access rules](template-intro.md#template-life-cycle-management) for `ClusterTemplate`/`ServiceTemplate` propagation across user namespaces. Further `AccessManagement` might be edited and used along with admin-created `ClusterTemplateChain` and `ServiceTemplaitChain` objects.
+1. kcm-controller-manager generates an empty ``AccessManagement` object. `AccessManagement` defines [access rules](template-intro.md#template-life-cycle-management) for `ClusterTemplate`/`ServiceTemplate` propagation across user namespaces. Further `AccessManagement` might be edited and used along with admin-created `ClusterTemplateChain` and `ServiceTemplateChain` objects.
