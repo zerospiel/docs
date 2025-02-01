@@ -2,7 +2,7 @@
 
 Before you start working with k0rdent, it helps to understand a few basics.
 
-## How K0rdent works
+## How k0rdent works
 
 k0rdent has several important subsystems, notably:
 
