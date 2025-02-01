@@ -87,7 +87,7 @@ helm installed into /usr/local/bin/helm
 Now we'll install k0rdent itself into the k0s management cluster:
 
 ```shell
-helm install kcm oci://ghcr.io/k0rdent/kcm/charts/kcm --version 0.0.7 -n kcm-system --create-namespace
+helm install kcm oci://ghcr.io/k0rdent/kcm/charts/kcm --version 0.1.0 -n kcm-system --create-namespace
 ```
 
 You'll see something like the following. Ignore the warnings, since this is an ephemeral, non-production, non-shared environment:
@@ -138,9 +138,9 @@ source-controller-5f648d6f5d-7mhz5                             1/1     Running
 
 Pods reported in states other than Running should become ready momentarily.
 
-## Check that the sveltos pods are running
+## Check that the projectsveltos pods are running
 
-The other fundamental k0rdent subsystem, k0rdent Service Manager (KSM), handles services configuration and lifecycle management on clusters. This utilizes the sveltos Kubernetes Add-On Controller and other open source projects. Before continuing, check that KSM pods are ready:
+The other fundamental k0rdent subsystem, k0rdent Service Manager (KSM), handles services configuration and lifecycle management on clusters. This utilizes the [projectsveltos](https://github.com/projectsveltos) Kubernetes Add-On Controller and other open source projects. Before continuing, check that KSM pods are ready:
 
 ```shell
 kubectl get pods -n projectsveltos   # check pods in the projectsveltos namespace

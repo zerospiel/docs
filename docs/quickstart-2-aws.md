@@ -7,12 +7,13 @@ As noted in the [Guide to QuickStarts](guide-to-quickstarts.md), you'll need adm
 
 Note that if you have already done our Azure QuickStart ([QuickStart 2 - Azure target environment](quickstart-2-azure.md)) you can continue here with steps to add the ability to manage clusters on AWS. The k0rdent management cluster can accommodate multiple provider and credential setups, enabling management of multiple infrastructures. And even if your management node is external to AWS (for example, it could be on an Azure virtual machine), as long as you permit outbound traffic to all IP addresses from the management node, this should work fine. A big benefit of k0rdent is that it provides a single point of control and visibility across multiple clusters on multiple clouds and infrastructures.
 
-**Cloud Security 101 Note:** k0rdent requires _some_ but not _all_ permissions to manage AWS &mdash; doing so via the CAPA (ClusterAPI for AWS) provider. So a best practice for using k0rdent with AWS (this pattern is repeated with other clouds and infrastructures) is to create a new 'k0rdent user' on your account with the particular permissions k0rdent and CAPA require.
+> CLOUD SECURITY 101 NOTE: 
+> k0rdent requires _some_ but not _all_ permissions to manage AWS &mdash; doing so via the CAPA (ClusterAPI for AWS) provider. So a best practice for using k0rdent with AWS (this pattern is repeated with other clouds and infrastructures) is to create a new 'k0rdent user' on your account with the particular permissions k0rdent and CAPA require.
 
 In this section, we'll create and configure IAM for that user, and perform other steps to make that k0rdent user's credentials accessible to k0rdent in the management node.
 
-    > NOTE:
-    > If you're working on a shared AWS account, please ensure that the k0rdent user is not already set up before creating a new one.
+> NOTE:
+> If you're working on a shared AWS account, please ensure that the k0rdent user is not already set up before creating a new one.
 
 Creating a k0rdent user with minimal required permissions is one of several principle-of-least-privilege mechanisms used to help ensure security as organizations work with k0rdent at progressively greater scales. For more on k0rdent security best practices, please see the [Administrator Guide]().
 
@@ -209,7 +210,7 @@ stringData:
   SecretAccessKey: "EXAMPLE_SECRET_ACCESS_KEY"
 ```
 
-Remember: the Access Key ID and Secret Access Key are the ones you generated for the k0rdent user, k0rdentQuickStart.
+Remember: the Access Key ID and Secret Access Key are the ones you generated for the k0rdent user, `k0rdentQuickStart`.
 
 Then apply this YAML to the management cluster as follows:
 
@@ -247,7 +248,7 @@ kubectl apply -f aws-cluster-identity.yaml  -n kcm-system
 
 ## Create the k0rdent Cluster Manager credential object
 
-Now we create the k0rdent Cluster Manager credential object. As in immediately prior steps, create a YAML file called `aws-cluster-identity-cred.yaml':
+Now we create the k0rdent Cluster Manager credential object. As in prior steps, create a YAML file called `aws-cluster-identity-cred.yaml':
 
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1alpha1
@@ -263,7 +264,7 @@ spec:
     name: aws-cluster-identity
 ```
 
-Note that .spec.identityRef.kind must be AWSClusterStaticIdentity and .spec.identityRef.name must match the .metadata.name of the AWSClusterStaticIdentity object.
+Note that `.spec.identityRef.kind` must be `AWSClusterStaticIdentity` and `.spec.identityRef.name` must match the `.metadata.name` of the `AWSClusterStaticIdentity` object.
 
 Now apply this YAML to your management cluster:
 
@@ -273,7 +274,7 @@ kubectl apply -f aws-cluster-identity-cred.yaml -n kcm-system
 
 ## List available cluster templates
 
-k0rdent is now fully configured to manage AWS. To create a cluster, begin by listing the available ClusterTemplates provided with k0rdent:
+k0rdent is now fully configured to manage AWS. To create a cluster, begin by listing the available `ClusterTemplate`s provided with k0rdent:
 
 ```shell
 kubectl get clustertemplate -n kcm-system
@@ -297,7 +298,7 @@ kcm-system   vsphere-standalone-cp-0-0-5     true
 
 ## Create your ClusterDeployment
 
-Now, to deploy a cluster, create a YAML file called `my-aws-clusterdeployment1.yaml`. We'll use this to create a ClusterDeployment object in k0rdent, representing the deployed cluster. The ClusterDeployment identifies for k0rdent the ClusterTemplate you wish to use for cluster creation, the identity credential object you wish to create it under (that of your k0rdent user), plus the region and instance types you want to use to host control plane and worker nodes:
+Now, to deploy a cluster, create a YAML file called `my-aws-clusterdeployment1.yaml`. We'll use this to create a `ClusterDeployment` object in k0rdent, representing the deployed cluster. The `ClusterDeployment` identifies for k0rdent the `ClusterTemplate` you wish to use for cluster creation, the identity credential object you wish to create it under (that of your k0rdent user), plus the region and instance types you want to use to host control plane and worker nodes:
 
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1alpha1
@@ -317,9 +318,9 @@ spec:
       instanceType: t3.small
 ```
 
-## Apply the ClusterDeployment to deploy the cluster
+## Apply the `ClusterDeployment` to deploy the cluster
 
-Finally, we'll apply the ClusterDeployment YAML (`my-aws-clusterdeployment1.yaml`) to instruct k0rdent to deploy the cluster:
+Finally, we'll apply the `ClusterDeployment` YAML (`my-aws-clusterdeployment1.yaml`) to instruct k0rdent to deploy the cluster:
 
 ```shell
 kubectl apply -f my-aws-clusterdeployment1.yaml
@@ -337,7 +338,7 @@ There will be a delay as the cluster finishes provisioning. You can watch the pr
 kubectl -n kcm-system get clusterdeployment.k0rdent.mirantis.com my-aws-clusterdeployment1 --watch
 ```
 
-In a short while, you'll see output like what's below:
+In a short while, you'll see output such as:
 
 ```console
 NAME                        READY   STATUS
@@ -346,13 +347,13 @@ my-aws-clusterdeployment1   True    ClusterDeployment is ready
 
 ## Obtain the cluster's kubeconfig
 
-Now you can retrieve the cluster's kubeconfig:
+Now you can retrieve the cluster's `kubeconfig`:
 
 ```shell
 kubectl -n kcm-system get secret my-aws-clusterdeployment1-kubeconfig -o jsonpath='{.data.value}' | base64 -d > my-aws-clusterdeployment1-kubeconfig.kubeconfig
 ```
 
-And you can use the kubeconfig to see what's running on the cluster:
+And you can use the `kubeconfig` to see what's running on the cluster:
 
 ```shell
 KUBECONFIG="my-aws-clusterdeployment1-kubeconfig.kubeconfig"
@@ -361,7 +362,7 @@ kubectl get pods -A
 
 ## List managed clusters
 
-To verify the presence of the managed cluster, list the available ClusterDeployments:
+To verify the presence of the managed cluster, list the available `ClusterDeployment`s:
 
 ```shell
 kubectl get ClusterDeployments -A
@@ -376,7 +377,7 @@ kcm-system   my-aws-clusterdeployment1   True    ClusterDeployment is ready
 
 ## Tear down the managed cluster
 
-To tear down the managed cluster, delete the ClusterDeployment:
+To tear down the managed cluster, delete the `ClusterDeployment`:
 
 ```shell
 kubectl delete ClusterDeployment my-aws-clusterdeployment1 -n kcm-system
@@ -398,4 +399,4 @@ Check out the [Administrator Guide](admin-before.md) ...
 * For details about setting up k0rdent to manage clusters on VMware and OpenStack
 * For details about using k0rdent with cloud Kubernetes distros: AWS EKS and Azure AKS
 
-Or check out the [Demos Repository]() for fast, makefile-driven demos of k0rdent's key features!
+Or check out the [Demos Repository](https://github.com/k0rdent/demos) for fast, makefile-driven demos of k0rdent's key features!

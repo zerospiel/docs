@@ -5,7 +5,9 @@
 Set `.spec.serviceSpec.syncMode=Continuous` in the `ClusterDeployment` or `MultiClusterService` object to enable drift detection and correction. Sveltos will then automatically deploy the drift-detection-manager on the targeted clusters:
 
 ```sh
-➜  ~ kubectl -n projectsveltos get deployments.apps 
+kubectl -n projectsveltos get deployments.apps 
+```
+```console
 NAME                      READY   UP-TO-DATE   AVAILABLE   AGE
 drift-detection-manager   1/1     1            1           152m
 sveltos-agent-manager     1/1     1            1           152m
@@ -49,7 +51,9 @@ spec:
 If we manually remove the `app.kubernetes.io/managed-by=Helm` label, we can observe that the drift is not corrected as can be seen in the following watch output.
 
 ```sh
-➜  ~ kubectl -n ingress-nginx get deployments.apps ingress-nginx-controller --show-labels -w
+kubectl -n ingress-nginx get deployments.apps ingress-nginx-controller --show-labels -w
+```
+```console
 NAME                       READY   UP-TO-DATE   AVAILABLE   AGE     LABELS
 ingress-nginx-controller   3/3     3            3           3h58m   app.kubernetes.io/component=controller,app.kubernetes.io/instance=ingress-nginx,app.kubernetes.io/managed-by=Helm,app.kubernetes.io/name=ingress-nginx,app.kubernetes.io/part-of=ingress-nginx,app.kubernetes.io/version=1.11.0,helm.sh/chart=ingress-nginx-4.11.0
 ingress-nginx-controller   3/3     3            3           3h59m   app.kubernetes.io/component=controller,app.kubernetes.io/instance=ingress-nginx,app.kubernetes.io/name=ingress-nginx,app.kubernetes.io/part-of=ingress-nginx,app.kubernetes.io/version=1.11.0,helm.sh/chart=ingress-nginx-4.11.0
@@ -82,7 +86,7 @@ status:
 Yet another way to check if a resource is being ignored for drift is by verifying that `projectsveltos.io/driftDetectionIgnore: ok` annotation has been applied to it as can be seen below.
 
 ```sh
-➜  ~ kubectl -n ingress-nginx get deployments.apps ingress-nginx-controller -o=jsonpath='{.metadata.annotations}'
+kubectl -n ingress-nginx get deployments.apps ingress-nginx-controller -o=jsonpath='{.metadata.annotations}'
 {"deployment.kubernetes.io/revision":"1","meta.helm.sh/release-name":"ingress-nginx","meta.helm.sh/release-namespace":"ingress-nginx","projectsveltos.io/driftDetectionIgnore":"ok"}%
 ```
 
@@ -120,7 +124,7 @@ spec:
 If we manually edit the replicas to be 1, the number of replicas is not corrected back to 3 as is indicated by the following watch output.
 
 ```sh
-➜  ~ kubectl -n ingress-nginx get deployments.apps ingress-nginx-controller -o=jsonpath='{.spec.replicas}' -w
+kubectl -n ingress-nginx get deployments.apps ingress-nginx-controller -o=jsonpath='{.spec.replicas}' -w
 3111
 ```
 
