@@ -391,4 +391,4 @@ Check out the [Administrator Guide](admin-before.md) ...
 * For details about setting up k0rdent to manage clusters on VMware and OpenStack
 * For details about using k0rdent with cloud Kubernetes distros: AWS EKS and Azure AKS
 
-Or check out the [Demos Repository]() for fast, makefile-driven demos of k0rdent's key features!
+Or check out the [Demos Repository](https://github.com/k0rdent/demos) for fast, makefile-driven demos of k0rdent's key features!

@@ -167,11 +167,10 @@ k0rdent.mirantis.com/component="kcm"
 
 ## Restoration
 
-NOTE: 
-
-Please refer to the
-[official migration documentation](https://velero.io/docs/v1.15/migration-case/#before-migrating-your-cluster)
-to familiarize yourself with potential limitations of the Velero backup system.
+> NOTE: 
+> Please refer to the
+> [official migration documentation](https://velero.io/docs/v1.15/migration-case/#before-migrating-your-cluster)
+> to familiarize yourself with potential limitations of the Velero backup system.
 
 In the event of disaster, you can restore from a backup by doing the following:
 
