@@ -21,6 +21,7 @@ The QuickStart shows and briefly explains the hows, whys, and wherefores of manu
 QuickStart prerequisites are simple &mdash; you'll need:
 
 * A desktop or cloud virtual machine running a supported version of Ubuntu Server (e.g., [22.04.5 LTS, Jammy Jellyfish](https://releases.ubuntu.com/jammy/)) &mdash; This machine will be used to install a basic Kubernetes working environment, and to host a single-node k0s Kubernetes management cluster to host k0rdent components. For simplest setup, configure this machine as follows:
+
     * A minimum of 32GB RAM, 8 vCPUs, 100GB SSD (e.g., AWS `t3.2xlarge` or equivalent)
     * Set up for SSH access using keys (standard for cloud VMs)
     * Set up for passwordless sudo (i.e., edit /etc/sudoers to configure your user to issue sudo commands without a password challenge)
@@ -28,9 +29,11 @@ QuickStart prerequisites are simple &mdash; you'll need:
     * Outbound traffic - All to any IP address
     * Apply all recent updates and upgrade local applications (sudo apt update/sudo apt upgrade)
     * (Optional) snapshot the machine in its virgin state
+
 * Administrative-level access to an AWS or Azure cloud account - Depending on which cloud environment you prefer. k0rdent will leverage this cloud to provide infrastructure for hosting managed clusters.
 
-Note: Ubuntu is a Debian distro and uses `apt` for package management. Other recent versions of 'enterprise' Linux should work with the following instructions as well, though you will need to adapt for different package managers and perhaps use slightly-different provider-recommended methods for installing required dependencies (e.g., Helm). Once you've installed k0rdent in the management cluster and have kubectl, Helm, and other resources connected, you'll mostly be dealing with Kubernetes, and everything should work the same way on any host OS.
+> NOTE: 
+> Ubuntu is a Debian distro and uses `apt` for package management. Other recent versions of 'enterprise' Linux should work with the following instructions as well, though you will need to adapt for different package managers and perhaps use slightly-different provider-recommended methods for installing required dependencies (e.g., Helm). Once you've installed k0rdent in the management cluster and have kubectl, Helm, and other resources connected, you'll mostly be dealing with Kubernetes, and everything should work the same way on any host OS.
 
 ## Limitations
 
@@ -59,5 +62,5 @@ Plus (intermediate-term roadmap) tutorials for using k0rdent to create and manag
 * (As an authorized user) Leveraging shared cluster and service templates to lifecycle manage platforms (performing self-service)
 * ... and more
 
-Ready? [Let's discover how to use k0rdent!](quickstart-1-mgmt-node-and-cluster.md)
+Next you'll learn [how to use k0rdent](quickstart-1-mgmt-node-and-cluster.md).
 
