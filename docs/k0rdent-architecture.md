@@ -12,7 +12,7 @@ The k0rdent architecture comprises the following components:
 
 Let’s look at each of these in more detail.
 
-![k0rdent Architecture - Simplified](assets/k0rdent-architecture-simple.png){ width=400 }
+![k0rdent Architecture - Simplified](assets/k0rdent-architecture-simple.png)
 
 
 ## Management cluster
@@ -20,13 +20,13 @@ Let’s look at each of these in more detail.
 The management cluster is the core of the k0rdent architecture. It hosts all of the controllers needed to make k0rdent’s platform engineering work. This includes:
 
 * **k0rdent Cluster Manager (KCM) Controller:**  KCM provides a wrapper for k0rdent’s CAPI-related capabilities. It orchestrates:
-  * **Cluster API (CAPI) Controllers:** CAPI controllers are designed to work with specific infrastructure providers. For example, one CAPI controller will manage the creation and lifecycle of Kubernetes clusters running on Amazon Web Services, while another manages those on Azure. It’s also possible to create custom CAPI controllers to integrate with internal systems.
-  * **k0smotron Controller:** k0smotron extends CAPI with additional functionality, including control plane and worker node bootstrap providers for k0s Kubernetes, and a control plane provider that supports Hosted Control Plane creation (i.e., k0s control planes in pods on a host Kubernetes cluster, which can be the same cluster that hosts k0rdent).The k0smotron project has also provided a so-called ‘RemoteMachine’ infrastructure provider for CAPI, enabling deployment and cluster operations via SSH on arbitrary remote Linux servers (including small-scale edge devices).
-  clusters. For example, users can deploy ingress controllers or other tools, or they can deploy complete application workloads.
+    * **Cluster API (CAPI) Controllers:** CAPI controllers are designed to work with specific infrastructure providers. For example, one CAPI controller will manage the creation and lifecycle of Kubernetes clusters running on Amazon Web Services, while another manages those on Azure. It’s also possible to create custom CAPI controllers to integrate with internal systems.
+    * **k0smotron Controller:** k0smotron extends CAPI with additional functionality, including control plane and worker node bootstrap providers for k0s Kubernetes, and a control plane provider that supports Hosted Control Plane creation (i.e., k0s control planes in pods on a host Kubernetes cluster, which can be the same cluster that hosts k0rdent).The k0smotron project has also provided a so-called ‘RemoteMachine’ infrastructure provider for CAPI, enabling deployment and cluster operations via SSH on arbitrary remote Linux servers (including small-scale edge devices).
+    clusters. For example, users can deploy ingress controllers or other tools, or they can deploy complete application workloads.
 * **k0rdent Service Manager (KSM) Controller:** KSM is responsible for lifecycle managing (deploy, scale, update, upgrade, teardown) services and applications on clusters, and for doing continuous state management of these services and applications. It orchestrates:
-  * **Addon Controller:** Responsible for coordinating addons (combinations of services (and infrastructure provisioning dependencies) that add capabilities to the platform, e.g., KubeVirt with its dependencies can be packaged as an addon &mdash; installing it makes the cluster's worker nodes able to host virtual machines as containers). Artifacts for addons are stored locally or remotely in a Helm repo and OCI repository.
-  * **Helm Controller:** Responsible for directly managing Helm operations involved in lifecycle managing services and applications on clusters.
-  * **Event Controller:** Responsible for polling the state of services and passing notifications to a Notification Provider.
+    * **Addon Controller:** Responsible for coordinating addons (combinations of services (and infrastructure provisioning dependencies) that add capabilities to the platform, e.g., KubeVirt with its dependencies can be packaged as an addon &mdash; installing it makes the cluster's worker nodes able to host virtual machines as containers). Artifacts for addons are stored locally or remotely in a Helm repo and OCI repository.
+    * **Helm Controller:** Responsible for directly managing Helm operations involved in lifecycle managing services and applications on clusters.
+    * **Event Controller:** Responsible for polling the state of services and passing notifications to a Notification Provider.
 * **k0rdent Observability & FinOps (KOF) Controller (not depicted in above diagram):** k0rdent Observability and FinOps provides enterprise-grade observability and FinOps capabilities for k0rdent-managed Kubernetes clusters. It enables centralized metrics, logging, and cost management
 through a unified OpenTelemetry-based architecture.
 
