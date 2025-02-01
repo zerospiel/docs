@@ -110,9 +110,6 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
-  - mdx_truly_sane_lists: # https://github.com/mkdocs/mkdocs/issues/545#issuecomment-522196661
-      nested_indent: 2
-      truly_sane: true
   - toc:
       permalink: "#"
       toc_depth: 3
