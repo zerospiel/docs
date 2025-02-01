@@ -95,11 +95,11 @@ You'll see something like the following. Ignore the warnings, since this is an e
 ```console
 WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: ./KUBECONFIG
 WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: ./KUBECONFIG
-Pulled: ghcr.io/mirantis/hmc/charts/hmc:0.0.3
+Pulled: ghcr.io/k0rdent/kcm/charts/kcm:0.1.0
 Digest: sha256:1f75e8e55c44d10381d7b539454c63b751f9a2ec6c663e2ab118d34c5a21087f
-NAME: hmc
+NAME: kcm
 LAST DEPLOYED: Mon Dec  9 00:32:14 2024
-NAMESPACE: hmc-system
+NAMESPACE: kcm-system
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None
