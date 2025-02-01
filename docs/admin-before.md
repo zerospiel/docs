@@ -20,7 +20,7 @@ Together, KCM and KSM interoperate to manifest a complete, template-driven syste
 the cluster, such as where to find images, and so on. These templates get installed into k0rdent, but they don't do 
 anything until you reference them in a `ClusterDeployment` that represents an actual cluster.
 
-![The Basic Architecture](./assets/k0rdent-basics-2.svg)
+![The Basic Architecture](./assets/k0rdent-basics-1.svg)
 
 k0rdent can also manage these clusters, upgrading, scaling them, or installing software and services.
 
@@ -29,7 +29,7 @@ you also use templates. These `ServiceTemplate`s are like `ClusterTemplate`s, in
 they're actually referenced, they don't do anything. When you reference a `ServiceTemplate` as part of a `ClusterDeployment`,
 k0rdent knows to install that service into that cluster.
 
-![Adding an application](./assets/k0rdent-basics-1.svg)
+![Adding an application](./assets/k0rdent-basics-2.svg)
 
 These services can be actual services, such as Nginx or Kyverno, or they can be user applications.
 
