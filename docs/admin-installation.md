@@ -38,11 +38,21 @@ And of course, where can these requirements be procured at reasonable cost? In m
 
 ### Minimum requirements
 
-[[[ TODO ]]]
+There isn't a strict minimum system requirement for k0rdent, but the following are recommended:
+
+* A minimum of 32GB RAM
+* 8 cores
+* 100GB SSD
 
 ### Recommended requirements for production
 
-[[[ TODO ]]]
+Of course, if you are running in production you will want a scale-out architecture and will to scale your k0rdent cluster horizontally; however, there will be a tradeoff in terms of individual node performance.  You will have to determine a good tradeoff point.
+
+A rough guide is for large scale deployments, per node system requirements should be:
+
+* 64GB RAM
+* 16 cores
+* 200GB SSD
 
 ### Create and prepare a Kubernetes cluster with k0s
 
@@ -132,11 +142,11 @@ helm install kcm oci://ghcr.io/k0rdent/kcm/charts/kcm --version 0.1.0 -n kcm-sys
 ```console
 WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: ./KUBECONFIG
 WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: ./KUBECONFIG
-Pulled: ghcr.io/mirantis/hmc/charts/hmc:0.0.3
+Pulled: ghcr.io/k0rdent/kcm/charts/kcm:0.1.0
 Digest: sha256:1f75e8e55c44d10381d7b539454c63b751f9a2ec6c663e2ab118d34c5a21087f
-NAME: hmc
+NAME: kcm
 LAST DEPLOYED: Mon Dec  9 00:32:14 2024
-NAMESPACE: hmc-system
+NAMESPACE: kcm-system
 STATUS: deployed
 REVISION: 1
 TEST SUITE: None

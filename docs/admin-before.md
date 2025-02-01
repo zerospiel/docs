@@ -52,9 +52,9 @@ their applications. The administrator simply updates the `Credential` object and
 
 You can find more information on creating these `Credential`s in [the Credentials chapter](admin-credentials.md).
 
-## k0rdent vs GitOps
+## k0rdent and GitOps
 
-At its heart, k0rdent is a way to declaratively specify what should be happening in the infrastructure and
+At its heart, k0rdent is a Kubernetes-native way to declaratively specify what should be happening in the infrastructure and
 have that maintained. In other words, if you want to, say, scale up a cluster, you would give that cluster a new
 definition that includes the additional nodes, and then k0rdent, seeing that reality doesn't match that definition, 
 will make it happen.
