@@ -9,7 +9,10 @@ Note that if you have already done our Azure QuickStart ([QuickStart 2 - Azure t
 
 **Cloud Security 101 Note:** k0rdent requires _some_ but not _all_ permissions to manage AWS &mdash; doing so via the CAPA (ClusterAPI for AWS) provider. So a best practice for using k0rdent with AWS (this pattern is repeated with other clouds and infrastructures) is to create a new 'k0rdent user' on your account with the particular permissions k0rdent and CAPA require.
 
-In this section, we'll create and configure IAM for that user, and perform other steps to make that k0rdent user's credentials accessible to k0rdent in the management node. **Note: if you're working on a shared AWS account, please ensure that the k0rdent user is not already set up before creating a new one.**
+In this section, we'll create and configure IAM for that user, and perform other steps to make that k0rdent user's credentials accessible to k0rdent in the management node.
+
+    > NOTE:
+    > If you're working on a shared AWS account, please ensure that the k0rdent user is not already set up before creating a new one.
 
 Creating a k0rdent user with minimal required permissions is one of several principle-of-least-privilege mechanisms used to help ensure security as organizations work with k0rdent at progressively greater scales. For more on k0rdent security best practices, please see the [Administrator Guide]().
 

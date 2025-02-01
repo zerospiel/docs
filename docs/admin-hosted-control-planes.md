@@ -28,7 +28,7 @@ Follow these steps to set up a k0smotron-hosted control plane on AWS:
 2. Networking
 
     To deploy a hosted control plane, the necessary AWS networking resources must already exist or be created. If you're 
-    using the same VPC and subnets as your management cluster, you can resuse these resources.
+    using the same VPC and subnets as your management cluster, you can reuse these resources.
 
     If your management cluster was deployed using the Cluster API Provider AWS (CAPA), you can gather the required 
     networking details using the following commands:
@@ -100,7 +100,7 @@ Follow these steps to set up a k0smotron-hosted control plane on AWS:
 
 ### Generate the `ClusterDeployment` Manifest
 
-    To simplify the creation of a `ClusterDeployment` manifest, you can use the following template, which dyamically 
+    To simplify the creation of a `ClusterDeployment` manifest, you can use the following template, which dynamically 
     inserts the appropriate values:
 
     ```yaml
@@ -256,7 +256,7 @@ Follow these steps to set up a k0smotron-hosted control plane on Azure:
 
 ### Generate the `ClusterDeployment` Manifest
 
-    To simplify the creation of a `ClusterDeployment` manifest, you can use the following template, which dyamically inserts 
+    To simplify the creation of a `ClusterDeployment` manifest, you can use the following template, which dynamically inserts 
     the appropriate values:
 
     ```yaml

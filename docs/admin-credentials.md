@@ -5,7 +5,7 @@ This chapter explains how that system works.
 
 ## The process
 
-In order to pass credentials to k0rdent so it can take action, the folliowing has to happen:
+In order to pass credentials to k0rdent so it can take action, the following has to happen:
 
 1. The lead cloud engineer or whoever has access to the actual provider credentials creates a `Secret` that includes that information. For example, for an AWS cluster, it might look like this:
 
@@ -55,7 +55,7 @@ In order to pass credentials to k0rdent so it can take action, the folliowing ha
 	```
     Notice that it references the previous `ClusterIdentity` (in this case an `AWSClusterStaticIdentity`). Also notice that you can use the `.spec.description` field to add additional text about the `Credential` so users can choose if multiple `Credential`s are available.
 
-3. Finally, when you create a `ClusterDeployment`, you refernece the `Credential` object in order to enable k0rdent to pass that information to the infrastructure provider:
+3. Finally, when you create a `ClusterDeployment`, you reference the `Credential` object in order to enable k0rdent to pass that information to the infrastructure provider:
 
     ```yaml
 	apiVersion: k0rdent.mirantis.com/v1alpha1

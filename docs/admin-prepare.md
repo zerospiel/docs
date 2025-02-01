@@ -28,7 +28,7 @@ k0rdent is able to deploy managed clusters as both EC2-based Kubernetes clusters
 
     Next you'll need to create the IAM policies and service account k0rdent will use to take action within the AWS infrastructure. (Note that you only need to do this once.)
 
-    The first step is to crete the IAM CloudFormation stack based on your admin user. Start by specifying the environment variables clusterawsadmin will use as AWS credentials:
+    The first step is to crete the IAM CloudFormation stack based on your admin user. Start by specifying the environment variables clusterawsadm will use as AWS credentials:
 
     ```shell
     export AWS_REGION=<EXAMPLE_AWS_REGION>
@@ -861,7 +861,7 @@ To enable users to deploy managed clusers on vSphere, follow these steps:
           matchLabels: {}
     ```
 
-    The `VSpehereClusterIdentity` object references the `Secret` you created in the previous step, so `.spec.secretName` 
+    The `VSphereClusterIdentity` object references the `Secret` you created in the previous step, so `.spec.secretName` 
     needs to match the `.metadata.name` for the `Secret`.
 
     Apply the YAML to your cluster:

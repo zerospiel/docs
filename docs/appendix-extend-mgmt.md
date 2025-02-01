@@ -22,7 +22,7 @@ spec:
 release: kcm-0-0-7
 ```
 
-As you can see, the `Management` object defines the providers that are available from wtihin k0rdent. Some of these are
+As you can see, the `Management` object defines the providers that are available from within k0rdent. Some of these are
 providers directly used by the user, such as aws, azure, and so on, and others are used internally
 by k0rdent, such as Sveltos.
 

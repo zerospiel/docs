@@ -34,7 +34,7 @@ k0rdent management clusters can live anywhere, so long as they are connected via
 * Monitored and observable
 * Equipped for backup and disaster recovery
 
-And of course, where can these requirements be procured at reasonable cost? In many cases the simplest and most cost-effective way to run these clusters is on a provider such as Amazon Elasti Kubernetes Service or Azure Kubernetes Service, where many fo these functions are handled for you.
+And of course, where can these requirements be procured at reasonable cost? In many cases the simplest and most cost-effective way to run these clusters is on a provider such as Amazon Elastic Kubernetes Service or Azure Kubernetes Service, where many of these functions are handled for you.
 
 ### Minimum requirements
 
@@ -142,9 +142,10 @@ REVISION: 1
 TEST SUITE: None
 ```
 
-(Make sure to specify the correct version number.)
+    > NOTE:
+    > Make sure to specify the correct version number.
 
-While the installation process appears to be done at this point, it's not; multiple pods and templates are being created in the background, and the entire process takes a few minutes.  
+While the installation process appears to be done at this point, it's not. Multiple pods and templates are being created in the background, and the entire process takes a few minutes.  
 
 To understand whether installation is complete, start by making sure all pods are ready in the `kcm-system` namespace. There should be 15:
 

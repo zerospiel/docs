@@ -75,7 +75,7 @@ Upgrading k0rdent involves making upgrades to the `Management` object. To do tha
     using. Monitor the readiness of the `Management` object to ensure the upgrade was successful. For example:
 
     ```shell
-    kubeclt get management.kcm kcm
+    kubectl get management.kcm kcm
     NAME   READY   RELEASE     AGE
     kcm    True    kcm-0-0-7   4m34s
     ```
