@@ -1,11 +1,35 @@
 # Why k0rdent?
 
-With the increasing complexity of modern systems, it has become more and more necessary to provide a way for administrators to manage that complexity while still providing the means for developers to get their jobs done as efficiently as possible.  Enter platforms. These frameworks or environments provide the foundation and tools for developing, deploying, and managing applications, services, or systems, enabling users to focus on their specific tasks or goals while abstracting away the underlying complexities.
+k0rdent was developed to provide for the needs of platform engineers and the developers that they serve, as well as application workloads that they support. 
 
-As the need for platform engineering, the practice of designing, building, and maintaining these platforms, becomes evident, so do some of the challenges of creating a truly functional platform engineering environment. Assembling, integrating, deploying, and managing Kubernetes clusters is straightforward in theory, but where companies may have once had a single multi-purpose platform, the current trend is to implement many more purpose-dedicated, simpler platforms. While this makes managing each platform easier, you’re left with a sum that’s more than its parts, both in capability and complexity. Once you add in multiple clouds, differing infrastructures, and the need to prepare those infrastructures to host workloads, platform engineering moves from being a task on an administrator’s plate to being an entire discipline.
+## Applications and Workloads
 
-The solution must be answerable to real world needs. This moves beyond simple resilience and availability to awareness of security and compliance requirements, including access management and sharing. Platform engineers need to be able to compose platforms–for example, Kubernetes, beach-head services such as CI/CD, and any other dependencies workloads require–in simple, repeatable ways. They also need to be able to safely and flexibly share access and artifacts with platform leads and other platform 'consumers/users.' On top of that, platforms must enable visibility into both the infrastructure and applications, including both performance and cost monitoring and ensuring platform integrity with state monitoring and continuous reconciliation, all while simplifying platform operations for Day 2 and beyond.
+Workloads evolve and grow, often faster then the infrastructure needed to support them. Infrastructure is almost always the lagging factor in getting new, or existing, applications into the hands of the users and scaling them to meet the user expectations. This challenge has grown exponentially with the rise of AI and ML workloads.
 
-All of these functionalities are available in open source. Kubernetes is the most obvious substrate, of course, providing tools for not only container orchestration, but also custom operators. Fortunately, there are optimized distros of Kubernetes such as k0s, and Kubernetes itself can be orchestrated using the Kubernetes Cluster API (CAPI), which can both manage clouds and infrastructure and assemble, create and lifecycle manage clusters on those infrastructures. Add open source tools such as Helm and other package managers to help manage deployment, upgrade, and removal of applications, and you have a complete platform engineering solution.
+* Workload complexity is increasing
+* Modern workloads depend on specialized infrastructure
+* Developers have high expectations of time to value
 
-Of course, getting all of the relevant pieces to work together–particularly over multiple infrastructures–isn’t simple or straightforward. That’s why you need k0rdent. k0rdent puts all of these pieces together so you don’t have to.
+## Platform Engineering
+
+Modern infrastructure systems are increasingly complex, administrators need to manage that complexity while still responding quickly to developers needs efficiently as possible. This has led to development of internal developer platforms (IDP) and platform engineering. These environments provide the frameworks and tools for increasing developer productivity when developing, deploying, and managing applications and services, enabling developers to focus on their specific tasks or goals and not the underlying complexities.
+
+* Developer platforms increase developer productivity
+* Platform engineers need to implement and grow the platforms
+* Infrastructure needs to support the required complexity
+
+## Modern Infrastructure Systems
+
+The increasingly distributed nature of modern infrastructure systems and the demands of modern workloads is leading to increasing complexity. Solutions need to solve a diverse set of challenges and provide consistency, repeatability and prevent lock-in all without increasing the burden on operators. Modern platform engineers and operators are increasingly time constrained with the vast number of challenges they need to overcome, including security and compliance, cost management, resilience and scale to name but a few.
+
+* Distributed deployments are the new normal
+* Infrastructure management is not just a technical problem
+* Operators need to focus on building value chains
+
+## Open Source
+
+The open source ecosystem and especially kubernetes is mature and offers and increasing number tools that solve real problems. The open source ecosystem if leveraged correctly also supports building unique architectures to support a businesses needs whilst helping to avoid lock-in and architectural dead ends. All of these tools need to be selected, deployed and lifecycle managed in a way that is repeatable and traceable.
+
+* Open source prevents lock-in and support architectural self determination
+* Open source solutions allow for the build of unique solutions
+* Managing the complexity can be a challenge
