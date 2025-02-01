@@ -7,13 +7,12 @@ at massive scale leveraging kubernetes.
 
 The project is based on the premise that:
 
-* Kubernetes and its broader ecosystem has matured to the point that it is inherently stable.
-* Large scale adoption means that is can run anywhere.
-* Community driven open standards and associated open source projects drive broader support and reduces the risk of
-adoption.
+* Kubernetes and its ecosystem is mature and inherently stable.
+* Large scale adoption means that it can run anywhere.
+* Community standards and open source projects ensure support and reduces adoption risk.
 
 The goal of the k0rdent project is to provide platform engineers with the means
-to deliver a distributed container management environment and enable them to
+to deliver a distributed container management environment (DCME) and enable them to
 compose unique internal developer platforms (IDP) to support a diverse range
 of complex modern application workloads.
 
