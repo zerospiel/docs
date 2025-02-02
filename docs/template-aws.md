@@ -119,11 +119,11 @@ This section covers setting up for a k0smotron hosted control plane on AWS.
 
 Before starting you must have:
 
--   A management Kubernetes cluster (v1.28+) deployed on AWS with kcm installed on it
--   A default default storage class configured on the management cluster
--   A VPC ID for the worker nodes
--   A Subnet ID which will be used along with AZ information
--   An AMI ID which will be used to deploy worker nodes
+- A management Kubernetes cluster (v1.28+) deployed on AWS with kcm installed on it
+- A default default storage class configured on the management cluster
+- A VPC ID for the worker nodes
+- A Subnet ID which will be used along with AZ information
+- An AMI ID which will be used to deploy worker nodes
 
 Keep in mind that all control plane components for all cluster deployments will
 reside in the management cluster.
@@ -261,6 +261,7 @@ kubectl get awscluster cluster -o go-template="$(cat clusterdeployment.yaml.tpl)
 KUBECONFIG=kubeconfig IMG="ghcr.io/k0rdent/kcm/controller-ci:v0.0.1-179-ga5bdf29" REGISTRY_REPO="oci://ghcr.io/k0rdent/kcm/charts-ci" make dev-apply
 KUBECONFIG=kubeconfig make dev-templates
 ```
+
 * The infrastructure will need to manually be marked `Ready` to get the
   `MachineDeployment` to scale up.  You can patch the `AWSCluster` kind using
   the command:

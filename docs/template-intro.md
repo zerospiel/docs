@@ -184,11 +184,11 @@ The example of `ClusterTemplate` Management:
      namespace: kcm-system
    spec:
      supportedTemplates:
-      - name: aws-standalone-cp-0-0-1
+       - name: aws-standalone-cp-0-0-1
          availableUpgrades:
            - name: aws-standalone-cp-0-0-2
        - name: aws-standalone-cp-0-0-2
-```
+   ```
 
 2. Edit the `AccessManagement` object and configure the `.spec.accessRules`.
    For example, to apply all templates and upgrade sequences defined in the `aws` `ClusterTemplateChain` to the

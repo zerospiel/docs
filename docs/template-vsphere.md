@@ -215,4 +215,4 @@ spec:
           kube-vip.io/loadbalancerIPs: "<VSPHERE_LOADBALANCER_IP>"
 ```
 
-Don't forget to substitute placeholders such as "<VSPHERE_SERVER>" with actual values.
+Don't forget to substitute placeholders such as `<VSPHERE_SERVER>` with actual values.
