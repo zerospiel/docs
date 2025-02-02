@@ -1,0 +1,10 @@
+# Ignore virtual environments
+venv/
+
+# Ignore MkDocs build output
+site/
+
+# Ignore Python bytecode and cache
+__pycache__/
+*.pyc
+*.pyo

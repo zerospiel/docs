@@ -36,6 +36,7 @@
         "kyverno",
         "makefiles",
         "mgmt",
+        "mkdocs",
         "mothership",
         "mutatingwebhookconfiguration",
         "natgateways",
