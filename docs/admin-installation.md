@@ -271,4 +271,138 @@ follow these steps to install and prepare a [k0s kubernetes](https://k0sproject.
     ./get_helm.sh
     ```
 
-    Helm will be installed into `/usr/local/bin/helm`
+    Helm will be installed into `/usr/local/bin/helm`.
+
+## Install k0rdent
+
+The actual management cluster is a Kubernetes cluster with the k0rdent application installed. The simplest way to install k0rdent is through its Helm chart.  You can find the latest release [here](https://github.com/k0rdent/kcm/tags), and from there you can deploy the Helm chart, as in:
+
+```shell
+helm install kcm oci://ghcr.io/k0rdent/kcm/charts/kcm --version 0.1.0 -n kcm-system --create-namespace
+```
+```console
+WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: ./KUBECONFIG
+WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: ./KUBECONFIG
+Pulled: ghcr.io/k0rdent/kcm/charts/kcm:0.1.0
+Digest: sha256:1f75e8e55c44d10381d7b539454c63b751f9a2ec6c663e2ab118d34c5a21087f
+NAME: kcm
+LAST DEPLOYED: Mon Dec  9 00:32:14 2024
+NAMESPACE: kcm-system
+STATUS: deployed
+REVISION: 1
+TEST SUITE: None
+```
+
+> NOTE:
+> Make sure to specify the correct version number.
+
+While the installation process appears to be done at this point, it's not. Multiple pods and templates are being created in the background, and the entire process takes a few minutes.  
+
+To understand whether installation is complete, start by making sure all pods are ready in the `kcm-system` namespace. There should be 15:
+
+```shell
+kubectl get pods -n kcm-system
+```
+```console
+NAME                                                           READY   STATUS
+azureserviceoperator-controller-manager-86d566cdbc-rqkt9       1/1     Running
+capa-controller-manager-7cd699df45-28hth                       1/1     Running
+capi-controller-manager-6bc5fc5f88-hd8pv                       1/1     Running
+capv-controller-manager-bb5ff9bd5-7dsr9                        1/1     Running
+capz-controller-manager-5dd988768-qjdbl                        1/1     Running
+helm-controller-76f675f6b7-4d47l                               1/1     Running
+kcm-cert-manager-7c8bd964b4-nhxnq                              1/1     Running
+kcm-cert-manager-cainjector-56476c46f9-xvqhh                   1/1     Running
+kcm-cert-manager-webhook-69d7fccf68-s46w8                      1/1     Running
+kcm-cluster-api-operator-79459d8575-2s9jc                      1/1     Running
+kcm-controller-manager-64869d9f9d-zktgw                        1/1     Running
+k0smotron-controller-manager-bootstrap-6c5f6c7884-d2fqs        2/2     Running
+k0smotron-controller-manager-control-plane-857b8bffd4-zxkx2    2/2     Running
+k0smotron-controller-manager-infrastructure-7f77f55675-tv8vb   2/2     Running
+source-controller-5f648d6f5d-7mhz5                             1/1     Running
+```
+
+State management is handled by Project Sveltos, so you'll want to make sure that all 9 pods are running in the `projectsveltos` namespace:
+
+```shell
+kubectl get pods -n projectsveltos
+```
+```console
+NAME                                     READY   STATUS    RESTARTS   AGE
+access-manager-cd49cffc9-c4q97           1/1     Running   0          16m
+addon-controller-64c7f69796-whw25        1/1     Running   0          16m
+classifier-manager-574c9d794d-j8852      1/1     Running   0          16m
+conversion-webhook-5d78b6c648-p6pxd      1/1     Running   0          16m
+event-manager-6df545b4d7-mbjh5           1/1     Running   0          16m
+hc-manager-7b749c57d-5phkb               1/1     Running   0          16m
+sc-manager-f5797c4f8-ptmvh               1/1     Running   0          16m
+shard-controller-767975966-v5qqn         1/1     Running   0          16m
+sveltos-agent-manager-56bbf5fb94-9lskd   1/1     Running   0          15m
+```
+
+If any of these pods are missing, simply give k0rdent more time. If there's a problem, you'll see pods crashing and restarting, and you can see what's happening by describing the pod, as in:
+
+```shell
+kubectl describe pod classifier-manager-574c9d794d-j8852 -n projectsveltos
+```
+
+As long as you're not seeing pod restarts, you just need to wait a few minutes.
+
+Next verify whether the kcm templates have been successfully installed and reconciled.  Start with the `ProviderTemplate` objects:
+
+```shell
+kubectl get providertemplate -n kcm-system
+```
+```console
+NAME                                   VALID
+cluster-api-0-0-6                      true
+cluster-api-provider-aws-0-0-4         true
+cluster-api-provider-azure-0-0-4       true
+cluster-api-provider-openstack-0-0-1   true
+cluster-api-provider-vsphere-0-0-5     true
+k0smotron-0-0-6                        true
+kcm-0-0-7                              true
+projectsveltos-0-45-0                  true
+```
+
+Make sure that all templates are not just installed, but valid. Again, this may take a few minutes.
+
+You'll also want to make sure the `ClusterTemplate` objects are installed and valid:
+
+```shell
+kubectl get clustertemplate -n kcm-system
+```
+```console
+NAME                                VALID
+adopted-cluster-0-0-2               true
+aws-eks-0-0-3                       true
+aws-hosted-cp-0-0-4                 true
+aws-standalone-cp-0-0-5             true
+azure-aks-0-0-2                     true
+azure-hosted-cp-0-0-4               true
+azure-standalone-cp-0-0-5           true
+openstack-standalone-cp-0-0-2       true
+vsphere-hosted-cp-0-0-5             true
+vsphere-standalone-cp-0-0-5         true
+```
+
+Finally, make sure the `ServiceTemplate` objects are installed and valid:
+
+```shell
+kubectl get servicetemplate -n kcm-system
+```
+```console
+NAME                      VALID
+cert-manager-1-16-2       true
+dex-0-19-1                true
+external-secrets-0-11-0   true
+ingress-nginx-4-11-0      true
+ingress-nginx-4-11-3      true
+kyverno-3-2-6             true
+velero-8-1-0              true
+```
+
+## Backing up a k0rdent management cluster
+
+In a production environment, you will always want to ensure that your management cluster is backed up. You can back it up just 
+as you would any other cluster, or you can prepare your cluster for [use Velero as a backup provider](admin-backup.md).

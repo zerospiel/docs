@@ -171,13 +171,13 @@ spec:
 
 Apply the YAML to your cluster:
 
-```shell:
+```bash
 kubectl apply -f azure-cluster-identity.yaml
 ```
 
 You should see output resembling this:
 
-```console
+```bash
 azureclusteridentity.infrastructure.cluster.x-k8s.io/azure-cluster-identity created
 ```
 
