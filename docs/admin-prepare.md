@@ -268,7 +268,7 @@ k0rdent is able to deploy managed clusters as both EC2-based Kubernetes clusters
   > - You're referencing the credential you created in the previous step, `aws-cluster-identity-cred`. This enables you to set up a system where users can take advantage of having access to the credentials to the AWS account without actually having those credentials in hand.
   > - You need to choose a template to use for the cluster, in this case `aws-standalone-cp-0-0-5`. You can get a list of available templates using:
 
-  ```console
+  ```shell
   kubectl get clustertemplate -n kcm-system
   ```
 	```console
