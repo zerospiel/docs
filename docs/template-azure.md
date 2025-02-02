@@ -150,7 +150,7 @@ spec:
       securityGroupName: mgmt-cluster-node-nsg
 ```
 
-To simplify creation of the ClusterDeployment object you can use the template below:
+To simplify creation of the `ClusterDeployment` object you can use the template below:
 
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1alpha1

@@ -1,11 +1,11 @@
 # EKS Machines Are not Created: ControlPlaneIsStable Preflight Check Failed
 
-[Related issue](https://github.com/k0rdent/kcm/issues/907)
+[Related issue: KCM #907](https://github.com/k0rdent/kcm/issues/907)
 
 The deployment of the EKS cluster is stuck waiting for the machines to be provisioned. The `MachineDeployment`
 resource is showing the following conditions:
 
-```
+```shell
 Type: MachineSetReady
 Status: False
 Reason: PreflightCheckFailed
@@ -25,15 +25,13 @@ As a result, the cluster was successfully created in EKS but no nodes are availa
 **Workaround**
 
 1. Edit the `MachineDeployment` object:
-
 ```bash
 kubectl --kubeconfig <management-kubeconfig> edit MachineDeployment -n <cluster-namespace> <cluster-name>-md
 ```
 
 1. Add `machineset.cluster.x-k8s.io/skip-preflight-checks: "ControlPlaneIsStable"` annotation to skip the
 `ControlPlaneIsStable` preflight check:
-
-```bash
+```yaml
 apiVersion: cluster.x-k8s.io/v1beta1
 kind: MachineDeployment
 metadata:
