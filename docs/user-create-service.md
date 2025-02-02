@@ -1,13 +1,12 @@
 # Deploy Services to a Managed Cluster
 
-AT its heart, everything in k0rdent is based on templates that help define Kubernetes objects. For clusters,
-these are `ClusterTemplate`s. For applications and services, these are `ServiceTemplate`s.
+At its heart, everything in k0rdent is based on templates that help define Kubernetes objects. For clusters, these are `ClusterTemplate`s. For applications and services, these are `ServiceTemplate`s.
 
 ## Understanding `ServiceTemplate`s
 
 `ServiceTemplate`s are meant to let k0rdent know where to find a Helm chart with instructions for installing
 an application. In many cases, these charts will be in a private repository.  For example, consider this template for
-installing the Nginx Ingress:
+installing Nginx Ingress:
 
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1alpha1
@@ -89,7 +88,7 @@ Let's look at a more complex case, involving deploying beach-head services on a 
 
 ## Deployment of beach-head services
 
-Beach-head services can be installed on a cluster deployment (that is, a target cluster) using the `ClusterDeployment` object, just as with a single service. Consider the following example of a `ClusterDeployment` object for AWS Infrastructure Provider with beach-head services
+Beach-head services can be installed on a cluster deployment (that is, a target cluster) using the `ClusterDeployment` object, just as with a single service. Consider the following example of a `ClusterDeployment` object for AWS Infrastructure Provider with beach-head services.
 
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1alpha1
