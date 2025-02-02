@@ -12,8 +12,8 @@ The key principles of the architecture include:
 * Leverage unmodified upstream components (e.g.CAPI)
 * Support integration with custom components downstream
 
->Note:
->This document is a ongoing work in progress, and we would welcome suggestions and questions. 
+> NOTE:
+> This document is a ongoing work in progress, and we would welcome suggestions and questions. 
 
 ## Summary
 
