@@ -10,13 +10,18 @@ In addition to the templates that ship with k0rdent, it's possible to make your 
 All templates are based on a Helm chart, so the first step is to define the source in which that Helm chart can be found.
 
 The source can be one of the following types:
-- [HelmRepository](https://fluxcd.io/flux/components/source/helmrepositories/),
-- [GitRepository](https://fluxcd.io/flux/components/source/gitrepositories/) or
-- [Bucket](https://fluxcd.io/flux/components/source/buckets/).
+
+- [HelmRepository](https://fluxcd.io/flux/components/source/helmrepositories/)
+- [GitRepository](https://fluxcd.io/flux/components/source/gitrepositories/)
+- [Bucket](https://fluxcd.io/flux/components/source/buckets/)
 
 Note that it's important to pay attention to where the source resides. Cluster-scoped `ProviderTemplates` must reside in the **system** namespace (`kcm-system` by default) but other template sources must reside in the same directory as the templates that will come from them.
 
 For example, this YAML describes a custom `Source` object of `kind` `HelmRepository`:
+
+> NOTE:
+> The custom `HelmRepository` must have the label
+> `k0rdent.mirantis.com/managed: "true"`.
 
 ```yaml
 apiVersion: source.toolkit.fluxcd.io/v1
@@ -24,6 +29,8 @@ kind: HelmRepository
 metadata:
   name: k0rdent-templates
   namespace: kcm-system
+  labels:
+    k0rdent.mirantis.com/managed: "true"
 spec:
   insecure: true
   interval: 10m0s
@@ -74,8 +81,10 @@ The controller automatically creates the `HelmChart` object based on the chartSp
 > system namespace (defaults to `kcm-system`). To get the instructions on how to distribute Templates along multiple
 > namespaces, read [Template Life Cycle Management](template-intro.md#template-life-cycle-management).
 
-### Example: Custom ClusterTemplate with the Chart Definition to Create a new HelmChart
+### Examples
 
+> EXAMPLE: 
+> Custom ClusterTemplate with the Chart Definition to Create a new HelmChart
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1alpha1
 kind: ClusterTemplate
@@ -95,8 +104,9 @@ spec:
         name: k0rdent-templates
 ```
 
-### Example: Custom ClusterTemplate Referencing an Existing HelmChart object
-
+> EXAMPLE: 
+> Custom ClusterTemplate Referencing an Existing HelmChart object
+>
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1alpha1
 kind: ClusterTemplate

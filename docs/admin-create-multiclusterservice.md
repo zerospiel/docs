@@ -1,7 +1,11 @@
 # Deploy beach-head services using MultiClusterService
+
 The `MultiClusterService` object is used to deploy beach-head services on multiple matching clusters.
+
 ## Creation
-The `MultiClusterService` object can be created with the following YAML:
+
+You can create the `MultiClusterService` object with the following YAML:
+
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1alpha1
 kind: MultiClusterService
@@ -20,23 +24,33 @@ spec:
       namespace: <release-namespace>
     priority: 100
 ```
+
 ## Matching Multiple Clusters
 
-Consider the following example where 2 clusters have been deployed using ClusterDeployment objects:
-```sh
-➜  ~ kubectl get clusterdeployments.k0rdent.mirantis.com -n kcm-system
+Consider the following example where two clusters have been deployed using `ClusterDeployment` objects:
+
+Command:
+
+```shell
+kubectl get clusterdeployments.k0rdent.mirantis.com -n kcm-system
+```
+```console
 NAME             READY   STATUS
 dev-cluster-1   True    ClusterDeployment is ready
 dev-cluster-2   True    ClusterDeployment is ready
-➜  ~ 
-➜  ~ 
-➜  ~  kubectl get cluster -n kcm-system --show-labels
+```
+
+Command:
+```shell
+ kubectl get cluster -n kcm-system --show-labels
+```
+```console
 NAME           CLUSTERCLASS     PHASE         AGE     VERSION   LABELS
 dev-cluster-1                  Provisioned   2h41m             app.kubernetes.io/managed-by=Helm,helm.toolkit.fluxcd.io/name=dev-cluster-1,helm.toolkit.fluxcd.io/namespace=kcm-system,sveltos-agent=present
 dev-cluster-2                  Provisioned   3h10m             app.kubernetes.io/managed-by=Helm,helm.toolkit.fluxcd.io/name=dev-cluster-2,helm.toolkit.fluxcd.io/namespace=kcm-system,sveltos-agent=present
 ```
-EXAMPLE: 
-Spec for `dev-cluster-1` ClusterDeployment (only sections relevant to beach-head services):
+
+The `dev-cluster-1` `ClusterDeployment` beach-head services are specified as:
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1alpha1
 kind: ClusterDeployment
@@ -56,8 +70,8 @@ spec:
     priority: 100
   . . .
 ```
->
-Spec for `dev-cluster-2` ClusterDeployment (only sections relevant to beach-head services):
+
+The `dev-cluster-2` `ClusterDeployment` beach-head services are specified as:
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1alpha1
 kind: ClusterDeployment
@@ -75,8 +89,10 @@ spec:
   . . .
 ```
 
-NOTE: See [Deploy beach-head Services using Cluster Deployment](user-create-service.md) for how to use beach-head services with ClusterDeployment.
-Now the following `global-ingress` MultiClusterService object is created with the following spec:
+> NOTE:
+> See [Deploy beach-head Services using Cluster Deployment](user-create-service.md) for how to use beach-head services with ClusterDeployment.
+
+Now create the following `global-ingress` `MultiClusterService` object:
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1alpha1
 kind: MultiClusterService
@@ -99,12 +115,15 @@ version 4.11.3 of ingress-nginx service on it.
 
 ### Configuring Custom Values
 
-Refer to "Configuring Custom Values" in [Deploy beach-head Services using Cluster Deployment](user-create-service.md#deployment-of-beach-head-services).
+Refer to "Configuring Custom Values" in [Deploy beach-head Services using Cluster Deployment](user-create-service.md#deployment-of-beach-head-services) for more information on using custom values.
+
 ### Templating Custom Values
-Refer to "Templating Custom Values" in [Deploy beach-head Services using Cluster Deployment](user-create-service.md#configuring-custom-values).
+Refer to "Templating Custom Values" in [Deploy beach-head Services using Cluster Deployment](user-create-service.md#configuring-custom-values) for more information dynamic custom values.
+
 ### Services Priority and Conflict
 
-The `.spec.serviceSpec.priority` field is used to specify the priority for the services managed by a ClusterDeployment or MultiClusterService object.
+The `.spec.serviceSpec.priority` field specifies the priority for the services managed by a ClusterDeployment or MultiClusterService object.
+
 Considering the example above:
 
 1. ClusterDeployment `dev-cluster-1` manages deployment of kyverno (v3.2.6) and ingress-nginx (v4.11.0) with `priority=100` on its cluster.
@@ -114,16 +133,19 @@ This scenario presents a conflict on both the clusters as the MultiClusterServic
 on both whereas the ClusterDeployment for each is attempting to deploy v4.11.0 of ingress-nginx.
 
 This is where `.spec.serviceSpec.priority` can be used to specify who gets the priority. Higher number means higer priority and vice versa. In this example:
+
 1. MultiClusterService "global-ingress" will take precedence over ClusterDeployment "dev-cluster-1" and ingress-nginx (v4.11.3) defined in MultiClusterService object will be deployed on the cluster.
 2. ClusterDeployment "dev-cluster-2" will take precedence over MultiClusterService "global-ingress" and ingress-nginx (v4.11.0) defined in ClusterDeployment object will be deployed on the cluster.
 
-NOTE: If priority are equal, the first one to reach the cluster wins and deploys its beach-head services.
+> NOTE: 
+> If `priority` values are equal, the first one to reach the cluster wins and deploys its beach-head services.
+
 ## Checking Status
 
-The status for the MultiClusterService object will show the deployment status for the beach-head services managed
+The status for the `MultiClusterService` object shows the deployment status for the beach-head services managed
 by it on each of the CAPI target clusters that it matches. Consider the same example where 2 ClusterDeployments
-and 1 MultiClusterService is deployed.
-EXAMPLE: Status for `global-ingress` MultiClusterService
+and 1 MultiClusterService is deployed. The status for the `global-ingress` `MultiClusterService` appears as:
+
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1alpha1
 kind: MultiClusterService
@@ -186,9 +208,10 @@ status:
       status: "True"
       type: ingress-nginx.ingress-nginx/SveltosHelmReleaseReady
 ```
-The status under `.status.services` shows a conflict for `dev-cluster-2` as expected because the MultiClusterService has a lower priority.
-Whereas, it shows provisioned for `dev-cluster-1` because the MultiClusterService has a higher priority.
-EXAMPLE: Status for `dev-cluster-1` ClusterDeployment (only sections relevant to beach-head services):
+
+The status under `.status.services` shows a conflict for `dev-cluster-2` as expected because the `MultiClusterService` has a lower priority.
+On the other hand, it shows provisioned for `dev-cluster-1` because the `MultiClusterService` has a higher priority.
+
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1alpha1
 kind: ClusterDeployment
@@ -234,9 +257,10 @@ status:
       status: "False"
       type: ingress-nginx.ingress-nginx/SveltosHelmReleaseReady
 ```
-The status under `.status.services` for ClusterDeployment `dev-cluster-1` shows that it is managing kyverno but unable to manage ingress-nginx because
-another object with higher priority is managing it, so it shows a conflict instead.
-EXAMPLE: Status for `dev-cluster-2` ClusterDeployment (only sections relevant to beach-head services):
+
+The status under `.status.services` for the `ClusterDeployment` `dev-cluster-1` shows that it is managing Kyverno but unable to manage ingress-nginx because another object with higher priority is managing it, so it shows a conflict instead.
+
+On the otherhand, the `dev-cluster-2` `ClusterDeployment` has a higher priority:
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1alpha1
 kind: ClusterDeployment
@@ -273,6 +297,8 @@ status:
       status: "True"
       type: ingress-nginx.ingress-nginx/SveltosHelmReleaseReady
 ```
-The status under `.status.services` for ClusterDeployment `dev-cluster-2` shows that it is managing ingress-nginx as expected since it has a higher priority.
+
+The status under `.status.services` for `ClusterDeployment` `dev-cluster-2` shows that it is managing ingress-nginx, as expected because it has a higher priority.
+
 ## Parameter List
-Refer to "Parameter List" in [Deploy beach-head Services using Cluster Deployment](user-create-service.md#deployment-of-beach-head-services).
+Refer to "Parameter List" in [Deploy beach-head Services using Cluster Deployment](user-create-service.md#deployment-of-beach-head-services) for more information.

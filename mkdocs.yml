@@ -37,7 +37,6 @@ extra_css:
   - stylesheets/extra.css
 
 plugins:
-  - callouts
   - search
   - ezglossary:
       section_config:
@@ -67,13 +66,14 @@ nav:
   - Administrator Guide:
     - Before you start: admin-before.md
     - Installing k0rdent: admin-installation.md
-    - Prepare k0rdent to create managed clusters on multiple providers: admin-prepare.md
+    - Prepare k0rdent to create child clusters on multiple providers: admin-prepare.md
     - Creating standalone clusters: admin-creating-clusters.md
     - Adopting clusters: admin-adopting-clusters.md
     - Hosted control planes: admin-hosted-control-planes.md
     - Troubleshooting AWS VPCs: admin-troubleshooting-aws-vpcs.md
     - Using and creating service templates: admin-service-templates.md
     - Creating multi-cluster services: admin-create-multiclusterservice.md
+    - k0rdent Observability & FinOps: admin-kof.md
     - Upgrading k0rdent: admin-upgrading-k0rdent.md
     - k0rdent credentials management: admin-credentials.md
     - k0rdent Role Based Access Control (RBAC): admin-rbac.md
@@ -98,8 +98,12 @@ nav:
     - Extended management configuration: appendix-extend-mgmt.md
     - Understanding the dry run: appendix-dryrun.md
     - Cloud provider credentials management in CAPI: appendix-providers.md
+  - Contributing:
+    - k0rdent documentation contributor's guide: k0rdent-documentation-contributors-guide.md
+    - k0rdent documentation style guide: k0rdent-documentation-style-guide.md
 
 markdown_extensions:
+  - callouts
   - tables
   - pymdownx.details
   - pymdownx.highlight: {}
@@ -110,9 +114,6 @@ markdown_extensions:
         - name: mermaid
           class: mermaid
           format: !!python/name:pymdownx.superfences.fence_code_format
-  - mdx_truly_sane_lists: # https://github.com/mkdocs/mkdocs/issues/545#issuecomment-522196661
-      nested_indent: 2
-      truly_sane: true
   - toc:
       permalink: "#"
       toc_depth: 3

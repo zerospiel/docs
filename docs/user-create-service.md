@@ -1,13 +1,12 @@
 # Deploy Services to a Managed Cluster
 
-AT its heart, everything in k0rdent is based on templates that help define Kubernetes objects. For clusters,
-these are `ClusterTemplate`s. For applications and services, these are `ServiceTemplate`s.
+At its heart, everything in k0rdent is based on templates that help define Kubernetes objects. For clusters, these are `ClusterTemplate`s. For applications and services, these are `ServiceTemplate`s.
 
 ## Understanding `ServiceTemplate`s
 
 `ServiceTemplate`s are meant to let k0rdent know where to find a Helm chart with instructions for installing
 an application. In many cases, these charts will be in a private repository.  For example, consider this template for
-installing the Nginx Ingress:
+installing Nginx Ingress:
 
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1alpha1
@@ -39,8 +38,8 @@ spec:
 ```
 
 Here you see a template called `project-ingress-nginx-4.11.0` that is meant to be deployed in the `tenant42` namespace.
-The `.spec.helm.chartSpec` spedifies the name of the Helm chart and where to find it, as well as the version and other 
-important information. The `ServiceTempateChain` shows that this template is also an upgrade path from version 4.10.0.
+The `.spec.helm.chartSpec` specifies the name of the Helm chart and where to find it, as well as the version and other 
+important information. The `ServiceTemplateChain` shows that this template is also an upgrade path from version 4.10.0.
 
 If you wanted to deploy this as an application, you would first go ahead and add it to the cluster in which you were
 working, so if you were to save this YAML to a file called `project-ingress.yaml` you could run this command on the management cluster:
@@ -89,7 +88,7 @@ Let's look at a more complex case, involving deploying beach-head services on a 
 
 ## Deployment of beach-head services
 
-Beach-head services can be installed on a cluster deployment (that is, a target cluster) using the `ClusterDeployment` object, just as with a single service. Consider the following example of a `ClusterDeployment` object for AWS Infrastructure Provider with beach-head services
+Beach-head services can be installed on a cluster deployment (that is, a target cluster) using the `ClusterDeployment` object, just as with a single service. Consider the following example of a `ClusterDeployment` object for AWS Infrastructure Provider with beach-head services.
 
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1alpha1
@@ -240,7 +239,7 @@ In this case, the host and port information will be fetched from the spec of the
 ## Checking status
 
 The `.status.services` field of the `ClusterDeployment` object shows the status for each of the beach-head services.
-For example, if you were to `describe` the `ClusterDeploymen` with these services, you would see `condition`s that show
+For example, if you were to `describe` the `ClusterDeployment` with these services, you would see `condition`s that show
 status information, as in:
 
 ```yaml
