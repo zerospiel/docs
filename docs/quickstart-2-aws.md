@@ -197,7 +197,7 @@ You should see something like this. It's important to save these credentials sec
 
 ## Create IAM credentials secret on the management cluster
 
-Next, we create a `Secret' containing credentials for the k0rdent user and apply this to the management cluster running k0rdent, in the `kcm-system` namespace (important: if you use another namespace, k0rdent will be unable to read the credentials). To do this, create the following YAML in a file called `aws-cluster-identity-secret.yaml':
+Next, we create a `Secret` containing credentials for the k0rdent user and apply this to the management cluster running k0rdent, in the `kcm-system` namespace (important: if you use another namespace, k0rdent will be unable to read the credentials). To do this, create the following YAML in a file called `aws-cluster-identity-secret.yaml`:
 
 ```yaml
 apiVersion: v1
@@ -377,13 +377,13 @@ my-aws-clusterdeployment1   True    ClusterDeployment is ready
 Now you can retrieve the cluster's `kubeconfig`:
 
 ```shell
-kubectl -n kcm-system get secret my-aws-clusterdeployment1-kubeconfig -o jsonpath='{.data.value}' | base64 -d > my-aws-clusterdeployment1-kubeconfig.kubeconfig
+kubectl -n kcm-system get secret my-aws-clusterdeployment1-kubeconfig -o jsonpath='{.data.value}' | base64 -d > my-aws-clusterdeployment1.kubeconfig
 ```
 
 And you can use the `kubeconfig` to see what's running on the cluster:
 
 ```shell
-KUBECONFIG="my-aws-clusterdeployment1-kubeconfig.kubeconfig" kubectl get pods -A
+KUBECONFIG="my-aws-clusterdeployment1.kubeconfig" kubectl get pods -A
 ```
 
 ## List child clusters
