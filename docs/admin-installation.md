@@ -57,7 +57,10 @@ We do not recommend running k0rdent in production on a single node.  If you are 
 
 ## Install k0rdent
 
-This section assumes that you already have a kubernetes cluster installed. If you need to setup a cluster you can follow the [Create and prepare a Kubernetes cluster with k0s](#create-and-prepare-a-kubernetes-cluster-with-k0s) guide.
+This section assumes that you already have a kubernetes cluster installed. If you need to setup a cluster you can follow the [Create and prepare a Kubernetes cluster with k0s](#create-and-prepare-a-kubernetes-cluster-with-k0s) guide. 
+
+> NOTE:
+> While it is technically possible to run k0rdent on an existing cluster, using a fresh cluster is recommended to avoid conflicts with pre-instalked components.
 
 The actual management cluster is a Kubernetes cluster with the k0rdent application installed. The simplest way to install k0rdent is through its Helm chart.  You can find the latest release [here](https://github.com/k0rdent/kcm/tags), and from there you can deploy the Helm chart, as in:
 
@@ -231,11 +234,11 @@ Follow these steps to install and prepare a [k0s kubernetes](https://k0sproject.
     sudo k0s kubectl get nodes
     ```
 
-    You should see a single node with a status of `Ready`, as in:
+    After 2-3 minutes you should see a single `control-plane` node with a status of `Ready`, as in:
 
     ```shell
-    NAME              STATUS   ROLES    AGE   VERSION
-    ip-172-31-29-61   Ready    <none>   46s   v1.31.2+k0s
+    NAME              STATUS   ROLES            AGE   VERSION
+    ip-172-31-29-61   Ready    control-plane    46s   v1.31.2+k0s
     ```
 
 2. Install kubectl
