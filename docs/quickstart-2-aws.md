@@ -62,9 +62,6 @@ Now we can use the AWS CLI to create a new k0rdent user:
 ```shell
  aws iam create-user --user-name k0rdentQuickstart
 ```
-
-You'll see something like what's shown below. You should save this data securely. Note the Amazon Resource Name (ARN) because we'll be using it right away:
-
 ```console
 {
     "User": {
@@ -93,14 +90,19 @@ Next, we'll attach appropriate policies to the k0rdent user. These are:
 * `controllers.cluster-api-provider-aws.sigs.k8s.io`
 * `nodes.cluster-api-provider-aws.sigs.k8s.io`
 
-We use the AWS CLI to attach them. To do this, you will need to extract the Amazon Resource Name (ARN) for the newly-created user. In the above example of content returned from the AWS CLI on user creation (see above) that's marked with the placeholder `FAKE_ARN_123`:
-
-Given this, you can assemble and execute the following commands to implement the required policies:
+We use the AWS CLI to attach them. To do this, you will need to extract the Amazon Resource Name (ARN) for the newly-created user:
 
 ```shell
-aws iam attach-user-policy --user-name k0rdentQuickstart --policy-arn arn:aws:iam::FAKE_ARN_123:policy/control-plane.cluster-api-provider-aws.sigs.k8s.io
-aws iam attach-user-policy --user-name k0rdentQuickstart --policy-arn arn:aws:iam::FAKE_ARN_123:policy/controllers-eks.cluster-api-provider-aws.sigs.k8s.io
-aws iam attach-user-policy --user-name k0rdentQuickstart --policy-arn arn:aws:iam::FAKE_ARN_123:policy/controllers.cluster-api-provider-aws.sigs.k8s.io
+AWS_ARN_ID=$(aws iam get-user --user-name k0rdentQuickstart --query 'User.Arn' --output text | grep -oP '\d{12}')
+echo $AWS_ARN_ID
+```
+
+ Assemble and execute the following commands to implement the required policies:
+
+```shell
+aws iam attach-user-policy --user-name k0rdentQuickstart --policy-arn arn:aws:iam::$AWS_ARN_ID:policy/control-plane.cluster-api-provider-aws.sigs.k8s.io
+aws iam attach-user-policy --user-name k0rdentQuickstart --policy-arn arn:aws:iam::$AWS_ARN_ID:policy/controllers-eks.cluster-api-provider-aws.sigs.k8s.io
+aws iam attach-user-policy --user-name k0rdentQuickstart --policy-arn arn:aws:iam::$AWS_ARN_ID:policy/controllers.cluster-api-provider-aws.sigs.k8s.io
 ```
 
 We can check to see that policies were assigned:
