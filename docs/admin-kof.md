@@ -23,8 +23,8 @@ interact through the UI.
              ┌──────┴──────┐
              │             │
         ┌────┴─────┐ ┌─────┴────┐
-        │ Storage  │ │ Storage │
-        │ region 1 │ │ region 2│
+        │ Storage  │ │ Storage  │
+        │ region 1 │ │ region 2 │
         └────┬─────┘ └─────┬────┘
              │             │
       ┌──────┴──────┐     ...
