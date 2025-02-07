@@ -16,28 +16,28 @@ interact through the UI.
 
 ```
            ┌────────────────┐
-           │   Management  │
-           │   UI, promxy  │
+           │   Management   │
+           │   UI, promxy   │
            └────────┬───────┘
                     │
              ┌──────┴──────┐
-             │            │
+             │             │
         ┌────┴─────┐ ┌─────┴────┐
-        │ Storage │ │ Storage │
-        │ region 1│ │ region 2│
+        │ Storage  │ │ Storage │
+        │ region 1 │ │ region 2│
         └────┬─────┘ └─────┬────┘
-            │             │
+             │             │
       ┌──────┴──────┐     ...
       │             │
 ┌─────┴─────┐ ┌─────┴─────┐
-│ Collect  │ │ Collect  │
-│ managed 1│ │ managed 2│
+│ Collect   │ │ Collect  │
+│ managed 1 │ │ managed 2│
 └───────────┘ └───────────┘
 ```
 
 ### Mid-level
 
-Getting a little bit more detailed, it's important to undrestand that data flows upwards, from observed resources to centralized Grafana om the
+Getting a little bit more detailed, it's important to undrestand that data flows upwards, from observed resources to centralized Grafana on the
 Management layer:
 
 ```
@@ -80,7 +80,7 @@ cloud 1...
    │  │__________________________________│          │
    │                                                │
    │                                                │
-   │  cluster deployment 1__________________  2...  │
+   │  child deployment 1____________________  2...  │
    │  │                                    │  │     │
    │  │  cert-manager (OTel-operator)      │  │     │
    │  │                                    │  │     │
@@ -149,7 +149,7 @@ KOF is deployed as a series of Helm charts at various levels.
 
 ### Prerequisites
 
-Before beginning KOF installation, you should have the following compoents in place:
+Before beginning KOF installation, you should have the following components in place:
 
 * A k0rdent management cluster - You can get instructions to create one in the [quickstart guide](https://docs.k0rdent.io/v0.1.0/quickstart-1-mgmt-node-and-cluster/)
     * To test on [macOS](https://docs.k0sproject.io/stable/system-requirements/#host-operating-system) you can install using:
@@ -167,7 +167,7 @@ For example, for AWS you should use the [Node IAM Role](https://github.com/kuber
 or [IRSA](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md#iam-roles-for-service-accounts) methods in production.
 
 For now, however, just for the sake of this demo based on the `aws-standalone` template,
-you an use the most straightforward (though less secure) [static credentials](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md#static-credentials) method:
+you can use the most straightforward (though less secure) [static credentials](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md#static-credentials) method:
 
 1. Create an `external-dns` IAM user with [this policy](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md#iam-policy).
 2. Create an access key and `external-dns-aws-credentials` file, as in:
@@ -234,7 +234,7 @@ Now install KOF on the Storage cluster:
 1. Look through the [default values](https://github.com/k0rdent/kof/blob/main/charts/kof-storage/values.yaml) of the `kof-storage` chart.
 2. Apply the quick start example for AWS, or use it as a reference.
 
-3. Set your own KOF variables using your own values:
+3. Set your KOF variables using your own values:
     ```shell
     STORAGE_CLUSTER_NAME=cloud1-region1
     STORAGE_DOMAIN=$STORAGE_CLUSTER_NAME.kof.example.com
@@ -242,7 +242,7 @@ Now install KOF on the Storage cluster:
     echo "$STORAGE_CLUSTER_NAME, $STORAGE_DOMAIN, $ADMIN_EMAIL"
     ```
 
-4. Use the up-to-date KOF template, as in:
+4. Use the up-to-date KOF `ClusterTemplate`, as in:
     ```shell
     kubectl get clustertemplate -n kcm-system | grep aws
     TEMPLATE=aws-standalone-cp-0-1-0
@@ -387,7 +387,7 @@ Now install KOF on the Storage cluster:
       --show-conditions all
     ```
 
-### Cluster Deployment
+### Child Cluster
 
 On the actual cluster to be monitored, do the following:
 
@@ -500,7 +500,7 @@ Finally, verify that KOF installed properly.
 ```shell
 kubectl get clustersummaries -A -o wide
 ```
-Wait until the value of `Provisioning` becomes `Provisioned`.
+Wait until the value of `HELMCHARTS` changes from `Provisioning` to `Provisioned`.
 
 ```shell
 kubectl get secret -n kcm-system $STORAGE_CLUSTER_NAME-kubeconfig \
@@ -528,7 +528,7 @@ If you've opted out of [DNS auto-config](#dns-auto-config), you will need to do 
     ```
     It should look like `REDACTED.us-east-2.elb.amazonaws.com`
 
-2. Create the these DNS records of type `A` both pointing to that `EXTERNAL-IP`:
+2. Create these DNS records of type `A`, both pointing to that `EXTERNAL-IP`:
     ```shell
     echo vmauth.$STORAGE_DOMAIN
     echo grafana.$STORAGE_DOMAIN
@@ -615,11 +615,10 @@ The method for scaling KOF depends on the type of expansion:
 
 ### Regional Expansion
 
-1. Deploy a [Storage Cluster](#storage-cluster) in new region
-2. Update promxy configuration
-3. Configure collector routing to point to the additional capacity
+1. Deploy a [Storage Cluster](#storage-cluster) in the new region
+2. Configure collector routing to point to the additional capacity
 
-### Adding a New ClusterDeployment
+### Adding a New Child Cluster
 
 1. Apply templates, as in the [Managed Cluster](#managed-cluster) section
 2. Verify the data flow
@@ -698,7 +697,7 @@ helm uninstall -n kof kof-mothership
       memory: 64Mi
   ```
 
-### Resources of a ClusterDeployment
+### Resources of a Child Cluster
 
 - [opentelemetry](https://github.com/k0rdent/kof/blob/121b61f5f6de6ddfdf3525b98f3ad4cb8ce57eaa/charts/kof-collectors/templates/opentelemetry/instrumentation.yaml#L18-L22):
   ```yaml
