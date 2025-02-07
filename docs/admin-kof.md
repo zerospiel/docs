@@ -3,7 +3,7 @@
 ## Overview
 
 k0rdent Observability and FinOps ([kof](https://github.com/k0rdent/kof)) provides enterprise-grade observability
-and FinOps capabilities for k0rdent-managed Kubernetes clusters.
+and FinOps capabilities for k0rdent-managed child Kubernetes clusters.
 It enables centralized metrics, logging, and cost management
 through a unified [OpenTelemetry](https://opentelemetry.io/docs/)-based architecture.
 
@@ -30,8 +30,8 @@ interact through the UI.
       ┌──────┴──────┐     ...
       │             │
 ┌─────┴─────┐ ┌─────┴─────┐
-│ Collect   │ │ Collect  │
-│ managed 1 │ │ managed 2│
+│ Collect   │ │ Collect   │
+│ child 1   │ │ child 2   │
 └───────────┘ └───────────┘
 ```
 
@@ -231,10 +231,10 @@ Follow these steps to install the KOF components on the management cluster:
 
 Now install KOF on the Storage cluster:
 
-1. Look through the [default values](https://github.com/k0rdent/kof/blob/main/charts/kof-storage/values.yaml) of the `kof-storage` chart.
-2. Apply the quick start example for AWS, or use it as a reference.
+First look through the [default values](https://github.com/k0rdent/kof/blob/main/charts/kof-storage/values.yaml) of the `kof-storage` chart.
+Apply the quick start example for AWS, or use it as a reference.
 
-3. Set your KOF variables using your own values:
+1. Set your KOF variables using your own values:
     ```shell
     STORAGE_CLUSTER_NAME=cloud1-region1
     STORAGE_DOMAIN=$STORAGE_CLUSTER_NAME.kof.example.com
@@ -242,13 +242,13 @@ Now install KOF on the Storage cluster:
     echo "$STORAGE_CLUSTER_NAME, $STORAGE_DOMAIN, $ADMIN_EMAIL"
     ```
 
-4. Use the up-to-date KOF `ClusterTemplate`, as in:
+2. Use the up-to-date KOF `ClusterTemplate`, as in:
     ```shell
     kubectl get clustertemplate -n kcm-system | grep aws
     TEMPLATE=aws-standalone-cp-0-1-0
     ```
 
-5. Compose the following objects:
+3. Compose the following objects:
     * `ClusterDeployment` - storage cluster
     * `PromxyServerGroup` - for metrics
     * `GrafanaDatasource` - for logs
@@ -374,14 +374,14 @@ Now install KOF on the Storage cluster:
     EOF
     ```
 
-6. Verify and apply the Storage `ClusterDeployment`:
+4. Verify and apply the Storage `ClusterDeployment`:
     ```shell
     cat storage-cluster.yaml
 
     kubectl apply -f storage-cluster.yaml
     ```
 
-7. Watch how the cluster is deployed to AWS until all values of `READY` are `True`:
+5. Watch how the cluster is deployed to AWS until all values of `READY` are `True`:
     ```shell
     clusterctl describe cluster -n kcm-system $STORAGE_CLUSTER_NAME \
       --show-conditions all
@@ -398,8 +398,8 @@ On the actual cluster to be monitored, do the following:
 
 3. Set your own value below, verifing [the variables](#storage-cluster):
     ```shell
-    MANAGED_CLUSTER_NAME=$STORAGE_CLUSTER_NAME-managed1
-    echo "$MANAGED_CLUSTER_NAME, $STORAGE_DOMAIN"
+    CHILD_CLUSTER_NAME=$STORAGE_CLUSTER_NAME-child1
+    echo "$CHILD_CLUSTER_NAME, $STORAGE_DOMAIN"
     ```
 
 4. Use the up-to-date template, as in:
@@ -411,11 +411,11 @@ On the actual cluster to be monitored, do the following:
 5. Compose the `ClusterDeployment`:
 
     ```shell
-    cat >managed-cluster.yaml <<EOF
+    cat >child-cluster.yaml <<EOF
     apiVersion: k0rdent.mirantis.com/v1alpha1
     kind: ClusterDeployment
     metadata:
-      name: $MANAGED_CLUSTER_NAME
+      name: $CHILD_CLUSTER_NAME
       namespace: kcm-system
       labels:
         kof: collector
@@ -454,7 +454,7 @@ On the actual cluster to be monitored, do the following:
             template: kof-collectors-0-1-0
             values: |
               global:
-                clusterName: $MANAGED_CLUSTER_NAME
+                clusterName: $CHILD_CLUSTER_NAME
               opencost:
                 enabled: true
                 opencost:
@@ -465,7 +465,7 @@ On the actual cluster to be monitored, do the following:
                     external:
                       url: https://vmauth.$STORAGE_DOMAIN/vm/select/0/prometheus
                   exporter:
-                    defaultClusterId: $MANAGED_CLUSTER_NAME
+                    defaultClusterId: $CHILD_CLUSTER_NAME
               kof:
                 logs:
                   username_key: username
@@ -482,14 +482,14 @@ On the actual cluster to be monitored, do the following:
 
 6. Verify and apply the `ClusterDeployment`:
     ```shell
-    cat managed-cluster.yaml
+    cat child-cluster.yaml
 
-    kubectl apply -f managed-cluster.yaml
+    kubectl apply -f child-cluster.yaml
     ``:
 
 7. Watch while the cluster is deployed to AWS until all values of `READY` are `True`:
     ```shell
-    clusterctl describe cluster -n kcm-system $MANAGED_CLUSTER_NAME \
+    clusterctl describe cluster -n kcm-system $CHILD_CLUSTER_NAME \
       --show-conditions all
     ```
 
@@ -506,13 +506,13 @@ Wait until the value of `HELMCHARTS` changes from `Provisioning` to `Provisioned
 kubectl get secret -n kcm-system $STORAGE_CLUSTER_NAME-kubeconfig \
   -o=jsonpath={.data.value} | base64 -d > storage-kubeconfig
 
-kubectl get secret -n kcm-system $MANAGED_CLUSTER_NAME-kubeconfig \
-  -o=jsonpath={.data.value} | base64 -d > managed-kubeconfig
+kubectl get secret -n kcm-system $CHILD_CLUSTER_NAME-kubeconfig \
+  -o=jsonpath={.data.value} | base64 -d > child-kubeconfig
 
 KUBECONFIG=storage-kubeconfig kubectl get pod -A
   # Namespaces: cert-manager, ingress-nginx, kof, kube-system, projectsveltos
 
-KUBECONFIG=managed-kubeconfig kubectl get pod -A
+KUBECONFIG=child-kubeconfig kubectl get pod -A
   # Namespaces: kof, kube-system, projectsveltos
 ```
 Wait for all pods to show as `Running`.
@@ -552,7 +552,7 @@ to verify secrets have been auto-distributed to the required clusters:
 
 2. Now open [http://127.0.0.1:8081/login](http://127.0.0.1:8081/login) and paste the token output in step 1 above.
 3. Open the `ClusterAPI` tab: [http://127.0.0.1:8081/sveltos/clusters/ClusterAPI/1](http://127.0.0.1:8081/sveltos/clusters/ClusterAPI/1)
-4. Check both storage and managed clusters:
+4. Check both storage and child clusters:
     * Cluster profiles should be `Provisioned`.
     * Secrets should be distributed.
 
@@ -616,11 +616,11 @@ The method for scaling KOF depends on the type of expansion:
 ### Regional Expansion
 
 1. Deploy a [Storage Cluster](#storage-cluster) in the new region
-2. Configure collector routing to point to the additional capacity
+2. Configure child clusters in this region to point to this storage cluster
 
 ### Adding a New Child Cluster
 
-1. Apply templates, as in the [Managed Cluster](#managed-cluster) section
+1. Apply templates, as in the [Child Cluster](#child-cluster) section
 2. Verify the data flow
 3. Configure any custom dashboards
 
@@ -650,7 +650,7 @@ To remove the demo clusters created in this section:
 > Make sure these are just your demo clusters and do not contain important data.
 
 ```shell
-kubectl delete -f managed-cluster.yaml
+kubectl delete -f child-cluster.yaml
 kubectl delete -f storage-cluster.yaml
 ```
 
