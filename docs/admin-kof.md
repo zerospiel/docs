@@ -11,8 +11,11 @@ through a unified [OpenTelemetry](https://opentelemetry.io/docs/)-based architec
 
 ### High-level
 
-From a high-level perspective, KOF consists of three layers: Collection, where the statistics and events are gathered, Regional, to keep track of them, and Management, where you
-interact through the UI.
+From a high-level perspective, KOF consists of three layers:
+
+* the Collection layer, where the statistics and events are gathered,
+* the Regional layer, which includes storage to keep track of those statistics and events,
+* and the Management layer, where you interact through the UI.
 
 ```
            ┌────────────────┐
