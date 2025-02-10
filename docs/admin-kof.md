@@ -11,8 +11,11 @@ through a unified [OpenTelemetry](https://opentelemetry.io/docs/)-based architec
 
 ### High-level
 
-From a high-level perspective, KOF consists of three layers: Collection, where the statistics and events are gathered, Storage, to keep track of them, and Management, where you
-interact through the UI.
+From a high-level perspective, KOF consists of three layers:
+
+* the Collection layer, where the statistics and events are gathered,
+* the Regional layer, which includes storage to keep track of those statistics and events,
+* and the Management layer, where you interact through the UI.
 
 ```
            ┌────────────────┐
@@ -23,7 +26,7 @@ interact through the UI.
              ┌──────┴──────┐
              │             │
         ┌────┴─────┐ ┌─────┴────┐
-        │ Storage  │ │ Storage  │
+        │ Regional │ │ Regional │
         │ region 1 │ │ region 2 │
         └────┬─────┘ └─────┬────┘
              │             │
@@ -65,7 +68,7 @@ cloud 1...
 │
 │  region 1__________________________________________  region 2...
 │  │                                                │  │
-.  │  storage cluster_____________________          │  │
+.  │  regional cluster____________________          │  │
 .  │  │                                  │          │  │
 .  │  │  kof-storage chart_____________  │          │  .
    │  │  │                            │  │          │  .
@@ -212,7 +215,7 @@ Follow these steps to install the KOF components on the management cluster:
     It's important to understand that we override some [default values](https://github.com/k0rdent/kof/blob/main/charts/kof-mothership/values.yaml) here:
 
     * `kcm.installTemplates` installs the templates such as `cert-manager` and `kof-storage` into the management cluster. This makes it possible to reference them from `.spec.serviceSpec.services[].template` in the AWS `ClusterDeployment` below.
-    * `external-dns-aws-credentials` is a secret created in the [DNS auto-config](#dns-auto-config) section and is auto-distributed to storage clusters by Sveltos. If you've opted out of [DNS auto-config](#dns-auto-config) then don't add the `kof-aws-dns-secrets` cluster profile above.
+    * `external-dns-aws-credentials` is a secret created in the [DNS auto-config](#dns-auto-config) section and is auto-distributed to regional clusters by Sveltos. If you've opted out of [DNS auto-config](#dns-auto-config) then don't add the `kof-aws-dns-secrets` cluster profile above.
     * `storage-vmuser-credentials` is a secret auto-created by default and auto-distributed to other clusters by the Sveltos `ClusterProfile` [here](https://github.com/k0rdent/kof/blob/121b61f5f6de6ddfdf3525b98f3ad4cb8ce57eaa/charts/kof-mothership/values.yaml#L25-L31).
     * `grafana-admin-credentials` is a secret auto-created by default [here](https://github.com/k0rdent/kof/blob/121b61f5f6de6ddfdf3525b98f3ad4cb8ce57eaa/charts/kof-mothership/values.yaml#L64-L65). We will use it in the [Grafana](#grafana) section.
 
@@ -227,19 +230,19 @@ Follow these steps to install the KOF components on the management cluster:
     kubectl get pod -n kof
     ```
 
-### Storage Cluster
+### Regional Cluster
 
-Now install KOF on the Storage cluster:
+Now install KOF on the Regional cluster:
 
 First look through the [default values](https://github.com/k0rdent/kof/blob/main/charts/kof-storage/values.yaml) of the `kof-storage` chart.
 Apply the quick start example for AWS, or use it as a reference.
 
 1. Set your KOF variables using your own values:
     ```shell
-    STORAGE_CLUSTER_NAME=cloud1-region1
-    STORAGE_DOMAIN=$STORAGE_CLUSTER_NAME.kof.example.com
+    REGIONAL_CLUSTER_NAME=cloud1-region1
+    REGIONAL_DOMAIN=$REGIONAL_CLUSTER_NAME.kof.example.com
     ADMIN_EMAIL=$(git config user.email)
-    echo "$STORAGE_CLUSTER_NAME, $STORAGE_DOMAIN, $ADMIN_EMAIL"
+    echo "$REGIONAL_CLUSTER_NAME, $REGIONAL_DOMAIN, $ADMIN_EMAIL"
     ```
 
 2. Use the up-to-date KOF `ClusterTemplate`, as in:
@@ -249,16 +252,16 @@ Apply the quick start example for AWS, or use it as a reference.
     ```
 
 3. Compose the following objects:
-    * `ClusterDeployment` - storage cluster
+    * `ClusterDeployment` - regional cluster
     * `PromxyServerGroup` - for metrics
     * `GrafanaDatasource` - for logs
 
     ```shell
-    cat >storage-cluster.yaml <<EOF
+    cat >regional-cluster.yaml <<EOF
     apiVersion: k0rdent.mirantis.com/v1alpha1
     kind: ClusterDeployment
     metadata:
-      name: $STORAGE_CLUSTER_NAME
+      name: $REGIONAL_CLUSTER_NAME
       namespace: kcm-system
       labels:
         kof: storage
@@ -302,14 +305,14 @@ Apply the quick start example for AWS, or use it as a reference.
               victoriametrics:
                 vmauth:
                   ingress:
-                    host: vmauth.$STORAGE_DOMAIN
+                    host: vmauth.$REGIONAL_DOMAIN
                 security:
                   username_key: username
                   password_key: password
                   credentials_secret_name: storage-vmuser-credentials
               grafana:
                 ingress:
-                  host: grafana.$STORAGE_DOMAIN
+                  host: grafana.$REGIONAL_DOMAIN
                 security:
                   credentials_secret_name: grafana-admin-credentials
               cert-manager:
@@ -324,9 +327,9 @@ Apply the quick start example for AWS, or use it as a reference.
       name: promxyservergroup-sample
       namespace: kof
     spec:
-      cluster_name: $STORAGE_CLUSTER_NAME
+      cluster_name: $REGIONAL_CLUSTER_NAME
       targets:
-        - "vmauth.$STORAGE_DOMAIN:443"
+        - "vmauth.$REGIONAL_DOMAIN:443"
       path_prefix: /vm/select/0/prometheus/
       scheme: https
       http_client:
@@ -343,7 +346,7 @@ Apply the quick start example for AWS, or use it as a reference.
     metadata:
       labels:
         app.kubernetes.io/managed-by: Helm
-      name: victoria-logs-storage0
+      name: victoria-logs-regional0
       namespace: kof
     spec:
       valuesFrom:
@@ -358,8 +361,8 @@ Apply the quick start example for AWS, or use it as a reference.
               key: password
               name: storage-vmuser-credentials
       datasource:
-        name: $STORAGE_CLUSTER_NAME
-        url: https://vmauth.$STORAGE_DOMAIN/vls
+        name: $REGIONAL_CLUSTER_NAME
+        url: https://vmauth.$REGIONAL_DOMAIN/vls
         access: proxy
         isDefault: false
         type: "victoriametrics-logs-datasource"
@@ -374,16 +377,16 @@ Apply the quick start example for AWS, or use it as a reference.
     EOF
     ```
 
-4. Verify and apply the Storage `ClusterDeployment`:
+4. Verify and apply the Regional `ClusterDeployment`:
     ```shell
-    cat storage-cluster.yaml
+    cat regional-cluster.yaml
 
-    kubectl apply -f storage-cluster.yaml
+    kubectl apply -f regional-cluster.yaml
     ```
 
 5. Watch how the cluster is deployed to AWS until all values of `READY` are `True`:
     ```shell
-    clusterctl describe cluster -n kcm-system $STORAGE_CLUSTER_NAME \
+    clusterctl describe cluster -n kcm-system $REGIONAL_CLUSTER_NAME \
       --show-conditions all
     ```
 
@@ -396,10 +399,10 @@ On the actual cluster to be monitored, do the following:
 
 2. Apply the next quick start example for AWS, or use it as a reference.
 
-3. Set your own value below, verifing [the variables](#storage-cluster):
+3. Set your own value below, verifing [the variables](#regional-cluster):
     ```shell
-    CHILD_CLUSTER_NAME=$STORAGE_CLUSTER_NAME-child1
-    echo "$CHILD_CLUSTER_NAME, $STORAGE_DOMAIN"
+    CHILD_CLUSTER_NAME=$REGIONAL_CLUSTER_NAME-child1
+    echo "$CHILD_CLUSTER_NAME, $REGIONAL_DOMAIN"
     ```
 
 4. Use the up-to-date template, as in:
@@ -463,7 +466,7 @@ On the actual cluster to be monitored, do the following:
                     password_key: password
                     existingSecretName: storage-vmuser-credentials
                     external:
-                      url: https://vmauth.$STORAGE_DOMAIN/vm/select/0/prometheus
+                      url: https://vmauth.$REGIONAL_DOMAIN/vm/select/0/prometheus
                   exporter:
                     defaultClusterId: $CHILD_CLUSTER_NAME
               kof:
@@ -471,12 +474,12 @@ On the actual cluster to be monitored, do the following:
                   username_key: username
                   password_key: password
                   credentials_secret_name: storage-vmuser-credentials
-                  endpoint: https://vmauth.$STORAGE_DOMAIN/vls/insert/opentelemetry/v1/logs
+                  endpoint: https://vmauth.$REGIONAL_DOMAIN/vls/insert/opentelemetry/v1/logs
                 metrics:
                   username_key: username
                   password_key: password
                   credentials_secret_name: storage-vmuser-credentials
-                  endpoint: https://vmauth.$STORAGE_DOMAIN/vm/insert/0/prometheus/api/v1/write
+                  endpoint: https://vmauth.$REGIONAL_DOMAIN/vm/insert/0/prometheus/api/v1/write
     EOF
     ```
 
@@ -503,13 +506,13 @@ kubectl get clustersummaries -A -o wide
 Wait until the value of `HELMCHARTS` changes from `Provisioning` to `Provisioned`.
 
 ```shell
-kubectl get secret -n kcm-system $STORAGE_CLUSTER_NAME-kubeconfig \
-  -o=jsonpath={.data.value} | base64 -d > storage-kubeconfig
+kubectl get secret -n kcm-system $REGIONAL_CLUSTER_NAME-kubeconfig \
+  -o=jsonpath={.data.value} | base64 -d > regional-kubeconfig
 
 kubectl get secret -n kcm-system $CHILD_CLUSTER_NAME-kubeconfig \
   -o=jsonpath={.data.value} | base64 -d > child-kubeconfig
 
-KUBECONFIG=storage-kubeconfig kubectl get pod -A
+KUBECONFIG=regional-kubeconfig kubectl get pod -A
   # Namespaces: cert-manager, ingress-nginx, kof, kube-system, projectsveltos
 
 KUBECONFIG=child-kubeconfig kubectl get pod -A
@@ -523,15 +526,15 @@ If you've opted out of [DNS auto-config](#dns-auto-config), you will need to do 
 
 1. Get the `EXTERNAL-IP` of `ingress-nginx`:
     ```shell
-    KUBECONFIG=storage-kubeconfig kubectl get svc \
+    KUBECONFIG=regional-kubeconfig kubectl get svc \
       -n ingress-nginx ingress-nginx-controller
     ```
     It should look like `REDACTED.us-east-2.elb.amazonaws.com`
 
 2. Create these DNS records of type `A`, both pointing to that `EXTERNAL-IP`:
     ```shell
-    echo vmauth.$STORAGE_DOMAIN
-    echo grafana.$STORAGE_DOMAIN
+    echo vmauth.$REGIONAL_DOMAIN
+    echo grafana.$REGIONAL_DOMAIN
     ```
 
 ## Sveltos
@@ -552,7 +555,7 @@ to verify secrets have been auto-distributed to the required clusters:
 
 2. Now open [http://127.0.0.1:8081/login](http://127.0.0.1:8081/login) and paste the token output in step 1 above.
 3. Open the `ClusterAPI` tab: [http://127.0.0.1:8081/sveltos/clusters/ClusterAPI/1](http://127.0.0.1:8081/sveltos/clusters/ClusterAPI/1)
-4. Check both storage and child clusters:
+4. Check both regional and child clusters:
     * Cluster profiles should be `Provisioned`.
     * Secrets should be distributed.
 
@@ -615,8 +618,8 @@ The method for scaling KOF depends on the type of expansion:
 
 ### Regional Expansion
 
-1. Deploy a [Storage Cluster](#storage-cluster) in the new region
-2. Configure child clusters in this region to point to this storage cluster
+1. Deploy a [Regional Cluster](#regional-cluster) in the new region
+2. Configure child clusters in this region to point to this regional cluster
 
 ### Adding a New Child Cluster
 
@@ -651,7 +654,7 @@ To remove the demo clusters created in this section:
 
 ```shell
 kubectl delete -f child-cluster.yaml
-kubectl delete -f storage-cluster.yaml
+kubectl delete -f regional-cluster.yaml
 ```
 
 To remove KOF, use helm:
