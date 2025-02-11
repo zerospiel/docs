@@ -197,7 +197,7 @@ and apply this example, or use it as a reference:
 1. Install `kof-operators` required by `kof-mothership`:
     ```shell
     helm install --create-namespace -n kof kof-operators \
-      oci://ghcr.io/k0rdent/kof/charts/kof-operators --version 0.1.0
+      oci://ghcr.io/k0rdent/kof/charts/kof-operators --version 0.1.1
     ```
 
 2. Create the `mothership-values.yaml` file:
@@ -239,7 +239,7 @@ and apply this example, or use it as a reference:
 6. Install `kof-mothership`:
     ```shell
     helm install -f mothership-values.yaml -n kof kof-mothership \
-      oci://ghcr.io/k0rdent/kof/charts/kof-mothership --version 0.1.0
+      oci://ghcr.io/k0rdent/kof/charts/kof-mothership --version 0.1.1
     ```
 
 7. Wait for all pods to show that they're `Running`:
@@ -314,7 +314,7 @@ and apply this example for AWS, or use it as a reference:
                   enabled: true
           - name: kof-storage
             namespace: kof
-            template: kof-storage-0-1-0
+            template: kof-storage-0-1-1
             values: |
               external-dns:
                 enabled: true
@@ -478,10 +478,10 @@ and apply this example for AWS, or use it as a reference:
                   enabled: true
           - name: kof-operators
             namespace: kof
-            template: kof-operators-0-1-0
+            template: kof-operators-0-1-1
           - name: kof-collectors
             namespace: kof
-            template: kof-collectors-0-1-0
+            template: kof-collectors-0-1-1
             values: |
               global:
                 clusterName: $CHILD_CLUSTER_NAME
