@@ -197,9 +197,18 @@ Follow these steps to install the KOF components on the management cluster:
       oci://ghcr.io/k0rdent/kof/charts/kof-operators --version 0.1.0
     ```
 
-2. Construct the values for `kof-mothership`:
+2. Select a storage class available in the management cluster, for example:
+  ```shell
+  kubectl get storageclass
+  STORAGE_CLASS=ebs-csi-default-sc  # AWS EBS
+  STORAGE_CLASS=standard  # kind
+  ```
+
+3. Construct the values for `kof-mothership`:
     ```shell
     cat >mothership-values.yaml <<EOF
+    global:
+      storageClass: $STORAGE_CLASS
     kcm:
       installTemplates: true
       kof:
@@ -219,23 +228,22 @@ Follow these steps to install the KOF components on the management cluster:
     * `storage-vmuser-credentials` is a secret auto-created by default and auto-distributed to other clusters by the Sveltos `ClusterProfile` [here](https://github.com/k0rdent/kof/blob/121b61f5f6de6ddfdf3525b98f3ad4cb8ce57eaa/charts/kof-mothership/values.yaml#L25-L31).
     * `grafana-admin-credentials` is a secret auto-created by default [here](https://github.com/k0rdent/kof/blob/121b61f5f6de6ddfdf3525b98f3ad4cb8ce57eaa/charts/kof-mothership/values.yaml#L64-L65). We will use it in the [Grafana](#grafana) section.
 
-3. Install `kof-mothership`:
+4. Install `kof-mothership`:
     ```shell
     helm install -f mothership-values.yaml -n kof kof-mothership \
       oci://ghcr.io/k0rdent/kof/charts/kof-mothership --version 0.1.0
     ```
 
-4. Wait for all pods to show that they're `Running`:
+5. Wait for all pods to show that they're `Running`:
     ```shell
     kubectl get pod -n kof
     ```
 
 ### Regional Cluster
 
-Now install KOF on the Regional cluster:
-
-First look through the [default values](https://github.com/k0rdent/kof/blob/main/charts/kof-storage/values.yaml) of the `kof-storage` chart.
-Apply the quick start example for AWS, or use it as a reference.
+To install KOF on the Regional cluster,
+look through the [default values](https://github.com/k0rdent/kof/blob/main/charts/kof-storage/values.yaml) of the `kof-storage` chart,
+and apply this example for AWS, or use it as a reference:
 
 1. Set your KOF variables using your own values:
     ```shell
@@ -245,13 +253,21 @@ Apply the quick start example for AWS, or use it as a reference.
     echo "$REGIONAL_CLUSTER_NAME, $REGIONAL_DOMAIN, $ADMIN_EMAIL"
     ```
 
-2. Use the up-to-date KOF `ClusterTemplate`, as in:
+2. Use the up-to-date `ClusterTemplate`, as in:
     ```shell
     kubectl get clustertemplate -n kcm-system | grep aws
     TEMPLATE=aws-standalone-cp-0-1-0
     ```
 
-3. Compose the following objects:
+3. Specify a storage class available by default for the `ClusterTemplate` selected above:
+    ```shell
+    STORAGE_CLASS=ebs-csi-default-sc  # AWS EBS
+    ```
+    * If you're installing KOF to an existing Regional cluster,
+      you may create a custom storage class,
+      for example using [AWS EBS CSI Driver parameters](https://github.com/kubernetes-sigs/aws-ebs-csi-driver/blob/master/docs/parameters.md).
+
+4. Compose the following objects:
     * `ClusterDeployment` - regional cluster
     * `PromxyServerGroup` - for metrics
     * `GrafanaDatasource` - for logs
@@ -300,6 +316,8 @@ Apply the quick start example for AWS, or use it as a reference.
             namespace: kof
             template: kof-storage-0-1-0
             values: |
+              global:
+                storageClass: $STORAGE_CLASS
               external-dns:
                 enabled: true
               victoriametrics:
@@ -377,14 +395,14 @@ Apply the quick start example for AWS, or use it as a reference.
     EOF
     ```
 
-4. Verify and apply the Regional `ClusterDeployment`:
+5. Verify and apply the Regional `ClusterDeployment`:
     ```shell
     cat regional-cluster.yaml
 
     kubectl apply -f regional-cluster.yaml
     ```
 
-5. Watch how the cluster is deployed to AWS until all values of `READY` are `True`:
+6. Watch how the cluster is deployed to AWS until all values of `READY` are `True`:
     ```shell
     clusterctl describe cluster -n kcm-system $REGIONAL_CLUSTER_NAME \
       --show-conditions all
@@ -392,26 +410,24 @@ Apply the quick start example for AWS, or use it as a reference.
 
 ### Child Cluster
 
-On the actual cluster to be monitored, do the following:
+To install KOF on the actual cluster to be monitored,
+look through the default values of the [kof-operators](https://github.com/k0rdent/kof/blob/main/charts/kof-operators/values.yaml)
+and [kof-collectors](https://github.com/k0rdent/kof/blob/main/charts/kof-collectors/values.yaml) charts,
+and apply this example for AWS, or use it as a reference:
 
-1. Look through the default values of the [kof-operators](https://github.com/k0rdent/kof/blob/main/charts/kof-operators/values.yaml)
-   and [kof-collectors](https://github.com/k0rdent/kof/blob/main/charts/kof-collectors/values.yaml) charts.
-
-2. Apply the next quick start example for AWS, or use it as a reference.
-
-3. Set your own value below, verifing [the variables](#regional-cluster):
+1. Set your own value below, verifing [the variables](#regional-cluster):
     ```shell
     CHILD_CLUSTER_NAME=$REGIONAL_CLUSTER_NAME-child1
     echo "$CHILD_CLUSTER_NAME, $REGIONAL_DOMAIN"
     ```
 
-4. Use the up-to-date template, as in:
+2. Use the up-to-date `ClusterTemplate`, as in:
     ```shell
     kubectl get clustertemplate -n kcm-system | grep aws
     TEMPLATE=aws-standalone-cp-0-1-0
     ```
 
-5. Compose the `ClusterDeployment`:
+3. Compose the `ClusterDeployment`:
 
     ```shell
     cat >child-cluster.yaml <<EOF
@@ -483,14 +499,14 @@ On the actual cluster to be monitored, do the following:
     EOF
     ```
 
-6. Verify and apply the `ClusterDeployment`:
+4. Verify and apply the `ClusterDeployment`:
     ```shell
     cat child-cluster.yaml
 
     kubectl apply -f child-cluster.yaml
     ``:
 
-7. Watch while the cluster is deployed to AWS until all values of `READY` are `True`:
+5. Watch while the cluster is deployed to AWS until all values of `READY` are `True`:
     ```shell
     clusterctl describe cluster -n kcm-system $CHILD_CLUSTER_NAME \
       --show-conditions all
