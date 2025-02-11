@@ -259,13 +259,13 @@ and apply this example for AWS, or use it as a reference:
     TEMPLATE=aws-standalone-cp-0-1-0
     ```
 
-3. Specify a storage class available by default for the `ClusterTemplate` selected above:
+3. Set `STORAGE_CLASS` variable according to the CSI providers
+   you are planning to use in the Regional cluster.
+   For example [AWS EBS CSI Driver](https://github.com/kubernetes-sigs/aws-ebs-csi-driver/blob/master/docs/parameters.md)
+   provides this storage class by default:
     ```shell
-    STORAGE_CLASS=ebs-csi-default-sc  # AWS EBS
+    STORAGE_CLASS=ebs-csi-default-sc
     ```
-    * If you're installing KOF to an existing Regional cluster,
-      you may create a custom storage class,
-      for example using [AWS EBS CSI Driver parameters](https://github.com/kubernetes-sigs/aws-ebs-csi-driver/blob/master/docs/parameters.md).
 
 4. Compose the following objects:
     * `ClusterDeployment` - regional cluster
