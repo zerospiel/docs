@@ -93,4 +93,4 @@ With multi-provider support, templated deployments, and strong security controls
 
 ## Terms and Clarification
 
-**Declarative approach**: We define define the declarative approach to cluster management using the Kubernetes principles as the process where you define the state you want within custom resource objects and the controllers or customer operators ensure that the system moves toward that desired state.
+**Declarative approach**: We define the declarative approach to cluster management using the Kubernetes principles as the process where you define the state you want within custom resource objects and the controllers or customer operators ensure that the system moves toward that desired state.
