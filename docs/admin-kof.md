@@ -189,7 +189,10 @@ you can use the most straightforward (though less secure) [static credentials](h
 
 ### Management Cluster
 
-Follow these steps to install the KOF components on the management cluster:
+To install KOF on the management cluster,
+look through the default values of the [kof-mothership](https://github.com/k0rdent/kof/blob/main/charts/kof-mothership/values.yaml)
+and [kof-operators](https://github.com/k0rdent/kof/blob/main/charts/kof-operators/values.yaml) charts,
+and apply this example, or use it as a reference:
 
 1. Install `kof-operators` required by `kof-mothership`:
     ```shell
@@ -197,20 +200,25 @@ Follow these steps to install the KOF components on the management cluster:
       oci://ghcr.io/k0rdent/kof/charts/kof-operators --version 0.1.0
     ```
 
-2. Select a storage class available in the management cluster, for example:
-    ```shell
-    kubectl get storageclass
-    STORAGE_CLASS=ebs-csi-default-sc  # AWS EBS
-    STORAGE_CLASS=standard  # kind
-    ```
-
-3. Construct the values for `kof-mothership`:
-    ```shell
-    cat >mothership-values.yaml <<EOF
-    global:
-      storageClass: $STORAGE_CLASS
+2. Create the `mothership-values.yaml` file:
+    ```yaml
     kcm:
       installTemplates: true
+    ```
+    This enables installation of `ServiceTemplates` such as `cert-manager` and `kof-storage`,
+    to make it possible to reference them from the Regional and Child `ClusterDeployments`.
+
+3. If you want to use a [default storage class](https://kubernetes.io/docs/concepts/storage/storage-classes/#default-storageclass),
+    but `kubectl get sc` shows no `(default)`, create it.
+    Otherwise you can use a non-default storage class in the `mothership-values.yaml` file:
+    ```yaml
+    global:
+      storageClass: <EXAMPLE_STORAGE_CLASS>
+    ```
+
+4. If you've applied the [DNS auto-config](#dns-auto-config) section, add to the `mothership-values.yaml` file:
+    ```yaml
+    kcm:
       kof:
         clusterProfiles:
           kof-aws-dns-secrets:
@@ -218,23 +226,23 @@ Follow these steps to install the KOF components on the management cluster:
               k0rdent.mirantis.com/kof-aws-dns-secrets: "true"
             secrets:
               - external-dns-aws-credentials
-    EOF
     ```
+    This enables Sveltos to auto-distribute DNS secret to Regional clusters.
 
-    It's important to understand that we override some [default values](https://github.com/k0rdent/kof/blob/main/charts/kof-mothership/values.yaml) here:
+5. Two secrets are auto-created by default:
+    * `storage-vmuser-credentials` is a secret used by VictoriaMetrics.
+        You don't need to use it directly.
+        It is auto-distributed to other clusters by the Sveltos `ClusterProfile` [here](https://github.com/k0rdent/kof/blob/121b61f5f6de6ddfdf3525b98f3ad4cb8ce57eaa/charts/kof-mothership/values.yaml#L25-L31).
+    * `grafana-admin-credentials` is a secret that we will use in the [Grafana](#grafana) section.
+        It is auto-created [here](https://github.com/k0rdent/kof/blob/121b61f5f6de6ddfdf3525b98f3ad4cb8ce57eaa/charts/kof-mothership/values.yaml#L64-L65).
 
-    * `kcm.installTemplates` installs the templates such as `cert-manager` and `kof-storage` into the management cluster. This makes it possible to reference them from `.spec.serviceSpec.services[].template` in the AWS `ClusterDeployment` below.
-    * `external-dns-aws-credentials` is a secret created in the [DNS auto-config](#dns-auto-config) section and is auto-distributed to regional clusters by Sveltos. If you've opted out of [DNS auto-config](#dns-auto-config) then don't add the `kof-aws-dns-secrets` cluster profile above.
-    * `storage-vmuser-credentials` is a secret auto-created by default and auto-distributed to other clusters by the Sveltos `ClusterProfile` [here](https://github.com/k0rdent/kof/blob/121b61f5f6de6ddfdf3525b98f3ad4cb8ce57eaa/charts/kof-mothership/values.yaml#L25-L31).
-    * `grafana-admin-credentials` is a secret auto-created by default [here](https://github.com/k0rdent/kof/blob/121b61f5f6de6ddfdf3525b98f3ad4cb8ce57eaa/charts/kof-mothership/values.yaml#L64-L65). We will use it in the [Grafana](#grafana) section.
-
-4. Install `kof-mothership`:
+6. Install `kof-mothership`:
     ```shell
     helm install -f mothership-values.yaml -n kof kof-mothership \
       oci://ghcr.io/k0rdent/kof/charts/kof-mothership --version 0.1.0
     ```
 
-5. Wait for all pods to show that they're `Running`:
+7. Wait for all pods to show that they're `Running`:
     ```shell
     kubectl get pod -n kof
     ```
@@ -242,7 +250,7 @@ Follow these steps to install the KOF components on the management cluster:
 ### Regional Cluster
 
 To install KOF on the Regional cluster,
-look through the [default values](https://github.com/k0rdent/kof/blob/main/charts/kof-storage/values.yaml) of the `kof-storage` chart,
+look through the default values of the [kof-storage](https://github.com/k0rdent/kof/blob/main/charts/kof-storage/values.yaml) chart,
 and apply this example for AWS, or use it as a reference:
 
 1. Set your KOF variables using your own values:
@@ -259,15 +267,7 @@ and apply this example for AWS, or use it as a reference:
     TEMPLATE=aws-standalone-cp-0-1-0
     ```
 
-3. Set `STORAGE_CLASS` variable according to the CSI providers
-   you are planning to use in the Regional cluster.
-   For example [AWS EBS CSI Driver](https://github.com/kubernetes-sigs/aws-ebs-csi-driver/blob/master/docs/parameters.md)
-   provides this storage class by default:
-    ```shell
-    STORAGE_CLASS=ebs-csi-default-sc
-    ```
-
-4. Compose the following objects:
+3. Compose the following objects:
     * `ClusterDeployment` - regional cluster
     * `PromxyServerGroup` - for metrics
     * `GrafanaDatasource` - for logs
@@ -316,8 +316,6 @@ and apply this example for AWS, or use it as a reference:
             namespace: kof
             template: kof-storage-0-1-0
             values: |
-              global:
-                storageClass: $STORAGE_CLASS
               external-dns:
                 enabled: true
               victoriametrics:
@@ -393,6 +391,19 @@ and apply this example for AWS, or use it as a reference:
           dashboards: grafana
       resyncPeriod: 5m
     EOF
+    ```
+
+4. The `ClusterTemplate` above provides the [default storage class](https://kubernetes.io/docs/concepts/storage/storage-classes/#default-storageclass)
+    `ebs-csi-default-sc`. If you want to use a non-default storage class,
+    add it to the `regional-cluster.yaml` file
+    in the `ClusterDeployment.spec.serviceSpec.services[name=kof-storage].values`:
+    ```yaml
+    global:
+      storageClass: <EXAMPLE_STORAGE_CLASS>
+    victoria-logs-single:
+      server:
+        storage:
+          storageClassName: <EXAMPLE_STORAGE_CLASS>
     ```
 
 5. Verify and apply the Regional `ClusterDeployment`:
@@ -504,7 +515,7 @@ and apply this example for AWS, or use it as a reference:
     cat child-cluster.yaml
 
     kubectl apply -f child-cluster.yaml
-    ``:
+    ```
 
 5. Watch while the cluster is deployed to AWS until all values of `READY` are `True`:
     ```shell
