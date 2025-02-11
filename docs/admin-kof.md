@@ -198,11 +198,11 @@ Follow these steps to install the KOF components on the management cluster:
     ```
 
 2. Select a storage class available in the management cluster, for example:
-  ```shell
-  kubectl get storageclass
-  STORAGE_CLASS=ebs-csi-default-sc  # AWS EBS
-  STORAGE_CLASS=standard  # kind
-  ```
+    ```shell
+    kubectl get storageclass
+    STORAGE_CLASS=ebs-csi-default-sc  # AWS EBS
+    STORAGE_CLASS=standard  # kind
+    ```
 
 3. Construct the values for `kof-mothership`:
     ```shell
