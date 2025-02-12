@@ -85,7 +85,7 @@ The helm chart deploys the KCM operator and prepares the environment, and KCM th
 
 ## Confirming the deployment
 
-To understand whether installation is complete, start by making sure all pods are ready in the `kcm-system` namespace. There should be 15:
+To understand whether installation is complete, start by making sure all pods are ready in the `kcm-system` namespace. There should be 17:
 
 ```shell
 kubectl get pods -n kcm-system
