@@ -227,7 +227,7 @@ and apply this example, or use it as a reference:
             secrets:
               - external-dns-aws-credentials
     ```
-    This enables Sveltos to auto-distribute DNS secret to Regional clusters.
+    This enables Sveltos to auto-distribute DNS secret to regional clusters.
 
 5. Two secrets are auto-created by default:
     * `storage-vmuser-credentials` is a secret used by VictoriaMetrics.
@@ -249,7 +249,7 @@ and apply this example, or use it as a reference:
 
 ### Regional Cluster
 
-To install KOF on the Regional cluster,
+To install KOF on the regional cluster,
 look through the default values of the [kof-storage](https://github.com/k0rdent/kof/blob/main/charts/kof-storage/values.yaml) chart,
 and apply this example for AWS, or use it as a reference:
 
@@ -645,12 +645,12 @@ The method for scaling KOF depends on the type of expansion:
 
 ### Regional Expansion
 
-1. Deploy a [Regional Cluster](#regional-cluster) in the new region
+1. Deploy a [regional cluster](#regional-cluster) in the new region
 2. Configure child clusters in this region to point to this regional cluster
 
 ### Adding a New Child Cluster
 
-1. Apply templates, as in the [Child Cluster](#child-cluster) section
+1. Apply templates, as in the [child cluster](#child-cluster) section
 2. Verify the data flow
 3. Configure any custom dashboards
 
@@ -684,7 +684,7 @@ kubectl delete -f child-cluster.yaml
 kubectl delete -f regional-cluster.yaml
 ```
 
-To remove KOF, use helm:
+To remove KOF from the management cluster, use helm:
 
 ```shell
 helm uninstall -n kof kof-mothership
