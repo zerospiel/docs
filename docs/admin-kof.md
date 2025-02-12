@@ -40,8 +40,8 @@ From a high-level perspective, KOF consists of three layers:
 
 ### Mid-level
 
-Getting a little bit more detailed, it's important to undrestand that data flows upwards, from observed resources to centralized Grafana on the
-Management layer:
+Getting a little bit more detailed, it's important to undrestand that data flows upwards,
+from observed objects to centralized Grafana on the Management layer:
 
 ```
 management cluster_____________________
@@ -104,7 +104,7 @@ cloud 1...
    │  │  │ prometheus-node-exporter │      │        │
    │  │  │__________________________│      │        │
    │  │                                    │        │
-   │  │  observed resources                │        │
+   │  │  observed objects                  │        │
    │  │____________________________________│        │
    │________________________________________________│
 ```
@@ -196,7 +196,7 @@ and apply this example, or use it as a reference:
 
 1. Install `kof-operators` required by `kof-mothership`:
     ```shell
-    helm install --create-namespace -n kof kof-operators \
+    helm install --wait --create-namespace -n kof kof-operators \
       oci://ghcr.io/k0rdent/kof/charts/kof-operators --version 0.1.1
     ```
 
@@ -238,7 +238,7 @@ and apply this example, or use it as a reference:
 
 6. Install `kof-mothership`:
     ```shell
-    helm install -f mothership-values.yaml -n kof kof-mothership \
+    helm install --wait -f mothership-values.yaml -n kof kof-mothership \
       oci://ghcr.io/k0rdent/kof/charts/kof-mothership --version 0.1.1
     ```
 
@@ -684,11 +684,12 @@ kubectl delete -f child-cluster.yaml
 kubectl delete -f regional-cluster.yaml
 ```
 
-To remove KOF from the management cluster, use helm:
+To remove KOF from the management cluster:
 
 ```shell
-helm uninstall -n kof kof-mothership
-helm uninstall -n kof kof-operators
+helm uninstall --wait --cascade foreground -n kof kof-mothership
+helm uninstall --wait --cascade foreground -n kof kof-operators
+kubectl delete namespace kof --wait --cascade=foreground
 ```
 
 ## Resource Limits
