@@ -688,6 +688,7 @@ To remove KOF, use helm:
 
 ```shell
 helm uninstall -n kof kof-mothership
+helm uninstall -n kof kof-operators
 ```
 
 ## Resource Limits
