@@ -216,9 +216,9 @@ and apply this example, or use it as a reference:
       storageClass: <EXAMPLE_STORAGE_CLASS>
     ```
 
-4. If you've applied the [DNS auto-config](#dns-auto-config) section, add to the `mothership-values.yaml` file:
+4. If you've applied the [DNS auto-config](#dns-auto-config) section,
+    add to the `kcm:` object in the `mothership-values.yaml` file:
     ```yaml
-    kcm:
       kof:
         clusterProfiles:
           kof-aws-dns-secrets:
