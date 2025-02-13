@@ -843,6 +843,8 @@ To enable users to deploy child clusers on vSphere, follow these steps:
     metadata:
       name: vsphere-cluster-identity-secret
       namespace: kcm-system
+      labels:
+        k0rdent.mirantis.com/component: "kcm"
     stringData:
       username: <USERNAME>
       password: <PASSWORD>
@@ -866,6 +868,9 @@ To enable users to deploy child clusers on vSphere, follow these steps:
     kind: VSphereClusterIdentity
     metadata:
       name: vsphere-cluster-identity
+      namespace: kcm-system
+      labels:
+        k0rdent.mirantis.com/component: "kcm"
     spec:
       secretName: vsphere-cluster-identity-secret
       allowedNamespaces:
@@ -898,6 +903,7 @@ To enable users to deploy child clusers on vSphere, follow these steps:
         apiVersion: infrastructure.cluster.x-k8s.io/v1beta1
         kind: VSphereClusterIdentity
         name: vsphere-cluster-identity
+        namespace: kcm-system
     ```
     Again, `.spec.identityRef.name` must match the `.metadata.name` of the `VSphereClusterIdentity` object you just created.
 
@@ -907,7 +913,85 @@ To enable users to deploy child clusers on vSphere, follow these steps:
     kubectl apply -f vsphere-cluster-identity-cred.yaml
     ```
 
-9. Create your first Cluster Deployment
+9. Create the `ConfigMap` resource-template Object
+
+    Create a YAML with the specification of our resource-template and save it as
+    `vsphere-cluster-identity-resource-template.yaml`
+
+    ```yaml
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: vsphere-cluster-identity-resource-template
+      namespace: kcm-system
+      labels:
+        k0rdent.mirantis.com/component: "kcm"
+      annotations:
+        projectsveltos.io/template: "true"
+    data:
+      configmap.yaml: |
+        {{- $cluster := .InfrastructureProvider -}}
+        {{- $identity := (getResource "InfrastructureProviderIdentity") -}}
+        {{- $secret := (getResource "InfrastructureProviderIdentitySecret") -}}
+        ---
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: vsphere-cloud-secret
+          namespace: kube-system
+        type: Opaque
+        data:
+          {{ printf "%s.username" $cluster.spec.server }}: {{ index $secret.data "username" }}
+          {{ printf "%s.password" $cluster.spec.server }}: {{ index $secret.data "password" }}
+        ---
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: vcenter-config-secret
+          namespace: kube-system
+        type: Opaque
+        stringData:
+          csi-vsphere.conf: |
+            [Global]
+            cluster-id = "{{ $cluster.metadata.name }}"
+
+            [VirtualCenter "{{ $cluster.spec.server }}"]
+            insecure-flag = "true"
+            user = "{{ index $secret.data "username" | b64dec }}"
+            password = "{{ index $secret.data "password" | b64dec }}"
+            port = "443"
+            datacenters = ${VSPHERE_DATACENTER}
+        ---
+        apiVersion: v1
+        kind: ConfigMap
+        metadata:
+          name: cloud-config
+          namespace: kube-system
+        data:
+          vsphere.conf: |
+            global:
+              insecureFlag: true
+              port: 443
+              secretName: vsphere-cloud-secret
+              secretNamespace: kube-system
+            labels:
+              region: k8s-region
+              zone: k8s-zone
+            vcenter:
+              {{ $cluster.spec.server }}:
+                datacenters:
+                  - ${VSPHERE_DATACENTER}
+                server: {{ $cluster.spec.server }}
+    ```
+    Object name needs to be exactly `vsphere-cluster-identity-resource-template`, `VSphereClusterIdentity` object name + `-resource-template` string suffix.
+
+    Apply the YAML to your cluster:
+
+    ```shell
+    kubectl apply -f vsphere-cluster-identity-resource-template.yaml
+    ```
+
+10. Create your first Cluster Deployment
 
     Test the configuration by deploying a cluster. Create a YAML document with the specification of your Cluster Deployment and save it as `my-vsphere-clusterdeployment1.yaml`.
 
@@ -944,6 +1028,9 @@ To enable users to deploy child clusers on vSphere, follow these steps:
       template: vsphere-standalone-cp-0-1-0
       credential: vsphere-cluster-identity-cred
       config:
+        clusterLabels: {}
+        controlPlaneNumber: 1
+        workersNumber: 1
         vsphere:
           server: <VSPHERE_SERVER>
           thumbprint: <VSPHERE_THUMBPRINT>
@@ -951,17 +1038,25 @@ To enable users to deploy child clusers on vSphere, follow these steps:
           datastore: <VSPHERE_DATASTORE>
           resourcePool: <VSPHERE_RESOURCEPOOL>
           folder: <VSPHERE_FOLDER>
+          username: ${VSPHERE_USER}
+          password: ${VSPHERE_PASSWORD}
         controlPlaneEndpointIP: <VSPHERE_CONTROL_PLANE_ENDPOINT>
         controlPlane:
           ssh:
             user: ubuntu
             publicKey: <VSPHERE_SSH_KEY>
+          rootVolumeSize: 50
+          cpus: 4
+          memory: 4096
           vmTemplate: <VSPHERE_VM_TEMPLATE>
           network: <VSPHERE_NETWORK>
         worker:
           ssh:
             user: ubuntu
             publicKey: <VSPHERE_SSH_KEY>
+          rootVolumeSize: 50
+          cpus: 4
+          memory: 4096
           vmTemplate: <VSPHERE_VM_TEMPLATE>
           network: <VSPHERE_NETWORK>
     ```
@@ -988,7 +1083,7 @@ To enable users to deploy child clusers on vSphere, follow these steps:
     KUBECONFIG="my-vsphere-clusterdeployment1-kubeconfig.kubeconfig" kubectl get pods -A
     ```
 
-10. Cleanup
+11. Cleanup
 
     To delete the provisioned cluster and free consumed vSphere resources run:
 
