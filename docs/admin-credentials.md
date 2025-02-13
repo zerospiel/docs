@@ -48,7 +48,7 @@ In order to pass credentials to k0rdent so it can take action, the following has
       name: aws-cluster-credential
       namespace: kcm-system
     spec:
-        description: "Credential Example"
+      description: "Credential Example"
       identityRef:
         apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
         kind: AWSClusterStaticIdentity

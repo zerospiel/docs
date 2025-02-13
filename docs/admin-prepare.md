@@ -231,11 +231,11 @@ k0rdent can deploy managed clusters as both EC2-based Kubernetes clusters and EK
       name: aws-cluster-identity-cred
       namespace: kcm-system
     spec:
-    description: "Credential Example"
-    identityRef:
-      apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
-      kind: AWSClusterStaticIdentity
-      name: aws-cluster-identity
+      description: "Credential Example"
+      identityRef:
+        apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
+        kind: AWSClusterStaticIdentity
+        name: aws-cluster-identity
     ```
     Apply the YAML to your cluster, again keeping it in the `kcm-system` namespace:
 
