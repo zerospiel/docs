@@ -415,6 +415,8 @@ Standalone clusters can be deployed on Azure instances. Follow these steps to ma
     metadata:
       name: azure-cluster-identity-secret
       namespace: kcm-system
+      labels:
+        k0rdent.mirantis.com/component: "kcm"
     stringData:
       clientSecret: <SP_PASSWORD_SP_PASSWORD> # Password retrieved from the Service Principal
     type: Opaque
@@ -440,6 +442,7 @@ Standalone clusters can be deployed on Azure instances. Follow these steps to ma
     metadata:
       labels:
         clusterctl.cluster.x-k8s.io/move-hierarchy: "true"
+        k0rdent.mirantis.com/component: "kcm"
       name: azure-cluster-identity
       namespace: kcm-system
     spec:
@@ -492,9 +495,82 @@ Standalone clusters can be deployed on Azure instances. Follow these steps to ma
     credential.k0rdent.mirantis.com/azure-cluster-identity-cred created
     ```
 
+10. Create the `ConfigMap` resource-template Object
+
+    Create a YAML with the specification of our resource-template and save it as
+    `azure-cluster-identity-resource-template.yaml`
+
+    ```yaml
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: azure-cluster-identity-resource-template
+      namespace: kcm-system
+      labels:
+        k0rdent.mirantis.com/component: "kcm"
+      annotations:
+        projectsveltos.io/template: "true"
+    data:
+      configmap.yaml: |
+        {{- $cluster := .InfrastructureProvider -}}
+        {{- $identity := (getResource "InfrastructureProviderIdentity") -}}
+        {{- $secret := (getResource "InfrastructureProviderIdentitySecret") -}}
+        {{- $subnetName := "" -}}
+        {{- $securityGroupName := "" -}}
+        {{- $routeTableName := "" -}}
+        {{- range $cluster.spec.networkSpec.subnets -}}
+          {{- if eq .role "node" -}}
+            {{- $subnetName = .name -}}
+            {{- $securityGroupName = .securityGroup.name -}}
+            {{- $routeTableName = .routeTable.name -}}
+            {{- break -}}
+          {{- end -}}
+        {{- end -}}
+        {{- $cloudConfig := dict
+          "aadClientId" $identity.spec.clientID
+          "aadClientSecret" (index $secret.data "clientSecret" | b64dec)
+          "cloud" $cluster.spec.azureEnvironment
+          "loadBalancerName" ""
+          "loadBalancerSku" "Standard"
+          "location" $cluster.spec.location
+          "maximumLoadBalancerRuleCount" 250
+          "resourceGroup" $cluster.spec.resourceGroup
+          "routeTableName" $routeTableName
+          "securityGroupName" $securityGroupName
+          "securityGroupResourceGroup" $cluster.spec.networkSpec.vnet.resourceGroup
+          "subnetName" $subnetName
+          "subscriptionId" $cluster.spec.subscriptionID
+          "tenantId" $identity.spec.tenantID
+          "useInstanceMetadata" true
+          "useManagedIdentityExtension" false
+          "vmType" "vmss"
+          "vnetName" $cluster.spec.networkSpec.vnet.name
+          "vnetResourceGroup" $cluster.spec.networkSpec.vnet.resourceGroup
+        -}}
+        ---
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: azure-cloud-provider
+          namespace: kube-system
+        type: Opaque
+        data:
+          cloud-config: {{ $cloudConfig | toJson | b64enc }}
+    ```
+    Object name needs to be exactly `azure-cluster-identity-resource-template.yaml`, `AzureClusterIdentity` object name + `-resource-template` string suffix.
+
+    Apply the YAML to your cluster:
+
+    ```shell
+    kubectl apply -f azure-cluster-identity-resource-template.yaml
+    ```
+    ```console
+    configmap/azure-cluster-identity-resource-template created
+    ```
+
 Now you're ready to deploy the cluster.
 
-10. Create a `ClusterDeployment`
+11. Create a `ClusterDeployment`
 
     To test the configuration, deploy a child cluster by following these steps:
 
@@ -584,7 +660,7 @@ Now you're ready to deploy the cluster.
     KUBECONFIG="my-azure-clusterdeployment1-kubeconfig.kubeconfig" kubectl get pods -A
     ```
 
-11. Cleanup
+12. Cleanup
 
     To clean up Azure resources, delete the child cluster by deleting the `ClusterDeployment`:
 

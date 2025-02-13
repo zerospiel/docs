@@ -244,6 +244,80 @@ You should see output resembling this:
 credential.k0rdent.mirantis.com/azure-cluster-identity-cred created
 ```
 
+## Create the `ConfigMap` resource-template Object
+
+Create a YAML with the specification of our resource-template and save it as
+`azure-cluster-identity-resource-template.yaml`
+
+```yaml
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: azure-cluster-identity-resource-template
+  namespace: kcm-system
+  labels:
+    k0rdent.mirantis.com/component: "kcm"
+  annotations:
+    projectsveltos.io/template: "true"
+data:
+  configmap.yaml: |
+    {{- $cluster := .InfrastructureProvider -}}
+    {{- $identity := (getResource "InfrastructureProviderIdentity") -}}
+    {{- $secret := (getResource "InfrastructureProviderIdentitySecret") -}}
+    {{- $subnetName := "" -}}
+    {{- $securityGroupName := "" -}}
+    {{- $routeTableName := "" -}}
+    {{- range $cluster.spec.networkSpec.subnets -}}
+      {{- if eq .role "node" -}}
+        {{- $subnetName = .name -}}
+        {{- $securityGroupName = .securityGroup.name -}}
+        {{- $routeTableName = .routeTable.name -}}
+        {{- break -}}
+      {{- end -}}
+    {{- end -}}
+    {{- $cloudConfig := dict
+      "aadClientId" $identity.spec.clientID
+      "aadClientSecret" (index $secret.data "clientSecret" | b64dec)
+      "cloud" $cluster.spec.azureEnvironment
+      "loadBalancerName" ""
+      "loadBalancerSku" "Standard"
+      "location" $cluster.spec.location
+      "maximumLoadBalancerRuleCount" 250
+      "resourceGroup" $cluster.spec.resourceGroup
+      "routeTableName" $routeTableName
+      "securityGroupName" $securityGroupName
+      "securityGroupResourceGroup" $cluster.spec.networkSpec.vnet.resourceGroup
+      "subnetName" $subnetName
+      "subscriptionId" $cluster.spec.subscriptionID
+      "tenantId" $identity.spec.tenantID
+      "useInstanceMetadata" true
+      "useManagedIdentityExtension" false
+      "vmType" "vmss"
+      "vnetName" $cluster.spec.networkSpec.vnet.name
+      "vnetResourceGroup" $cluster.spec.networkSpec.vnet.resourceGroup
+    -}}
+    ---
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: azure-cloud-provider
+      namespace: kube-system
+    type: Opaque
+    data:
+      cloud-config: {{ $cloudConfig | toJson | b64enc }}
+```
+
+Object name needs to be exactly `azure-cluster-identity-resource-template.yaml`, `AzureClusterIdentity` object name + `-resource-template` string suffix.
+
+Apply the YAML to your cluster:
+
+```shell
+kubectl apply -f azure-cluster-identity-resource-template.yaml
+```
+```console
+configmap/azure-cluster-identity-resource-template created
+```
+
 ## Find your location/region
 
 To determine where to deploy your cluster, you may wish to begin by listing your Azure location/regions:
