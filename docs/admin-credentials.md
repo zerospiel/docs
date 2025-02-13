@@ -26,6 +26,7 @@ In order to pass credentials to k0rdent so it can take action, the following has
 2. A provider-specific `ClusterIdentity` gets created. The `ClusterIdentity` references the `Secret` from step one. For example, for an AWS cluster, this object might look like this:
 
     ```yaml
+    apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
     kind: AWSClusterStaticIdentity
     metadata:
       name: aws-cluster-identity

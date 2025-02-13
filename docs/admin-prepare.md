@@ -200,7 +200,8 @@ k0rdent can deploy managed clusters as both EC2-based Kubernetes clusters and EK
 
     Create the `AWSClusterStaticIdentity` object in a file named `aws-cluster-identity.yaml`:
 
-    ```shell
+    ```yaml
+    apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
     kind: AWSClusterStaticIdentity
     metadata:
       name: aws-cluster-identity
