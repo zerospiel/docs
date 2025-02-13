@@ -680,8 +680,8 @@ To remove the demo clusters created in this section:
 > Make sure these are just your demo clusters and do not contain important data.
 
 ```shell
-kubectl delete -f child-cluster.yaml
-kubectl delete -f regional-cluster.yaml
+kubectl delete --wait --cascade=foreground -f child-cluster.yaml
+kubectl delete --wait --cascade=foreground -f regional-cluster.yaml
 ```
 
 To remove KOF from the management cluster:
@@ -693,6 +693,8 @@ kubectl delete namespace kof --wait --cascade=foreground
 ```
 
 ## Resource Limits
+
+See also: [System Requirements](https://github.com/k0rdent/kof/blob/main/docs/system-requirements.md).
 
 ### Resources of Management Cluster
 
@@ -759,4 +761,5 @@ Detailed:
 ## More
 
 - If you've applied this guide you should have kof up and running.
-- Check [k0rdent/kof/docs](https://github.com/k0rdent/kof/tree/main/docs) for advanced guides such as configuring alerts.
+- Check [k0rdent/kof/docs](https://github.com/k0rdent/kof/tree/main/docs) for advanced guides
+such as [configuring alerts](https://github.com/k0rdent/kof/blob/main/docs/alerts.md).
