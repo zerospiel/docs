@@ -40,8 +40,8 @@ From a high-level perspective, KOF consists of three layers:
 
 ### Mid-level
 
-Getting a little bit more detailed, it's important to undrestand that data flows upwards, from observed resources to centralized Grafana on the
-Management layer:
+Getting a little bit more detailed, it's important to undrestand that data flows upwards,
+from observed objects to centralized Grafana on the Management layer:
 
 ```
 management cluster_____________________
@@ -104,7 +104,7 @@ cloud 1...
    │  │  │ prometheus-node-exporter │      │        │
    │  │  │__________________________│      │        │
    │  │                                    │        │
-   │  │  observed resources                │        │
+   │  │  observed objects                  │        │
    │  │____________________________________│        │
    │________________________________________________│
 ```
@@ -189,19 +189,36 @@ you can use the most straightforward (though less secure) [static credentials](h
 
 ### Management Cluster
 
-Follow these steps to install the KOF components on the management cluster:
+To install KOF on the management cluster,
+look through the default values of the [kof-mothership](https://github.com/k0rdent/kof/blob/main/charts/kof-mothership/values.yaml)
+and [kof-operators](https://github.com/k0rdent/kof/blob/main/charts/kof-operators/values.yaml) charts,
+and apply this example, or use it as a reference:
 
 1. Install `kof-operators` required by `kof-mothership`:
     ```shell
-    helm install --create-namespace -n kof kof-operators \
-      oci://ghcr.io/k0rdent/kof/charts/kof-operators --version 0.1.0
+    helm install --wait --create-namespace -n kof kof-operators \
+      oci://ghcr.io/k0rdent/kof/charts/kof-operators --version 0.1.1
     ```
 
-2. Construct the values for `kof-mothership`:
-    ```shell
-    cat >mothership-values.yaml <<EOF
+2. Create the `mothership-values.yaml` file:
+    ```yaml
     kcm:
       installTemplates: true
+    ```
+    This enables installation of `ServiceTemplates` such as `cert-manager` and `kof-storage`,
+    to make it possible to reference them from the Regional and Child `ClusterDeployments`.
+
+3. If you want to use a [default storage class](https://kubernetes.io/docs/concepts/storage/storage-classes/#default-storageclass),
+    but `kubectl get sc` shows no `(default)`, create it.
+    Otherwise you can use a non-default storage class in the `mothership-values.yaml` file:
+    ```yaml
+    global:
+      storageClass: <EXAMPLE_STORAGE_CLASS>
+    ```
+
+4. If you've applied the [DNS auto-config](#dns-auto-config) section,
+    add to the `kcm:` object in the `mothership-values.yaml` file:
+    ```yaml
       kof:
         clusterProfiles:
           kof-aws-dns-secrets:
@@ -209,33 +226,32 @@ Follow these steps to install the KOF components on the management cluster:
               k0rdent.mirantis.com/kof-aws-dns-secrets: "true"
             secrets:
               - external-dns-aws-credentials
-    EOF
     ```
+    This enables Sveltos to auto-distribute DNS secret to regional clusters.
 
-    It's important to understand that we override some [default values](https://github.com/k0rdent/kof/blob/main/charts/kof-mothership/values.yaml) here:
+5. Two secrets are auto-created by default:
+    * `storage-vmuser-credentials` is a secret used by VictoriaMetrics.
+        You don't need to use it directly.
+        It is auto-distributed to other clusters by the Sveltos `ClusterProfile` [here](https://github.com/k0rdent/kof/blob/121b61f5f6de6ddfdf3525b98f3ad4cb8ce57eaa/charts/kof-mothership/values.yaml#L25-L31).
+    * `grafana-admin-credentials` is a secret that we will use in the [Grafana](#grafana) section.
+        It is auto-created [here](https://github.com/k0rdent/kof/blob/121b61f5f6de6ddfdf3525b98f3ad4cb8ce57eaa/charts/kof-mothership/values.yaml#L64-L65).
 
-    * `kcm.installTemplates` installs the templates such as `cert-manager` and `kof-storage` into the management cluster. This makes it possible to reference them from `.spec.serviceSpec.services[].template` in the AWS `ClusterDeployment` below.
-    * `external-dns-aws-credentials` is a secret created in the [DNS auto-config](#dns-auto-config) section and is auto-distributed to regional clusters by Sveltos. If you've opted out of [DNS auto-config](#dns-auto-config) then don't add the `kof-aws-dns-secrets` cluster profile above.
-    * `storage-vmuser-credentials` is a secret auto-created by default and auto-distributed to other clusters by the Sveltos `ClusterProfile` [here](https://github.com/k0rdent/kof/blob/121b61f5f6de6ddfdf3525b98f3ad4cb8ce57eaa/charts/kof-mothership/values.yaml#L25-L31).
-    * `grafana-admin-credentials` is a secret auto-created by default [here](https://github.com/k0rdent/kof/blob/121b61f5f6de6ddfdf3525b98f3ad4cb8ce57eaa/charts/kof-mothership/values.yaml#L64-L65). We will use it in the [Grafana](#grafana) section.
-
-3. Install `kof-mothership`:
+6. Install `kof-mothership`:
     ```shell
-    helm install -f mothership-values.yaml -n kof kof-mothership \
-      oci://ghcr.io/k0rdent/kof/charts/kof-mothership --version 0.1.0
+    helm install --wait -f mothership-values.yaml -n kof kof-mothership \
+      oci://ghcr.io/k0rdent/kof/charts/kof-mothership --version 0.1.1
     ```
 
-4. Wait for all pods to show that they're `Running`:
+7. Wait for all pods to show that they're `Running`:
     ```shell
     kubectl get pod -n kof
     ```
 
 ### Regional Cluster
 
-Now install KOF on the Regional cluster:
-
-First look through the [default values](https://github.com/k0rdent/kof/blob/main/charts/kof-storage/values.yaml) of the `kof-storage` chart.
-Apply the quick start example for AWS, or use it as a reference.
+To install KOF on the regional cluster,
+look through the default values of the [kof-storage](https://github.com/k0rdent/kof/blob/main/charts/kof-storage/values.yaml) chart,
+and apply this example for AWS, or use it as a reference:
 
 1. Set your KOF variables using your own values:
     ```shell
@@ -245,7 +261,7 @@ Apply the quick start example for AWS, or use it as a reference.
     echo "$REGIONAL_CLUSTER_NAME, $REGIONAL_DOMAIN, $ADMIN_EMAIL"
     ```
 
-2. Use the up-to-date KOF `ClusterTemplate`, as in:
+2. Use the up-to-date `ClusterTemplate`, as in:
     ```shell
     kubectl get clustertemplate -n kcm-system | grep aws
     TEMPLATE=aws-standalone-cp-0-1-0
@@ -298,7 +314,7 @@ Apply the quick start example for AWS, or use it as a reference.
                   enabled: true
           - name: kof-storage
             namespace: kof
-            template: kof-storage-0-1-0
+            template: kof-storage-0-1-1
             values: |
               external-dns:
                 enabled: true
@@ -377,14 +393,27 @@ Apply the quick start example for AWS, or use it as a reference.
     EOF
     ```
 
-4. Verify and apply the Regional `ClusterDeployment`:
+4. The `ClusterTemplate` above provides the [default storage class](https://kubernetes.io/docs/concepts/storage/storage-classes/#default-storageclass)
+    `ebs-csi-default-sc`. If you want to use a non-default storage class,
+    add it to the `regional-cluster.yaml` file
+    in the `ClusterDeployment.spec.serviceSpec.services[name=kof-storage].values`:
+    ```yaml
+    global:
+      storageClass: <EXAMPLE_STORAGE_CLASS>
+    victoria-logs-single:
+      server:
+        storage:
+          storageClassName: <EXAMPLE_STORAGE_CLASS>
+    ```
+
+5. Verify and apply the Regional `ClusterDeployment`:
     ```shell
     cat regional-cluster.yaml
 
     kubectl apply -f regional-cluster.yaml
     ```
 
-5. Watch how the cluster is deployed to AWS until all values of `READY` are `True`:
+6. Watch how the cluster is deployed to AWS until all values of `READY` are `True`:
     ```shell
     clusterctl describe cluster -n kcm-system $REGIONAL_CLUSTER_NAME \
       --show-conditions all
@@ -392,26 +421,24 @@ Apply the quick start example for AWS, or use it as a reference.
 
 ### Child Cluster
 
-On the actual cluster to be monitored, do the following:
+To install KOF on the actual cluster to be monitored,
+look through the default values of the [kof-operators](https://github.com/k0rdent/kof/blob/main/charts/kof-operators/values.yaml)
+and [kof-collectors](https://github.com/k0rdent/kof/blob/main/charts/kof-collectors/values.yaml) charts,
+and apply this example for AWS, or use it as a reference:
 
-1. Look through the default values of the [kof-operators](https://github.com/k0rdent/kof/blob/main/charts/kof-operators/values.yaml)
-   and [kof-collectors](https://github.com/k0rdent/kof/blob/main/charts/kof-collectors/values.yaml) charts.
-
-2. Apply the next quick start example for AWS, or use it as a reference.
-
-3. Set your own value below, verifing [the variables](#regional-cluster):
+1. Set your own value below, verifing [the variables](#regional-cluster):
     ```shell
     CHILD_CLUSTER_NAME=$REGIONAL_CLUSTER_NAME-child1
     echo "$CHILD_CLUSTER_NAME, $REGIONAL_DOMAIN"
     ```
 
-4. Use the up-to-date template, as in:
+2. Use the up-to-date `ClusterTemplate`, as in:
     ```shell
     kubectl get clustertemplate -n kcm-system | grep aws
     TEMPLATE=aws-standalone-cp-0-1-0
     ```
 
-5. Compose the `ClusterDeployment`:
+3. Compose the `ClusterDeployment`:
 
     ```shell
     cat >child-cluster.yaml <<EOF
@@ -451,10 +478,10 @@ On the actual cluster to be monitored, do the following:
                   enabled: true
           - name: kof-operators
             namespace: kof
-            template: kof-operators-0-1-0
+            template: kof-operators-0-1-1
           - name: kof-collectors
             namespace: kof
-            template: kof-collectors-0-1-0
+            template: kof-collectors-0-1-1
             values: |
               global:
                 clusterName: $CHILD_CLUSTER_NAME
@@ -483,14 +510,14 @@ On the actual cluster to be monitored, do the following:
     EOF
     ```
 
-6. Verify and apply the `ClusterDeployment`:
+4. Verify and apply the `ClusterDeployment`:
     ```shell
     cat child-cluster.yaml
 
     kubectl apply -f child-cluster.yaml
-    ``:
+    ```
 
-7. Watch while the cluster is deployed to AWS until all values of `READY` are `True`:
+5. Watch while the cluster is deployed to AWS until all values of `READY` are `True`:
     ```shell
     clusterctl describe cluster -n kcm-system $CHILD_CLUSTER_NAME \
       --show-conditions all
@@ -559,7 +586,7 @@ to verify secrets have been auto-distributed to the required clusters:
     * Cluster profiles should be `Provisioned`.
     * Secrets should be distributed.
 
-![sveltos-demo](assets/kof/sveltos-2025-02-06.gif)
+![sveltos-demo](assets/kof/sveltos-2025-02-13.gif)
 
 ## Grafana
 
@@ -618,12 +645,12 @@ The method for scaling KOF depends on the type of expansion:
 
 ### Regional Expansion
 
-1. Deploy a [Regional Cluster](#regional-cluster) in the new region
+1. Deploy a [regional cluster](#regional-cluster) in the new region
 2. Configure child clusters in this region to point to this regional cluster
 
 ### Adding a New Child Cluster
 
-1. Apply templates, as in the [Child Cluster](#child-cluster) section
+1. Apply templates, as in the [child cluster](#child-cluster) section
 2. Verify the data flow
 3. Configure any custom dashboards
 
@@ -653,17 +680,21 @@ To remove the demo clusters created in this section:
 > Make sure these are just your demo clusters and do not contain important data.
 
 ```shell
-kubectl delete -f child-cluster.yaml
-kubectl delete -f regional-cluster.yaml
+kubectl delete --wait --cascade=foreground -f child-cluster.yaml
+kubectl delete --wait --cascade=foreground -f regional-cluster.yaml
 ```
 
-To remove KOF, use helm:
+To remove KOF from the management cluster:
 
 ```shell
-helm uninstall -n kof kof-mothership
+helm uninstall --wait --cascade foreground -n kof kof-mothership
+helm uninstall --wait --cascade foreground -n kof kof-operators
+kubectl delete namespace kof --wait --cascade=foreground
 ```
 
 ## Resource Limits
+
+See also: [System Requirements](https://github.com/k0rdent/kof/blob/main/docs/system-requirements.md).
 
 ### Resources of Management Cluster
 
@@ -730,4 +761,5 @@ Detailed:
 ## More
 
 - If you've applied this guide you should have kof up and running.
-- Check [k0rdent/kof/docs](https://github.com/k0rdent/kof/tree/main/docs) for advanced guides such as configuring alerts.
+- Check [k0rdent/kof/docs](https://github.com/k0rdent/kof/tree/main/docs) for advanced guides
+such as [configuring alerts](https://github.com/k0rdent/kof/blob/main/docs/alerts.md).
