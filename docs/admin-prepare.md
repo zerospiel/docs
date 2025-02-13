@@ -200,7 +200,8 @@ k0rdent can deploy managed clusters as both EC2-based Kubernetes clusters and EK
 
     Create the `AWSClusterStaticIdentity` object in a file named `aws-cluster-identity.yaml`:
 
-    ```shell
+    ```yaml
+    apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
     kind: AWSClusterStaticIdentity
     metadata:
       name: aws-cluster-identity
@@ -208,7 +209,7 @@ k0rdent can deploy managed clusters as both EC2-based Kubernetes clusters and EK
       secretRef: aws-cluster-identity-secret
       allowedNamespaces:
         selector:
-        matchLabels: {}
+          matchLabels: {}
     ```
 
     Notice that the `secretRef` references the `Secret` you created in the previous step.
@@ -230,11 +231,11 @@ k0rdent can deploy managed clusters as both EC2-based Kubernetes clusters and EK
       name: aws-cluster-identity-cred
       namespace: kcm-system
     spec:
-    description: "Credential Example"
-    identityRef:
-      apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
-      kind: AWSClusterStaticIdentity
-      name: aws-cluster-identity
+      description: "Credential Example"
+      identityRef:
+        apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
+        kind: AWSClusterStaticIdentity
+        name: aws-cluster-identity
     ```
     Apply the YAML to your cluster, again keeping it in the `kcm-system` namespace:
 

@@ -34,7 +34,7 @@ Follow these steps to deploy a standalone Kubernetes cluster:
       name: accounting-cluster-credential
       namespace: accounting
     spec:
-        description: "Credentials for Accounting AWS account"
+      description: "Credentials for Accounting AWS account"
       identityRef:
         apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
         kind: AWSClusterStaticIdentity
