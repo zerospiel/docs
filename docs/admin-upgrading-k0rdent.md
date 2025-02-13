@@ -65,7 +65,7 @@ Upgrading k0rdent involves making upgrades to the `Management` object. To do tha
 
     ```shell
     RELEASE_NAME=kcm-0-1-0
-    kubectl patch management.kcm kcm --patch "{\"spec\":{\"release\":\"${RELEASE_NAME}\"}}" --type=merge
+    kubectl patch managements.k0rdent.mirantis.com kcm --patch "{\"spec\":{\"release\":\"${RELEASE_NAME}\"}}" --type=merge
     ```
 
 4. Verify the Upgrade
@@ -74,7 +74,7 @@ Upgrading k0rdent involves making upgrades to the `Management` object. To do tha
     using. Monitor the readiness of the `Management` object to ensure the upgrade was successful. For example:
 
     ```shell
-    kubectl get management.kcm kcm
+    kubectl get managements.k0rdent.mirantis.com kcm
     NAME   READY   RELEASE     AGE
     kcm    True    kcm-0-1-0   4m34s
     ```
