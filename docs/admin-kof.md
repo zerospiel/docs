@@ -586,7 +586,7 @@ to verify secrets have been auto-distributed to the required clusters:
     * Cluster profiles should be `Provisioned`.
     * Secrets should be distributed.
 
-![sveltos-demo](assets/kof/sveltos-2025-02-06.gif)
+![sveltos-demo](assets/kof/sveltos-2025-02-13.gif)
 
 ## Grafana
 
