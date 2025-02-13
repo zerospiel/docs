@@ -34,7 +34,7 @@ In order to pass credentials to k0rdent so it can take action, the following has
       secretRef: aws-cluster-identity-secret
       allowedNamespaces:
         selector:
-        matchLabels: {}
+          matchLabels: {}
     ```
 
     Notice that it references the `aws-cluster-identity-secret` we created earlier. It also specifies the namespaces in which this `ClusterIdentity` can be used. (In this case there are no restrictions.)

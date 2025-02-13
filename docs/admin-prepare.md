@@ -209,7 +209,7 @@ k0rdent can deploy managed clusters as both EC2-based Kubernetes clusters and EK
       secretRef: aws-cluster-identity-secret
       allowedNamespaces:
         selector:
-        matchLabels: {}
+          matchLabels: {}
     ```
 
     Notice that the `secretRef` references the `Secret` you created in the previous step.
