@@ -339,7 +339,7 @@ k0rdent can deploy managed clusters as both EC2-based Kubernetes clusters and EK
     When you've established that it's working properly, you can delete the managed cluster and its AWS objects:
 
     ```shell
-    kubectl delete ClusterDeployment my-aws-clusterdeployment1 
+    kubectl delete clusterdeployments my-aws-clusterdeployment1 
     ```
 
 ## Azure
@@ -694,14 +694,14 @@ Now you're ready to deploy the cluster.
     To clean up Azure resources, delete the child cluster by deleting the `ClusterDeployment`:
 
     ```shell
-    kubectl get ClusterDeployments -A
+    kubectl get clusterdeployments -A
     ```
     ```console
     NAMESPACE    NAME                          READY   STATUS
     kcm-system   my-azure-clusterdeployment1   True    ClusterDeployment is ready
     ```
     ```shell
-    kubectl delete ClusterDeployment my-azure-clusterdeployment1 -n kcm-system
+    kubectl delete clusterdeployments my-azure-clusterdeployment1 -n kcm-system
     ```
     ```console
     clusterdeployment.k0rdent.mirantis.com "my-azure-clusterdeployment1" deleted
@@ -709,7 +709,7 @@ Now you're ready to deploy the cluster.
 
 ## OpenStack
 
-k0rdent is able to deploy child clusters on OpenStack virtual machines. Follow these steps to make it possible to deploy to OpenStack:
+k0rdent can deploy child clusters on OpenStack virtual machines. Follow these steps to configure and deploy OpenStack clusters for your users:
 
 1. Install k0rdent
 
@@ -722,7 +722,7 @@ k0rdent is able to deploy child clusters on OpenStack virtual machines. Follow t
 
 3. Configure the OpenStack Application Credential
 
-    This credential should include:
+    The exported list of variables should include:
 
     ```shell
     OS_AUTH_URL
@@ -731,7 +731,7 @@ k0rdent is able to deploy child clusters on OpenStack virtual machines. Follow t
     OS_REGION_NAME
     OS_INTERFACE
     OS_IDENTITY_API_VERSION
-    OS_AUTH_TYPE (e.g. v3applicationcredential)
+    OS_AUTH_TYPE
     ```
 
     While it's possible to use a username and password instead of the Application Credential &mdash; adjust your YAML accordingly &mdash; an Application Credential is strongly recommended because it limits scope and improves security over a raw username/password approach.
@@ -747,6 +747,8 @@ k0rdent is able to deploy child clusters on OpenStack virtual machines. Follow t
     metadata:
       name: openstack-cloud-config
       namespace: kcm-system
+      labels:
+        k0rdent.mirantis.com/component: "kcm"
     stringData:
       clouds.yaml: |
         clouds:
@@ -778,6 +780,8 @@ k0rdent is able to deploy child clusters on OpenStack virtual machines. Follow t
     metadata:
       name: openstack-cluster-identity-cred
       namespace: kcm-system
+      labels:
+        k0rdent.mirantis.com/component: "kcm"  
     spec:
       description: "OpenStack credentials"
       identityRef:
@@ -796,7 +800,94 @@ k0rdent is able to deploy child clusters on OpenStack virtual machines. Follow t
     Note that `.spec.identityRef.name` must match the `Secret` you created in the previous step, and 
     `.spec.identityRef.namespace` must be the same as the one that includes the `Secret` (`kcm-system`).
 
-6. Create Your First Child Cluster
+6. Create the ConfigMap resource-template object
+
+    Create a YAML file with the specification of the resource-template and save it as `openstack-cluster-identity-resource-template.yaml`:
+
+    ```yaml
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: openstack-cloud-config-resource-template
+      namespace: kcm-system
+      labels:
+        k0rdent.mirantis.com/component: "kcm"
+      annotations:
+        projectsveltos.io/template: "true"
+    data:
+      configmap.yaml: |
+        {{- $cluster := .InfrastructureProvider -}}
+        {{- $identity := (getResource "InfrastructureProviderIdentity") -}}
+
+        {{- $clouds := fromYaml (index $identity "data" "clouds.yaml" | b64dec) -}}
+        {{- if not $clouds }}
+          {{ fail "failed to decode clouds.yaml" }}
+        {{ end -}}
+
+        {{- $openstack := index $clouds "clouds" "openstack" -}}
+
+        {{- if not (hasKey $openstack "auth") }}
+          {{ fail "auth key not found in openstack config" }}
+        {{- end }}
+        {{- $auth := index $openstack "auth" -}}
+
+        {{- $auth_url := index $auth "auth_url" -}}
+        {{- $app_cred_id := index $auth "application_credential_id" -}}
+        {{- $app_cred_name := index $auth "application_credential_name" -}}
+        {{- $app_cred_secret := index $auth "application_credential_secret" -}}
+
+        {{- $network_id := $cluster.status.externalNetwork.id -}}
+        {{- $network_name := $cluster.status.externalNetwork.name -}}
+        ---
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: openstack-cloud-config
+          namespace: kube-system
+        type: Opaque
+        stringData:
+          cloud.conf: |
+            [Global]
+            auth-url="{{ $auth_url }}"
+
+            {{- if $app_cred_id }}
+            application-credential-id="{{ $app_cred_id }}"
+            {{- end }}
+
+            {{- if $app_cred_name }}
+            application-credential-name="{{ $app_cred_name }}"
+            {{- end }}
+
+            {{- if $app_cred_secret }}
+            application-credential-secret="{{ $app_cred_secret }}"
+            {{- end }}
+
+            {{- if and (not $app_cred_id) (not $app_cred_secret) }}
+            username="{{ index $openstack "username" }}"
+            password="{{ index $openstack "password" }}"
+            {{- end }}
+            region="{{ index $openstack "region_name" }}"
+
+            [LoadBalancer]
+            {{- if $network_id }}
+            floating-network-id="{{ $network_id }}"
+            {{- end }}
+
+            [Network]
+            {{- if $network_name }}
+            public-network-name="{{ $network_name }}"
+            {{- end }}
+    ```
+    
+    Object needs to be named `openstack-cluster-identity-resource-template.yaml`, `OpenStackClusterIdentity` object name + `-resource-template` string suffix.
+
+    Apply the YAML to your cluster:
+
+    ```shell
+    kubectl apply -f openstack-cluster-identity-resource-template.yaml
+    ```
+
+7. Create Your First Child Cluster
 
     To test the configuration, create a YAML file with the specification of your Managed Cluster and save it as
     `my-openstack-cluster-deployment.yaml`.  Note that you can see the available templates by listing them:
@@ -830,6 +921,7 @@ k0rdent is able to deploy child clusters on OpenStack virtual machines. Follow t
       template: openstack-standalone-cp-0-1-0
       credential: openstack-cluster-identity-cred
       config:
+        clusterLabels: {}
         controlPlaneNumber: 1
         workersNumber: 1
         controlPlane:
@@ -842,9 +934,17 @@ k0rdent is able to deploy child clusters on OpenStack virtual machines. Follow t
           image:
             filter:
               name: ubuntu-22.04-x86_64
-        authURL: <OS_AUTH_URL>
+        externalNetwork:
+          filter:
+            name: "public"
+        authURL: ${OS_AUTH_URL}
+        identityRef:
+          name: "openstack-cloud-config"
+          cloudName: "openstack"
+          region: ${OS_REGION_NAME}
     ```
-    You can adjust `flavor`, `image` name, and `authURL` to match your OpenStack environment. For more information about the configuration options, see the [OpenStack Template Parameters Reference](template-openstack.md).
+
+    You can adjust `flavor`, `image name`, `region name`, and `authURL` to match your OpenStack environment. For more information about the configuration options, see the [OpenStack Template Parameters Reference](template-openstack.md).
 
     Apply the YAML to your management cluster:
 
@@ -852,7 +952,7 @@ k0rdent is able to deploy child clusters on OpenStack virtual machines. Follow t
     kubectl apply -f my-openstack-cluster-deployment.yaml
     ```
 
-    There will be a delay as the cluster finishes provisioning. You can follow the
+    This will trigger the provisioning process where k0rdent will create a bunch of OpenStack resources such as OpenStackCluster, OpenStackMachineTemplate, OpenStackMachineDeployment, etc. You can follow the
     provisioning process:
 
     ```shell
@@ -866,19 +966,19 @@ k0rdent is able to deploy child clusters on OpenStack virtual machines. Follow t
     KUBECONFIG="my-openstack-cluster-deployment-kubeconfig.kubeconfig" kubectl get pods -A
     ```
 
-7. Cleanup
+8. Cleanup
 
     To clean up OpenStack resources, delete the managed cluster by deleting the `ClusterDeployment`:
 
     ```shell
-    kubectl get ClusterDeployments -A
+    kubectl get clusterdeployments -A
     ```
     ```console
     NAMESPACE    NAME                          READY   STATUS
     kcm-system   my-openstack-cluster-deployment   True    ClusterDeployment is ready
     ```
     ```shell
-    kubectl delete ClusterDeployment my-openstack-cluster-deployment -n kcm-system
+    kubectl delete clusterdeployments my-openstack-cluster-deployment -n kcm-system
     ```
     ```console
     clusterdeployment.k0rdent.mirantis.com "my-openstack-cluster-deployment" deleted
