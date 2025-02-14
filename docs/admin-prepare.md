@@ -184,6 +184,8 @@ k0rdent can deploy managed clusters as both EC2-based Kubernetes clusters and EK
     metadata:
       name: aws-cluster-identity-secret
       namespace: kcm-system
+      labels:
+        k0rdent.mirantis.com/component: "kcm"
     type: Opaque
     stringData:
       AccessKeyID: EXAMPLE_ACCESS_KEY_ID
@@ -205,6 +207,8 @@ k0rdent can deploy managed clusters as both EC2-based Kubernetes clusters and EK
     kind: AWSClusterStaticIdentity
     metadata:
       name: aws-cluster-identity
+      labels:
+        k0rdent.mirantis.com/component: "kcm"
     spec:
       secretRef: aws-cluster-identity-secret
       allowedNamespaces:
@@ -220,7 +224,30 @@ k0rdent can deploy managed clusters as both EC2-based Kubernetes clusters and EK
     kubectl apply -f aws-cluster-identity.yaml  -n kcm-system
     ```
 
-11. Create the `Credential`
+11. Create the Cluster Identity resource template `ConfigMap`
+
+    Now we create Cluster Identity resource template `ConfigMap`. As in prior steps, create a YAML file called `aws-cluster-identity-resource-template.yaml`:
+
+    ```yaml
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: aws-cluster-identity-resource-template
+      labels:
+        k0rdent.mirantis.com/component: "kcm"
+      annotations:
+        projectsveltos.io/template: "true"
+    ```
+
+    Note that `ConfigMap` is empty, this is expected, we don't need to template any object inside child cluster(s), but we can use that object in the future if need arises.
+
+    Apply the YAML to your cluster, again keeping it in the `kcm-system` namespace:
+
+    ```shell
+    kubectl apply -f aws-cluster-identity-resource-template.yaml -n kcm-system
+    ```
+
+12. Create the `Credential`
 
     Finally, create the KCM `Credential` object, making sure to reference the `AWSClusterStaticIdentity` you just created:
 
@@ -243,7 +270,8 @@ k0rdent can deploy managed clusters as both EC2-based Kubernetes clusters and EK
     kubectl apply -f aws-cluster-identity-cred.yaml -n kcm-system
     ```
 
-12. Deploy a cluster
+
+13. Deploy a cluster
 
     Make sure everything is configured properly by creating a `ClusterDeployment`. Start with a YAML file specifying the `ClusterDeployment`, as in:
 
@@ -306,7 +334,7 @@ k0rdent can deploy managed clusters as both EC2-based Kubernetes clusters and EK
     KUBECONFIG="my-aws-clusterdeployment1-kubeconfig.kubeconfig" kubectl get pods -A
     ```
 
-13. Cleanup
+14. Cleanup
 
     When you've established that it's working properly, you can delete the managed cluster and its AWS objects:
 
