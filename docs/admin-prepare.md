@@ -58,6 +58,62 @@ k0rdent can deploy managed clusters as both EC2-based Kubernetes clusters and EK
 
   	The tool recognizes the environment variables you created earlier, so there's no need to login.
 
+6. Check for available IPs
+
+    Because k0rdent has 3 availablilty zone NAT gateways, each cluster needs 3 public IPs. Unfortunately, the default
+    `EC2-VPC Elastic IPs` quota per region is 5, so while you likely won't have issues with a first cluster, if you try to deplay a 
+    second to the same region, you are likely to run into issues.  
+
+    You can determine how many elastic IPs are available from the command line:
+
+    ```shell
+    LIMIT=$(aws ec2 describe-account-attributes --attribute-names vpc-max-elastic-ips --query 'AccountAttributes[0].AttributeValues[0].AttributeValue' --output text)
+    USED=$(aws ec2 describe-addresses --query 'Addresses[*].PublicIp' --output text | wc -w)
+    AVAILABLE=$((LIMIT - USED))
+    echo "Available Public IPs: $AVAILABLE"
+    ```
+    ```console
+    Available Public IPs: 5
+    ```
+
+    If you have less than 3 available public IPs, you can request an increase in your quota:
+
+    ```shell
+    aws service-quotas request-service-quota-increase \
+        --service-code ec2 \
+        --quota-code L-0263D0A3 \
+        --desired-value 20
+    ```
+
+    You can check on the status of your request:
+
+    ```shell
+    aws service-quotas list-requested-service-quota-change-history \
+        --service-code ec2
+    ```
+    ```console
+    {
+        "RequestedQuotas": [
+            {
+                "Id": "EXAMPLE_ACCESS_KEY_ID",
+                "ServiceCode": "ec2",
+                "ServiceName": "Amazon Elastic Compute Cloud (Amazon EC2)",
+                "QuotaCode": "L-0263D0A3",
+                "QuotaName": "EC2-VPC Elastic IPs",
+                "DesiredValue": 20.0,
+                "Status": "PENDING",
+                "Created": "2025-02-09T02:27:01.573000-05:00",
+                "LastUpdated": "2025-02-09T02:27:01.956000-05:00",
+                "Requester": "{\"accountId\":\"EXAMPLE_ACCESS_KEY_ID\",\"callerArn\":\"arn:aws:iam::EXAMPLE_ACCESS_KEY_ID:user/nchase\"}",
+                "QuotaArn": "arn:aws:servicequotas:EXAMPLE_AWS_REGION:EXAMPLE_ACCESS_KEY_ID:ec2/L-0263D0A3",
+                "GlobalQuota": false,
+                "Unit": "None",
+                "QuotaRequestedAtLevel": "ACCOUNT"
+            }
+        ]
+    }
+    ```
+
 6. Create the IAM user. 
 
 	  The actual `user-name` parameter is arbitrary; you can specify it as anything you like:
