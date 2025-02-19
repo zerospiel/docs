@@ -7,53 +7,34 @@ and FinOps capabilities for k0rdent-managed child Kubernetes clusters.
 It enables centralized metrics, logging, and cost management
 through a unified [OpenTelemetry](https://opentelemetry.io/docs/)-based architecture.
 
-K0rdent Observability and FinOps ([KOF](https://github.com/k0rdent/kof)) is a comprehensive platform designed to 
-provide observability and financial operations (FinOps) capabilities for managing Kubernetes clusters and modern 
-applications. It focuses on providing observability and FinOps features to support the management of complex, 
-modern application workloads. KOF is built to integrate seamlessly with Kubernetes, offering a centralized and 
-scalable solution for monitoring, logging, and managing the financial aspects of cloud-native applications.
-
-### Observability:
-
-* **Monitoring:** KOF provides robust monitoring capabilities to track the performance and health of 
-Kubernetes clusters and applications. It collects metrics from various sources and stores them in a time series database
+* **Observability**: KOF collects **metrics** from various sources and stores them in a time series database
 based on [Victoria Metrics](https://github.com/victoriaMetrics/VictoriaMetrics/), allowing for real-time and historical analysis.
-* **Logging:** KOF includes log management features to aggregate, store, and analyze logs from different 
+It includes **log management** features to aggregate, store, and analyze logs from different 
 components of the Kubernetes ecosystem. This helps in troubleshooting and understanding the behavior of applications and infrastructure.
-* **Alerting:** KOF can evaluate alerting rules and send notifications based on the collected metrics and logs. 
-This proactive monitoring helps in identifying and responding to issues before they impact users.
+KOF can evaluate **alerting** rules and send notifications based on these collected metrics and logs helping to identify and respond to issues before they impact users.
 
-### FinOps:
-
-* **Cost Management:** KOF helps in tracking and managing the costs associated with running applications on Kubernetes. 
+* **FinOps**: KOF helps with **cost management** by tracking and managing the costs associated with running applications on Kubernetes. 
 It provides insights into resource utilization and helps in optimizing costs by identifying underutilized or over-provisioned resources.
-* **Budgeting and Forecasting:** KOF helps set budgets and forecast future costs based on historical data and current 
-usage patterns. This helps in better financial planning and resource allocation.
-* **Chargeback and Showback:** KOF enables chargeback and showback mechanisms, enabling organizations to attribute costs to 
-specific teams, departments, or projects. This capability promotes accountability and transparency in resource usage.
+With this information, you can **set budgets and forecast future costs** based on historical data and current 
+usage patterns. KOF enables **chargeback and showback** mechanisms, enabling organizations to attribute costs to 
+specific teams, departments, or projects, and promotes accountability and transparency in resource usage.
 
-### Centralized Management:
-
-* **Unified Control Plane:** KOF acts as a "super control plane" for managing Kubernetes clusters at scale. It provides a 
+* **Centralized Management**: KOF provides a **unified control plane** for managing Kubernetes clusters at scale, with a 
 centralized view of all clusters, making it possible to use k0rdent to manage and operate large-scale deployments.
-* **Lifecycle Management:** KOF offers comprehensive lifecycle management capabilities, including provisioning, 
+It also offers comprehensive **lifecycle management** capabilities, including provisioning, 
 configuration, and maintenance of Kubernetes clusters, ensuring clusters are consistently managed and adhere to best practices.
 
-### Scalability and Performance:
+* **Scalability and Performance**: KOF leverages components such as VictoriaMetrics to provide **high-performance** monitoring and analytics. 
+It can handle millions of metrics per second and provides low-latency query responses. It's also designed to **scale** horizontally, enabling it to manage large volumes of data and support growing environments. It can be deployed on-premises, in the cloud, or in hybrid environments.
 
-* **High Performance:** KOF leverages components such as VictoriaMetrics to provide high-performance monitoring and analytics. 
-It can handle millions of metrics per second and provides low-latency query responses.
-* **Scalability:** KOF is designed to scale horizontally, enabling it to manage large volumes of data and support 
-growing environments. It can be deployed on-premises, in the cloud, or in hybrid environments.
-
-### Compliance and Security:
-
-* **Compliance:** KOF helps ensure compliance with organizational policies and industry standards, providing
-audit trails and reporting features to meet regulatory requirements.
-* **Security:** KOF includes security features to protect data and ensure the integrity of monitoring 
-and FinOps processes. It supports role-based access control (RBAC) and secure communication protocols.
+* **Compliance and Security**: KOF helps ensure **compliance** with organizational policies and industry standards, providing
+audit trails and reporting features to meet regulatory requirements. It includes **security** features to protect data and ensure 
+the integrity of monitoring and FinOps processes. It supports role-based access control (RBAC) and secure communication protocols.
 
 ### Use Cases
+
+KOF can be used by both technical and non-technical arms of a company.
+
 * **Platform Engineering:** KOF is ideal for platform engineers who need to manage and monitor Kubernetes 
 clusters at scale. It provides the tools and insights required to ensure the reliability and performance of applications.
 * **DevOps Teams:** DevOps teams can use KOF to gain visibility into the deployment and operation of applications, 
@@ -86,105 +67,161 @@ flowchart TD;
 Getting a little bit more detailed, it's important to undrestand that data flows upwards,
 from observed objects to centralized Grafana on the Management layer:
 
-```mermaid
-graph TB;
-    subgraph Management Cluster
-        subgraph kof-operators chart
-            B[opentelemetry-operator 
-            prometheus-operator-crds];
-        end
-        subgraph kof-mothership chart
-            A[grafana-operator 
-              victoria-metrics-operator 
-              cluster-api-visualizer 
-              sveltos-dashboard 
-              k0rdent service templates 
-              promxy];
-        end
-    end
-```
-![KOF Cloud Diagram](assets/kof/kofclouddiagram.png)
-<!-- This is currently displayed as a PNG due to difficulty controlling positionign via Mermaid; left here in case changes need to be made.
-```mermaid
-  graph TB;
-    direction TB;
-    subgraph cloud 1..n;
-        direction TB;
-        subgraph region 1..n;
-            subgraph child deployment 1..n
-                E["cert-manager (OTel-operator)"];
-                subgraph kof-operators chart
-                    subgraph opentelemetry-operator
-                        F[OpenTelemetryCollector];
-                    end
-                    G[prometheus-operator-crds];
-                end
-                subgraph kof-collectors chart
-                    H[opencost 
-                      kube-state-metrics 
-                      prometheus-node-exporter];
-                end
-                I[observed resources];
-            end
-            direction TB;
-            subgraph storage cluster;
-                subgraph kof-storage chart;
-                    B[grafana-operator 
-                      victoria-metrics-operator 
-                      victoria-logs-single external-dns];
-                end
-                C["cert-manager (grafana, vmauth)"
-                  ingress-nginx];
-            end
-        end
-    end
-```
-```
-cloud 1...
-│
-│  region 1__________________________________________  region 2...
-│  │                                                │  │
-.  │  storage cluster_____________________          │  │
-.  │  │                                  │          │  │
-.  │  │  kof-storage chart_____________  │          │  .
-   │  │  │                            │  │          │  .
-   │  │  │ grafana-operator           │  │          │  .
-   │  │  │ victoria-metrics-operator  │  │          │
-   │  │  │ victoria-logs-single       │  │          │
-   │  │  │ external-dns               │  │          │
-   │  │  │____________________________│  │          │
-   │  │                                  │          │
-   │  │  cert-manager (grafana, vmauth)  │          │
-   │  │  ingress-nginx                   │          │
-   │  │__________________________________│          │
-   │                                                │
-   │                                                │
-   │  child deployment 1____________________  2...  │
-   │  │                                    │  │     │
-   │  │  cert-manager (OTel-operator)      │  │     │
-   │  │                                    │  │     │
-   │  │  kof-operators chart_____________  │  .     │
-   │  │  │                              │  │  .     │
-   │  │  │  opentelemetry-operator____  │  │  .     │
-   │  │  │  │                        │  │  │        │
-   │  │  │  │ OpenTelemetryCollector │  │  │        │
-   │  │  │  │________________________│  │  │        │
-   │  │  │                              │  │        │
-   │  │  │  prometheus-operator-crds    │  │        │
-   │  │  │______________________________│  │        │
-   │  │                                    │        │
-   │  │  kof-collectors chart________      │        │
-   │  │  │                          │      │        │
-   │  │  │ opencost                 │      │        │
-   │  │  │ kube-state-metrics       │      │        │
-   │  │  │ prometheus-node-exporter │      │        │
-   │  │  │__________________________│      │        │
-   │  │                                    │        │
-   │  │  observed resources                │        │
-   │  │____________________________________│        │
-   │________________________________________________│
-```
+<!--
+
+To update the diagram:
+* Update the indented text below.
+* Copy/paste it to https://codepen.io/denis-ryzhkov/pen/ByajZeJ
+* Copy the resulting HTML.
+* Please preserve custom `max-width: 30em;` in the end.
+
+<b>Management Cluster</b>
+  kof-mothership chart
+    grafana-operator
+    victoria-metrics-operator
+    cluster-api-visualizer
+    sveltos-dashboard
+    k0rdent service templates
+    promxy
+
+  kof-operators chart
+    opentelemetry-operator
+    prometheus-operator-crds
+
+Cloud 1..N
+  Region 1..M
+
+    <b>Regional Cluster</b>
+      kof-storage chart
+        grafana-operator
+        victoria-metrics-operator
+        victoria-logs-single
+        external-dns
+
+      cert-manager of grafana and vmauth
+      ingress-nginx
+
+    <b>Child Cluster 1</b>
+      cert-manager of OTel-operator
+
+      kof-operators chart
+        opentelemetry-operator
+          OpenTelemetryCollector
+        prometheus-operator-crds
+
+      kof-collectors chart
+        opencost
+        kube-state-metrics
+        prometheus-node-exporter
+
+      observed objects
 -->
+
+<div class="o">
+  <b>Management Cluster</b>
+  <div class="o">
+    kof-mothership chart
+    <div class="o">
+      grafana-operator
+    </div>
+    <div class="o">
+      victoria-metrics-operator
+    </div>
+    <div class="o">
+      cluster-api-visualizer
+    </div>
+    <div class="o">
+      sveltos-dashboard
+    </div>
+    <div class="o">
+      k0rdent service templates
+    </div>
+    <div class="o">
+      promxy
+    </div>
+  </div>
+  <div class="o">
+    kof-operators chart
+    <div class="o">
+      opentelemetry-operator
+    </div>
+    <div class="o">
+      prometheus-operator-crds
+    </div>
+  </div>
+</div>
+<div class="o">
+  Cloud 1..N
+  <div class="o">
+    Region 1..M
+    <div class="o">
+      <b>Regional Cluster</b>
+      <div class="o">
+        kof-storage chart
+        <div class="o">
+          grafana-operator
+        </div>
+        <div class="o">
+          victoria-metrics-operator
+        </div>
+        <div class="o">
+          victoria-logs-single
+        </div>
+        <div class="o">
+          external-dns
+        </div>
+      </div>
+      <div class="o">
+        cert-manager of grafana and vmauth
+      </div>
+      <div class="o">
+        ingress-nginx
+      </div>
+    </div>
+    <div class="o">
+      <b>Child Cluster 1</b>
+      <div class="o">
+        cert-manager of OTel-operator
+      </div>
+      <div class="o">
+        kof-operators chart
+        <div class="o">
+          opentelemetry-operator
+          <div class="o">
+            OpenTelemetryCollector
+          </div>
+        </div>
+        <div class="o">
+          prometheus-operator-crds
+        </div>
+      </div>
+      <div class="o">
+        kof-collectors chart
+        <div class="o">
+          opencost
+        </div>
+        <div class="o">
+          kube-state-metrics
+        </div>
+        <div class="o">
+          prometheus-node-exporter
+        </div>
+      </div>
+      <div class="o">
+        observed objects
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  .o {
+    margin: 0.25em 1em;
+    background-color: rgba(128, 128, 128, 0.25);
+    padding: 0.25em 0.5em;
+    max-width: 30em;
+  }
+</style>
 
 ### Low-level
 
