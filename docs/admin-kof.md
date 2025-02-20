@@ -253,7 +253,7 @@ KOF is deployed as a series of Helm charts at various levels.
 
 ### kof-operators
 
-- [prometheus-operator-crds](https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-operator-crds) required to create OpenTelemetry collectors, also required to monitor [`kof-mothership`](ttps://docs.k0rdent.io/head/admin-kof/#management-cluster) itself
+- [prometheus-operator-crds](https://github.com/prometheus-community/helm-charts/tree/main/charts/prometheus-operator-crds) required to create OpenTelemetry collectors, also required to monitor [`kof-mothership`](#management-cluster) itself
 - [OpenTelemetry](https://opentelemetry.io/) [collectors](https://opentelemetry.io/docs/collector/) below, managed by [opentelemetry-operator](https://opentelemetry.io/docs/kubernetes/operator/)
 
 ### kof-collectors
