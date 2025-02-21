@@ -454,7 +454,7 @@ and apply this example for AWS, or use it as a reference:
       labels:
         app.kubernetes.io/name: promxy-operator
         k0rdent.mirantis.com/promxy-secret-name: kof-mothership-promxy-config
-      name: promxyservergroup-sample
+      name: $REGIONAL_CLUSTER_NAME-metrics
       namespace: kof
     spec:
       cluster_name: $REGIONAL_CLUSTER_NAME
@@ -476,7 +476,7 @@ and apply this example for AWS, or use it as a reference:
     metadata:
       labels:
         app.kubernetes.io/managed-by: Helm
-      name: victoria-logs-regional0
+      name: $REGIONAL_CLUSTER_NAME-logs
       namespace: kof
     spec:
       valuesFrom:
