@@ -65,10 +65,10 @@ This section assumes that you already have a kubernetes cluster installed. If yo
 The actual management cluster is a Kubernetes cluster with the k0rdent application installed. The simplest way to install k0rdent is through its Helm chart.  You can find the latest release [here](https://github.com/k0rdent/kcm/tags), and from there you can deploy the Helm chart, as in:
 
 ```shell
-helm install kcm oci://ghcr.io/k0rdent/kcm/charts/kcm --version 0.1.0 -n kcm-system --create-namespace
+helm install kcm oci://ghcr.io/k0rdent/kcm/charts/kcm --version {{{ extra.docsVersionInfo.k0rdentDotVersion }}} -n kcm-system --create-namespace
 ```
 ```console
-Pulled: ghcr.io/k0rdent/kcm/charts/kcm:0.1.0
+Pulled: ghcr.io/k0rdent/kcm/charts/kcm:{{{ extra.docsVersionInfo.k0rdentDotVersion }}}
 Digest: sha256:1f75e8e55c44d10381d7b539454c63b751f9a2ec6c663e2ab118d34c5a21087f
 NAME: kcm
 LAST DEPLOYED: Mon Dec  9 00:32:14 2024
@@ -147,7 +147,7 @@ kubectl get Management -n kcm-system
 ```
 ```console
 NAME   READY   RELEASE     AGE
-kcm    True    kcm-0-1-0   9m
+kcm    True    kcm-{{{ extra.docsVersionInfo.k0rdentVersion }}}   9m
 ```
 
 ## Verify the templates
@@ -160,13 +160,13 @@ kubectl get providertemplate -n kcm-system
 
 ```console
 NAME                                   VALID
-cluster-api-0-1-0                      true
-cluster-api-provider-aws-0-1-0         true
-cluster-api-provider-azure-0-1-0       true
-cluster-api-provider-openstack-0-1-0   true
-cluster-api-provider-vsphere-0-1-0     true
-k0smotron-0-1-0                        true
-kcm-0-1-0                              true
+cluster-api-{{{ extra.docsVersionInfo.k0rdentVersion }}}                      true
+cluster-api-provider-aws-{{{ extra.docsVersionInfo.k0rdentVersion }}}         true
+cluster-api-provider-azure-{{{ extra.docsVersionInfo.k0rdentVersion }}}       true
+cluster-api-provider-openstack-{{{ extra.docsVersionInfo.k0rdentVersion }}}   true
+cluster-api-provider-vsphere-{{{ extra.docsVersionInfo.k0rdentVersion }}}     true
+k0smotron-{{{ extra.docsVersionInfo.k0rdentVersion }}}                        true
+kcm-{{{ extra.docsVersionInfo.k0rdentVersion }}}                              true
 projectsveltos-0-45-0                  true
 ```
 
@@ -180,16 +180,16 @@ kubectl get clustertemplate -n kcm-system
 
 ```console
 NAME                            VALID
-adopted-cluster-0-1-0           true
-aws-eks-0-1-0                   true
-aws-hosted-cp-0-1-0             true
-aws-standalone-cp-0-1-0         true
-azure-aks-0-1-0                 true
-azure-hosted-cp-0-1-0           true
-azure-standalone-cp-0-1-0       true
-openstack-standalone-cp-0-1-0   true
-vsphere-hosted-cp-0-1-0         true
-vsphere-standalone-cp-0-1-0     true
+adopted-cluster-{{{ extra.docsVersionInfo.k0rdentVersion }}}           true
+aws-eks-{{{ extra.docsVersionInfo.k0rdentVersion }}}                   true
+aws-hosted-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}             true
+aws-standalone-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}         true
+azure-aks-{{{ extra.docsVersionInfo.k0rdentVersion }}}                 true
+azure-hosted-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}           true
+azure-standalone-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}       true
+openstack-standalone-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}   true
+vsphere-hosted-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}         true
+vsphere-standalone-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}     true
 ```
 
 Finally, make sure the `ServiceTemplate` objects are installed and valid:

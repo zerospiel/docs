@@ -268,10 +268,10 @@ KOF is deployed as a series of Helm charts at various levels.
 
 Before beginning KOF installation, you should have the following components in place:
 
-* A k0rdent management cluster - You can get instructions to create one in the [quickstart guide](https://docs.k0rdent.io/v0.1.0/quickstart-1-mgmt-node-and-cluster/)
+* A k0rdent management cluster - You can get instructions to create one in the [quickstart guide](https://docs.k0rdent.io/v{{{ extra.docsVersionInfo.k0rdentDotVersion }}}/quickstart-1-mgmt-node-and-cluster/)
     * To test on [macOS](https://docs.k0sproject.io/stable/system-requirements/#host-operating-system) you can install using:
       `brew install kind && kind create cluster -n k0rdent`
-* You will also need your infrastructure provider credentials, such as those shown in the [guide for AWS](https://docs.k0rdent.io/v0.1.0/quickstart-2-aws/)
+* You will also need your infrastructure provider credentials, such as those shown in the [guide for AWS](https://docs.k0rdent.io/v{{{ extra.docsVersionInfo.k0rdentDotVersion }}}/quickstart-2-aws/)
     * Note that you should skip the "Create your ClusterDeployment" and later sections.
 * Finally, you need access to create DNS records for service endpoints such as `kof.example.com`
 
@@ -378,7 +378,7 @@ and apply this example for AWS, or use it as a reference:
 2. Use the up-to-date `ClusterTemplate`, as in:
     ```shell
     kubectl get clustertemplate -n kcm-system | grep aws
-    TEMPLATE=aws-standalone-cp-0-1-0
+    TEMPLATE=aws-standalone-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}
     ```
 
 3. Compose the following objects:
@@ -549,7 +549,7 @@ and apply this example for AWS, or use it as a reference:
 2. Use the up-to-date `ClusterTemplate`, as in:
     ```shell
     kubectl get clustertemplate -n kcm-system | grep aws
-    TEMPLATE=aws-standalone-cp-0-1-0
+    TEMPLATE=aws-standalone-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}
     ```
 
 3. Compose the `ClusterDeployment`:
