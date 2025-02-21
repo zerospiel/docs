@@ -98,7 +98,7 @@ The basic sequence looks like this:
     spec:
       config:
         clusterLabels: {}
-      template: aws-standalone-cp-0-1-0
+      template: aws-standalone-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}
       credential: aws-credential
       serviceSpec:
         services:

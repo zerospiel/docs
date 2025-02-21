@@ -344,7 +344,7 @@ Automatically created backups have the
 following name template to make it easier to find them:
 the name of the `ManagementBackup` object with enabled `performOnManagementUpgrade`
 concatenates with the name of the release before the upgrade,
-for example, `example-backup-kcm-0-1-0`.
+for example, `example-backup-kcm-{{{ extra.docsVersionInfo.k0rdentVersion }}}`.
 
 Automatically created backups have the label `k0rdent.mirantis.com/release-backup`
 with the name of the release before the upgrade as its value

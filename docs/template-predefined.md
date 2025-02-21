@@ -10,16 +10,16 @@ for `ClusterTemplate` objects, run:
     ```
     ```console
     NAMESPACE    NAME                            VALID
-    kcm-system   adopted-cluster-0-1-0           true
-    kcm-system   aws-eks-0-1-0                   true
-    kcm-system   aws-hosted-cp-0-1-0             true
-    kcm-system   aws-standalone-cp-0-1-0         true
-    kcm-system   azure-aks-0-1-0                 true
-    kcm-system   azure-hosted-cp-0-1-0           true
-    kcm-system   azure-standalone-cp-0-1-0       true
-    kcm-system   openstack-standalone-cp-0-1-0   true
-    kcm-system   vsphere-hosted-cp-0-1-0         true
-    kcm-system   vsphere-standalone-cp-0-1-0     true
+    kcm-system   adopted-cluster-{{{ extra.docsVersionInfo.k0rdentVersion }}}           true
+    kcm-system   aws-eks-{{{ extra.docsVersionInfo.k0rdentVersion }}}                   true
+    kcm-system   aws-hosted-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}             true
+    kcm-system   aws-standalone-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}         true
+    kcm-system   azure-aks-{{{ extra.docsVersionInfo.k0rdentVersion }}}                 true
+    kcm-system   azure-hosted-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}           true
+    kcm-system   azure-standalone-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}       true
+    kcm-system   openstack-standalone-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}   true
+    kcm-system   vsphere-hosted-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}         true
+    kcm-system   vsphere-standalone-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}     true
     ```
 
 2. Remove the template from the list using `kubectl delete`, as in:

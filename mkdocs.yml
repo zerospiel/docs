@@ -140,3 +140,6 @@ extra:
   version:
     provider: mike
     default: stable
+  docsVersionInfo:
+    k0rdentVersion: 0-1-0
+    k0rdentDotVersion: 0.1.0

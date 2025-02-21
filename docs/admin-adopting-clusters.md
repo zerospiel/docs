@@ -69,16 +69,16 @@ Follow these steps to adopt an existing cluster:
     ```
     ```console
     NAME                            VALID
-    adopted-cluster-0-1-0           true
-    aws-eks-0-1-0                   true
-    aws-hosted-cp-0-1-0             true
-    aws-standalone-cp-0-1-0         true
-    azure-aks-0-1-0                 true
-    azure-hosted-cp-0-1-0           true
-    azure-standalone-cp-0-1-0       true
-    openstack-standalone-cp-0-1-0   true
-    vsphere-hosted-cp-0-1-0         true
-    vsphere-standalone-cp-0-1-0     true
+    adopted-cluster-{{{ extra.docsVersionInfo.k0rdentVersion }}}           true
+    aws-eks-{{{ extra.docsVersionInfo.k0rdentVersion }}}                   true
+    aws-hosted-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}             true
+    aws-standalone-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}         true
+    azure-aks-{{{ extra.docsVersionInfo.k0rdentVersion }}}                 true
+    azure-hosted-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}           true
+    azure-standalone-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}       true
+    openstack-standalone-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}   true
+    vsphere-hosted-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}         true
+    vsphere-standalone-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}     true
     ```
 
     Putting it all together, your YAML would look something like this:
@@ -90,7 +90,7 @@ Follow these steps to adopt an existing cluster:
       name: my-cluster
       namespace: kcm-system
     spec:
-      template: adopted-cluster-0-1-0
+      template: adopted-cluster-{{{ extra.docsVersionInfo.k0rdentVersion }}}
       credential: my-cluster-credential
       dryRun: false
       config: {}

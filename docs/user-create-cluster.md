@@ -64,22 +64,22 @@ Follow these steps to deploy a standalone Kubernetes cluster:
     ```
     ```console
     NAMESPACE    NAME                            VALID
-    kcm-system   adopted-cluster-0-1-0           true
-    kcm-system   aws-eks-0-1-0                   true
-    kcm-system   aws-hosted-cp-0-1-0             true
-    kcm-system   aws-standalone-cp-0-1-0         true
-    kcm-system   azure-aks-0-1-0                 true
-    kcm-system   azure-hosted-cp-0-1-0           true
-    kcm-system   azure-standalone-cp-0-1-0       true
-    kcm-system   openstack-standalone-cp-0-1-0   true
-    kcm-system   vsphere-hosted-cp-0-1-0         true
-    kcm-system   vsphere-standalone-cp-0-1-0     true
+    kcm-system   adopted-cluster-{{{ extra.docsVersionInfo.k0rdentVersion }}}           true
+    kcm-system   aws-eks-{{{ extra.docsVersionInfo.k0rdentVersion }}}                   true
+    kcm-system   aws-hosted-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}             true
+    kcm-system   aws-standalone-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}         true
+    kcm-system   azure-aks-{{{ extra.docsVersionInfo.k0rdentVersion }}}                 true
+    kcm-system   azure-hosted-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}           true
+    kcm-system   azure-standalone-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}       true
+    kcm-system   openstack-standalone-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}   true
+    kcm-system   vsphere-hosted-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}         true
+    kcm-system   vsphere-standalone-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}     true
     ```
 
     You can then get information on the actual template by describing it, as in:
 
     ```shell
-    kubectl describe clustertemplate aws-standalone-cp-0-1-0 -n kcm-system
+    kubectl describe clustertemplate aws-standalone-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}} -n kcm-system
     ```
 
 3. Create a ClusterDeployment YAML Configuration
@@ -116,7 +116,7 @@ Follow these steps to deploy a standalone Kubernetes cluster:
       name: my-cluster-deployment
       namespace: kcm-system
     spec:
-      template: aws-standalone-cp-0-1-0
+      template: aws-standalone-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}
       credential: aws-credential
       config:
         clusterLabels: {}

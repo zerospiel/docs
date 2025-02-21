@@ -65,7 +65,7 @@ In order to pass credentials to k0rdent so it can take action, the following has
         name: my-aws-clusterdeployment
       namespace: kcm-system
     spec:
-      template: aws-standalone-cp-0-1-0
+      template: aws-standalone-cp-{{{ extra.docsVersionInfo.k0rdentVersion }}}
       credential: aws-cluster-credential
         config:
         clusterLabels: {}
