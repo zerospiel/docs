@@ -32,6 +32,7 @@ The `Credential` resource provides an abstraction layer by either:
 - Template processing accesses cluster objects through:
   - Built-in Sveltos variables (`Cluster`, `InfrastructureProvider`)
   - `getResource` function for additionally exposed objects (`InfrastructureProviderIdentity`, `InfrastructureProviderIdentitySecret`)
+- The object name needs to follow a predictable naming pattern, such as the `ClusterIdentity` object (referenced via `identityRef` in the `Credential` resource) name + `-resource-template` suffix. It must also be placed in same Namespace as the `ClusterIdentity` object it references
 
 ## Templating System
 
@@ -50,6 +51,10 @@ Let's take `Azure` provider as an example [azure-credentials.yaml](https://githu
  - [`Secret`](https://github.com/k0rdent/kcm/blob/v{{{ extra.docsVersionInfo.k0rdentDotVersion }}}/config/dev/azure-credentials.yaml#L19-L28) (related to `ClusterIdentity`)
  - [`Credential`](https://github.com/k0rdent/kcm/blob/v{{{ extra.docsVersionInfo.k0rdentDotVersion }}}/config/dev/azure-credentials.yaml#L30-L41)
  - [`ConfigMap`](https://github.com/k0rdent/kcm/blob/v{{{ extra.docsVersionInfo.k0rdentDotVersion }}}/config/dev/azure-credentials.yaml#L43-L97)
+
+> NOTE:
+> These examples assume the `ConfigMap` is included in a template. To use these examples directly via `kubectl`, please replace `$$`
+> (double dollar signs) with `$` (single dollar sign)
 
 ## Provider Registration
 
