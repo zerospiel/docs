@@ -55,14 +55,14 @@ We define the declarative approach to cluster management using the Kubernetes pr
 as the process where you define the state you want within custom resource objects and the 
 controllers or customer operators ensure that the system moves toward that desired state.
 
-## k0rdent Cluster Manager (kcm)
+## k0rdent Cluster Manager (KCM)
 Deployment and life-cycle management of Kubernetes clusters, including configuration, 
 updates, and other CRUD operations.
 
-## k0rdent Observability and FinOps (kof)
+## k0rdent Observability and FinOps (KOF)
 Cluster and beach-head services monitoring, events and log management.
 
-## k0rdent State Manager (ksm)
+## k0rdent State Manager (KSM)
 Installation and life-cycle management of beach-head services, policy, Kubernetes API 
 configurations and more.
 
