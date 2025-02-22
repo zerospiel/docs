@@ -43,8 +43,8 @@ Backups should be scheduled on a regular basis, depending on how often informati
 Before you create a scheduled backup, you need to perform a few preparatory steps:
 
 1. If no `velero` plugins have been installed as suggested
-   in the [corresponding section](#velero-installation),
-   install one that [supports Object Store](https://velero.io/docs/v1.15/supported-providers/)
+   in [Velero installation](#velero-installation),
+   install a plugin that [supports Object Store](https://velero.io/docs/v1.15/supported-providers/)
    by modifying the `Management` object:
 
     ```yaml
@@ -409,7 +409,7 @@ The credentials stored in backups can and will get stale,
 so a proper rotation should be considered beforehand.
 
 Only plugins that [support Object Store](https://velero.io/docs/v1.15/supported-providers/)
-must be used to store backups into an object storage.
+can be used to store backups into an object storage.
 
 All `velero` caveats and limitations are transitively implied in `k0rdent`. In particular, that
 means no backup encryption is provided until it is implemented by a `velero` plugin that supports
