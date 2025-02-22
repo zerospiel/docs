@@ -50,6 +50,11 @@ CRs with infrastructure-specific credentials such as access keys, passwords,
 certificates, etc. This means that a credential is specific to the CAPI provider that 
 uses it.
 
+## Declarative approach
+We define the declarative approach to cluster management using the Kubernetes principles 
+as the process where you define the state you want within custom resource objects and the 
+controllers or customer operators ensure that the system moves toward that desired state.
+
 ## k0rdent Cluster Manager (kcm)
 Deployment and life-cycle management of Kubernetes clusters, including configuration, 
 updates, and other CRUD operations.
