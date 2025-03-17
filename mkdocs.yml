@@ -4,7 +4,7 @@ site_author: Mirantis, Inc.
 
 docs_dir: docs/
 repo_name: GitHub
-repo_url: https://github.com/jjainschigg-r/docs
+repo_url: https://github.com/k0rdent/docs
 edit_uri: "edit/main/docs/"
 
 copyright:
