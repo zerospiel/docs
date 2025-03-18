@@ -2,7 +2,7 @@
 
 In this QuickStart unit, we'll be gathering information and performing preparatory steps to enable k0rdent (running on your management node) to manage clusters on Azure, and deploying a child cluster.
 
-As noted in the [Guide to QuickStarts](./guide-to-quickstarts.md), you'll need administrative access to an Azure account to complete this step. If you haven't yet created a management node and installed k0rdent, go back to [QuickStart 1 - Management node and cluster](./quickstart-1-mgmt-node-and-cluster.md).
+As noted in the [Guide to QuickStarts](./index.md), you'll need administrative access to an Azure account to complete this step. If you haven't yet created a management node and installed k0rdent, go back to [QuickStart 1 - Management node and cluster](./quickstart-1-mgmt-node-and-cluster.md).
 
 Note that if you have already done our AWS QuickStart ([QuickStart 2 - AWS target environment](./quickstart-2-aws.md)) you can use the same management cluster, continuing here with steps to add the ability to manage clusters on Azure. The k0rdent management cluster can accommodate multiple provider and credential setups, enabling management of multiple infrastructures. And even if your management node is external to Azure (for example, it could be on an AWS EC2 virtual machine), as long as you permit outbound traffic to all IP addresses from the management node, this should work fine. A big benefit of k0rdent is that it provides a single point of control and visibility across multiple clusters on multiple clouds and infrastructures.
 

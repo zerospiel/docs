@@ -112,7 +112,7 @@ namespaces based on the `accessRules` in the `AccessManagement` spec.
 > INFO:
 > Access rules can also include `Cluster` and `Service` Template Chains (`ClusterTemplateChain` objects and
 > `ServiceTemplateChain` objects) to distribute templates to target namespaces.
-> For more details, read: [Template Life Cycle Management](../../../reference/template/template-intro.md).
+> For more details, read: [Template Life Cycle Management](../../../reference/template/index.md).
 
 ### How to Configure Credential Distribution
 

@@ -43,7 +43,7 @@ The project has a number of components, including:
 
     * **k0rdent State Manager (KSM)**
 
-        Installation and life-cycle management of [beach-head services](reference/glossary.md#beach-head-services),
+        Installation and life-cycle management of [beach-head services](appendix/glossary.md#beach-head-services),
         policy, Kubernetes API configurations, and more.
 
           * This is currently rolled into kcm, but may be split out in the future
@@ -64,7 +64,7 @@ There are a few historical names that may show up in the code and in older docs,
 
 ## Quick Start
 
-See the [k0rdent Quick Start Guide](quickstarts/guide-to-quickstarts.md) to get started with a small deployment.
+See the [k0rdent Quick Start Guide](quickstarts/index.md) to get started with a small deployment.
 
 ## Supported Providers
 
@@ -84,3 +84,17 @@ or even into an existing local infrastructure.
 
 Documentation related to the development process and developer-specific notes is
 located in the [main k0rdent repository](https://github.com/k0rdent/kcm/blob/main/docs/dev.md).
+
+## Where to go from here
+
+This documentation covers all aspects of administering, using, and contributing to k0rdent, including:
+
+- [k0rdent concepts](concepts/index.md)
+- [QuickStarts](quickstarts/index.md)
+- [Administrator Guide](admin/index.md)
+- [User Guide](user/index.md)
+- [k0rdent Templates Reference](reference/template/index.md)
+- [Troubleshooting](troubleshooting/index.md)
+- [Glossary](appendix/glossary.md)
+- [Appendix](appendix/index.md)
+- [Contributor's Guide](contrib/index.md)

@@ -217,4 +217,9 @@ As a result, the following new objects should be created:
 > 2. The target template should not affect immutable fields or any other incompatible internal objects upgrades,
 > otherwise the upgrade will fail.
 
-
+- [Removing predefined templates](template-predefined.md)
+- [Bring-your-own (BYO) templates](template-byo.md)
+- [Templates for Amazon Web Services](template-aws.md)
+- [Templates for Azure](template-azure.md)
+- [Templates for OpenStack](template-openstack.md)
+- [Templates for vSphere](template-vsphere.md)

@@ -124,4 +124,15 @@ The k0rdent initialization process involves tools such as Helm and FluxCD.
 1. `kcm-controller-manager` creates a `Management` object that refers to the above `Release` and the `ProviderTemplate` objects.
 The `Management` object represents the k0rdent management cluster as a whole.
 The management cluster Day-2 operations (such as [upgrade](upgrade/admin-upgrading-k0rdent.md)) are  executed by manipulating the `Release` and `Management` objects.
-1. `kcm-controller-manager` generates an empty `AccessManagement` object. `AccessManagement` defines [access rules](../reference/template/template-intro.md#template-life-cycle-management) for `ClusterTemplate`/`ServiceTemplate` propagation across user namespaces. Further, the `AccessManagement` might be edited and used along with admin-created `ClusterTemplateChain` and `ServiceTemplateChain` objects.
+1. `kcm-controller-manager` generates an empty `AccessManagement` object. `AccessManagement` defines [access rules](../reference/template/index.md#template-life-cycle-management) for `ClusterTemplate`/`ServiceTemplate` propagation across user namespaces. Further, the `AccessManagement` might be edited and used along with admin-created `ClusterTemplateChain` and `ServiceTemplateChain` objects.
+
+This Administration Guide provides information on:
+
+- [Installing and preparing k0rdent for use](installation/index.md)
+- [Working with clusters](clusters/index.md)
+- [Working with services](services/index.md)
+- [Hosted control planes](hosted-control-plane/index.md)
+- [k0rdent Observability & FinOps](kof/index.md)
+- [Upgrading k0rdent](upgrade/admin-upgrading-k0rdent.md)
+- [Access Management (Credentials and RBAC)](access/index.md)
+- [Backup and Restore](backup/index.md)

@@ -2,7 +2,7 @@
 
 Managed clusters can be hosted on a number of different platforms. At the time of this writing, those platforms include:
 
-- Amazon Web Services (EC2 and EKS)
-- Microsoft Azure (self-managed and AKS)
-- OpenStack
-- VMware
+- [AWS](aws.md)
+- [Azure](azure.md)
+- [OpenStack](openstack.md)
+- [VMware](vmware.md)
