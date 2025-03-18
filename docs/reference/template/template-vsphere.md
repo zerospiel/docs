@@ -168,7 +168,7 @@ handle it.
 ## ClusterDeployment manifest
 
 The hosted CP template has mostly identical parameters to the standalone CP, and you can
-check them in the [template parameters](template-intro.md) section.
+check them in the [template parameters](index.md) section.
 
 > NOTE:
 > The vSphere provider requires the control plane endpoint IP to be specified

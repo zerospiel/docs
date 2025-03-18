@@ -76,5 +76,8 @@ Plus (intermediate-term roadmap) tutorials for using k0rdent to create and manag
 * (As an authorized user) Leveraging shared cluster and service templates to lifecycle manage platforms (performing self-service)
 * ... and more
 
-Next you'll learn [how to use k0rdent](./quickstart-1-mgmt-node-and-cluster.md).
+Next you'll want to learn how to:
 
+- [Set up Management Node and Cluster](quickstart-1-mgmt-node-and-cluster.md)
+- [Configure and Deploy to AWS](quickstart-2-aws.md)
+- [Configure and Deploy to Azure](quickstart-2-azure.md)

@@ -53,7 +53,7 @@ The basic sequence looks like this:
     `my-target-namespace` namespace.  It references version 4.11.3 of the `ingress-nginx` chart
     located in the `k0rdent-catalog` Helm repository.
 
-    For more information on creating templates, see the [Template Guide](../../reference/template/template-intro.md).
+    For more information on creating templates, see the [Template Guide](../../reference/template/index.md).
 
   3. Create a `ServiceTemplateChain`
 

@@ -1,6 +1,6 @@
 # k0rdent architecture
 
-The k0rdent architecture follows a [declarative approach](../reference/glossary.md#declarative-approach) to cluster management using Kubernetes principles. The modular extensible architecture provides for a repeatable template-driven solution to interact with sub components such as the Cluster API (CAPI) and other Kubernetes components.
+The k0rdent architecture follows a [declarative approach](../appendix/glossary.md#declarative-approach) to cluster management using Kubernetes principles. The modular extensible architecture provides for a repeatable template-driven solution to interact with sub components such as the Cluster API (CAPI) and other Kubernetes components.
 
 The key principles of the architecture include:
 

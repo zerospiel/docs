@@ -32,3 +32,11 @@ The `velero` instance is part of the Helm chart that installs k0rdent, which mea
 can be [customized](./customization.md#velero-installation) if necessary.
 
 k0rdent manages the schedule and is responsible for collecting data to be included in a backup.
+
+- [Scheduled Management Backups](scheduled-backups.md)
+- [Management Backup on Demand](ondemand-backups.md)
+- [What's Included in a Backup](whats-included.md)
+- [Restoring From Backup](restore.md)
+- [Upgrades and Rollbacks](upgrades-rollbacks.md)
+- [Caveats](caveats.md)
+- [Customization](customization.md)

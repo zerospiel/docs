@@ -57,7 +57,7 @@ the `aws-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.a
 You wouldn't be able to use this template to update a cluster that uses any other `ClusterTemplate`.
 
 Similarly, the `AccessManagement` object must have properly configured `spec.accessRules` with a list of allowed 
-`ClusterTemplateChain` object names and their namespaces. For more information, see [Template Life Cycle Management](../../reference/template/template-intro.md#template-life-cycle-management).
+`ClusterTemplateChain` object names and their namespaces. For more information, see [Template Life Cycle Management](../../reference/template/index.md#template-life-cycle-management).
 
 > NOTE:  
 > Support for displaying all available Cluster Templates for updates in the `ClusterDeployment` status is planned.
