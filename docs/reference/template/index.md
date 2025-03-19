@@ -1,6 +1,6 @@
 # The Templates system
 
-By default, k0rdent delivers a set of default `ProviderTemplate`, `ClusterTemplate` and `ServiceTemplate` objects:
+By default, {{{ docsVersionInfo.k0rdentName }}} delivers a set of default `ProviderTemplate`, `ClusterTemplate` and `ServiceTemplate` objects:
 
 * `ProviderTemplate`
    The template containing the configuration of the provider (for example, k0smotron or AWS). These are cluster-scoped.
@@ -11,7 +11,7 @@ By default, k0rdent delivers a set of default `ProviderTemplate`, `ClusterTempla
 
 All Templates are immutable, so if you want to change something about a cluster that has been deployed, you have to
 apply a whole new template. You can also build your own templates and use them for deployment along with the
-templates shipped with k0rdent.
+templates shipped with {{{ docsVersionInfo.k0rdentName }}}.
 
 ## Template Naming Convention
 

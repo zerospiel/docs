@@ -159,7 +159,7 @@ As with resource parameters the position of these parameters in the
 
 ## Prerequisites
 
-* Management Kubernetes cluster (v1.28+) deployed on vSphere with k0rdent installed on it
+* Management Kubernetes cluster (v1.28+) deployed on vSphere with {{{ docsVersionInfo.k0rdentName }}} installed on it
 
 Keep in mind that all control plane components for all managed clusters will
 reside in the management cluster, so make sure the server is robust enough to

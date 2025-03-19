@@ -1,6 +1,6 @@
-# K0rdent Observability and FinOps
+# {{{ docsVersionInfo.k0rdentName }}} Observability and FinOps
 
-k0rdent Observability and FinOps ([kof](https://github.com/k0rdent/kof)) provides enterprise-grade observability
+{{{ docsVersionInfo.k0rdentName }}} Observability and FinOps ([kof](https://github.com/k0rdent/kof)) provides enterprise-grade observability
 and FinOps capabilities for k0rdent-managed child Kubernetes clusters.
 It enables centralized metrics, logging, and cost management
 through a unified [OpenTelemetry](https://opentelemetry.io/docs/)-based architecture.
@@ -18,7 +18,7 @@ usage patterns. KOF enables **chargeback and showback** mechanisms, enabling org
 specific teams, departments, or projects, and promotes accountability and transparency in resource usage.
 
 * **Centralized Management**: KOF provides a **unified control plane** for managing Kubernetes clusters at scale, with a 
-centralized view of all clusters, making it possible to use k0rdent to manage and operate large-scale deployments.
+centralized view of all clusters, making it possible to use {{{ docsVersionInfo.k0rdentName }}} to manage and operate large-scale deployments.
 It also offers comprehensive **lifecycle management** capabilities, including provisioning, 
 configuration, and maintenance of Kubernetes clusters, ensuring clusters are consistently managed and adhere to best practices.
 
