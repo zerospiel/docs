@@ -1,6 +1,6 @@
 # Bring Your Own Templates
 
-In addition to the templates that ship with k0rdent, it's possible to make your own. These might represent different types of clusters, or they may represent additional services to add to a cluster. Follow these steps:
+In addition to the templates that ship with {{{ docsVersionInfo.k0rdentName }}}, it's possible to make your own. These might represent different types of clusters, or they may represent additional services to add to a cluster. Follow these steps:
 
 ## Create a Source Object
 
