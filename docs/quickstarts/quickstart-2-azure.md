@@ -7,14 +7,14 @@ As noted in the [Guide to QuickStarts](./index.md), you'll need administrative a
 Note that if you have already done our AWS QuickStart ([QuickStart 2 - AWS target environment](./quickstart-2-aws.md)) you can use the same management cluster, continuing here with steps to add the ability to manage clusters on Azure. The {{{ docsVersionInfo.k0rdentName }}} management cluster can accommodate multiple provider and credential setups, enabling management of multiple infrastructures. And even if your management node is external to Azure (for example, it could be on an AWS EC2 virtual machine), as long as you permit outbound traffic to all IP addresses from the management node, this should work fine. A big benefit of {{{ docsVersionInfo.k0rdentName }}} is that it provides a single point of control and visibility across multiple clusters on multiple clouds and infrastructures.
 
 > NOTE:
-> **Cloud Security 101:** {{{ docsVersionInfo.k0rdentName }}} requires _some_ but not _all_ permissions to manage Azure resources &mdash; doing so via the CAPZ (ClusterAPI for Azure) provider. 
+> **Cloud Security 101:** {{{ docsVersionInfo.k0rdentName }}} requires _some_ but not _all_ permissions to manage Azure resources via the CAPZ (ClusterAPI for Azure) provider. 
 
-A best practice for using {{{ docsVersionInfo.k0rdentName }}} with Azure (this pattern is repeated with other clouds and infrastructures) is to create a new {{{ docsVersionInfo.k0rdentName }}} Azure Cluster Identity and Service Principal (SP) on your account with the particular permissions {{{ docsVersionInfo.k0rdentName }}} and CAPZ require.In this section, we'll create and configure those identity abstractions, and perform other steps to make required credentials accessible to {{{ docsVersionInfo.k0rdentName }}} in the management node.
+A best practice for using {{{ docsVersionInfo.k0rdentName }}} with Azure (this pattern is repeated with other clouds and infrastructures) is to create a new Azure Cluster Identity and Service Principal (SP) on your account with the particular permissions {{{ docsVersionInfo.k0rdentName }}} and CAPZ require. In this section, we'll create and configure those identity abstractions, and perform other steps to make required credentials accessible to {{{ docsVersionInfo.k0rdentName }}} in the management node.
 
 > NOTE:
 > If you're working on a shared Azure account, please ensure that the Azure Cluster Identity and Service Principal are not already set up before creating new abstractions.
 
-Creating user identity abstractions with minimal required permissions is one of several principle-of-least-privilege mechanisms used to help ensure security as organizations work with {{{ docsVersionInfo.k0rdentName }}} at progressively greater scales. For more on {{{ docsVersionInfo.k0rdentName }}} security best practices, please see the [Administrator Guide](../admin/index.md).
+Creating user identity abstractions with minimal required permissions is one of several principle-of-least-privilege mechanisms used to help ensure security as organizations work with Kubernetes at progressively greater scales. For more on {{{ docsVersionInfo.k0rdentName }}} security best practices, please see the [Administrator Guide](../admin/index.md).
 
 ## Install the Azure CLI (az)
 
@@ -81,7 +81,7 @@ The Subcription ID is in the second column.
 
 ## Create a Service Principal for {{{ docsVersionInfo.k0rdentName }}}
 
-The Service Principal is like a password-protected user that CAPZ will use to manage resources on Azure. To create it, run the following command with the Azure CLI, replacing <subscription-id> with the ID you copied earlier.
+The Service Principal is like a password-protected user that CAPZ will use to manage resources on Azure. To create it, run the following command with the Azure CLI, replacing `<subscription-id>` with the ID you copied earlier.
 
 ```shell
 az ad sp create-for-rbac --role contributor --scopes="/subscriptions/<subscription-id>"
@@ -246,7 +246,7 @@ credential.k0rdent.mirantis.com/azure-cluster-identity-cred created
 
 ## Create the `ConfigMap` resource-template Object
 
-Create a YAML with the specification of our resource-template and save it as
+Create a YAML with the specification of our resource-template (and the necessary `StorageClass`) and save it as
 `azure-cluster-identity-resource-template.yaml`
 
 ```yaml
@@ -305,6 +305,19 @@ data:
     type: Opaque
     data:
       cloud-config: {{ $cloudConfig | toJson | b64enc }}
+    ---
+    apiVersion: storage.k8s.io/v1
+    kind: StorageClass
+    metadata:
+      name: managed-csi
+      annotations:
+        storageclass.kubernetes.io/is-default-class: "true"
+    provisioner: disk.csi.azure.com
+    parameters:
+      skuName: StandardSSD_LRS
+    reclaimPolicy: Delete
+    volumeBindingMode: WaitForFirstConsumer
+    allowVolumeExpansion: true
 ```
 
 Object name needs to be exactly `azure-cluster-identity-resource-template.yaml`, `AzureClusterIdentity` object name + `-resource-template` string suffix.
@@ -339,17 +352,17 @@ Australia East            australiaeast        (Asia Pacific) Australia East
 . . .
 ```
 
-What you'll need to insert in your ClusterDeployment is the name (center column) of the region you wish to deploy to.
+What you'll need to insert in your `ClusterDeployment` is the name (center column) of the region to which you wish to deploy.
 
 ## List available cluster templates
 
-{{{ docsVersionInfo.k0rdentName }}} is now fully configured to manage Azure. To create a cluster, begin by listing the available ClusterTemplates provided with {{{ docsVersionInfo.k0rdentName }}}:
+{{{ docsVersionInfo.k0rdentName }}} is now fully configured to manage Azure. To create a cluster, begin by listing the available `ClusterTemplate` objects:
 
 ```shell
 kubectl get clustertemplate -n kcm-system
 ```
 
-You'll see output resembling what's below. Grab the name of the AWS standalone cluster template in its present version (in the example below, that's `azure-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.azureStandaloneCpCluster }}}`):
+You'll see output resembling what's below. Grab the name of the Azure standalone cluster template in its present version (in the example below, that's `azure-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.azureStandaloneCpCluster }}}`):
 
 ```console
 NAMESPACE    NAME                            VALID
@@ -367,7 +380,7 @@ kcm-system   vsphere-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.da
 
 ## Create your ClusterDeployment
 
-Now, to deploy a cluster, create a YAML file called `my-azure-clusterdeployment1.yaml`. We'll use this to create a ClusterDeployment object in {{{ docsVersionInfo.k0rdentName }}}, representing the deployed cluster. The `ClusterDeployment` identifies for {{{ docsVersionInfo.k0rdentName }}} the `ClusterTemplate` you want to use for cluster creation, the identity credential object you want to create it under, plus the location/region and instance types you want to use to host control plane and worker nodes:
+Now, to deploy a cluster, create a YAML file called `my-azure-clusterdeployment1.yaml`. We'll use this to create a `ClusterDeployment` object in {{{ docsVersionInfo.k0rdentName }}}, representing the deployed cluster. The `ClusterDeployment` identifies for {{{ docsVersionInfo.k0rdentName }}} the `ClusterTemplate` you want to use for cluster creation, the identity credential object you want to create it under, plus the location/region and instance types you want to use to host control plane and worker nodes:
 
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1alpha1
@@ -413,7 +426,7 @@ spec:
 
 ## Apply the ClusterDeployment to deploy the cluster
 
-Finally, we'll apply the ClusterDeployment YAML (`my-azure-clusterdeployment1.yaml`) to instruct {{{ docsVersionInfo.k0rdentName }}} to deploy the cluster:
+Finally, we'll apply the `ClusterDeployment` YAML (`my-azure-clusterdeployment1.yaml`) to instruct {{{ docsVersionInfo.k0rdentName }}} to deploy the cluster:
 
 ```shell
 kubectl apply -f my-azure-clusterdeployment1.yaml
@@ -433,13 +446,13 @@ kubectl -n kcm-system get clusterdeployment.k0rdent.mirantis.com my-azure-cluste
 
 ## Obtain the cluster's kubeconfig
 
-Now you can retrieve the cluster's kubeconfig:
+Now you can retrieve the cluster's `kubeconfig`:
 
 ```shell
 kubectl -n kcm-system get secret my-azure-clusterdeployment1-kubeconfig -o jsonpath='{.data.value}' | base64 -d > my-azure-clusterdeployment1-kubeconfig.kubeconfig
 ```
 
-And you can use the kubeconfig to see what's running on the cluster:
+And you can use the `kubeconfig` to see what's running on the cluster:
 
 ```shell
 KUBECONFIG="my-azure-clusterdeployment1-kubeconfig.kubeconfig" kubectl get pods -A
@@ -478,4 +491,3 @@ Check out the [Administrator Guide](../admin/index.md) ...
 * For details about setting up {{{ docsVersionInfo.k0rdentName }}} to manage clusters on VMware and OpenStack
 * For details about using {{{ docsVersionInfo.k0rdentName }}} with cloud Kubernetes distros: AWS EKS and Azure AKS
 
-Or check out the [Demos Repository](https://github.com/k0rdent/demos) for fast, makefile-driven demos of {{{ docsVersionInfo.k0rdentName }}}'s key features!
