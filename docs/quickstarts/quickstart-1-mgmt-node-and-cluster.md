@@ -1,18 +1,20 @@
-# QuckStart 1 - Set up Management Node and Cluster
+# QuickStart 1 - Setup Management Cluster
 
-Please review the [Guide to QuickStarts](index.md) for preliminaries. This QuickStart unit details setting up a single-VM environment for managing and interacting with {{{ docsVersionInfo.k0rdentName }}}, and for hosting {{{ docsVersionInfo.k0rdentName }}} components on a single-node local Kubernetes management cluster. Once {{{ docsVersionInfo.k0rdentName }}} is installed on the management cluster, you can drive {{{ docsVersionInfo.k0rdentName }}} by SSHing into the management node (kubectl is there and will be provisioned with the appropriate kubeconfig) or remotely by various means (for example, install the management cluster kubeconfig in Lens or another Kubernetes dashboard on your laptop, tunnel across from your own local kubectl, and so on).
+Please review the [Guide to QuickStarts](index.md) for preliminaries. This QuickStart unit details setting up a single-VM environment for managing and interacting with {{{ docsVersionInfo.k0rdentName }}}, and for hosting its components on a single-node local Kubernetes management cluster. Once {{{ docsVersionInfo.k0rdentName }}} is installed on the management cluster, you can drive it by SSHing into the management node (`kubectl` is there and will be provisioned with the appropriate `kubeconfig`) or remotely by various means. For example, you can install the management cluster `kubeconfig` in Lens or another Kubernetes dashboard on your laptop, tunnel across from your own local `kubectl`, and so on.
 
-## Install a single-node k0s cluster locally to work as {{{ docsVersionInfo.k0rdentName }}}'s management cluster
+## Install a single-node k0s cluster locally as the management cluster
 
-[k0s Kubernetes](https://k0sproject.io) is a CNCF-certified minimal single-binary Kubernetes that installs with one command, and brings along its own CLI. We're using it to quickly set up a single-node management cluster on our manager node. However, {{{ docsVersionInfo.k0rdentName }}} works on any CNCF-certified Kubernetes. If you choose to use something else, Team {{{ docsVersionInfo.k0rdentName }}} would love to hear how you set things up to work for you.
+[k0s Kubernetes](https://k0sproject.io) is a CNCF-certified minimal single-binary Kubernetes that installs with one command and brings along its own CLI. We're using it to quickly set up a single-node management cluster on our manager node. However, {{{ docsVersionInfo.k0rdentName }}} works on any CNCF-certified Kubernetes. If you choose to use something else, we would love to hear how you set things up to work for you.
+
+Download and install k0s:
 
 ```shell
 curl --proto '=https' --tlsv1.2 -sSf https://get.k0s.sh | sudo sh
-sudo k0s install controller --single
+sudo k0s install controller --enable-worker --no-taints
 sudo k0s start
 ```
 
-You can check to see if the cluster is working by leveraging kubectl (installed and configured automatically by k0s) via the k0s CLI:
+You can check to see if the cluster is working by leveraging `kubectl` (installed and configured automatically by k0s) via the k0s CLI:
 
 ```shell
 sudo k0s kubectl get nodes
@@ -27,7 +29,7 @@ ip-172-31-29-61   Ready    <none>   46s   v1.31.2+k0s
 
 ## Install kubectl
 
-k0s installs a compatible kubectl and makes it accessible via its own client. But to make your environment easier to configure, we advise installing kubectl the normal way on the manager node and using it to control the local k0s management cluster.
+k0s installs a compatible `kubectl` and makes it accessible via its own client. But to make your environment easier to configure, we advise installing `kubectl` the normal way on the manager node and using it to control the local k0s management cluster:
 
 ```shell
 sudo apt-get update
@@ -42,7 +44,7 @@ sudo apt-get install -y kubectl
 
 ## Get the local k0s cluster's kubeconfig for kubectl
 
-On startup, k0s stores the administrator's kubeconfig in a local directory, making it easy to access:
+On startup, k0s stores the administrator's `kubeconfig` in a local directory, making it easy to access:
 
 ```shell
 sudo cp /var/lib/k0s/pki/admin.conf KUBECONFIG
@@ -50,7 +52,7 @@ sudo chmod +r KUBECONFIG
 export KUBECONFIG=./KUBECONFIG
 ```
 
-At this point, your newly-installed kubectl should be able to interoperate with the k0s management cluster with administrative privileges. Test to see that the cluster is ready (this usually takes about one minute):
+At this point, your newly-installed `kubectl` should be able to interoperate with the k0s management cluster with administrative privileges. Test to see that the cluster is ready (this usually takes about one minute):
 
 ```shell
 kubectl get nodes
@@ -82,7 +84,7 @@ Preparing to install helm into /usr/local/bin
 helm installed into /usr/local/bin/helm
 ```
 
-## Install {{{ docsVersionInfo.k0rdentName }}} into the k0s management cluster
+## Install {{{ docsVersionInfo.k0rdentName }}}
 
 Now we'll install {{{ docsVersionInfo.k0rdentName }}} itself into the k0s management cluster:
 
@@ -109,7 +111,7 @@ TEST SUITE: None
 
 ## Check that {{{ docsVersionInfo.k0rdentName }}} cluster management pods are running
 
-One fundamental {{{ docsVersionInfo.k0rdentName }}} subsystem, {{{ docsVersionInfo.k0rdentName }}} Cluster Manager (KCM), handles cluster lifecycle management on clouds and infrastructures: for example, it helps you configure and compose clusters and manages infrastructure via Cluster API (CAPI). Before continuing, check that the KCM pods are ready:
+One fundamental {{{ docsVersionInfo.k0rdentName }}} subsystem, k0rdent Cluster Manager (KCM), handles cluster lifecycle management on clouds and infrastructures. For example, it helps you configure and compose clusters and manages infrastructure via Cluster API (CAPI). Before continuing, check that the KCM pods are ready:
 
 ```shell
 kubectl get pods -n kcm-system   # check pods in the kcm-system namespace
@@ -140,7 +142,7 @@ Pods reported in states other than Running should become ready momentarily.
 
 ## Check that the projectsveltos pods are running
 
-The other fundamental {{{ docsVersionInfo.k0rdentName }}} subsystem, k0rdent State Manager (KSM), handles services configuration and lifecycle management on clusters. This utilizes the [projectsveltos](https://github.com/projectsveltos) Kubernetes Add-On Controller and other open source projects. Before continuing, check that the ksm pods are ready:
+The other fundamental {{{ docsVersionInfo.k0rdentName }}} subsystem, k0rdent State Manager (KSM), handles services configuration and lifecycle management on clusters. This utilizes the [projectsveltos](https://github.com/projectsveltos) Kubernetes Add-On Controller and other open source projects. Before continuing, check that the KSM pods are ready:
 
 ```shell
 kubectl get pods -n projectsveltos   # check pods in the projectsveltos namespace
@@ -189,9 +191,9 @@ You should see output similar to:
 NAME                                   VALID
 cluster-api-{{{ extra.docsVersionInfo.k0rdentVersion }}}                      true
 cluster-api-provider-aws-{{{ extra.docsVersionInfo.k0rdentVersion }}}         true
-cluster-api-provider-azure-{{{ extra.docsVersionInfo.k0rdentVersion }}}
-cluster-api-provider-openstack-{{{ extra.docsVersionInfo.k0rdentVersion }}}
-cluster-api-provider-vsphere-{{{ extra.docsVersionInfo.k0rdentVersion }}}
+cluster-api-provider-azure-{{{ extra.docsVersionInfo.k0rdentVersion }}}       true
+cluster-api-provider-openstack-{{{ extra.docsVersionInfo.k0rdentVersion }}}   true
+cluster-api-provider-vsphere-{{{ extra.docsVersionInfo.k0rdentVersion }}}     true
 k0smotron-{{{ extra.docsVersionInfo.k0rdentVersion }}}                        true
 kcm-{{{ extra.docsVersionInfo.k0rdentVersion }}}                              true
 projectsveltos-0-45-0                  true
@@ -199,7 +201,7 @@ projectsveltos-0-45-0                  true
 
 ## Verify that KCM ClusterTemplate objects are available
 
-CAPI also requires control plane and bootstrap (worker node) providers to construct and/or manage different Kubernetes cluster distros and variants. Again, these providers are delivered and referenced within {{{ docsVersionInfo.k0rdentName }}} using templates, instantiated in the management cluster as `ClusterTemplate` objects. Before continuing, verify that default ClusterTemplate objects are installed and valid:
+CAPI also requires control plane and bootstrap (worker node) providers to construct and/or manage different Kubernetes cluster distros and variants. Again, these providers are delivered and referenced within {{{ docsVersionInfo.k0rdentName }}} using templates, instantiated in the management cluster as `ClusterTemplate` objects. Before continuing, verify that default `ClusterTemplate` objects are installed and valid:
 
 ```shell
 kubectl get clustertemplate -n kcm-system   # list clustertemplate objects in the kcm-system namespace
