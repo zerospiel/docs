@@ -1,6 +1,6 @@
 # QuickStart 2 - AWS target environment
 
-In this QuickStart unit, we'll be gathering information and performing preparatory steps to enable {{{ docsVersionInfo.k0rdentName }}} (running on your management node) to manage clusters on Amazon Web Services (AWS) and deploying our first child cluster.
+In this QuickStart unit, we'll be gathering information and performing preparatory steps to enable {{{ docsVersionInfo.k0rdentName }}} (running on your management node) to manage clusters on Amazon Web Services (AWS), and we'll deploy our first child cluster.
 
 As noted in the [Guide to QuickStarts](./index.md), you'll need administrative access to an AWS account to complete this step. If you haven't yet created a management node and installed {{{ docsVersionInfo.k0rdentName }}}, go back to [QuickStart 1 - Management node and cluster](./quickstart-1-mgmt-node-and-cluster.md).
 
@@ -8,15 +8,15 @@ Note that if you have already done our Azure QuickStart ([QuickStart 2 - Azure t
 
 > NOTE:
 > **CLOUD SECURITY 101**: {{{ docsVersionInfo.k0rdentName }}} requires _some_ but not _all_ permissions
-> to manage AWS &mdash; doing so via the CAPA (ClusterAPI for AWS) provider.
+> to manage AWS via the CAPA (ClusterAPI for AWS) provider.
 
 Because {{{ docsVersionInfo.k0rdentName }}} doesn't require all permissions, a best practice for using {{{ docsVersionInfo.k0rdentName }}} with AWS (this pattern is repeated
-with other clouds and infrastructures) is to create a new 'k0rdentuser' on your account with the particular permissions {{{ docsVersionInfo.k0rdentName }}} and CAPA require. In this section, we'll create and configure IAM for that user, and perform other steps to make that {{{ docsVersionInfo.k0rdentName }}} user's credentials accessible to {{{ docsVersionInfo.k0rdentName }}} in the management node.
+with other clouds and infrastructures) is to create a new user on your account with the particular permissions it and CAPA require. In this section, we'll create and configure IAM for that user, and perform other steps to make that {{{ docsVersionInfo.k0rdentName }}} user's credentials accessible to it in the management node.
 
 > NOTE:
 > If you're working on a shared AWS account, please ensure that the {{{ docsVersionInfo.k0rdentName }}} user is not already set up before creating a new one.
 
-Creating a {{{ docsVersionInfo.k0rdentName }}} user with minimal required permissions is one of several principle-of-least-privilege mechanisms used to help ensure security as organizations work with {{{ docsVersionInfo.k0rdentName }}} at progressively greater scales. For more on {{{ docsVersionInfo.k0rdentName }}} security best practices, please see the [Administrator Guide](../admin/index.md).
+Creating a {{{ docsVersionInfo.k0rdentName }}} user with minimal required permissions is one of several principle-of-least-privilege mechanisms used to help ensure security as organizations work with Kubernetes at progressively greater scales. For more on {{{ docsVersionInfo.k0rdentName }}} security best practices, please see the [Administrator Guide](../admin/index.md).
 
 ## Install the AWS CLI
 
@@ -50,7 +50,7 @@ Export the credentials to the management node environment:
 export AWS_REGION=EXAMPLE_AWS_REGION
 export AWS_ACCESS_KEY_ID=EXAMPLE_ACCESS_KEY_ID
 export AWS_SECRET_ACCESS_KEY=EXAMPLE_SECRET_ACCESS_KEY
-export AWS_SESSION_TOKEN=EXAMPLE_SESSION_TOKEN # Optional. If you are using Multi-Factor Auth.
+export AWS_SESSION_TOKEN=EXAMPLE_SESSION_TOKEN # Optional. If you are using Multi-Factor or Single Sign On Auth.
 ```
 
 These credentials will be used both by the AWS CLI (to create your {{{ docsVersionInfo.k0rdentName }}} user) and by `clusterawsadm` (to create a CloudFormation template used by CAPA within {{{ docsVersionInfo.k0rdentName }}}).
@@ -255,7 +255,7 @@ You should see something like this. It's important to save these credentials sec
 
 ## Create IAM credentials secret on the management cluster
 
-Next, we create a `Secret` containing credentials for the {{{ docsVersionInfo.k0rdentName }}} user and apply this to the management cluster running {{{ docsVersionInfo.k0rdentName }}}, in the `kcm-system` namespace (important: if you use another namespace, {{{ docsVersionInfo.k0rdentName }}} will be unable to read the credentials). To do this, create the following YAML in a file called `aws-cluster-identity-secret.yaml`:
+Next, we create a `Secret` containing credentials for the {{{ docsVersionInfo.k0rdentName }}} user and apply this to the management cluster running {{{ docsVersionInfo.k0rdentName }}}, in the `kcm-system` namespace. Important: if you use another namespace, {{{ docsVersionInfo.k0rdentName }}} will be unable to read the credentials. To do this, create the following YAML in a file called `aws-cluster-identity-secret.yaml`:
 
 ```yaml
 apiVersion: v1
@@ -273,7 +273,7 @@ stringData:
 
 Remember: the Access Key ID and Secret Access Key are the ones you generated for the {{{ docsVersionInfo.k0rdentName }}} user, `k0rdentQuickStart`.
 
-Then apply this YAML to the management cluster as follows:
+Apply this YAML to the management cluster as follows:
 
 ```shell
 kubectl apply -f aws-cluster-identity-secret.yaml -n kcm-system
@@ -349,7 +349,7 @@ metadata:
     projectsveltos.io/template: "true"
 ```
 
-Note that `ConfigMap` is empty, this is expected, we don't need to template any object inside child cluster(s), but we can use that object in the future if need arises.
+Note that `ConfigMap` is empty. This is expected, we don't need to template any object inside child cluster(s), but we can use that object in the future if need arises.
 
 Now apply this YAML to your management cluster:
 
@@ -483,4 +483,6 @@ Check out the [Administrator Guide](../admin/index.md) ...
 * For details about setting up {{{ docsVersionInfo.k0rdentName }}} to manage clusters on VMware and OpenStack
 * For details about using {{{ docsVersionInfo.k0rdentName }}} with cloud Kubernetes distros: AWS EKS and Azure AKS
 
+<!--
 Or check out the [Demos Repository](https://github.com/k0rdent/demos) for fast, makefile-driven demos of {{{ docsVersionInfo.k0rdentName }}}'s key features.
+-->
