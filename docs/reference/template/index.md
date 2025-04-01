@@ -221,5 +221,8 @@ As a result, the following new objects should be created:
 - [Bring-your-own (BYO) templates](template-byo.md)
 - [Templates for Amazon Web Services](template-aws.md)
 - [Templates for Azure](template-azure.md)
+- [Templates for Google Cloud Platform](template-gcp.md)
 - [Templates for OpenStack](template-openstack.md)
 - [Templates for vSphere](template-vsphere.md)
+- [Templates for Remote deployments using SSH](template-remote.md)
+
