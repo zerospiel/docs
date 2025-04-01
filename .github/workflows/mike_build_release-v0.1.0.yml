@@ -51,4 +51,4 @@ jobs:
         run: mkdocs gh-deploy
 
       - name: Deploy to release-v0.1.0 branch
-        run: mike deploy --push --update-aliases
+        run: mike deploy --push --update-aliases v0.1.0
