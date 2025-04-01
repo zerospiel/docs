@@ -50,5 +50,9 @@ jobs:
         if: steps.check_branch.outputs.exists == 'false'
         run: mkdocs gh-deploy
 
-      - name: Deploy to release-v0.2.0 branch
-        run: mike deploy --push --update-aliases v0.2.0 head
+      - name: Deploy v0.2.0 and next with aliases
+        run: |
+          mike deploy --update-aliases next head
+          mike deploy --update-aliases v0.2.0 latest stable
+          mike set-default v0.2.0
+          git push origin gh-pages
