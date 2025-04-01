@@ -6,3 +6,4 @@ Managed clusters can be hosted on a number of different platforms. At the time o
 - [Azure](azure.md)
 - [OpenStack](openstack.md)
 - [VMware](vmware.md)
+- [Google Cloud Platform](gcp.md)
