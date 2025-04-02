@@ -335,7 +335,7 @@ extra:
         kyverno: 3-2-6       
         velero: 8-1-0   
       dotVersions:
-        certManager: 1.16.2  
+        certManager: 1.17.1  
         externalSecrets: 0.11.0
         ingressNginx: 4.11.3   
         kyverno: 3.2.6       
