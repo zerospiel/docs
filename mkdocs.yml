@@ -284,49 +284,49 @@ extra:
             using our <a href="https://github.com/k0rdent/docs/issues/new" target="_blank" rel="noopener">feedback form</a>.
   docsVersionInfo:
     k0rdentName: k0rdent
-    k0rdentVersion: 0-1-0
-    k0rdentDotVersion: 0.1.0
+    k0rdentVersion: 0-2-0
+    k0rdentDotVersion: 0.2.0
     ociRegistry: oci://ghcr.io/k0rdent/kcm/charts/kcm
     kofVersions:
-      kofVersion: 0-1-1
-      kofDotVersion: 0.1.1
-      kofStorageVersion: 0-1-1
-      kofDotStorageVersion: 0.1.1
-      kofOperatorsVersion: 0-1-1
-      kofDotOperatorsVersion: 0.1.1
-      kofCollectorsVersion: 0-1-1
-      kofDotCollectorsVersion: 0.1.1
+      kofVersion: 0-2-0
+      kofDotVersion: 0.2.0
+      kofStorageVersion: 0-2-0
+      kofDotStorageVersion: 0.2.0
+      kofOperatorsVersion: 0-2-0
+      kofDotOperatorsVersion: 0.2.0
+      kofCollectorsVersion: 0-2-0
+      kofDotCollectorsVersion: 0.2.0
     providerVersions:
       dashVersions:
-        adoptedCluster: 0-1-0
-        awsEksCluster: 0-1-0
-        awsHostedCpCluster: 0-1-0
-        awsStandaloneCpCluster: 0-1-0
-        azureAksCluster: 0-1-0
-        azureHostedCpCluster: 0-1-0
-        azureStandaloneCpCluster: 0-1-0
-        gcpGkeCluster: 0-1-0
-        gcpHostedCpCluster: 0-1-0
-        gcpStandaloneCpCluster: 0-1-0
-        openstackStandaloneCpCluster: 0-1-0
-        remoteCluster: 0-1-0
-        vsphereHostedCpCluster: 0-1-0
-        vsphereStandaloneCpCluster: 0-1-0
+        adoptedCluster: 0-2-0
+        awsEksCluster: 0-2-0
+        awsHostedCpCluster: 0-2-0
+        awsStandaloneCpCluster: 0-2-0
+        azureAksCluster: 0-2-0
+        azureHostedCpCluster: 0-2-0
+        azureStandaloneCpCluster: 0-2-0
+        gcpGkeCluster: 0-2-0
+        gcpHostedCpCluster: 0-2-0
+        gcpStandaloneCpCluster: 0-2-0
+        openstackStandaloneCpCluster: 0-2-0
+        remoteCluster: 0-2-0
+        vsphereHostedCpCluster: 0-2-0
+        vsphereStandaloneCpCluster: 0-2-0
       dotVersions:
-        adoptedCluster: 0.1.0
-        awsEksCluster: 0.1.0
-        awsHostedCpCluster: 0.1.0
-        awsStandaloneCpCluster: 0.1.0
-        azureAksCluster: 0.1.0
-        azureHostedCpCluster: 0.1.0
-        azureStandaloneCpCluster: 0.1.0
-        gcpGkeCluster: 0.1.0
-        gcpHostedCpCluster: 0.1.0
-        gcpStandaloneCpCluster: 0.1.0
-        openstackStandaloneCpCluster: 0.1.0
-        remoteCluster: 0.1.0
-        vsphereHostedCpCluster: 0.1.0
-        vsphereStandaloneCpCluster: 0.1.0
+        adoptedCluster: 0.2.0
+        awsEksCluster: 0.2.0
+        awsHostedCpCluster: 0.2.0
+        awsStandaloneCpCluster: 0.2.0
+        azureAksCluster: 0.2.0
+        azureHostedCpCluster: 0.2.0
+        azureStandaloneCpCluster: 0.2.0
+        gcpGkeCluster: 0.2.0
+        gcpHostedCpCluster: 0.2.0
+        gcpStandaloneCpCluster: 0.2.0
+        openstackStandaloneCpCluster: 0.2.0
+        remoteCluster: 0.2.0
+        vsphereHostedCpCluster: 0.2.0
+        vsphereStandaloneCpCluster: 0.2.0
     servicesVersions:
       dashVersions:
         certManager: 1-16-2  
@@ -335,7 +335,7 @@ extra:
         kyverno: 3-2-6       
         velero: 8-1-0   
       dotVersions:
-        certManager: 1.16.2  
+        certManager: 1.17.1  
         externalSecrets: 0.11.0
         ingressNginx: 4.11.3   
         kyverno: 3.2.6       
