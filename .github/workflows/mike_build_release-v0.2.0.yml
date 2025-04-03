@@ -44,6 +44,7 @@ jobs:
           else
             echo "🚀 gh-pages branch is missing. Will init the docs with mkdocs..."
             echo "exists=false" >> $GITHUB_OUTPUT
+          fi
           
       - name: Init docs as gh-pages is missing
         if: steps.check_branch.outputs.exists == 'false'
