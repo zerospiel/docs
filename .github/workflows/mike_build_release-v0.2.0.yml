@@ -50,10 +50,13 @@ jobs:
         if: steps.check_branch.outputs.exists == 'false'
         run: mkdocs gh-deploy
 
-      - name: Fetch existing gh-pages branch
+      - name: Fetch and rebase gh-pages
         if: steps.check_branch.outputs.exists == 'true'
         run: |
-          git fetch origin gh-pages:gh-pages
+          git fetch origin gh-pages
+          git checkout gh-pages
+          git rebase origin/gh-pages
+          git checkout -
 
       - name: Deploy v0.2.0 and next with aliases
         run: |
