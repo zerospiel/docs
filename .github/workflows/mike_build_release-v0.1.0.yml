@@ -2,7 +2,7 @@ name: mike build release-v0.1.0
 on:
   push:
     branches:
-      - main
+      - release-v0.1.0
   workflow_dispatch:
 
 permissions:
@@ -50,5 +50,13 @@ jobs:
         if: steps.check_branch.outputs.exists == 'false'
         run: mkdocs gh-deploy
 
+      - name: Fetch and checkout gh-pages
+        if: steps.check_branch.outputs.exists == 'true'
+        run: |
+          git fetch origin gh-pages
+          git checkout gh-pages
+          git reset --hard origin/gh-pages
+
       - name: Deploy to release-v0.1.0 branch
         run: mike deploy --push --update-aliases v0.1.0
+
