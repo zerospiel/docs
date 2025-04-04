@@ -312,6 +312,7 @@ extra:
         remoteCluster: 0-2-0
         vsphereHostedCpCluster: 0-2-0
         vsphereStandaloneCpCluster: 0-2-0
+        sveltosProvider: 0-50-0
       dotVersions:
         adoptedCluster: 0.2.0
         awsEksCluster: 0.2.0
@@ -327,6 +328,7 @@ extra:
         remoteCluster: 0.2.0
         vsphereHostedCpCluster: 0.2.0
         vsphereStandaloneCpCluster: 0.2.0
+        sveltosProvider: 0.50.0
     servicesVersions:
       dashVersions:
         certManager: 1-16-2  
