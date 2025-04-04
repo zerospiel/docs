@@ -56,6 +56,7 @@ jobs:
           git fetch origin gh-pages
           git checkout gh-pages
           git reset --hard origin/gh-pages
+          git checkout release-v0.1.0
 
       - name: Deploy to release-v0.1.0 branch
         run: mike deploy --push --update-aliases v0.1.0

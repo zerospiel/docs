@@ -55,6 +55,7 @@ jobs:
           git fetch origin gh-pages
           git checkout gh-pages
           git reset --hard origin/gh-pages
+          git checkout main
 
       - name: Deploy v0.2.0 and next with aliases
         run: |
