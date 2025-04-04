@@ -50,17 +50,16 @@ jobs:
         if: steps.check_branch.outputs.exists == 'false'
         run: mkdocs gh-deploy
 
-      - name: Fetch and rebase gh-pages
+      - name: Prepare gh-pages branch
         if: steps.check_branch.outputs.exists == 'true'
         run: |
           git fetch origin gh-pages
           git checkout gh-pages
-          git rebase origin/gh-pages
-          git checkout -
+          git reset --hard origin/gh-pages
 
       - name: Deploy v0.2.0 and next with aliases
         run: |
-          mike deploy --update-aliases next head
-          mike deploy --update-aliases v0.2.0 latest stable
-          mike set-default v0.2.0
-          git push origin gh-pages
+          mike deploy --update-aliases next head --push
+          mike deploy --update-aliases v0.2.0 latest stable --push
+          mike set-default v0.2.0 --push
+
