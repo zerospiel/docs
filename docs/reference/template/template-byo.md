@@ -15,7 +15,7 @@ The source can be one of the following types:
 - [GitRepository](https://fluxcd.io/flux/components/source/gitrepositories/)
 - [Bucket](https://fluxcd.io/flux/components/source/buckets/)
 
-Note that it's important to pay attention to where the source resides. Cluster-scoped `ProviderTemplate` objects must reside in the **system** namespace (`kcm-system` by default) but other template sources must reside in the same directory as the templates that will come from them.
+Note that it's important to pay attention to where the source resides. Cluster-scoped `ProviderTemplate` objects must reside in the **system** namespace (`kcm-system` by default) but other template sources must reside in the same namespace as the templates that will come from them.
 
 For example, this YAML describes a custom `Source` object of `kind` `HelmRepository`:
 
