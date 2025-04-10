@@ -20,7 +20,7 @@ and use it to deploy an application to a {{{ docsVersionInfo.k0rdentName }}} chi
 > NOTE:
 > Only [`HelmRepository`](https://fluxcd.io/flux/components/source/helmrepositories/) support as a source for `HelmChart`.
 
-Define the source of the Helm chart that defines the service. The source object must have the label `k0rdent.mirantis.com/managed: "true"`. For example, this YAML describes a custom `Source` object of `kind` `HelmRepository`:
+Define the source of the Helm chart that defines the service. The source object must have the label `k0rdent.mirantis.com/managed: "true"`. For example, this YAML describes a FluxCD source object of `kind` `HelmRepository`:
 
 ```yaml
 apiVersion: source.toolkit.fluxcd.io/v1
@@ -242,6 +242,6 @@ to tell {{{ docsVersionInfo.k0rdentName }}} that you want this service to be par
 If you wanted to add this service to an existing cluster, you would simply patch the definition of the `ClusterDeployment`, as in:
 
  ```shell
- kubectl patch clusterdeployment my-cluster-deployment -n my-target-namespace --type='merge' -p '{"spec":{"services":[{"template":"project-ingress-nginx-4.11.3","name":"ingress-nginx","namespace":"my-target-namespace"}]}}'
+ kubectl patch clusterdeployment my-cluster-deployment -n my-target-namespace --type='merge' -p '{"spec":{"serviceSpec":{"services":[{"template":"project-ingress-nginx-4.11.3","name":"ingress-nginx","namespace":"my-target-namespace"}]}}}'
  ```
 For more information on creating and using `ServiceTemplate` objects, see the [User Guide](../../user/services/index.md).
