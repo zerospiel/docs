@@ -54,3 +54,24 @@ Finally there are the cost management features, including:
 * Usage analysis
 * Budget monitoring
 * Optimization recommendations
+
+## Access to Jaeger
+
+[Jaeger UI](https://www.jaegertracing.io/docs/2.5/frontend-ui/#trace-page) of each regional cluster can be accessed by following these steps:
+
+1. Ensure you have the `REGIONAL_DOMAIN` variable set on the [installation step](./kof-install.md#regional-cluster)
+    and the `regional-kubeconfig` file created on the [verification step](./kof-verification.md#verification-steps).
+
+2. Get the regional Jaeger username and password:
+    ```shell
+    KUBECONFIG=regional-kubeconfig kubectl get secret \
+      -n kof jaeger-credentials -o yaml | yq '{
+      "user": .data.username | @base64d,
+      "pass": .data.password | @base64d
+    }'
+    ```
+
+3. Get the URL, open it, and login with the username/password printed above:
+    ```shell
+    echo https://jaeger.$REGIONAL_DOMAIN
+    ```

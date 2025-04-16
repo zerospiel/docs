@@ -2,31 +2,40 @@
 
 Finally, verify that KOF installed properly.
 
-```shell
-kubectl get clustersummaries -A -o wide
-```
-Wait until the value of `HELMCHARTS` changes from `Provisioning` to `Provisioned`.
+## Verification steps
 
-```shell
-kubectl get secret -n kcm-system $REGIONAL_CLUSTER_NAME-kubeconfig \
-  -o=jsonpath={.data.value} | base64 -d > regional-kubeconfig
+1. Wait until the value of `HELMCHARTS` and `POLICYREFS`
+    changes from `Provisioning` to `Provisioned`:
+    ```shell
+    kubectl get clustersummaries -A -o wide
+    ```
+    If you see the `Failed/Provisioning` loop, check status and logs:
+    ```shell
+    kubectl get clustersummaries -A -o yaml \
+      | yq '.items[].status.featureSummaries[]
+      | select(.status != "Provisioned")'
 
-kubectl get secret -n kcm-system $CHILD_CLUSTER_NAME-kubeconfig \
-  -o=jsonpath={.data.value} | base64 -d > child-kubeconfig
+    kubectl logs -n kof deploy/kof-mothership-kof-operator
+    ```
 
-KUBECONFIG=regional-kubeconfig kubectl get pod -A
-  # Namespaces: cert-manager, ingress-nginx, kof, kube-system, projectsveltos
+2. Wait for all pods in the regional and child clusters to show as `Running`
+    in the namespaces `kof, kube-system, projectsveltos`:
+    ```shell
+    kubectl get secret -n kcm-system $REGIONAL_CLUSTER_NAME-kubeconfig \
+      -o=jsonpath={.data.value} | base64 -d > regional-kubeconfig
 
-KUBECONFIG=child-kubeconfig kubectl get pod -A
-  # Namespaces: kof, kube-system, projectsveltos
-```
-Wait for all pods to show as `Running`.
+    kubectl get secret -n kcm-system $CHILD_CLUSTER_NAME-kubeconfig \
+      -o=jsonpath={.data.value} | base64 -d > child-kubeconfig
 
-If the auto-configuration failed, find the reason in the logs of the `kof-operator`:
+    KUBECONFIG=regional-kubeconfig kubectl get pod -A
+    KUBECONFIG=child-kubeconfig kubectl get pod -A
+    ```
 
-```shell
-kubectl logs -n kof deploy/kof-mothership-kof-operator
-```
+3. Wait until the value of `READY` changes to `True`
+    for all certificates in the regional cluster:
+    ```shell
+    KUBECONFIG=regional-kubeconfig kubectl get cert -n kof
+    ```
 
 ## Manual DNS config
 
