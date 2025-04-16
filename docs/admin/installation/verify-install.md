@@ -3,7 +3,7 @@
 > NOTE:
 > After running the helm install command, please wait 5 to 10 minutes for the deployment to stabilize.
 
-To understand whether installation is complete, start by making sure all pods are ready in the `kcm-system` namespace. There should be 17 pod entries:
+To understand whether installation is complete, start by making sure all pods are ready in the `kcm-system` namespace. There should be 20 pod entries:
 
 ```shell
 kubectl get pods -n kcm-system
@@ -40,7 +40,7 @@ kubectl get pods -n kcm-system --no-headers | wc -l
 20
 ```
 
-State management is handled by Project Sveltos, so you'll want to make sure that all 9 pods are running/completed in the `projectsveltos` namespace:
+State management is handled by Project Sveltos, so you'll want to make sure that all 10 pods are running/completed in the `projectsveltos` namespace:
 
 ```shell
 kubectl get pods -n projectsveltos
@@ -137,6 +137,18 @@ vsphere-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.vspher
 vsphere-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.vsphereStandaloneCpCluster }}}     true
 ```
 
+If this is a new `v0.2.0` cluster, you will see:
+
+```shell
+No resources found in kcm-system namespace.
+```
+
+You can then install the `ServiceTemplates` objects as follows:
+
+```shell
+helm upgrade --install catalog-core oci://ghcr.io/k0rdent/catalog/charts/catalog-core --version 1.0.0 -n kcm-system
+```
+
 Finally, make sure the `ServiceTemplate` objects are installed and valid:
 
 ```shell
@@ -153,17 +165,3 @@ ingress-nginx-4-11-3      true
 kyverno-3-2-6             true
 velero-8-1-0              true
 ```
-
-If this is a new `v0.2.0` cluster, you will get the following:
-
-```shell
-No resources found in kcm-system namespace.
-```
-
-This will require you to install the `ServiceTemplates` objects as follows:
-
-```shell
-helm upgrade --install catalog-core oci://ghcr.io/k0rdent/catalog/charts/catalog-core --version 1.0.0 -n kcm-system
-```
-
-after which you will be able to verify the `ServiceTemplate` objects as shown above.
