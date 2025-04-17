@@ -50,10 +50,10 @@ To update the diagram:
     kube-state-metrics
     prometheus-node-exporter
 
-  Either kof-istio chart
+  Either kof-istio
     Certificates
     ClusterProfiles
-  Or kof-regional and kof-child charts
+  Or kof-regional and kof-child
     MultiClusterServices
 
 Cloud 1..N
@@ -76,11 +76,12 @@ Cloud 1..N
         kube-state-metrics
         prometheus-node-exporter
 
-      cert-manager of grafana and vmauth
-      ingress-nginx
+      cert-manager
+      ingress-nginx or kof-istio
 
     <b>Child Cluster 1</b>
-      cert-manager of OTel-operator
+      cert-manager
+      Optional kof-istio
 
       kof-operators chart
         opentelemetry-operator
@@ -142,7 +143,7 @@ Cloud 1..N
     </div>
   </div>
   <div class="o">
-    Either kof-istio chart
+    Either kof-istio
     <div class="o">
       Certificates
     </div>
@@ -151,7 +152,7 @@ Cloud 1..N
     </div>
   </div>
   <div class="o">
-    Or kof-regional and kof-child charts
+    Or kof-regional and kof-child
     <div class="o">
       MultiClusterServices
     </div>
@@ -203,16 +204,19 @@ Cloud 1..N
         </div>
       </div>
       <div class="o">
-        cert-manager of grafana and vmauth
+        cert-manager
       </div>
       <div class="o">
-        ingress-nginx
+        ingress-nginx or kof-istio
       </div>
     </div>
     <div class="o">
       <b>Child Cluster 1</b>
       <div class="o">
-        cert-manager of OTel-operator
+        cert-manager
+      </div>
+      <div class="o">
+        Optional kof-istio
       </div>
       <div class="o">
         kof-operators chart

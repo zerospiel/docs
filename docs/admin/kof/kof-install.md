@@ -252,7 +252,7 @@ and apply this example for AWS, or use it as a reference:
           instanceType: t3.large
         workersNumber: 3
         worker:
-          instanceType: t3.medium
+          instanceType: t3.xlarge
     EOF
     ```
 
@@ -425,7 +425,7 @@ and apply this example for AWS, or use it as a reference:
           instanceType: t3.large
         workersNumber: 3
         worker:
-          instanceType: t3.small
+          instanceType: t3.medium
     EOF
     ```
 

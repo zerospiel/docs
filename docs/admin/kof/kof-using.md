@@ -14,7 +14,7 @@ To make Grafana available, follow these steps:
     }'
     ```
 
-2. Start the Grafana dashboard:
+2. Forward a port to the Grafana dashboard:
     ```shell
     kubectl port-forward -n kof svc/grafana-vm-service 3000:3000
     ```
@@ -59,19 +59,34 @@ Finally there are the cost management features, including:
 
 [Jaeger UI](https://www.jaegertracing.io/docs/2.5/frontend-ui/#trace-page) of each regional cluster can be accessed by following these steps:
 
-1. Ensure you have the `REGIONAL_DOMAIN` variable set on the [installation step](./kof-install.md#regional-cluster)
-    and the `regional-kubeconfig` file created on the [verification step](./kof-verification.md#verification-steps).
+1. Ensure you have the `regional-kubeconfig` file created on the [verification step](./kof-verification.md#verification-steps).
 
-2. Get the regional Jaeger username and password:
-    ```shell
-    KUBECONFIG=regional-kubeconfig kubectl get secret \
-      -n kof jaeger-credentials -o yaml | yq '{
-      "user": .data.username | @base64d,
-      "pass": .data.password | @base64d
-    }'
-    ```
+2. If you've applied the [Istio](./kof-install.md#istio) section:
 
-3. Get the URL, open it, and login with the username/password printed above:
-    ```shell
-    echo https://jaeger.$REGIONAL_DOMAIN
-    ```
+    * Forward a port to the Jaeger UI:
+        ```shell
+        KUBECONFIG=regional-kubeconfig kubectl port-forward \
+          -n kof svc/kof-storage-jaeger-query 16686:16686
+        ```
+
+    * Open the link [http://127.0.0.1:16686/search](http://127.0.0.1:16686/search)
+      and explore the Jaeger UI.
+
+3. If you have not applied the [Istio](./kof-install.md#istio) section:
+
+    * Ensure you have the `REGIONAL_DOMAIN` variable set on the [installation step](./kof-install.md#regional-cluster).
+
+    * Get the regional Jaeger username and password:
+        ```shell
+        KUBECONFIG=regional-kubeconfig kubectl get secret \
+          -n kof jaeger-credentials -o yaml | yq '{
+          "user": .data.username | @base64d,
+          "pass": .data.password | @base64d
+        }'
+        ```
+
+    * Get the the Jaeger UI URL, open it,
+        and login with the username/password printed above:
+        ```shell
+        echo https://jaeger.$REGIONAL_DOMAIN
+        ```
