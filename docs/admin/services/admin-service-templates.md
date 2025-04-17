@@ -17,10 +17,7 @@ and use it to deploy an application to a {{{ docsVersionInfo.k0rdentName }}} chi
 
 ### Creating Helm-based ServiceTemplate
 
-> NOTE:
-> Only [`HelmRepository`](https://fluxcd.io/flux/components/source/helmrepositories/) support as a source for `HelmChart`.
-
-Define the source of the Helm chart that defines the service. The source object must have the label `k0rdent.mirantis.com/managed: "true"`. For example, this YAML describes a FluxCD source object of `kind` `HelmRepository`:
+Before creating a `ServiceTemplate`, the source of the Helm chart that represents the service can be created. The source object must have the label `k0rdent.mirantis.com/managed: "true"`. For example, this YAML describes a FluxCD source object of `kind` `HelmRepository`:
 
 ```yaml
 apiVersion: source.toolkit.fluxcd.io/v1
@@ -40,30 +37,107 @@ spec:
 
 #### Create the `ServiceTemplate`
 
-A template can either define a Helm chart directly using the template's `spec.helm.chartSpec` field or reference its location using the `spec.helm.chartRef` field.
+Helm-based `ServiceTemplate` can be created in three ways:
 
-For example:
+- by defining Helm chart right in the template object
+- by referring the existing Helm chart
+- by defining or referring source provided by FluxCD
 
-```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
-kind: ServiceTemplate
-metadata:
-  name: project-ingress-nginx-4.11.3
-  namespace: my-target-namespace
-spec:
-  helm:
-    chartSpec:
-      chart: ingress-nginx
-      version: 4.11.3
-      interval: 10m0s
-      sourceRef:
-        kind: HelmRepository
-        name: k0rdent-catalog
-```
+> NOTE:
+> `ServiceTemplate` can refer existing `HelmChart` object in `.spec.helm.chartRef` field if only `HelmChart` is backed by `HelmRepository` object.
+> To use FluxCD sources, `ServiceTemplate` must be defined using `.spec.helm.chartSource` field.
 
-In this case, we're creating a `ServiceTemplate` called `ingress-nginx-4.11.3` in the
-`my-target-namespace` namespace.  It references version 4.11.3 of the `ingress-nginx` chart
-located in the `k0rdent-catalog` Helm repository.
+FluxCD sources supported by `ServiceTemplate` are:
+
+- [`GitRespository`](https://fluxcd.io/flux/components/source/gitrepositories/)
+- [`Bucket`](https://fluxcd.io/flux/components/source/buckets/)
+- [`OCIRepository`](https://fluxcd.io/flux/components/source/ocirepositories/)
+
+##### Examples
+
+1. Explicitly defining Helm chart
+
+   ```yaml
+   apiVersion: k0rdent.mirantis.com/v1alpha1
+   kind: ServiceTemplate
+   metadata:
+     name: project-ingress-nginx-4.11.3
+     namespace: my-target-namespace
+   spec:
+     helm:
+       chartSpec:
+         chart: ingress-nginx
+         version: 4.11.3
+         interval: 10m0s
+         sourceRef:
+           kind: HelmRepository
+           name: k0rdent-catalog
+   ```
+
+   In this case, we're creating a `ServiceTemplate` called `ingress-nginx-4.11.3` in the
+   `my-target-namespace` namespace.  It references version 4.11.3 of the `ingress-nginx` chart
+   located in the `k0rdent-catalog` Helm repository. The `HelmChart` object will be created by the controller.
+
+2. Referring the existing Helm chart
+
+   ```yaml
+   apiVersion: k0rdent.mirantis.com/v1alpha1
+   kind: ServiceTemplate
+   metadata:
+     name: project-ingress-nginx-4.11.3
+     namespace: my-target-namespace
+   spec:
+     helm:
+       chartRef:
+         kind: HelmChart
+         name: ingress-nginx-4.11.3
+   ```
+   
+   In this case, we're creating a `ServiceTemplate` called `ingress-nginx-4.11.3` in the
+   `my-target-namespace` namespace.  It references the existing `ingress-nginx-4.11.3` Helm chart.
+   
+3. Referring existing FluxCD source
+
+   ```yaml
+   apiVersion: k0rdent.mirantis.com/v1alpha1
+   kind: ServiceTemplate
+   metadata:
+     name: project-ingress-nginx-4.11.3
+     namespace: my-target-namespace
+   spec:
+     helm:
+       chartSource:
+         localSourceRef:
+           kind: GitRepository
+           name: k0rdent-catalog
+         path: "./charts/ingress-nginx"
+   ```
+   
+   In this case, we're creating a `ServiceTemplate` called `ingress-nginx-4.11.3` in the
+   `my-target-namespace` namespace.  It references the existing `GitRepository` object called 
+   `k0rdent-catalog` and the Helm chart located in the `charts/ingress-nginx` path.
+   
+4. Defining Helm chart source, which can be one of types provided by FluxCD:
+
+   ```yaml
+   apiVersion: k0rdent.mirantis.com/v1alpha1
+   kind: ServiceTemplate
+   metadata:
+     name: project-ingress-nginx-4.11.3
+     namespace: my-target-namespace
+   spec:
+     helm:
+       chartSource:
+         remoteSourceSpec:
+           bucket:
+             url: s3://bucket/path/to/charts
+             interval: 10m0s
+           path: "./ingress-nginx"
+   ```
+
+   In this case, we're creating a `ServiceTemplate` called `ingress-nginx-4.11.3` in the
+   `my-target-namespace` namespace.  It defines the source of the Helm chart located in the 
+   `s3://bucket/path/to/charts` bucket and path where the Helm chart is located within the bucket.
 
 For more information on creating templates, see the [Template Guide](../../reference/template/index.md).
 
