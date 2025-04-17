@@ -20,7 +20,10 @@ To make Grafana available, follow these steps:
     ```
 
 3. Login to [http://127.0.0.1:3000/dashboards](http://127.0.0.1:3000/dashboards) with the username/password printed above.
-4. Open a dashboard:
+
+4. Open a dashboard and select any cluster:
+
+![collect-from-3-cluster-roles](../../assets/kof/collect-from-3-cluster-roles--2025-04-17.gif)
 
 ![grafana-demo](../../assets/kof/grafana-2025-01-14.gif)
 
