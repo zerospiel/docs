@@ -41,7 +41,7 @@ Upgrading {{{ docsVersionInfo.k0rdentName }}} involves making upgrades to the `M
         - name: cluster-api-provider-gcp
           template: cluster-api-provider-gcp-{{{ extra.docsVersionInfo.k0rdentVersion }}}
         - name: projectsveltos
-          template: projectsveltos-0-50-0
+          template: projectsveltos-0-{{{ extra.docsVersionInfo.providerVersions.dotVersions.sveltosProvider }}}-0
     ```
 
     Thankfully, you don't have to build these YAML files yourself. Once you've chosen a release, you can go ahead and create the release object by referencing the YAML file online, as in:
