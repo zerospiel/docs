@@ -1,6 +1,6 @@
 # Resource Limits
 
-See also: [System Requirements](https://github.com/k0rdent/kof/blob/main/docs/system-requirements.md).
+See also: [System Requirements](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/docs/system-requirements.md).
 
 ## Resources of Management Cluster
 

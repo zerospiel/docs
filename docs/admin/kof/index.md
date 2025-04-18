@@ -43,8 +43,8 @@ ensuring resources are used efficiently and costs are optimized.
 ## More Resources
 
 Once you've applied this guide and you have KOF up and running, check 
-[k0rdent/kof/docs](https://github.com/k0rdent/kof/tree/main/docs) for advanced guides
-such as [configuring alerts](https://github.com/k0rdent/kof/blob/main/docs/alerts.md),
+[k0rdent/kof/docs](https://github.com/k0rdent/kof/tree/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/docs) for advanced guides
+such as [configuring alerts](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/docs/alerts.md),
 or get started with the basic documentation:
 
 - [Architecture](kof-architecture.md)

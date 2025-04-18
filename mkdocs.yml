@@ -163,6 +163,7 @@ nav:
       - Architecture: admin/kof/kof-architecture.md
       - Installing KOF: admin/kof/kof-install.md
       - Verifying the KOF installation: admin/kof/kof-verification.md
+      - Storing KOF data: admin/kof/kof-storing.md
       - Using KOF: admin/kof/kof-using.md
       - Scaling KOF: admin/kof/kof-scaling.md
       - Maintaining KOF: admin/kof/kof-maintainence.md
@@ -214,6 +215,7 @@ nav:
     - Templates for Remote SSH: reference/template/template-remote.md
   - Troubleshooting: 
     - Overview: troubleshooting/index.md
+    - Inspecting K0rdent Events: troubleshooting/events.md
     - AWS VPCs: troubleshooting/admin-troubleshooting-aws-vpcs.md
     - EKS: troubleshooting/known-issues-eks.md
   - Appendix:

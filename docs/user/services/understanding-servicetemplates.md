@@ -14,7 +14,7 @@ be deployed as a complete application.
 
 ### Helm-based ServiceTemplate
 
-Helm-based `ServiceTemplate` can be created in two ways:
+Helm-based `ServiceTemplate` can be created in three ways:
 
 - by defining Helm chart right in the template object
 
@@ -50,6 +50,47 @@ Helm-based `ServiceTemplate` can be created in two ways:
       chartRef:
         kind: HelmChart
         name: foo-chart
+  ```
+
+- by defining Helm chart source, which can be one of types provided by FluxCD:
+
+  - [HelmRepository](https://fluxcd.io/flux/components/source/helmrepositories/)
+  - [GitRepository](https://fluxcd.io/flux/components/source/gitrepositories/)
+  - [Bucket](https://fluxcd.io/flux/components/source/buckets/)
+
+  Source can already exist or can be created by the controller.
+
+  ```yaml
+  apiVersion: k0rdent.mirantis.com/v1alpha1
+  kind: ServiceTemplate
+  metadata:
+    name: foo
+    namespace: bar
+  spec:
+    helm:
+      chartSource:
+        localSourceRef:
+          kind: GitRepository
+          name: foo-repository
+        path: "./charts"
+  ```
+  
+  ```yaml
+  apiVersion: k0rdent.mirantis.com/v1alpha1
+  kind: ServiceTemplate
+  metadata:
+    name: foo
+    namespace: bar
+  spec:
+    helm:
+      chartSource:
+        remoteSourceRef:
+          git:
+            url: https://github.com/bar/foo.git
+            reference:
+              branch: main
+            interval: 10m
+          path: "./charts"
   ```
 
 ### Kustomize-based ServiceTemplate

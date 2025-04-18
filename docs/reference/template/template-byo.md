@@ -109,17 +109,18 @@ You can use one of the following fields in `.spec` (they are mutually exclusive)
 
 - `.spec.kustomize`
 - `.spec.resources`
+- `.spec.helm.chartSource`
 
 Each of these fields accepts a `SourceSpec`, which defines the origin of the template content. Only one can be used at a time.
 
 A `SourceSpec` includes:
 
-| **Field**          | **Description**                                                                                                                                 |
-|--------------------|-------------------------------------------------------------------------------------------------------------------------------------------------|
-| `deploymentType`   | Must be either `Local` or `Remote`. Defines whether resources will be deployed to management (local) or to managed (remote) cluster.            |
-| `localSourceRef`   | Reference to a local source (e.g., `ConfigMap`, `Secret`, `GitRepository`, `Bucket`, `OCIRepository`).                                          |
-| `remoteSourceSpec` | Configuration for a remote source. Includes support for `Git`, `Bucket`, or `OCI` repositories.                                                 |
-| `path`             | Path within the source object pointing to the manifests or kustomize config. Ignored when deploying raw resources using `ConfigMap` or `Secret` |
+| **Field**          | **Description**                                                                                                                                                                      |
+|--------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `deploymentType`   | Must be either `Local` or `Remote`. Defines whether resources will be deployed to management (local) or to managed (remote) cluster. Ignored if defined in `.spec.helm.chartSource`. |
+| `localSourceRef`   | Reference to a local source (e.g., `ConfigMap`, `Secret`, `GitRepository`, `Bucket`, `OCIRepository`). `ConfigMap` and `Secret` are not supported in `.spec.helm.chartSource`.       |
+| `remoteSourceSpec` | Configuration for a remote source. Includes support for `Git`, `Bucket`, or `OCI` repositories.                                                                                      |
+| `path`             | Path within the source object pointing to the manifests or kustomize config. Ignored when deploying raw resources using `ConfigMap` or `Secret`                                      |
 
 > NOTE:
 > Fields `.spec.*.remoteSourceSpec.git`, `.spec.*.remoteSource.Spec.bucket` and `.spec.*.remoteSourceSpec.oci` are mutually exclusive.

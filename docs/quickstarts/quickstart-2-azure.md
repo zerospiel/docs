@@ -320,7 +320,7 @@ data:
     allowVolumeExpansion: true
 ```
 
-Object name needs to be exactly `azure-cluster-identity-resource-template.yaml`, `AzureClusterIdentity` object name + `-resource-template` string suffix.
+Object name needs to be exactly `azure-cluster-identity-resource-template`, `AzureClusterIdentity` object name + `-resource-template` string suffix.
 
 Apply the YAML to your cluster:
 
