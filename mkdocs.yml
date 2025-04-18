@@ -284,50 +284,50 @@ extra:
             using our <a href="https://github.com/k0rdent/docs/issues/new" target="_blank" rel="noopener">feedback form</a>.
   docsVersionInfo:
     k0rdentName: k0rdent
-    k0rdentVersion: 0-2-0
-    k0rdentDotVersion: 0.2.0
+    k0rdentVersion: 0-3-0
+    k0rdentDotVersion: 0.3.0
     ociRegistry: oci://ghcr.io/k0rdent/kcm/charts/kcm
     kofVersions:
-      kofVersion: 0-2-0
-      kofDotVersion: 0.2.0
-      kofStorageVersion: 0-2-0
-      kofDotStorageVersion: 0.2.0
-      kofOperatorsVersion: 0-2-0
-      kofDotOperatorsVersion: 0.2.0
-      kofCollectorsVersion: 0-2-0
-      kofDotCollectorsVersion: 0.2.0
+      kofVersion: 0-3-0
+      kofDotVersion: 0.3.0
+      kofStorageVersion: 0-3-0
+      kofDotStorageVersion: 0.3.0
+      kofOperatorsVersion: 0-3-0
+      kofDotOperatorsVersion: 0.3.0
+      kofCollectorsVersion: 0-3-0
+      kofDotCollectorsVersion: 0.3.0
     providerVersions:
       dashVersions:
-        adoptedCluster: 0-2-0
-        awsEksCluster: 0-2-0
-        awsHostedCpCluster: 0-2-0
-        awsStandaloneCpCluster: 0-2-0
-        azureAksCluster: 0-2-0
-        azureHostedCpCluster: 0-2-0
-        azureStandaloneCpCluster: 0-2-0
-        gcpGkeCluster: 0-2-0
-        gcpHostedCpCluster: 0-2-0
-        gcpStandaloneCpCluster: 0-2-0
-        openstackStandaloneCpCluster: 0-2-0
-        remoteCluster: 0-2-0
-        vsphereHostedCpCluster: 0-2-0
-        vsphereStandaloneCpCluster: 0-2-0
+        adoptedCluster: 0-3-0
+        awsEksCluster: 0-3-0
+        awsHostedCpCluster: 0-3-0
+        awsStandaloneCpCluster: 0-3-0
+        azureAksCluster: 0-3-0
+        azureHostedCpCluster: 0-3-0
+        azureStandaloneCpCluster: 0-3-0
+        gcpGkeCluster: 0-3-0
+        gcpHostedCpCluster: 0-3-0
+        gcpStandaloneCpCluster: 0-3-0
+        openstackStandaloneCpCluster: 0-3-0
+        remoteCluster: 0-3-0
+        vsphereHostedCpCluster: 0-3-0
+        vsphereStandaloneCpCluster: 0-3-0
         sveltosProvider: 0-50-0
       dotVersions:
-        adoptedCluster: 0.2.0
-        awsEksCluster: 0.2.0
-        awsHostedCpCluster: 0.2.0
-        awsStandaloneCpCluster: 0.2.0
-        azureAksCluster: 0.2.0
-        azureHostedCpCluster: 0.2.0
-        azureStandaloneCpCluster: 0.2.0
-        gcpGkeCluster: 0.2.0
-        gcpHostedCpCluster: 0.2.0
-        gcpStandaloneCpCluster: 0.2.0
-        openstackStandaloneCpCluster: 0.2.0
-        remoteCluster: 0.2.0
-        vsphereHostedCpCluster: 0.2.0
-        vsphereStandaloneCpCluster: 0.2.0
+        adoptedCluster: 0.3.0
+        awsEksCluster: 0.3.0
+        awsHostedCpCluster: 0.3.0
+        awsStandaloneCpCluster: 0.3.0
+        azureAksCluster: 0.3.0
+        azureHostedCpCluster: 0.3.0
+        azureStandaloneCpCluster: 0.3.0
+        gcpGkeCluster: 0.3.0
+        gcpHostedCpCluster: 0.3.0
+        gcpStandaloneCpCluster: 0.3.0
+        openstackStandaloneCpCluster: 0.3.0
+        remoteCluster: 0.3.0
+        vsphereHostedCpCluster: 0.3.0
+        vsphereStandaloneCpCluster: 0.3.0
         sveltosProvider: 0.50.0
     servicesVersions:
       dashVersions:
