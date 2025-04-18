@@ -39,7 +39,8 @@ Finally, verify that KOF installed properly.
 
 ## Manual DNS config
 
-If you've opted out of [DNS auto-config](./kof-install.md#dns-auto-config), you will need to do the following:
+If you've opted out of [DNS auto-config](./kof-install.md#dns-auto-config)
+and [Istio](./kof-install.md#istio), you will need to do the following:
 
 1. Get the `EXTERNAL-IP` of `ingress-nginx`:
     ```shell
