@@ -215,6 +215,7 @@ nav:
     - Templates for Remote SSH: reference/template/template-remote.md
   - Troubleshooting: 
     - Overview: troubleshooting/index.md
+    - Inspecting K0rdent Events: troubleshooting/events.md
     - AWS VPCs: troubleshooting/admin-troubleshooting-aws-vpcs.md
     - EKS: troubleshooting/known-issues-eks.md
   - Appendix:
