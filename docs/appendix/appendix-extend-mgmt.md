@@ -176,3 +176,27 @@ spec:
           tag: v0.0.7
           pullPolicy: IfNotPresent
 ```
+
+### Configuring manager settings for CAPI providers
+
+Starting from K0rdent `v0.3.0`, configuring manager settings for CAPI providers is supported. You can override
+these settings by defining the `spec.providers[*].config.manager` section. The values under the `manager` section should
+follow the format described here:
+https://github.com/kubernetes-sigs/cluster-api-operator/blob/v0.18.1/api/v1alpha2/provider_types.go#L126.
+
+> WARNING: This is not supported for the `k0sproject-k0smotron` provider due to a bug in the CAPI Operator:
+> [CAPI operator incorrectly finds the manager container if the number of containers is >1](https://github.com/kubernetes-sigs/cluster-api-operator/issues/787).
+
+For example, to override feature gates for the Cluster API Provider AWS, configure the following:
+
+```yaml
+spec:
+  providers:
+  - name: cluster-api-provider-aws
+    config:
+      manager:
+        featureGates:
+          MachinePool: true
+          EKSEnableIAM: true
+          EKSAllowAddRoles: true
+```
