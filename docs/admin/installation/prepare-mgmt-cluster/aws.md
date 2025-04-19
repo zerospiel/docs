@@ -337,8 +337,10 @@
         region: us-east-2
         controlPlane:
           instanceType: t3.small
+          rootVolumeSize: 32
         worker:
           instanceType: t3.small
+          rootVolumeSize: 32
     ```
     > NOTE:
     > - You're giving it an arbitrary name in `.metadata.name` (`my-aws-clusterdeployment1`)
