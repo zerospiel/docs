@@ -98,7 +98,7 @@ You'll see something like the following. Ignore the warnings, since this is an e
 WARNING: Kubernetes configuration file is group-readable. This is insecure. Location: ./KUBECONFIG
 WARNING: Kubernetes configuration file is world-readable. This is insecure. Location: ./KUBECONFIG
 Pulled: ghcr.io/k0rdent/kcm/charts/kcm:{{{ extra.docsVersionInfo.k0rdentDotVersion }}}
-Digest: sha256:c4cd3cceecbed98512515f080e0a2878118d122532d5e5d8b7ef87bcd991639d
+Digest: {{{ extra.docsVersionInfo.k0rdentDigestValue }}}
 NAME: kcm
 LAST DEPLOYED: Tue Apr  1 22:19:26 2025
 NAMESPACE: kcm-system
