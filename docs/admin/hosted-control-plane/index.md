@@ -4,7 +4,7 @@ Under normal circumstances, {{{ docsVersionInfo.k0rdentName }}} deploys a child 
 That is, the controllers and workers are all part of the `ClusterDeployment`. There are serious advantages to deploying
 a cluster this way, not the least of which is the fact that the cluster is essentially independant of the Management cluster,
 in that if the Management cluster becomes inaccessible for any reason the child cluster can continue on as though nothing
-has happened.
+has happened. This is known as a "standalone" deployment.
 
 On the other hand, for many Kubernetes clusters, the controllers are either too busy -- that is, they are constantly
 being scaled up and down -- or they're not busy enough -- that is, they're taking up server resources that aren't being
