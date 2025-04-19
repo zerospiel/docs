@@ -401,8 +401,10 @@ spec:
     region: us-east-2
     controlPlane:
       instanceType: t3.small
+      rootVolumeSize: 32
     worker:
       instanceType: t3.small
+      rootVolumeSize: 32
 ```
 
 ## Apply the `ClusterDeployment` to deploy the cluster
