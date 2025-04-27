@@ -13,6 +13,7 @@ To deploy an OpenStack cluster, the following are the primary parameters in the 
 | `.spec.config.controlPlaneNumber` | `3`                                   | Number of control plane nodes.                              |
 | `.spec.config.workersNumber`      | `2`                                   | Number of worker nodes.                                     |
 | `.spec.config.clusterLabels`      | `k0rdent: demo`                       | Labels to apply to the cluster. Used by MultiClusterService.|
+| `.spec.config.ccmRegional`         | `true`                                | Enables the OpenStack CCM OS_CCM_REGIONAL envvar feature and allows OpenStack CCM to define the region in nodes |
 
 ### SSH Configuration
 
