@@ -6,6 +6,13 @@ Please review the [Guide to QuickStarts](index.md) for preliminaries. This Quick
 
 [k0s Kubernetes](https://k0sproject.io) is a CNCF-certified minimal single-binary Kubernetes that installs with one command and brings along its own CLI. We're using it to quickly set up a single-node management cluster on our manager node. However, {{{ docsVersionInfo.k0rdentName }}} works on any CNCF-certified Kubernetes. If you choose to use something else, we would love to hear how you set things up to work for you.
 
+> NOTE:
+> k0s isn't supported on MacOS, but you can install a test cluster using:
+> ```
+> brew install kind && kind create cluster -n k0rdent
+> ```
+> Skip ahead to [Install kubectl](#install-kubectl).
+
 Download and install k0s:
 
 ```shell
