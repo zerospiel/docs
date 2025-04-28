@@ -13,6 +13,11 @@ If you haven't yet created a management node and installed k0rdent, go back to [
 
 Note that if you have already done our AWS QuickStart ([QuickStart 2 - AWS target environment](quickstart-2-aws.md)) or ([QuickStart 2 - Azure target environment](quickstart-2-azure.md)) you can use the same management cluster, continuing here with steps to add the ability to manage remote clusters. The k0rdent management cluster can accommodate multiple provider and credential setups, enabling management of multiple infrastructures. A big benefit of k0rdent is that it provides a single point of control and visibility across multiple clusters on multiple clouds and infrastructures.
 
+Before proceeding, make sure your management cluster meets the following requirements:
+
+1. A [default storage class](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/) is configured on the management cluster to support Persistent Volumes.
+2. If the API server will be exposed as a `LoadBalancer`, ensure the appropriate cloud provider is installed on the management cluster.
+
 ## Create a Secret object containing the private SSH key to access remote machines
 
 Create a `Secret` object to securely store the private SSH key, under the key `value`, for accessing all remote machines that will be part of the cluster. Save this configuration in a YAML file named `remote-ssh-key-secret.yaml`. Ensure you replace the placeholder `PRIVATE_SSH_KEY_B64` with your base64-encoded private SSH key:
