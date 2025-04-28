@@ -6,4 +6,4 @@ as Nginx Ingress, or they can be user-created applications. To deploy these appl
 
 - [Using and creating service templates](admin-service-templates.md)
 - [Creating multi-cluster services](admin-create-multiclusterservice.md)
- 
+- [Deploying beach-head services on the Management Cluster itself](admin-deploy-services-mgmt-cluster.md)
