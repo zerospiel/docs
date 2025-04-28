@@ -64,4 +64,4 @@ status:
       type: ingress-nginx.ingress-nginx/SveltosHelmReleaseReady
 ```
 
-See [Deploy beach-head services using MultiClusterService](./admin-create-multiclusterservice.md) for more detail on deploying beach-head services using MultiClusterService.
+See [Creating multi-cluster services](./admin-create-multiclusterservice.md) for more detail on deploying beach-head services using MultiClusterService.
