@@ -83,7 +83,7 @@ Standalone clusters can be deployed on GCP instances. Follow these steps to make
     To get base64 encoded credentials, run:
 
     ```bash
-    cat <gcpJSONCredentialsFileName> | base64
+    cat <gcpJSONCredentialsFileName> | base64 -w 0
     ```
 
     ```yaml
