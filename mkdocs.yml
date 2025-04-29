@@ -205,16 +205,19 @@ nav:
       - Remove Beach Head Services: user/services/remove-beach-head.md
       - ServiceTemplate Parameters: user/services/servicetemplate-parameters.md
     - Enabling drift detection: user/user-enable-drift-detection.md
-  - k0rdent Templates Reference:
-    - Introduction to k0rdent templates: reference/template/index.md
-    - Removing predefined templates: reference/template/template-predefined.md
-    - Bring-your-own (BYO) templates: reference/template/template-byo.md
-    - Templates for Amazon Web Services: reference/template/template-aws.md
-    - Templates for Azure: reference/template/template-azure.md
-    - Templates for GCP: reference/template/template-gcp.md
-    - Templates for OpenStack: reference/template/template-openstack.md
-    - Templates for vSphere: reference/template/template-vsphere.md
-    - Templates for Remote SSH: reference/template/template-remote.md
+  - Reference:
+    - Overview: reference/index.md
+    - k0rdent CRDs: reference/crds/index.md
+    - k0rdent Templates:
+      - Introduction to k0rdent templates: reference/template/index.md
+      - Removing predefined templates: reference/template/template-predefined.md
+      - Bring-your-own (BYO) templates: reference/template/template-byo.md
+      - Templates for Amazon Web Services: reference/template/template-aws.md
+      - Templates for Azure: reference/template/template-azure.md
+      - Templates for GCP: reference/template/template-gcp.md
+      - Templates for OpenStack: reference/template/template-openstack.md
+      - Templates for vSphere: reference/template/template-vsphere.md
+      - Templates for Remote SSH: reference/template/template-remote.md
   - Troubleshooting: 
     - Overview: troubleshooting/index.md
     - Inspecting K0rdent Events: troubleshooting/events.md
