@@ -285,7 +285,7 @@ kubectl apply -f aws-cluster-identity-secret.yaml -n kcm-system
 
 Next, we need to create an `AWSClusterStaticIdentity` object that uses the secret.
 
-To do this, create a YAML file named `aws-cluster-identity` as follows:
+To do this, create a YAML file named `aws-cluster-identity.yaml` as follows:
 
 ```yaml
 apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
