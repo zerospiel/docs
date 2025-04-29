@@ -25,7 +25,7 @@ Create a `Secret` object to securely store the private SSH key, under the key `v
 ```shell
 # Setup Environment
 KEY_PATH=~/.ssh/id_ed25519
-PRIVATE_SSH_KEY_B64=$(cat $KEY_PATH | base64)
+PRIVATE_SSH_KEY_B64=$(cat $KEY_PATH | base64 -w 0)
 SECRET_NAME=remote-ssh-key
 KCM_SYSTEM_NS=kcm-system
 CREDENTIAL_NAME=remote-cred

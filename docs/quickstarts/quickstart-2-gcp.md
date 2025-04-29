@@ -80,7 +80,7 @@ Create a `Secret` object that stores the `credentials` field under `data` sectio
 To get base64 encoded credentials, run:
 
 ```bash
-    cat <gcpJSONCredentialsFileName> | base64
+    cat <gcpJSONCredentialsFileName> | base64 -w 0
 ```
 
 ```yaml
