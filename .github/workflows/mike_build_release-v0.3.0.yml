@@ -1,8 +1,8 @@
-name: mike build release v0.2.0 set default
+name: mike build release v0.3.0 set default
 on:
   push:
     branches:
-      - release-v0.2.0
+      - release-v0.3.0
   workflow_dispatch:
 
 permissions:
@@ -55,8 +55,9 @@ jobs:
           git fetch origin gh-pages
           git checkout gh-pages
           git reset --hard origin/gh-pages
-          git checkout release-v0.2.0
+          git checkout release-v0.3.0
 
-      - name: Deploy v0.2.0 docs from release-v0.2.0
-        run: mike deploy v0.2.0 --push
- 
+      - name: Deploy v0.3.0 docs from release-v0.3.0 (and make latest and stable and set v0.3.0 as the default)
+        run: |
+          mike deploy --update-aliases v0.3.0 latest stable --push
+          mike set-default v0.3.0 --push
