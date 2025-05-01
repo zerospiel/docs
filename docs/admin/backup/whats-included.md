@@ -11,7 +11,7 @@ cluster.x-k8s.io/cluster-name="<cluster-deployment-name>"
 helm.toolkit.fluxcd.io/name="<cluster-deployment-name>"
 
 cluster.x-k8s.io/provider="bootstrap-<provider>"
-cluster.x-k8s.io/provider="control-plane-<provider>"
+cluster.x-k8s.io/provider="control-plane-<provider>" 
 cluster.x-k8s.io/provider="infrastructure-<provider>"
 
 cluster.x-k8s.io/provider="cluster-api"
