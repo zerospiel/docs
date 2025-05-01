@@ -100,6 +100,16 @@ apply the steps below to enable [Istio](https://istio.io/) service mesh:
     profile for all child clusters at once now,
     or for each child cluster later, or just use the default values.
 
+> NOTICE:
+> Currently `kof-istio` chart uses `ClusterProfiles` [kof-istio-regional](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-istio/templates/kof-regional-cluster-profile.yaml)
+> and [kof-istio-child](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-istio/templates/kof-child-cluster-profile.yaml).  
+> We plan to replace them with `MultiClusterServices` in [kof-regional](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-regional/templates/regional-multi-cluster-service.yaml)
+> and [kof-child](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-child/templates/child-multi-cluster-service.yaml) charts soon.
+>
+> If you selected Istio option then use `kof-istio`,  
+> otherwise use `kof-regional` with `kof-child`,  
+> but not all 3 charts at the same time.
+
 ## Management Cluster
 
 To install KOF on the management cluster,
@@ -179,6 +189,16 @@ and apply this example, or use it as a reference:
     ```
 
 8. If you have not applied the [Istio](#istio) section:
+
+    > NOTICE:
+    > Currently `kof-istio` chart uses `ClusterProfiles` [kof-istio-regional](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-istio/templates/kof-regional-cluster-profile.yaml)
+    > and [kof-istio-child](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-istio/templates/kof-child-cluster-profile.yaml).  
+    > We plan to replace them with `MultiClusterServices` in [kof-regional](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-regional/templates/regional-multi-cluster-service.yaml)
+    > and [kof-child](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-child/templates/child-multi-cluster-service.yaml) charts soon.
+    >
+    > If you selected Istio option then use `kof-istio`,  
+    > otherwise use `kof-regional` with `kof-child`,  
+    > but not all 3 charts at the same time.
 
     * Look through the `MultiClusterServices` in the [kof-regional](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-regional/templates/regional-multi-cluster-service.yaml)
         and [kof-child](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-child/templates/child-multi-cluster-service.yaml) charts.
