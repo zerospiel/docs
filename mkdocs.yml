@@ -186,6 +186,7 @@ nav:
         - Role Definitions: admin/access/rbac/roles-summary.md
     - Backup and Restore:
       - Overview: admin/backup/index.md
+      - Preparing for Backup: admin/backup/prepare-backups.md
       - Scheduled Management Backups: admin/backup/scheduled-backups.md
       - Management Backup on Demand: admin/backup/ondemand-backups.md
       - What's Included in a Backup: admin/backup/whats-included.md
