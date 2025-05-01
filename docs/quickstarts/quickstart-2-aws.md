@@ -157,69 +157,38 @@ echo $AWS_ARN_ID
  Assemble and execute the following commands to implement the required policies:
 
 ```shell
-aws iam attach-user-policy --user-name k0rdentUser --policy-arn arn:aws:iam::FAKE_ARN_123:policy/controllers.cluster-api-provider-aws.sigs.k8s.io
-aws iam attach-user-policy --user-name k0rdentUser --policy-arn arn:aws:iam::FAKE_ARN_123:policy/control-plane.cluster-api-provider-aws.sigs.k8s.io
-aws iam attach-user-policy --user-name k0rdentUser --policy-arn arn:aws:iam::FAKE_ARN_123:policy/nodes.cluster-api-provider-aws.sigs.k8s.io
-aws iam attach-user-policy --user-name k0rdentUser --policy-arn arn:aws:iam::FAKE_ARN_123:policy/controllers-eks.cluster-api-provider-aws.sigs.k8s.io
+aws iam attach-user-policy --user-name k0rdentQuickstart --policy-arn arn:aws:iam::$AWS_ARN_ID:policy/controllers.cluster-api-provider-aws.sigs.k8s.io
+aws iam attach-user-policy --user-name k0rdentQuickstart --policy-arn arn:aws:iam::$AWS_ARN_ID:policy/control-plane.cluster-api-provider-aws.sigs.k8s.io
+aws iam attach-user-policy --user-name k0rdentQuickstart --policy-arn arn:aws:iam::$AWS_ARN_ID:policy/nodes.cluster-api-provider-aws.sigs.k8s.io
+aws iam attach-user-policy --user-name k0rdentQuickstart --policy-arn arn:aws:iam::$AWS_ARN_ID:policy/controllers-eks.cluster-api-provider-aws.sigs.k8s.io
 ```
 
-We can check to see that policies were assigned:
+We can check to see that policies were attached to the new user:
 
 ```shell
-aws iam list-policies --scope Local
+aws iam list-attached-user-policies --user-name k0rdentQuickstart
+
 ```
 And you'll see output that looks like this (this is non-valid example text):
 
 ```console
 {
-    "Policies": [
+    "AttachedPolicies": [
         {
             "PolicyName": "controllers-eks.cluster-api-provider-aws.sigs.k8s.io",
-            "PolicyId": "ANPA22CF4NNF3VUDTMH3N",
-            "Arn": "arn:aws:iam::FAKE_ARN_123:policy/controllers-eks.cluster-api-provider-aws.sigs.k8s.io",
-            "Path": "/",
-            "DefaultVersionId": "v1",
-            "AttachmentCount": 2,
-            "PermissionsBoundaryUsageCount": 0,
-            "IsAttachable": true,
-            "CreateDate": "2025-01-01T18:47:43+00:00",
-            "UpdateDate": "2025-01-01T18:47:43+00:00"
-        },
-        {
-            "PolicyName": "nodes.cluster-api-provider-aws.sigs.k8s.io",
-            "PolicyId": "ANPA22CF4NNF5TAKL44PU",
-            "Arn": "arn:aws:iam::FAKE_ARN_123:policy/nodes.cluster-api-provider-aws.sigs.k8s.io",
-            "Path": "/",
-            "DefaultVersionId": "v1",
-            "AttachmentCount": 3,
-            "PermissionsBoundaryUsageCount": 0,
-            "IsAttachable": true,
-            "CreateDate": "2025-01-01T18:47:44+00:00",
-            "UpdateDate": "2025-01-01T18:47:44+00:00"
+            "PolicyArn": "arn:aws:iam::AWS_ARN_ID:policy/controllers-eks.cluster-api-provider-aws.sigs.k8s.io"
         },
         {
             "PolicyName": "controllers.cluster-api-provider-aws.sigs.k8s.io",
-            "PolicyId": "ANPA22CF4NNFVO6OHIQOE",
-            "Arn": "arn:aws:iam::FAKE_ARN_123:policy/controllers.cluster-api-provider-aws.sigs.k8s.io",
-            "Path": "/",
-            "DefaultVersionId": "v1",
-            "AttachmentCount": 3,
-            "PermissionsBoundaryUsageCount": 0,
-            "IsAttachable": true,
-            "CreateDate": "2025-01-01T18:47:43+00:00",
-            "UpdateDate": "2025-01-01T18:47:43+00:00"
+            "PolicyArn": "arn:aws:iam::AWS_ARN_ID:policy/controllers.cluster-api-provider-aws.sigs.k8s.io"
         },
         {
             "PolicyName": "control-plane.cluster-api-provider-aws.sigs.k8s.io",
-            "PolicyId": "ANPA22CF4NNFY4FJ3DA2E",
-            "Arn": "arn:aws:iam::FAKE_ARN_123:policy/control-plane.cluster-api-provider-aws.sigs.k8s.io",
-            "Path": "/",
-            "DefaultVersionId": "v1",
-            "AttachmentCount": 2,
-            "PermissionsBoundaryUsageCount": 0,
-            "IsAttachable": true,
-            "CreateDate": "2025-01-01T18:47:43+00:00",
-            "UpdateDate": "2025-01-01T18:47:43+00:00"
+            "PolicyArn": "arn:aws:iam::AWS_ARN_ID:policy/control-plane.cluster-api-provider-aws.sigs.k8s.io"
+        },
+        {
+            "PolicyName": "nodes.cluster-api-provider-aws.sigs.k8s.io",
+            "PolicyArn": "arn:aws:iam::AWS_ARN_ID:policy/nodes.cluster-api-provider-aws.sigs.k8s.io"
         }
     ]
 }
