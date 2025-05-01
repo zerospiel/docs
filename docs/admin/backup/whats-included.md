@@ -7,9 +7,9 @@ operational resilience. This guide provides a comprehensive walkthrough for sett
 
 Velero works by:
 
-1.  Querying the Kubernetes API server to capture the state of cluster resources (like Deployments, Services, Secrets, ConfigMaps, CRDs, etc.).
-2.  Optionally backing up data stored in Persistent Volumes (PVs) using either storage platform snapshots (via CSI) or a file-level backup tool (like Kopia or Restic).
-3.  Storing both the resource definitions and volume backups in an external object storage location (like AWS S3, Azure Blob Storage, Google Cloud Storage, or any S3-compatible provider).
+cluster.x-k8s.io/provider="bootstrap-<provider>"
+cluster.x-k8s.io/provider="control-plane-<provider>" 
+cluster.x-k8s.io/provider="infrastructure-<provider>"
 
 ## {{{ docsVersionInfo.k0rdentName }}} Backup Strategy
 
