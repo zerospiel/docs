@@ -60,10 +60,14 @@ Let's take `Azure` provider as an example [azure-credentials.yaml](https://githu
 
 ## Provider Registration
 
-Providers are registered through YAML configuration files mounted into a [predefined path](https://github.com/k0rdent/kcm/blob/v{{{ extra.docsVersionInfo.k0rdentDotVersion }}}/templates/provider/kcm/templates/deployment.yaml#L42-L43) in the manager container at startup [using `ConfigMap`](https://github.com/k0rdent/kcm/blob/v{{{ extra.docsVersionInfo.k0rdentDotVersion }}}/templates/provider/kcm/templates/providers.yaml).
+Providers are registered through `ProviderInterface` CR, each [provider Helm chart](https://github.com/k0rdent/kcm/blob/v{{{ extra.docsVersionInfo.k0rdentDotVersion }}}/templates/provider) ships with corresponding `ProviderInterface` object.
+
+Modifications to the `Management` Spec are needed to enable newly added provider.
+
+For detailed information, refer to [Extended Management Configuration](#appendix-extend-mgmt)
 
 ### Configuration Examples
 
-Provider configuration examples can be found [here](https://github.com/k0rdent/kcm/tree/v{{{ extra.docsVersionInfo.k0rdentDotVersion }}}/providers)
+As mentioned previously provider configuration examples can be found [here](https://github.com/k0rdent/kcm/tree/v{{{ extra.docsVersionInfo.k0rdentDotVersion }}}/providers), look for `ProviderInterface` object inside CAPI Helm charts.
 
-Let's take `Azure` provider as an example [azure.yml](https://github.com/k0rdent/kcm/blob/v{{{ extra.docsVersionInfo.k0rdentDotVersion }}}/providers/azure.yml), as seen, the definition is straightforward.
+Let's take the `Azure` provider as an example [interface.yaml](https://github.com/k0rdent/kcm/blob/v{{{ extra.docsVersionInfo.k0rdentDotVersion }}}/templates/provider/cluster-api-provider-azure/templates/interface.yaml), as seen, the CR definitions are straightforward.
