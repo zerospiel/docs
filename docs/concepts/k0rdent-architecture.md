@@ -81,7 +81,10 @@ To solve this problem, {{{ docsVersionInfo.k0rdentName }}} lets you create a `Cr
 2. The platform lead then creates a `Credential` object that references the `ClusterIdentity`.
 3. Developers reference the `Credential` object, which gives the cluster the ability to access these credentials (little “c”) without having to expose them to developers directly.
 
-## TL;DR - Conclusion
+> NOTE:
+> To be sure credentials are not visible to developers, make sure to [limit access](../admin/access/rbac/roles-summary.md#limit-credential-access) to the `kcm-system` namespace.
+
+## TL;DR - Conclusion]
 
 {{{ docsVersionInfo.k0rdentName }}} provides a comprehensive Kubernetes lifecycle management framework through its three core components:
 
