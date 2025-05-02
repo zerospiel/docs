@@ -84,7 +84,7 @@ To solve this problem, {{{ docsVersionInfo.k0rdentName }}} lets you create a `Cr
 > NOTE:
 > To be sure credentials are not visible to developers, make sure to [limit access](../admin/access/rbac/roles-summary.md#limit-credential-access) to the `kcm-system` namespace.
 
-## TL;DR - Conclusion]
+## TL;DR - Conclusion
 
 {{{ docsVersionInfo.k0rdentName }}} provides a comprehensive Kubernetes lifecycle management framework through its three core components:
 
