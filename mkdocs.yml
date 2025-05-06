@@ -347,7 +347,7 @@ extra:
         awsStandaloneCpCluster: 0.2.1
         azureAksCluster: 0.2.0
         azureHostedCpCluster: 0.2.2
-        azureStandaloneCpCluster: 0.2.2
+        azureStandaloneCpCluster: 0.2.2 
         dockerHostedCpCluster: 0.2.0
         gcpGkeCluster: 0.2.0
         gcpHostedCpCluster: 0.2.1
