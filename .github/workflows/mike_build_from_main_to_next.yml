@@ -17,7 +17,7 @@ jobs:
       - name: Checkout Repository
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Ensure all history and tags are fetched
+          fetch-depth: 0
 
       - name: Configure Git Credentials
         run: |
@@ -35,29 +35,11 @@ jobs:
           pip install --upgrade pip
           pip install --disable-pip-version-check -r requirements.txt
 
-      - name: Check and initialize gh-pages if missing
-        id: check_branch
-        run: |
-          if git ls-remote --heads origin gh-pages | grep -q gh-pages; then
-            echo "exists=true" >> $GITHUB_OUTPUT
-          else
-            echo "exists=false" >> $GITHUB_OUTPUT
-          fi
-
-      - name: Init docs as gh-pages is missing
-        if: steps.check_branch.outputs.exists == 'false'
-        run: mkdocs gh-deploy
-
-      - name: Fetch and checkout gh-pages
-        if: steps.check_branch.outputs.exists == 'true'
-        run: |
-          git fetch origin gh-pages
-          git checkout gh-pages
-          git reset --hard origin/gh-pages
-          git checkout main
-
       - name: Deploy next and head preview docs from main
         run: |
-          mike deploy next head
-          mike alias next head
-          git push origin gh-pages
+          git fetch origin gh-pages || echo "gh-pages does not exist yet"
+          git checkout gh-pages || git checkout -b gh-pages
+          git reset --hard origin/gh-pages || echo "nothing to reset"
+          git checkout main
+          mike deploy --push next head
+          mike alias --push next head
