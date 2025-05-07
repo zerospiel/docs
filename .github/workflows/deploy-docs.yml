@@ -3,7 +3,7 @@ name: centralized deploy of versioned docs
 on:
   push:
     branches:
-      - 'release-v*'
+      - release-v*
 
 permissions:
   contents: write
