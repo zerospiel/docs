@@ -3,7 +3,7 @@ name: centralized deploy of versioned docs
 on:
   push:
     branches:
-      - release-v*
+      - '**'
 
 permissions:
   contents: write
@@ -13,11 +13,25 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout target branch
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
-          ref: ${{ github.ref_name }}
+
+      - name: Validate branch name
+        id: validate
+        run: |
+          BRANCH="${GITHUB_REF##*/}"
+          echo "Branch: $BRANCH"
+
+          # Match strictly: release-vX.Y.Z
+          if [[ "$BRANCH" =~ ^release-v[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "✔️ Valid release branch: $BRANCH"
+            echo "version=${BRANCH#release-v}" >> $GITHUB_OUTPUT
+          else
+            echo "❌ Not a valid release branch. Skipping deploy."
+            exit 1
+          fi
 
       - name: Fetch versions.yml from main
         run: |
