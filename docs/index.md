@@ -1,4 +1,4 @@
-# Welcome to the {{{ docsVersionInfo.k0rdentName }}} docs MAIN 1
+# Welcome to the {{{ docsVersionInfo.k0rdentName }}} docs MAIN 2
 
 ## Introduction
 
