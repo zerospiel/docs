@@ -1,4 +1,5 @@
 name: Deploy preview docs from main to next and head
+
 on:
   push:
     branches:
@@ -38,10 +39,8 @@ jobs:
         id: check_branch
         run: |
           if git ls-remote --heads origin gh-pages | grep -q gh-pages; then
-            echo "✅ gh-pages branch already exists. Proceeding with deployment with mike..."
             echo "exists=true" >> $GITHUB_OUTPUT
           else
-            echo "🚀 gh-pages branch is missing. Will init the docs with mkdocs..."
             echo "exists=false" >> $GITHUB_OUTPUT
           fi
 
@@ -59,5 +58,6 @@ jobs:
 
       - name: Deploy next and head preview docs from main
         run: |
-          mike deploy --push next head
-
+          mike deploy next head
+          mike alias next head
+          git push origin gh-pages
