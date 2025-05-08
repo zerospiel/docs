@@ -44,5 +44,5 @@ jobs:
           git checkout gh-pages || git checkout -b gh-pages
           git reset --hard origin/gh-pages || echo "nothing to reset"
           git checkout main
-          mike deploy --push next head
-          mike alias --push next head
+          mike deploy --push --update-aliases next head --allow-empty
+
