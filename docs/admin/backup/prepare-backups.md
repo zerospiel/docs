@@ -99,7 +99,6 @@ Before you create a manual one-off or scheduled backup, review the steps below a
         credential:
           name: cloud-credentials
           key: cloud
-      EOF
       ```
 
 1. Create the necessary Kubernetes resources in your k0rdent cluster by applying the YAML to the management cluster:
