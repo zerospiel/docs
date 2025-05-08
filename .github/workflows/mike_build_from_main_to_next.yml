@@ -35,11 +35,14 @@ jobs:
           pip install --upgrade pip
           pip install --disable-pip-version-check -r requirements.txt
 
+      - name: Clean previous MkDocs output
+        run: rm -rf site/
+
       - name: Deploy next and head preview docs from main
         run: |
           git fetch origin gh-pages || echo "gh-pages does not exist yet"
           git checkout gh-pages || git checkout -b gh-pages
           git reset --hard origin/gh-pages || echo "nothing to reset"
-          git switch -
+          git checkout main
           mike deploy --push next head
           mike alias --push next head
