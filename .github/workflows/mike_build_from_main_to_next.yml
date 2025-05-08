@@ -40,6 +40,6 @@ jobs:
           git fetch origin gh-pages || echo "gh-pages does not exist yet"
           git checkout gh-pages || git checkout -b gh-pages
           git reset --hard origin/gh-pages || echo "nothing to reset"
-          git checkout main
+          git switch -
           mike deploy --push next head
           mike alias --push next head
