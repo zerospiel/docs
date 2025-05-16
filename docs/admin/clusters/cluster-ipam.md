@@ -129,7 +129,7 @@ The specified IPAM settings will be used to allocate IP addresses during provisi
 To inspect the resulting `ClusterIPAM` resource:
 
 ```bash
-kubectl get -n <kcm-system-namespace> ClusterIPAM <claim-name>
+kubectl get -n <namespace> ClusterIPAM <claim-name>
 ```
 
 ### Example Output
