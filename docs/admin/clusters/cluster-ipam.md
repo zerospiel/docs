@@ -112,7 +112,7 @@ Apply the deployment configuration:
 kubectl apply -f <cluster-deployment-file>.yaml
 ```
 
-The specified IPAM settings will be used to allocate IP addresses during provisioning.
+The specified IPAM settings will be used to allocate IP addresses during provisioning. Keep in mind, that cluster provisioning will not proceed until IPAM resources ready and addresses allocated.
 
 To inspect the resulting `ClusterIPAM` resource:
 
