@@ -78,7 +78,7 @@ apiVersion: k0rdent.mirantis.com/v1alpha1
 kind: ClusterDeployment
 metadata:
   name: <cluster-name>
-  namespace: <kcm-system-namespace>
+  namespace: <namespace>
 spec:
   template: <template-name>
   credential: <provider-credential-name>
