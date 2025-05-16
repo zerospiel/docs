@@ -28,7 +28,7 @@ Ensure the following before configuring IPAM:
 
 ## 2. Define a `ClusterIPAMClaim`
 
-The `ClusterIPAMClaim` resource reserves the required IP address space for the cluster. Each network segment—node, cluster, and external—can be defined using either a `cidr` or a static list of `ipaddresses`.
+The `ClusterIPAMClaim` resource reserves the required IP address space for the cluster. Node network segment can be defined using either a `cidr` or a static list of `ipAddresses`.
 
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1alpha1
