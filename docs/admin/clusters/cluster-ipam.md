@@ -46,7 +46,7 @@ spec:
   cluster: <cluster-name>
 ```
 
-> ⚠️ The `cluster` field in `ClusterIPAMClaim` is immutable.  
+> ⚠️ The `cluster` field in `ClusterIPAMClaim` is immutable once set.
 > 💡 The `cluster` field links the claim to a specific `ClusterDeployment`, ensuring IPs are reserved before provisioning begins.
 
 #### Apply the `ClusterIPAMClaim`
