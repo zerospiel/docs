@@ -101,13 +101,14 @@ spec:
   dryRun: <"true" | "false">  # Optional; defaults to "false"
   config:
     <cluster-configuration>
-  ipam:
-    provider: <provider-name>
-    nodeNetwork:
-      cidr: <cidr>
-      # ipaddresses:
-      # - <ip-1>
-      # - <ip-2>
+  ipamClaim:
+    spec:
+      provider: <provider-name>
+      nodeNetwork:
+        cidr: <cidr>
+        # ipAddresses:
+        # - <ip-1>
+        # - <ip-2>
 ```
 
 ## 3. Deploy the Cluster
