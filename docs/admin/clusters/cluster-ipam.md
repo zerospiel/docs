@@ -32,7 +32,11 @@ Ensure the following before configuring IPAM:
 
 #### Define a `ClusterIPAMClaim`
 
+<<<<<<< HEAD
+The `ClusterIPAMClaim` resource reserves the required IP address space for the cluster. Each address space can be defined using either a `cidr` or a static list of `ipaddresses`.
+=======
 The `ClusterIPAMClaim` resource reserves the required IP address space for the cluster. Node network segment can be defined using either a `cidr` or a static list of `ipAddresses`.
+>>>>>>> 55ab282523eb8c40bbcc0d164a277ddbad9c83fd
 
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1alpha1
@@ -66,7 +70,7 @@ To verify the claim:
 ```bash
 kubectl get clusteripamclaim <claim-name> -n <namespace>
 ```
-### Status Fields
+#### Status Fields
 - ```.spec.clusterIPAMRef```: Indicates that the child ClusterIPAM object was successfully created, if this field is set.
 
 - ```.status.bound```: If true, it means the child ClusterIPAM was successfully reconciled and the defined addresses were allocated.
@@ -87,11 +91,13 @@ spec:
     <cluster-configuration>
   ipamClaim:
     ref: <claim-name>
- ```
+```
 
-## 3. (Alternative) Inline IPAM in `ClusterDeployment`
+### Option 2: Use inline IPAM configuration in `ClusterDeployment`
 
-Alternatively, IPAM configuration can be defined inline within the `ClusterDeployment` resource:
+IPAM configuration can be defined inline within the `ClusterDeployment` resource:
+
+#### Define a `ClusterDeployment`
 
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1alpha1
@@ -115,14 +121,13 @@ spec:
         # - <ip-2>
 ```
 
-## 3. Deploy the Cluster
-
-Apply the deployment configuration:
+#### Apply the `ClusterDeployment`:
 
 ```bash
 kubectl apply -f <cluster-deployment-file>.yaml
 ```
 
+## 4. Verify IPAM
 The specified IPAM settings will be used to allocate IP addresses during provisioning. Keep in mind, that cluster provisioning will not proceed until IPAM resources ready and addresses allocated.
 
 To inspect the resulting `ClusterIPAM` resource:
