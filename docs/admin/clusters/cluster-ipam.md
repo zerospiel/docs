@@ -49,7 +49,7 @@ spec:
 > ⚠️ The `cluster` field in `ClusterIPAMClaim` is immutable.  
 > 💡 The `cluster` field links the claim to a specific `ClusterDeployment`, ensuring IPs are reserved before provisioning begins.
 
-### Apply the `ClusterIPAMClaim`
+#### Apply the `ClusterIPAMClaim`
 
 To create the claim:
 
