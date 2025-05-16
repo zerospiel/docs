@@ -40,7 +40,7 @@ spec:
   provider: <provider-name>
   nodeNetwork:
     cidr: <cidr>
-    # ipaddresses:
+    # ipAddresses:
     # - <ip-1>
     # - <ip-2>
   cluster: <cluster-name>
