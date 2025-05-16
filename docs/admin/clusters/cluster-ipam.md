@@ -63,6 +63,22 @@ To verify the claim:
 kubectl get clusteripamclaim <claim-name> -n <namespace>
 ```
 
+#### Define a `ClusterDeployment`
+
+```yaml
+apiVersion: k0rdent.mirantis.com/v1alpha1
+kind: ClusterDeployment
+metadata:
+  name: <cluster-name>
+  namespace: <kcm-system-namespace>
+spec:
+  template: <template-name>
+  credential: <provider-credential-name>
+  dryRun: <"true" | "false">  # Optional; defaults to "false"
+  config:
+    <cluster-configuration>
+  ipamClaim:
+    ref: <claim-name>
 ## 3. (Alternative) Inline IPAM in `ClusterDeployment`
 
 Alternatively, IPAM configuration can be defined inline within the `ClusterDeployment` resource:
