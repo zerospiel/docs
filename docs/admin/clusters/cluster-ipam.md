@@ -26,7 +26,11 @@ Ensure the following before configuring IPAM:
   - One IP per control plane node
   - One IP per worker node
 
-## 2. Define a `ClusterIPAMClaim`
+## 2. Define IPAM configuration
+
+### Option 1: Use mutual references in `ClusterDeployment` and `ClusterIPAMClaim`
+
+#### Define a `ClusterIPAMClaim`
 
 The `ClusterIPAMClaim` resource reserves the required IP address space for the cluster. Node network segment can be defined using either a `cidr` or a static list of `ipAddresses`.
 
