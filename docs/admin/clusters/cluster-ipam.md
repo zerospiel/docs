@@ -35,7 +35,7 @@ Ensure the following before configuring IPAM:
 The `ClusterIPAMClaim` resource reserves the required IP address space for the cluster. Node network segment can be defined using either a `cidr` or a static list of `ipAddresses`.
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterIPAMClaim
 metadata:
   name: <claim-name>
@@ -51,6 +51,7 @@ spec:
 ```
 
 > ⚠️ The `cluster` field in `ClusterIPAMClaim` is immutable once set.
+> 
 > 💡 The `cluster` field links the claim to a specific `ClusterDeployment`, ensuring IPs are reserved before provisioning begins.
 
 #### Apply the `ClusterIPAMClaim`
@@ -66,7 +67,27 @@ To verify the claim:
 ```bash
 kubectl get clusteripamclaim <claim-name> -n <namespace>
 ```
-#### Status Fields
+
+### Example Output
+``` yaml
+apiVersion: k0rdent.mirantis.com/v1beta1
+kind: ClusterIPAMClaim
+metadata:
+  name: <claim-name>
+  namespace: <namespace>
+spec:
+  cluster: <cluster-name>
+  clusterIPAMRef: <claim-name>
+  nodeNetwork:
+    cidr: <cidr>
+    # ipAddresses:
+    # - <ip-1>
+    # - <ip-2>
+  provider: <provider-name>
+status:
+  bound: true
+```
+
 - ```.spec.clusterIPAMRef```: Indicates that the child ClusterIPAM object was successfully created, if this field is set.
 
 - ```.status.bound```: If true, it means the child ClusterIPAM was successfully reconciled and the defined addresses were allocated.
@@ -74,7 +95,7 @@ kubectl get clusteripamclaim <claim-name> -n <namespace>
 #### Define a `ClusterDeployment`
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   name: <cluster-name>
@@ -96,7 +117,7 @@ IPAM configuration can be defined inline within the `ClusterDeployment` resource
 #### Define a `ClusterDeployment`
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   name: <cluster-name>
@@ -135,7 +156,7 @@ kubectl get -n <namespace> ClusterIPAM <claim-name>
 ### Example Output
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterIPAM
 metadata:
   name: <cluster-ipam-name>
