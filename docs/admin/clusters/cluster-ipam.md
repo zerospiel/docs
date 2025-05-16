@@ -62,6 +62,10 @@ To verify the claim:
 ```bash
 kubectl get clusteripamclaim <claim-name> -n <namespace>
 ```
+### Status Fields
+- ```.spec.clusterIPAMRef```: Indicates that the child ClusterIPAM object was successfully created, if this field is set.
+
+- ```.status.bound```: If true, it means the child ClusterIPAM was successfully reconciled and the defined addresses were allocated.
 
 #### Define a `ClusterDeployment`
 
@@ -79,6 +83,8 @@ spec:
     <cluster-configuration>
   ipamClaim:
     ref: <claim-name>
+ ```
+
 ## 3. (Alternative) Inline IPAM in `ClusterDeployment`
 
 Alternatively, IPAM configuration can be defined inline within the `ClusterDeployment` resource:
