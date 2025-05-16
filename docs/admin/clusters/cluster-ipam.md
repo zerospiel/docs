@@ -2,7 +2,7 @@
 # IP Address Management (IPAM)
 
 `{{{ docsVersionInfo.k0rdentName }}}` provides a flexible IP Address Management (IPAM) system that enables deterministic allocation of IP addresses throughout the cluster lifecycle.
-
+> ⚠️ At the moment **only node network supported**
 With IPAM enabled, IP addresses can be assigned to both worker and control plane nodes.
 
 Administrators can define address ranges using either CIDR blocks or explicit IP lists, enabling:
