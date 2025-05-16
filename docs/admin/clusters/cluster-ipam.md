@@ -104,7 +104,7 @@ spec:
       # - <ip-2>
 ```
 
-## 4. Deploy the Cluster
+## 3. Deploy the Cluster
 
 Apply the deployment configuration:
 
