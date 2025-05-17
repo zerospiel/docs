@@ -280,7 +280,7 @@ To enable users to deploy child clusers on vSphere, follow these steps:
           network: <VSPHERE_NETWORK>
     ```
 
-    For more information about the available configuration options, see the [vSphere Template Parameters](../../../reference/template/template-openstack.md).
+    For more information about the available configuration options, see the [vSphere Template Parameters](../../../reference/template/template-vsphere.md).
 
     Apply the YAML to your management cluster:
 
