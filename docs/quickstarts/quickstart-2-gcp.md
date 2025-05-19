@@ -1,8 +1,5 @@
 # QuickStart 2 - GCP target environment
 
-> NOTE:
-> GCP cluster deployment is supported in K0rdent 0.2.0 and above.
-
 In this QuickStart unit, we'll be gathering information and performing preparatory steps to enable
 {{{ docsVersionInfo.k0rdentName }}} (running on your management node) to manage clusters on GCP and deploying a child cluster.
 
@@ -14,9 +11,8 @@ an AWS EC2 virtual machine), as long as you permit outbound traffic to all IP ad
 work fine. A big benefit of {{{ docsVersionInfo.k0rdentName }}} is that it provides a single point of control and visibility
 across multiple clusters on multiple clouds and infrastructures.
 
-GCP provider is available from K0rdent the 0.2.0 release only, and it's not enabled by default.
-To enable GCP provider in K0rdent, edit the `Management` object and add `cluster-api-provider-gcp` to the list of `spec.providers`
-and wait for a couple of minutes for GCP components to start.
+The GCP provider is available starting with the {{{ docsVersionInfo.k0rdentName }}} 0.2.0 release, but it's not enabled by default.
+To enable the GCP provider in {{{ docsVersionInfo.k0rdentName }}}, edit the `Management` object and add `cluster-api-provider-gcp` to the list of `spec.providers`, and the GCP components will start within a few minutes.
 
 ## Install Gcloud CLI
 
