@@ -4,7 +4,7 @@ In this QuickStart unit, we'll be gathering information and performing preparato
 
 As noted in the [Guide to QuickStarts](./index.md), you'll need administrative access to an AWS account to complete this step. If you haven't yet created a management node and installed {{{ docsVersionInfo.k0rdentName }}}, go back to [QuickStart 1 - Management node and cluster](./quickstart-1-mgmt-node-and-cluster.md).
 
-Note that if you have already done our Azure QuickStart ([QuickStart 2 - Azure target environment](./quickstart-2-azure.md)) you can  use the same management cluster, continuing here with steps to add the ability to manage clusters on AWS. The {{{ docsVersionInfo.k0rdentName }}} management cluster can accommodate multiple provider and credential setups, enabling management of multiple infrastructures. And even if your management node is external to AWS (for example, it could be on an Azure virtual machine), as long as you permit outbound traffic to all IP addresses from the management node, this should work fine. A big benefit of {{{ docsVersionInfo.k0rdentName }}} is that it provides a single point of control and visibility across multiple clusters on multiple clouds and infrastructures.
+Note that if you have already done one of the other quickstarts, such as our Azure QuickStart ([QuickStart 2 - Azure target environment](./quickstart-2-azure.md)), you can  use the same management cluster, continuing here with steps to add the ability to manage clusters on AWS. The {{{ docsVersionInfo.k0rdentName }}} management cluster can accommodate multiple provider and credential setups, enabling management of multiple infrastructures. And even if your management node is external to AWS (for example, it could be on an Azure virtual machine), as long as you permit outbound traffic to all IP addresses from the management node, this should work fine. A big benefit of {{{ docsVersionInfo.k0rdentName }}} is that it provides a single point of control and visibility across multiple clusters on multiple clouds and infrastructures.
 
 > NOTE:
 > **CLOUD SECURITY 101**: {{{ docsVersionInfo.k0rdentName }}} requires _some_ but not _all_ permissions
@@ -340,14 +340,19 @@ You'll see output resembling what's below. Grab the name of the AWS standalone c
 
 ```console
 NAMESPACE    NAME                            VALID
-kcm-system   adopted-cluster-{{{ extra.docsVersionInfo.k0rdentVersion }}}           true
+kcm-system   adopted-cluster-{{{ extra.docsVersionInfo.providerVersions.dashVersions.adoptedCluster }}}           true
 kcm-system   aws-eks-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsEksCluster }}}                   true
 kcm-system   aws-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsHostedCpCluster }}}             true
 kcm-system   aws-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsStandaloneCpCluster }}}         true
 kcm-system   azure-aks-{{{ extra.docsVersionInfo.providerVersions.dashVersions.azureAksCluster }}}                 true
 kcm-system   azure-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.azureHostedCpCluster }}}           true
 kcm-system   azure-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.azureStandaloneCpCluster }}}       true
+kcm-system   docker-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.dockerHostedCpCluster }}}          true
+kcm-system   gcp-gke-{{{ extra.docsVersionInfo.providerVersions.dashVersions.gcpGkeCluster }}}                   true
+kcm-system   gcp-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.gcpHostedCpCluster }}}             true
+kcm-system   gcp-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.gcpStandaloneCpCluster }}}         true
 kcm-system   openstack-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.openstackStandaloneCpCluster }}}   true
+kcm-system   remote-cluster-{{{ extra.docsVersionInfo.providerVersions.dashVersions.openstackStandaloneCpCluster }}}            true
 kcm-system   vsphere-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.vsphereHostedCpCluster }}}         true
 kcm-system   vsphere-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.vsphereStandaloneCpCluster }}}     true
 ```
