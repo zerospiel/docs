@@ -6,7 +6,7 @@
 In this QuickStart unit, we'll be gathering information and performing preparatory steps to enable
 {{{ docsVersionInfo.k0rdentName }}} (running on your management node) to manage clusters on GCP and deploying a child cluster.
 
-Note that if you have already done our AWS or Azure QuickStart ([QuickStart 2 - AWS target environment](./quickstart-2-aws.md)), Azure QuickStart ([QuickStart 2 - Azure target environment](./quickstart-2-azure.md)), or 
+Note that if you have already done one of the other quickstarts, such as our AWS or Azure QuickStart ([QuickStart 2 - AWS target environment](./quickstart-2-aws.md)) or Azure QuickStart ([QuickStart 2 - Azure target environment](./quickstart-2-azure.md)), 
 you can use the same management cluster, continuing here with steps to add the ability to manage clusters on GCP. The 
 {{{ docsVersionInfo.k0rdentName }}} management cluster can accommodate multiple provider and credential setups, enabling
 management of multiple infrastructures. And even if your management node is external to GCP (for example, it could be on 
@@ -260,11 +260,14 @@ kcm-system   aws-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVe
 kcm-system   azure-aks-{{{ extra.docsVersionInfo.providerVersions.dashVersions.azureAksCluster }}}                 true
 kcm-system   azure-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.azureHostedCpCluster }}}           true
 kcm-system   azure-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.azureStandaloneCpCluster }}}       true
+kcm-system   docker-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.dockerHostedCpCluster }}}          true
+kcm-system   gcp-gke-{{{ extra.docsVersionInfo.providerVersions.dashVersions.gcpGkeCluster }}}                   true
+kcm-system   gcp-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.gcpHostedCpCluster }}}             true
+kcm-system   gcp-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.gcpStandaloneCpCluster }}}         true
 kcm-system   openstack-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.openstackStandaloneCpCluster }}}   true
+kcm-system   remote-cluster-{{{ extra.docsVersionInfo.providerVersions.dashVersions.openstackStandaloneCpCluster }}}            true
 kcm-system   vsphere-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.vsphereHostedCpCluster }}}         true
 kcm-system   vsphere-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.vsphereStandaloneCpCluster }}}     true
-kcm-system   gcp-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.gcpStandaloneCpCluster }}}     true
-kcm-system   gcp-gke-{{{ extra.docsVersionInfo.providerVersions.dashVersions.gcpGkeCpCluster }}}     true
 ```
 
 ## Create your ClusterDeployment

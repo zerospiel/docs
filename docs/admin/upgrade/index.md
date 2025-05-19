@@ -23,24 +23,28 @@ Upgrading {{{ docsVersionInfo.k0rdentName }}} involves making upgrades to the `M
       kcm:
         template: kcm-{{{ extra.docsVersionInfo.k0rdentVersion }}}
       capi:
-        template: cluster-api-{{{ extra.docsVersionInfo.k0rdentVersion }}}
+        template: cluster-api-{{{ extra.docsVersionInfo.providerVersions.dashVersions.clusterApi }}}
       providers:
         - name: cluster-api-provider-k0sproject-k0smotron
-          template: cluster-api-provider-k0sproject-k0smotron-{{{ extra.docsVersionInfo.k0rdentVersion }}}
+          template: cluster-api-provider-k0sproject-k0smotron-{{{ extra.docsVersionInfo.providerVersions.dashVersions.k0smotron }}}
         - name: cluster-api-provider-azure
-          template: cluster-api-provider-azure-{{{ extra.docsVersionInfo.k0rdentVersion }}}
+          template: cluster-api-provider-azure-{{{ extra.docsVersionInfo.providerVersions.dashVersions.clusterApiProviderAzure }}}
         - name: cluster-api-provider-vsphere
-          template: cluster-api-provider-vsphere-{{{ extra.docsVersionInfo.k0rdentVersion }}}
+          template: cluster-api-provider-vsphere-{{{ extra.docsVersionInfo.providerVersions.dashVersions.clusterApiProviderVsphere }}}
         - name: cluster-api-provider-aws
-          template: cluster-api-provider-aws-{{{ extra.docsVersionInfo.k0rdentVersion }}}
+          template: cluster-api-provider-aws-{{{ extra.docsVersionInfo.providerVersions.dashVersions.clusterApiProviderAws }}}
         - name: cluster-api-provider-openstack
-          template: cluster-api-provider-openstack-{{{ extra.docsVersionInfo.k0rdentVersion }}}
+          template: cluster-api-provider-openstack-{{{ extra.docsVersionInfo.providerVersions.dashVersions.clusterApiProviderOpenstack }}}
         - name: cluster-api-provider-docker
-          template: cluster-api-provider-docker-{{{ extra.docsVersionInfo.k0rdentVersion }}}
+          template: cluster-api-provider-docker-{{{ extra.docsVersionInfo.providerVersions.dashVersions.clusterApiProviderDocker }}}
         - name: cluster-api-provider-gcp
-          template: cluster-api-provider-gcp-{{{ extra.docsVersionInfo.k0rdentVersion }}}
+          template: cluster-api-provider-gcp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.clusterApiProviderGcp }}}
+        - name: cluster-api-provider-ipam
+          template: cluster-api-provider-ipam-{{{ extra.docsVersionInfo.providerVersions.dashVersions.clusterApiProviderIpam }}}
+        - name: cluster-api-provider-infoblox
+          template: cluster-api-provider-infoblox-{{{ extra.docsVersionInfo.providerVersions.dashVersions.clusterApiProviderInfoblox }}}                    
         - name: projectsveltos
-          template: projectsveltos-{{{ extra.docsVersionInfo.providerVersions.dotVersions.sveltosProvider }}}
+          template: projectsveltos-{{{ extra.docsVersionInfo.providerVersions.dashVersions.sveltosProvider }}}
     ```
 
     Thankfully, you don't have to build these YAML files yourself. Once you've chosen a release, you can go ahead and create the release object by referencing the YAML file online, as in:
