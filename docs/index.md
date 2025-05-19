@@ -1,5 +1,4 @@
-# Welcome to the {{{ docsVersionInfo.k0rdentName }}} docs MAIN 3
-
+# Welcome to the {{{ docsVersionInfo.k0rdentName }}} docs (checking main build)
 ## Introduction
 
 {{{ docsVersionInfo.k0rdentName }}} has been developed to provide a way to manage distributed infrastructure
