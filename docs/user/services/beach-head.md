@@ -3,7 +3,7 @@
 Beach-head services can be installed on a cluster deployment (that is, a target cluster) using the `ClusterDeployment` object, just as with a single service. Consider the following example of a `ClusterDeployment` object for AWS Infrastructure Provider with beach-head services.
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   name: my-cluster-deployment
@@ -48,7 +48,7 @@ This example `ClusterDeployment` object deploys kyverno and ingress-nginx, as re
 service templates respectively, on the target cluster.  As before, the `ServiceTemplate` includes information on the service. For example, here is the `ServiceTemplate` for kyverno:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ServiceTemplate
 metadata:
   name: kyverno-3-2-6
@@ -73,7 +73,7 @@ For more details see the [Bring your own Templates](../../reference/template/tem
 Helm values can be passed to each beach-head service with the `.spec.serviceSpec.services[].values` field in the `ClusterDeployment` or `MultiClusterService` object. For example:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   name: my-clusterdeployment
@@ -122,7 +122,7 @@ spec:
 Using the Sveltos templating feature, we can also write templates that can be useful for automatically fetching pre-existing information within the cluster. For example:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   name: my-clusterdeployment

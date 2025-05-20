@@ -5,7 +5,7 @@ For example, if you were to `describe` the `ClusterDeployment` with these servic
 status information, as in:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   . . .

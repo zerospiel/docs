@@ -113,7 +113,7 @@ Standalone clusters can be deployed on GCP instances. Follow these steps to make
     Note that `.spec.name` must match `.metadata.name` of the `Secret` object created in the previous step.
 
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: Credential
     metadata:
       name: gcp-credential
@@ -228,7 +228,7 @@ Now you're ready to deploy the cluster.
      Create the YAML for the `ClusterDeployment` and save it as my-gcp-clusterdeployment1.yaml:
 
      ```yaml
-     apiVersion: k0rdent.mirantis.com/v1alpha1
+     apiVersion: k0rdent.mirantis.com/v1beta1
      kind: ClusterDeployment
      metadata:
        name: my-gcp-clusterdeployment1

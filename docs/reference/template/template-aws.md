@@ -59,7 +59,7 @@ You can get a full list of the bastion configuration options in the [CAPA docs](
 The resulting `ClusterDeployment` might look something like this:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   name: cluster-1
@@ -91,7 +91,7 @@ EKS templates use parameters similar to AWS and the resulting EKS
 `ClusterDeployment` looks something like this:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   name: cluster-1
@@ -176,7 +176,7 @@ and other provider controllers will need a large amount of resources to run.
 With all the collected data your `ClusterDeployment` manifest will look similar to:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   name: aws-hosted-cp
@@ -214,7 +214,7 @@ Grab the following `ClusterDeployment` manifest template and save it to a file
 named `clusterdeployment.yaml.tpl`:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   name: aws-hosted
@@ -267,4 +267,3 @@ KUBECONFIG=kubeconfig kubectl patch AWSCluster <hosted-cluster-name> --type=merg
 ```
 
 For additional information on why this is required [click here](https://docs.k0smotron.io/stable/capi-aws/#:~:text=As%20we%20are%20using%20self%2Dmanaged%20infrastructure%20we%20need%20to%20manually%20mark%20the%20infrastructure%20ready.%20This%20can%20be%20accomplished%20using%20the%20following%20command).
-

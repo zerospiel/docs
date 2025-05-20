@@ -20,7 +20,7 @@ Follow these steps to set up a k0smotron-hosted control plane on Google Cloud:
     For a detailed list of parameters, refer to the [Template Reference Guide](../../reference/template/template-gcp.md), but here is an example:
 
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ClusterDeployment
     metadata:
       name: gcp-hosted-cp

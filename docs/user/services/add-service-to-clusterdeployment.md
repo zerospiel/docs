@@ -4,7 +4,7 @@ To add the service defined by this template to a cluster, you simply add it to t
 when you create it, as in:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   name: my-cluster-deployment

@@ -17,7 +17,7 @@ Before you create a manual one-off or scheduled backup, review the steps below a
     then edit the `management.yaml` file so that the velero plugin details are filled in under `spec.core.kcm`:
 
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: Management
     metadata:
       name: kcm

@@ -63,7 +63,7 @@ Follow these steps to set up a k0smotron-hosted control plane on Azure:
     look something like this:
 
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ClusterDeployment
     metadata:
       name: azure-hosted-cp
@@ -89,7 +89,7 @@ Follow these steps to set up a k0smotron-hosted control plane on Azure:
     the appropriate values:
 
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ClusterDeployment
     metadata:
       name: azure-hosted-cp

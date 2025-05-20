@@ -39,7 +39,7 @@ Note that not all updates are possible; `ClusterTemplateChain` objects limit wha
 for example, this `ClusterTemplateChain`:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterTemplateChain
 metadata:
   name: aws-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsStandaloneCpCluster }}}

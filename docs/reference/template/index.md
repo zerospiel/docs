@@ -19,7 +19,7 @@ The templates can have any name. However, since they are immutable, we have adop
 
 EXAMPLE: An example of a `ProviderTemplate` with its status.
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ProviderTemplate
 metadata:
   name: cluster-api-{{{ extra.docsVersionInfo.k0rdentVersion }}}
@@ -55,7 +55,7 @@ status:
 
 EXAMPLE: An example of a `ClusterTemplate` with its status.
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterTemplate
 metadata:
   name: aws-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsStandaloneCpCluster }}}
@@ -136,7 +136,7 @@ status:
 
 EXAMPLE: An example of a `ServiceTemplate` with its status.
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ServiceTemplate
 metadata:
   name: kyverno-3-2-6
@@ -176,7 +176,7 @@ The example of `ClusterTemplate` Management:
     allow upgrading. For example:
 
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ClusterTemplateChain
     metadata:
       name: aws
@@ -225,4 +225,3 @@ As a result, the following new objects should be created:
 - [Templates for OpenStack](template-openstack.md)
 - [Templates for vSphere](template-vsphere.md)
 - [Templates for Remote deployments using SSH](template-remote.md)
-

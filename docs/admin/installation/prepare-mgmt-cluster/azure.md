@@ -154,7 +154,7 @@ Standalone clusters can be deployed on Azure instances. Follow these steps to ma
     Create the YAML for the specification of the `Credential` and save it as `azure-cluster-identity-cred.yaml`.
 
     ```YAML
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: Credential
     metadata:
       name: azure-cluster-identity-cred
@@ -302,7 +302,7 @@ Now you're ready to deploy the cluster.
     Create the yaml:
 
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ClusterDeployment
     metadata:
       name: my-azure-clusterdeployment1

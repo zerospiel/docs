@@ -28,7 +28,7 @@ Follow these steps to deploy a standalone Kubernetes cluster:
     You'll see the YAML for the `Credential` object, as in:
 
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: Credential
     metadata:
       name: accounting-cluster-credential
@@ -99,7 +99,7 @@ Follow these steps to deploy a standalone Kubernetes cluster:
     Create a `ClusterDeployment` configuration in a YAML file, following this structure:
 
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ClusterDeployment
     metadata:
       name: <cluster-name>
@@ -115,7 +115,7 @@ Follow these steps to deploy a standalone Kubernetes cluster:
     You will of course want to replace the placeholders with actual values. (For more information about `dryRun` see [Understanding the Dry Run](../appendix/appendix-dryrun.md)) For example, this is a simple AWS infrastructure provider `ClusterDeployment`:
 
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ClusterDeployment
     metadata:
       name: my-cluster-deployment

@@ -41,7 +41,7 @@ To deploy a cluster using {{{ docsVersionInfo.k0rdentName}}} on any SSH accessib
 ### Example ClusterDeployment
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   name: my-remote-cluster-deployment

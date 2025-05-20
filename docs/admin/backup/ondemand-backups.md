@@ -5,7 +5,7 @@ using a YAML document and the `kubectl` CLI. The object then creates only one in
 to the location created [previously](./prepare-backups.md). Create a YAML file called `one-time-backup.yaml`:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ManagementBackup
 metadata:
   name: example-backup
