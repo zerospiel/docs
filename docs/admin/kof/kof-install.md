@@ -244,7 +244,7 @@ and apply this example for AWS, or use it as a reference:
 
     ```shell
     cat >regional-cluster.yaml <<EOF
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ClusterDeployment
     metadata:
       name: $REGIONAL_CLUSTER_NAME
@@ -279,7 +279,7 @@ and apply this example for AWS, or use it as a reference:
     echo "AZURE_SUBSCRIPTION_ID=$AZURE_SUBSCRIPTION_ID"
 
     cat >regional-cluster.yaml <<EOF
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ClusterDeployment
     metadata:
       name: $REGIONAL_CLUSTER_NAME
@@ -370,26 +370,32 @@ and apply this example for AWS, or use it as a reference:
     k0rdent.mirantis.com/kof-write-traces-endpoint: https://jaeger.$REGIONAL_DOMAIN/collector
     ```
 
-9. The `MultiClusterService` named [kof-regional-cluster](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-regional/templates/regional-multi-cluster-service.yaml)
+9. If you need a custom http client configuration for `PromxyServerGroup` and `GrafanaDatasource`,
+    add it to the `regional-cluster.yaml` file in the `.metadata.annotations`, for example:
+    ```yaml
+    k0rdent.mirantis.com/kof-http-config: '{"dial_timeout": "10s", "tls_config": {"insecure_skip_verify": true}}'
+    ```
+
+10. The `MultiClusterService` named [kof-regional-cluster](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-regional/templates/regional-multi-cluster-service.yaml)
     configures and installs `cert-manager`, `ingress-nginx`, `kof-storage`, `kof-operators`, and `kof-collectors` charts automatically.
     To pass any custom [values](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-storage/values.yaml) to the `kof-storage` chart
-    or its subcharts, such as [victoria-logs-single](https://docs.victoriametrics.com/helm/victorialogs-single/index.html#parameters),
+    or its subcharts, such as [victoria-logs-cluster](https://docs.victoriametrics.com/helm/victorialogs-cluster/#parameters),
     add them to the `regional-cluster.yaml` file in the `.spec.config.clusterAnnotations`, for example:
     ```yaml
     k0rdent.mirantis.com/kof-storage-values: |
-      victoria-logs-single:
-        server:
+      victoria-logs-cluster:
+        vlinsert:
           replicaCount: 2
     ```
 
-10. Verify and apply the Regional `ClusterDeployment`:
+11. Verify and apply the Regional `ClusterDeployment`:
     ```shell
     cat regional-cluster.yaml
 
     kubectl apply -f regional-cluster.yaml
     ```
 
-11. Watch how the cluster is deployed until all values of `READY` are `True`:
+12. Watch how the cluster is deployed until all values of `READY` are `True`:
     ```shell
     clusterctl describe cluster -n kcm-system $REGIONAL_CLUSTER_NAME \
       --show-conditions all
@@ -420,7 +426,7 @@ and apply this example for AWS, or use it as a reference:
 
     ```shell
     cat >child-cluster.yaml <<EOF
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ClusterDeployment
     metadata:
       name: $CHILD_CLUSTER_NAME
@@ -452,7 +458,7 @@ and apply this example for AWS, or use it as a reference:
     echo "AZURE_SUBSCRIPTION_ID=$AZURE_SUBSCRIPTION_ID"
 
     cat >child-cluster.yaml <<EOF
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ClusterDeployment
     metadata:
       name: $CHILD_CLUSTER_NAME
