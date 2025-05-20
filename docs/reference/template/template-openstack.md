@@ -65,7 +65,7 @@ If your user doesn't have access to or your cloud doesn't utilize octavia load b
 ### Example ClusterDeployment
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   name: my-openstack-cluster-deployment

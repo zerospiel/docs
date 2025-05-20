@@ -63,7 +63,7 @@ Note that `.spec.name` must match `.metadata.name` of the `Secret` object create
 
 ```shell
 cat > remote-cred.yaml << EOF
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: Credential
 metadata:
   name: $CREDENTIAL_NAME
@@ -153,7 +153,7 @@ To deploy a cluster, create a YAML file called `my-remote-clusterdeployment1.yam
 
 ```shell
 cat > my-remote-clusterdeployment1.yaml << EOF
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   name: $CLUSTER_DEPLOYMENT_NAME

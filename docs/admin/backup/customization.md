@@ -43,7 +43,7 @@ The [Velero helm chart](https://vmware-tanzu.github.io/helm-charts/) is supplied
     For example, this is a `Management` object with a configured plugin and enabled metrics:
 
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: Management
     metadata:
       name: kcm

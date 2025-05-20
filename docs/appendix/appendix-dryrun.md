@@ -7,7 +7,7 @@ Note that if no configuration (`.spec.config`) is provided, default values from 
 **Example:** Dry Run with default configuration:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   name: my-cluster-deployment
@@ -23,7 +23,7 @@ After validation (this is, you see `TemplateReady` as a condition in `.status.co
 **Example:** Validated `ClusterDeployment` object:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   name: my-cluster-deployment

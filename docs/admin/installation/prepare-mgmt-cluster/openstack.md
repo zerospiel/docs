@@ -66,7 +66,7 @@
     Save this as `openstack-cluster-identity-cred.yaml`:
 
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: Credential
     metadata:
       name: openstack-cluster-identity-cred
@@ -203,7 +203,7 @@
     The `ClusterDeployment` should look something like this:
 
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ClusterDeployment
     metadata:
       name: my-openstack-cluster-deployment
@@ -274,4 +274,3 @@
     ```console
     clusterdeployment.k0rdent.mirantis.com "my-openstack-cluster-deployment" deleted
     ```
-

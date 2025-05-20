@@ -49,7 +49,7 @@ Follow these steps to adopt an existing cluster:
     YAML file for the `ClusterDeployment` object, as shown below:
 
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ClusterDeployment
     metadata:
       name: <CLUSTER_NAME>
@@ -91,7 +91,7 @@ Follow these steps to adopt an existing cluster:
     Putting it all together, your YAML would look something like this:
 
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ClusterDeployment
     metadata:
       name: my-cluster

@@ -244,7 +244,7 @@ and apply this example for AWS, or use it as a reference:
 
     ```shell
     cat >regional-cluster.yaml <<EOF
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ClusterDeployment
     metadata:
       name: $REGIONAL_CLUSTER_NAME
@@ -279,7 +279,7 @@ and apply this example for AWS, or use it as a reference:
     echo "AZURE_SUBSCRIPTION_ID=$AZURE_SUBSCRIPTION_ID"
 
     cat >regional-cluster.yaml <<EOF
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ClusterDeployment
     metadata:
       name: $REGIONAL_CLUSTER_NAME
@@ -420,7 +420,7 @@ and apply this example for AWS, or use it as a reference:
 
     ```shell
     cat >child-cluster.yaml <<EOF
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ClusterDeployment
     metadata:
       name: $CHILD_CLUSTER_NAME
@@ -452,7 +452,7 @@ and apply this example for AWS, or use it as a reference:
     echo "AZURE_SUBSCRIPTION_ID=$AZURE_SUBSCRIPTION_ID"
 
     cat >child-cluster.yaml <<EOF
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ClusterDeployment
     metadata:
       name: $CHILD_CLUSTER_NAME

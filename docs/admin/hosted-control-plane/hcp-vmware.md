@@ -26,7 +26,7 @@ Follow these steps to set up a k0smotron-hosted control plane on vSphere.
     parameters. For example:
 
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ClusterDeployment
     metadata:
       name: cluster-1

@@ -28,7 +28,7 @@ Certain resources can be completely opted out of drift correction by using this 
 In the following example, the "ingress-nginx/ingress-nginx-controller" deployment is ignored for drift correction on the target cluster.
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   . . .
@@ -101,7 +101,7 @@ Certain fields of a resource can be excluded from drift detection using this fea
 In the following example, the `.spec.replicas` field of the `ingress-nginx/ingress-nginx-controller` deployment on the target cluster is excluded from drift detection.
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   . . .

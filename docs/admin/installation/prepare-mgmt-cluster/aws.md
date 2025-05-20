@@ -300,7 +300,7 @@
     Finally, create the KCM `Credential` object, making sure to reference the `AWSClusterStaticIdentity` you just created:
 
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: Credential
     metadata:
       name: aws-cluster-identity-cred
@@ -324,7 +324,7 @@
     Make sure everything is configured properly by creating a `ClusterDeployment`. Start with a YAML file specifying the `ClusterDeployment`, as in:
 
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ClusterDeployment
     metadata:
       name: my-aws-clusterdeployment1

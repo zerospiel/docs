@@ -4,7 +4,7 @@
 depending on the release version:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: Management
 metadata:
   name: kcm
@@ -50,7 +50,7 @@ There are two options to override the default management configuration of {{{ do
       For example:
 
            ```yaml
-           apiVersion: k0rdent.mirantis.com/v1alpha1
+           apiVersion: k0rdent.mirantis.com/v1beta1
            kind: Management
            metadata:
              name: kcm

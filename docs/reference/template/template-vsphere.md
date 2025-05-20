@@ -63,7 +63,7 @@ govc vm.info -t '*'
 With all above parameters provided your `ClusterDeployment` can look like this:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   name: cluster-1
@@ -178,7 +178,7 @@ check them in the [template parameters](index.md) section.
 > (such as the `kube-vip` annotation in the example below).
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   name: cluster-1

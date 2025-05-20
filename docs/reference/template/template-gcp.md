@@ -98,7 +98,7 @@ Available for the hosted cluster template only.
 The resulting GCP standalone `ClusterDeployment` might look something like this:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   name: cluster-1
@@ -132,7 +132,7 @@ spec:
 The resulting GCP hosted `ClusterDeployment` might look something like this:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   name: cluster-1
@@ -160,7 +160,7 @@ spec:
 The resulting GCP GKE `ClusterDeployment` might look something like this:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   name: cluster-1

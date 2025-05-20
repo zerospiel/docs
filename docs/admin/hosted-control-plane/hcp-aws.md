@@ -59,7 +59,7 @@ Follow these steps to set up a k0smotron-hosted control plane on AWS:
     deploy and manage the hosted control plane. For example:
 
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ClusterDeployment
     metadata:
       name: aws-hosted-cp
@@ -96,7 +96,7 @@ Follow these steps to set up a k0smotron-hosted control plane on AWS:
     To simplify the creation of a `ClusterDeployment` manifest, you can use the following template, which dynamically 
     inserts the appropriate values:
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ClusterDeployment
     metadata:
       name: aws-hosted

@@ -195,7 +195,7 @@ Create a YAML with the specification of our credential and save it as `azure-clu
 Note that for non-AKS clusters `.spec.kind` must be `AzureClusterIdentity`, and `.spec.name` must match `.metadata.name` of the `AzureClusterIdentity` object created in the previous step.
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: Credential
 metadata:
   name: azure-cluster-identity-cred
@@ -215,7 +215,7 @@ Note: for AKS we also need to create Cluster Identity resource template ConfigMa
 
 ```yaml
 ---
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: Credential
 metadata:
   name: azure-aks-credential
@@ -394,7 +394,7 @@ kcm-system   vsphere-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.da
 Now, to deploy a cluster, create a YAML file called `my-azure-clusterdeployment1.yaml`. We'll use this to create a `ClusterDeployment` object in {{{ docsVersionInfo.k0rdentName }}}, representing the deployed cluster. The `ClusterDeployment` identifies for {{{ docsVersionInfo.k0rdentName }}} the `ClusterTemplate` you want to use for cluster creation, the identity credential object you want to create it under, plus the location/region and instance types you want to use to host control plane and worker nodes:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   name: my-azure-clusterdeployment1
@@ -415,7 +415,7 @@ spec:
 For AKS clusters, the `ClusterDeployment` looks like this:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   name: my-azure-clusterdeployment1
@@ -501,4 +501,3 @@ Check out the [Administrator Guide](../admin/index.md) ...
 * For a more detailed view of {{{ docsVersionInfo.k0rdentName }}} setup for production
 * For details about setting up {{{ docsVersionInfo.k0rdentName }}} to manage clusters on VMware and OpenStack
 * For details about using {{{ docsVersionInfo.k0rdentName }}} with cloud Kubernetes distros: AWS EKS and Azure AKS
-

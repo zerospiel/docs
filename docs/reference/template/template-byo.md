@@ -127,7 +127,7 @@ A `SourceSpec` includes:
 
 Example using `.spec.kustomize`:
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ServiceTemplate
 metadata:
    name: example-kustomization
@@ -145,7 +145,7 @@ spec:
 
 Example using `.spec.resources`:
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ServiceTemplate
 metadata:
    name: example-resources
@@ -213,7 +213,7 @@ For the core `CAPI` Template values should be empty.
     Example with the `.spec`:
 
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ProviderTemplate
     # ...
     spec:
@@ -250,7 +250,7 @@ and the value is the provider contract version required to be supported by the p
     Example with the `.spec`:
 
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ClusterTemplate
     # ...
     spec:
@@ -283,7 +283,7 @@ Given compatibility values will be then set accordingly in the `.status` field.
     Example with the `.spec`:
 
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ServiceTemplate
     # ...
     spec:
@@ -309,4 +309,3 @@ from the related `ProviderTemplate` object, updates to the `ClusterDeployment` o
 is not listed in the core `CAPI` `ProviderTemplate` object, the updates to the `Management` object will be blocked;
 * If a `ClusterTemplate` object's exact kubernetes version does not satisfy the kubernetes version
 constraint from the related `ServiceTemplate` object, the updates to the `ClusterDeployment` object will be blocked.
-

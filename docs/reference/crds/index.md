@@ -2,9 +2,9 @@
 
 Packages:
 
-- [k0rdent.mirantis.com/v1alpha1](#k0rdentmirantiscomv1alpha1)
+- [k0rdent.mirantis.com/v1beta1](#k0rdentmirantiscomv1beta1)
 
-# k0rdent.mirantis.com/v1alpha1
+# k0rdent.mirantis.com/v1beta1
 
 Resource Types:
 
@@ -38,7 +38,7 @@ Resource Types:
 
 
 ## AccessManagement
-<sup><sup>[↩ Parent](#k0rdentmirantiscomv1alpha1 )</sup></sup>
+<sup><sup>[↩ Parent](#k0rdentmirantiscomv1beta1 )</sup></sup>
 
 
 
@@ -59,7 +59,7 @@ AccessManagement is the Schema for the AccessManagements API
     <tbody><tr>
       <td><b>apiVersion</b></td>
       <td>string</td>
-      <td>k0rdent.mirantis.com/v1alpha1</td>
+      <td>k0rdent.mirantis.com/v1beta1</td>
       <td>true</td>
       </tr>
       <tr>
@@ -528,7 +528,7 @@ merge patch.<br/>
 </table>
 
 ## ClusterDeployment
-<sup><sup>[↩ Parent](#k0rdentmirantiscomv1alpha1 )</sup></sup>
+<sup><sup>[↩ Parent](#k0rdentmirantiscomv1beta1 )</sup></sup>
 
 
 
@@ -549,7 +549,7 @@ ClusterDeployment is the Schema for the ClusterDeployments API
     <tbody><tr>
       <td><b>apiVersion</b></td>
       <td>string</td>
-      <td>k0rdent.mirantis.com/v1alpha1</td>
+      <td>k0rdent.mirantis.com/v1beta1</td>
       <td>true</td>
       </tr>
       <tr>
@@ -1444,7 +1444,7 @@ with respect to the current state of the instance.<br/>
 </table>
 
 ## ClusterTemplateChain
-<sup><sup>[↩ Parent](#k0rdentmirantiscomv1alpha1 )</sup></sup>
+<sup><sup>[↩ Parent](#k0rdentmirantiscomv1beta1 )</sup></sup>
 
 
 
@@ -1465,7 +1465,7 @@ ClusterTemplateChain is the Schema for the clustertemplatechains API
     <tbody><tr>
       <td><b>apiVersion</b></td>
       <td>string</td>
-      <td>k0rdent.mirantis.com/v1alpha1</td>
+      <td>k0rdent.mirantis.com/v1beta1</td>
       <td>true</td>
       </tr>
       <tr>
@@ -1622,7 +1622,7 @@ upgrade paths.<br/>
 </table>
 
 ## ClusterTemplate
-<sup><sup>[↩ Parent](#k0rdentmirantiscomv1alpha1 )</sup></sup>
+<sup><sup>[↩ Parent](#k0rdentmirantiscomv1beta1 )</sup></sup>
 
 
 
@@ -1643,7 +1643,7 @@ ClusterTemplate is the Schema for the clustertemplates API
     <tbody><tr>
       <td><b>apiVersion</b></td>
       <td>string</td>
-      <td>k0rdent.mirantis.com/v1alpha1</td>
+      <td>k0rdent.mirantis.com/v1beta1</td>
       <td>true</td>
       </tr>
       <tr>
@@ -3615,7 +3615,7 @@ resource object that contains the reference.<br/>
 </table>
 
 ## Credential
-<sup><sup>[↩ Parent](#k0rdentmirantiscomv1alpha1 )</sup></sup>
+<sup><sup>[↩ Parent](#k0rdentmirantiscomv1beta1 )</sup></sup>
 
 
 
@@ -3636,7 +3636,7 @@ Credential is the Schema for the credentials API
     <tbody><tr>
       <td><b>apiVersion</b></td>
       <td>string</td>
-      <td>k0rdent.mirantis.com/v1alpha1</td>
+      <td>k0rdent.mirantis.com/v1beta1</td>
       <td>true</td>
       </tr>
       <tr>
@@ -3895,7 +3895,7 @@ with respect to the current state of the instance.<br/>
 </table>
 
 ## ManagementBackup
-<sup><sup>[↩ Parent](#k0rdentmirantiscomv1alpha1 )</sup></sup>
+<sup><sup>[↩ Parent](#k0rdentmirantiscomv1beta1 )</sup></sup>
 
 
 
@@ -3916,7 +3916,7 @@ ManagementBackup is the Schema for the managementbackups API
     <tbody><tr>
       <td><b>apiVersion</b></td>
       <td>string</td>
-      <td>k0rdent.mirantis.com/v1alpha1</td>
+      <td>k0rdent.mirantis.com/v1beta1</td>
       <td>true</td>
       </tr>
       <tr>
@@ -4311,7 +4311,7 @@ filters that happen as items are processed.<br/>
 </table>
 
 ## Management
-<sup><sup>[↩ Parent](#k0rdentmirantiscomv1alpha1 )</sup></sup>
+<sup><sup>[↩ Parent](#k0rdentmirantiscomv1beta1 )</sup></sup>
 
 
 
@@ -4332,7 +4332,7 @@ Management is the Schema for the managements API
     <tbody><tr>
       <td><b>apiVersion</b></td>
       <td>string</td>
-      <td>k0rdent.mirantis.com/v1alpha1</td>
+      <td>k0rdent.mirantis.com/v1beta1</td>
       <td>true</td>
       </tr>
       <tr>
@@ -4804,7 +4804,7 @@ If not specified, will be taken from the Release object.<br/>
 </table>
 
 ## MultiClusterService
-<sup><sup>[↩ Parent](#k0rdentmirantiscomv1alpha1 )</sup></sup>
+<sup><sup>[↩ Parent](#k0rdentmirantiscomv1beta1 )</sup></sup>
 
 
 
@@ -4825,7 +4825,7 @@ MultiClusterService is the Schema for the multiclusterservices API
     <tbody><tr>
       <td><b>apiVersion</b></td>
       <td>string</td>
-      <td>k0rdent.mirantis.com/v1alpha1</td>
+      <td>k0rdent.mirantis.com/v1beta1</td>
       <td>true</td>
       </tr>
       <tr>
@@ -5752,7 +5752,7 @@ with respect to the current state of the instance.<br/>
 </table>
 
 ## PluggableProvider
-<sup><sup>[↩ Parent](#k0rdentmirantiscomv1alpha1 )</sup></sup>
+<sup><sup>[↩ Parent](#k0rdentmirantiscomv1beta1 )</sup></sup>
 
 
 
@@ -5773,7 +5773,7 @@ PluggableProvider is the Schema for the PluggableProvider API
     <tbody><tr>
       <td><b>apiVersion</b></td>
       <td>string</td>
-      <td>k0rdent.mirantis.com/v1alpha1</td>
+      <td>k0rdent.mirantis.com/v1beta1</td>
       <td>true</td>
       </tr>
       <tr>
@@ -5933,7 +5933,7 @@ PluggableProviderStatus defines the observed state of PluggableProvider
 </table>
 
 ## ProviderTemplate
-<sup><sup>[↩ Parent](#k0rdentmirantiscomv1alpha1 )</sup></sup>
+<sup><sup>[↩ Parent](#k0rdentmirantiscomv1beta1 )</sup></sup>
 
 
 
@@ -5954,7 +5954,7 @@ ProviderTemplate is the Schema for the providertemplates API
     <tbody><tr>
       <td><b>apiVersion</b></td>
       <td>string</td>
-      <td>k0rdent.mirantis.com/v1alpha1</td>
+      <td>k0rdent.mirantis.com/v1beta1</td>
       <td>true</td>
       </tr>
       <tr>
@@ -7912,7 +7912,7 @@ resource object that contains the reference.<br/>
 </table>
 
 ## Release
-<sup><sup>[↩ Parent](#k0rdentmirantiscomv1alpha1 )</sup></sup>
+<sup><sup>[↩ Parent](#k0rdentmirantiscomv1beta1 )</sup></sup>
 
 
 
@@ -7933,7 +7933,7 @@ Release is the Schema for the releases API
     <tbody><tr>
       <td><b>apiVersion</b></td>
       <td>string</td>
-      <td>k0rdent.mirantis.com/v1alpha1</td>
+      <td>k0rdent.mirantis.com/v1beta1</td>
       <td>true</td>
       </tr>
       <tr>
@@ -8221,7 +8221,7 @@ with respect to the current state of the instance.<br/>
 </table>
 
 ## ServiceTemplateChain
-<sup><sup>[↩ Parent](#k0rdentmirantiscomv1alpha1 )</sup></sup>
+<sup><sup>[↩ Parent](#k0rdentmirantiscomv1beta1 )</sup></sup>
 
 
 
@@ -8242,7 +8242,7 @@ ServiceTemplateChain is the Schema for the servicetemplatechains API
     <tbody><tr>
       <td><b>apiVersion</b></td>
       <td>string</td>
-      <td>k0rdent.mirantis.com/v1alpha1</td>
+      <td>k0rdent.mirantis.com/v1beta1</td>
       <td>true</td>
       </tr>
       <tr>
@@ -8399,7 +8399,7 @@ upgrade paths.<br/>
 </table>
 
 ## ServiceTemplate
-<sup><sup>[↩ Parent](#k0rdentmirantiscomv1alpha1 )</sup></sup>
+<sup><sup>[↩ Parent](#k0rdentmirantiscomv1beta1 )</sup></sup>
 
 
 
@@ -8420,7 +8420,7 @@ ServiceTemplate is the Schema for the servicetemplates API
     <tbody><tr>
       <td><b>apiVersion</b></td>
       <td>string</td>
-      <td>k0rdent.mirantis.com/v1alpha1</td>
+      <td>k0rdent.mirantis.com/v1beta1</td>
       <td>true</td>
       </tr>
       <tr>

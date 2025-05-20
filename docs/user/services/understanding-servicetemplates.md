@@ -19,7 +19,7 @@ Helm-based `ServiceTemplate` can be created in three ways:
 - by defining Helm chart right in the template object
 
   ```yaml
-  apiVersion: k0rdent.mirantis.com/v1alpha1
+  apiVersion: k0rdent.mirantis.com/v1beta1
   kind: ServiceTemplate
   metadata:
     name: foo
@@ -40,7 +40,7 @@ Helm-based `ServiceTemplate` can be created in three ways:
 - by referring the existing Helm chart
 
   ```yaml
-  apiVersion: k0rdent.mirantis.com/v1alpha1
+  apiVersion: k0rdent.mirantis.com/v1beta1
   kind: ServiceTemplate
   metadata:
     name: foo
@@ -61,7 +61,7 @@ Helm-based `ServiceTemplate` can be created in three ways:
   Source can already exist or can be created by the controller.
 
   ```yaml
-  apiVersion: k0rdent.mirantis.com/v1alpha1
+  apiVersion: k0rdent.mirantis.com/v1beta1
   kind: ServiceTemplate
   metadata:
     name: foo
@@ -76,7 +76,7 @@ Helm-based `ServiceTemplate` can be created in three ways:
   ```
   
   ```yaml
-  apiVersion: k0rdent.mirantis.com/v1alpha1
+  apiVersion: k0rdent.mirantis.com/v1beta1
   kind: ServiceTemplate
   metadata:
     name: foo
@@ -100,7 +100,7 @@ Kustomize-based `ServiceTemplate` can be created with either local or remote sou
 - by using existing flux source object - `GitRepository`, `Bucket` or `OCIRepository` - or using existing `ConfigMap` or `Secret`
 
   ```yaml
-  apiVersion: k0rdent.mirantis.com/v1alpha1
+  apiVersion: k0rdent.mirantis.com/v1beta1
   kind: ServiceTemplate
   metadata:
     name: foo
@@ -123,7 +123,7 @@ Kustomize-based `ServiceTemplate` can be created with either local or remote sou
 - by defining remote source right in the template object
 
   ```yaml
-  apiVersion: k0rdent.mirantis.com/v1alpha1
+  apiVersion: k0rdent.mirantis.com/v1beta1
   kind: ServiceTemplate
   metadata:
     name: kustomization-app

@@ -37,7 +37,7 @@ In order to pass credentials to {{{ docsVersionInfo.k0rdentName }}} so it can ta
 2. Now you can create a `Credential` object that references the `ClusterIdentity`, thus making the credentials available and specifying the namespaces where it can be used. Continuing our AWS example:
 
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: Credential
     metadata:
       name: aws-cluster-credential
@@ -54,7 +54,7 @@ In order to pass credentials to {{{ docsVersionInfo.k0rdentName }}} so it can ta
 3. Finally, when you create a `ClusterDeployment`, you reference the `Credential` object in order to enable {{{ docsVersionInfo.k0rdentName }}} to pass that information to the infrastructure provider:
 
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ClusterDeployment
     metadata:
         name: my-aws-clusterdeployment

@@ -116,7 +116,7 @@ Create a YAML with the specification of our credential and save it as `gcp-crede
 Note that `.spec.name` must match `.metadata.name` of the `Secret` object created in the previous step.
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: Credential
 metadata:
   name: gcp-credential
@@ -290,7 +290,7 @@ you want to use to host control plane and worker nodes.
 > it.
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   name: my-gcp-clusterdeployment1
@@ -316,7 +316,7 @@ spec:
 For GKE clusters, the `ClusterDeployment` looks like this:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   name: my-gke-clusterdeployment1

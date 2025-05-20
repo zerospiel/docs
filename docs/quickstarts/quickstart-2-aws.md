@@ -283,7 +283,7 @@ kubectl apply -f aws-cluster-identity.yaml  -n kcm-system
 Now we create the {{{ docsVersionInfo.k0rdentName }}} Cluster Manager credential object. As in prior steps, create a YAML file called `aws-cluster-identity-cred.yaml`:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: Credential
 metadata:
   name: aws-cluster-identity-cred
@@ -362,7 +362,7 @@ kcm-system   vsphere-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.da
 Now, to deploy a cluster, create a YAML file called `my-aws-clusterdeployment1.yaml`. We'll use this to create a `ClusterDeployment` object in {{{ docsVersionInfo.k0rdentName }}}, representing the deployed cluster. The `ClusterDeployment` identifies for {{{ docsVersionInfo.k0rdentName }}} the `ClusterTemplate` you want to use for cluster creation, the identity credential object you want to create it under (that of your {{{ docsVersionInfo.k0rdentName }}} user), plus the region and instance types you want to use to host control plane and worker nodes:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   name: my-aws-clusterdeployment1

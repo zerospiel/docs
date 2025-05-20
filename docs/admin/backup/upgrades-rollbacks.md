@@ -14,7 +14,7 @@ To enable, set the `.spec.performOnManagementUpgrade` to `true`.
 For example, a `ManagementBackup` object with enabled auto-backup before the `kcm` version upgrade looks like this:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ManagementBackup
 metadata:
   name: example-backup
@@ -87,4 +87,3 @@ should be performed to restore the `kcm` to its before-the-upgrade state:
 
 1. Wait until the `Restore` status is `Completed` and all `kcm` components are up and running.
 1. Optionally delete the created `ConfigMap`.
-

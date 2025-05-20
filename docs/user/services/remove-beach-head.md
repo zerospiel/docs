@@ -4,7 +4,7 @@ To remove a beach-head service simply remove its entry from `.spec.serviceSpec.s
 The example below removes `kyverno-3-2-6`, so its status also removed from `.status.services`.
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   . . .

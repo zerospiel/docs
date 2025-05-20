@@ -112,7 +112,7 @@ To enable users to deploy child clusers on vSphere, follow these steps:
     `vsphere-cluster-identity-cred.yaml`
 
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: Credential
     metadata:
       name: vsphere-cluster-identity-cred
@@ -238,7 +238,7 @@ To enable users to deploy child clusers on vSphere, follow these steps:
     specific information:
 
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ClusterDeployment
     metadata:
       name: my-vsphere-clusterdeployment1

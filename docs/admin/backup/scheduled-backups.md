@@ -16,7 +16,7 @@ created in the [preparation step](./prepare-backups.md) every 6 hours
 (ref: [Kubernetes CronJob schedule syntax, "Vixie cron" step values](https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/#schedule-syntax)). Create a YAML file called `scheduled-backup.yaml`:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ManagementBackup
 metadata:
   name: kcm

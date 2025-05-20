@@ -16,7 +16,7 @@ mgmt   true    v1.32.2   k0rdent.mirantis.com/management-cluster=true,projectsve
 To deploy beach-head services on the management cluster, a MultiClusterService object can be created that matches the mgmt SveltosCluster using the k0rdent.mirantis.com/management-cluster=true and sveltos-agent=present labels as shown in the following YAML:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: MultiClusterService
 metadata:
   name: mgmt-mcs
@@ -43,7 +43,7 @@ kubectl get multiclusterservice mgmt -o yaml
 The output should be similar to the following showing that ingress-nginx has been Provisioned:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: MultiClusterService
 . . .
 status:
