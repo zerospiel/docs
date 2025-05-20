@@ -10,7 +10,7 @@ Before you start working with {{{ docsVersionInfo.k0rdentName }}}, it helps to u
 Kubernetes objects. Within a {{{ docsVersionInfo.k0rdentName }}} management cluster, you'll have a `ClusterDeployment` object that
 represents a deployed cluster, with `Machine` objects, and so on. When you create a `ClusterDeployment`,
 {{{ docsVersionInfo.k0rdentName }}} deploys the cluster, when you delete it, {{{ docsVersionInfo.k0rdentName }}} deletes it, and so on.
-* **KSM - k0rdent Service Manager**: KSM wraps and manages several interoperating open source projects such as Helm and Sveltos, which lets you treat services and applications as Kubernetes objects.
+* **KSM - k0rdent State Manager**: KSM wraps and manages several interoperating open source projects such as Helm and Sveltos, which lets you treat services and applications as Kubernetes objects.
 
 Together, KCM and KSM interoperate to create a complete, template-driven system for defining and managing Internal Development Platforms (IDPs) made up of suites of services, plus a cluster and its components as realized on a particular cloud or infrastructure substrate.
 
