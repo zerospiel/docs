@@ -1,6 +1,8 @@
 # Ignore virtual environments
 venv/
 .venv/
+newvenv/
+crdgen/api-docs/
 
 # Ignore extension folders from .vscode
 
