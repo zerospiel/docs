@@ -371,7 +371,7 @@ and apply this example for AWS, or use it as a reference:
     ```
 
 9. If you need a custom http client configuration for `PromxyServerGroup` and `GrafanaDatasource`,
-    add it to the `regional-cluster.yaml` file in the `.metadata.annotations`, for example:
+    add it to the `regional-cluster.yaml` file in the `.metadata.annotations`. For example:
     ```yaml
     k0rdent.mirantis.com/kof-http-config: '{"dial_timeout": "10s", "tls_config": {"insecure_skip_verify": true}}'
     ```
@@ -380,7 +380,7 @@ and apply this example for AWS, or use it as a reference:
     configures and installs `cert-manager`, `ingress-nginx`, `kof-storage`, `kof-operators`, and `kof-collectors` charts automatically.
     To pass any custom [values](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-storage/values.yaml) to the `kof-storage` chart
     or its subcharts, such as [victoria-logs-cluster](https://docs.victoriametrics.com/helm/victorialogs-cluster/#parameters),
-    add them to the `regional-cluster.yaml` file in the `.spec.config.clusterAnnotations`, for example:
+    add them to the `regional-cluster.yaml` file in the `.spec.config.clusterAnnotations`. For example:
     ```yaml
     k0rdent.mirantis.com/kof-storage-values: |
       victoria-logs-cluster:
