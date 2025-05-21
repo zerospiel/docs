@@ -39,7 +39,6 @@ The following parameters are available for `controlPlane` (for standalone cluste
 * `serviceAccount.scopes` (array): The list of scopes to be made available for this service account.
 * `ipForwarding` (string): Allows this instance to send and receive packets with non-matching destination or source IPs. One of: `Enabled`,`Disabled`.
 
-
 ### K0s Parameters
 
 * `k0s.version` (string): K0s version.
@@ -93,7 +92,6 @@ Available for the hosted cluster template only.
 * `machines.additionalLabels` (object): Additional labels added to GCP resources managed by the provider.
 * `machines.management.autoUpgrade` (boolean): Specifies if node auto-upgrade is enabled. Defaul
 * `machines.management.autoRepair` (boolean): Specifies if node auto-repair is enabled.
-
 
 The resulting GCP standalone `ClusterDeployment` might look something like this:
 

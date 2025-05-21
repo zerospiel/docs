@@ -1,6 +1,6 @@
 # AWS Hosted Control Plane Deployment
 
-Follow these steps to set up a k0smotron-hosted control plane on AWS: 
+Follow these steps to set up a k0smotron-hosted control plane on AWS:
 
 1. Prerequisites
 
@@ -13,38 +13,43 @@ Follow these steps to set up a k0smotron-hosted control plane on AWS:
     * The AMI ID for the worker nodes (Amazon Machine Image ID for the desired OS and Kubernetes version).
 
     > IMPORTANT:  
-    > All control plane components for your hosted cluster will reside in the management cluster, and the management cluster 
+    > All control plane components for your hosted cluster will reside in the management cluster, and the management cluster
     > must have sufficient resources to handle these additional workloads.
 
 2. Networking
 
-    To deploy a hosted control plane, the necessary AWS networking resources must already exist or be created. If you're 
+    To deploy a hosted control plane, the necessary AWS networking resources must already exist or be created. If you're
     using the same VPC and subnets as your management cluster, you can reuse these resources.
 
-    If your management cluster was deployed using the Cluster API Provider AWS (CAPA), you can gather the required 
+    If your management cluster was deployed using the Cluster API Provider AWS (CAPA), you can gather the required
     networking details using the following commands:
 
     Retrieve the VPC ID:
+
     ```shell
     kubectl get awscluster <cluster-name> -o go-template='{{.spec.network.vpc.id}}'
     ```
 
     Retrieve Subnet ID:
+
     ```shell
     kubectl get awscluster <cluster-name> -o go-template='{{(index .spec.network.subnets 0).resourceID}}'
     ```
 
     Retrieve Availability Zone:
+
     ```shell
     kubectl get awscluster <cluster-name> -o go-template='{{(index .spec.network.subnets 0).availabilityZone}}'
     ```
 
     Retrieve Security Group:
+
     ```shell
     kubectl get awscluster <cluster-name> -o go-template='{{.status.networkStatus.securityGroups.node.id}}'
     ```
 
     Retrieve AMI ID:
+
     ```shell
     kubectl get awsmachinetemplate <cluster-name>-worker-mt -o go-template='{{.spec.template.spec.ami.id}}'
     ```
@@ -52,10 +57,9 @@ Follow these steps to set up a k0smotron-hosted control plane on AWS:
     > TIP:  
     > If you want to use different VPCs or regions for your management and hosted clusters, you’ll need to configure additional networking, such as [VPC peering](https://docs.aws.amazon.com/whitepapers/latest/building-scalable-secure-multi-vpc-network-infrastructure/vpc-peering.html), to allow communication between them.
 
-
 3. Create the ClusterDeployment manifest
 
-    Once you've collected all the necessary data, you can create the `ClusterDeployment` manifest. This file tells {{{ docsVersionInfo.k0rdentName }}} how to 
+    Once you've collected all the necessary data, you can create the `ClusterDeployment` manifest. This file tells {{{ docsVersionInfo.k0rdentName }}} how to
     deploy and manage the hosted control plane. For example:
 
     ```yaml
@@ -93,8 +97,9 @@ Follow these steps to set up a k0smotron-hosted control plane on AWS:
 
 4. Generate the `ClusterDeployment` Manifest
 
-    To simplify the creation of a `ClusterDeployment` manifest, you can use the following template, which dynamically 
+    To simplify the creation of a `ClusterDeployment` manifest, you can use the following template, which dynamically
     inserts the appropriate values:
+
     ```yaml
     apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ClusterDeployment
@@ -158,7 +163,9 @@ Here are some additional tips to help with deployment:
 3. Mark the Infrastructure as Ready:
 
     To scale up the `MachineDeployment`, manually mark the infrastructure as ready:
+
     ```shell
     kubectl patch AWSCluster <hosted-cluster-name> --type=merge --subresource status --patch '{"status": {"ready": true}}' -n kcm-system
     ```
+
     For more details on why this is necessary, [click here](https://docs.k0smotron.io/stable/capi-aws/#:~:text=As%20we%20are%20using%20self%2Dmanaged%20infrastructure%20we%20need%20to%20manually%20mark%20the%20infrastructure%20ready.%20This%20can%20be%20accomplished%20using%20the%20following%20command).

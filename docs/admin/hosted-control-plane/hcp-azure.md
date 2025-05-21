@@ -7,52 +7,59 @@ Follow these steps to set up a k0smotron-hosted control plane on Azure:
     Before you start, make sure you have the following:
 
     - A management Kubernetes cluster (Kubernetes v1.28+) deployed on Azure with [{{{ docsVersionInfo.k0rdentName }}} installed](../installation/install-k0rdent.md).
-    - A [default storage class](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/) configured 
+    - A [default storage class](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/) configured
       on the management cluster to support Persistent Volumes.
 
     > NOTE:  
-    > All control plane components for managed clusters will run in the management cluster. Make sure the management cluster 
+    > All control plane components for managed clusters will run in the management cluster. Make sure the management cluster
       has sufficient CPU, memory, and storage to handle the additional workload.
 
-2.  Gather Pre-existing Resources
+2. Gather Pre-existing Resources
 
-    In a hosted control plane setup, some Azure resources must exist before deployment and must be explicitly 
+    In a hosted control plane setup, some Azure resources must exist before deployment and must be explicitly
     provided in the `ClusterDeployment` configuration. These resources can also be reused by the management cluster.
 
-    If you deployed your Azure Kubernetes cluster using the Cluster API Provider for Azure (CAPZ), you can retrieve 
+    If you deployed your Azure Kubernetes cluster using the Cluster API Provider for Azure (CAPZ), you can retrieve
     the required information using the following commands:
 
     Location:
+
     ```shell
     kubectl get azurecluster <cluster-name> -o go-template='{{.spec.location}}'
     ```
 
     Subscription ID:
+
     ```shell
     kubectl get azurecluster <cluster-name> -o go-template='{{.spec.subscriptionID}}'
     ```
 
     Resource Group:
+
     ```shell
     kubectl get azurecluster <cluster-name> -o go-template='{{.spec.resourceGroup}}'
     ```
 
     VNet Name:
+
     ```shell
     kubectl get azurecluster <cluster-name> -o go-template='{{.spec.networkSpec.vnet.name}}'
     ```
 
     Subnet Name:
+
     ```shell
     kubectl get azurecluster <cluster-name> -o go-template='{{(index .spec.networkSpec.subnets 1).name}}'
     ```
 
     Route Table Name:
+
     ```shell
     kubectl get azurecluster <cluster-name> -o go-template='{{(index .spec.networkSpec.subnets 1).routeTable.name}}'
     ```
 
     Security Group Name:
+
     ```shell
     kubectl get azurecluster <cluster-name> -o go-template='{{(index .spec.networkSpec.subnets 1).securityGroup.name}}'
     ```
@@ -85,7 +92,7 @@ Follow these steps to set up a k0smotron-hosted control plane on Azure:
 
 4. Generate the `ClusterDeployment` Manifest
 
-    To simplify the creation of a `ClusterDeployment` manifest, you can use the following template, which dynamically inserts 
+    To simplify the creation of a `ClusterDeployment` manifest, you can use the following template, which dynamically inserts
     the appropriate values:
 
     ```yaml
@@ -108,7 +115,9 @@ Follow these steps to set up a k0smotron-hosted control plane on Azure:
           routeTableName: "{{(index .spec.networkSpec.subnets 1).routeTable.name}}"
           securityGroupName: "{{(index .spec.networkSpec.subnets 1).securityGroup.name}}"
     ```
+
     Save this YAML as `clusterdeployment.yaml.tpl` and render the manifest with the following command:
+
     ```shell
     kubectl get azurecluster <management-cluster-name> -o go-template="$(cat clusterdeployment.yaml.tpl)" > clusterdeployment.yaml
     ```
@@ -120,10 +129,10 @@ Follow these steps to set up a k0smotron-hosted control plane on Azure:
     ```shell
     kubectl apply clusterdeployment.yaml -n kcm-system
     ```
-      
+
 5. Manually update the `AzureCluster` object
 
-    Due to a limitation in k0smotron, (see [k0sproject/k0smotron#668](https://github.com/k0sproject/k0smotron/issues/668)), 
+    Due to a limitation in k0smotron, (see [k0sproject/k0smotron#668](https://github.com/k0sproject/k0smotron/issues/668)),
     after applying the `ClusterDeployment` manifest, you must manually update the status of the `AzureCluster` object.
 
     Use the following command to set the `AzureCluster` object status to `Ready`:

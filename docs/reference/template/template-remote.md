@@ -13,6 +13,7 @@ To deploy a cluster using {{{ docsVersionInfo.k0rdentName}}} on any SSH accessib
 * `clusterNetwork.services.cidrBlocks` (array of strings): The IP address range allocated for Services. Example: `["10.96.0.0/12"]`.
 
 ### Machines Parameters
+
 * `machines[].address` (string): The IP address of the remote machine. Example: `"10.130.0.237"`.
 * `machines[].port` (number): The SSH port of the remote machine. Default is 22. Example: `22`.
 * `machines[].user` (string): The user name for SSH login. Default is root. Example: `"root"`.
@@ -32,9 +33,10 @@ To deploy a cluster using {{{ docsVersionInfo.k0rdentName}}} on any SSH accessib
 * `k0smotron.service.konnectivityPort` (number): This parameter indicates the port for the Konnectivity service. Example: `30132`.
 
 ### K0s Parameters
+
 * `k0s.version` (string): Specifies the version of the k0s Kubernetes distribution. Example: `"v1.32.2+k0s.0"`.
 * `k0s.api.extraArgs`: Additional arguments to pass to the Kubernetes API server. Example: `{"--some-arg": "value"}`.
-* `k0s.network`: Network settings for the k0s cluster. Example: `{"dns": "8.8.8.8"}`. 
+* `k0s.network`: Network settings for the k0s cluster. Example: `{"dns": "8.8.8.8"}`.
 * `k0s.extensions.helm.repositories` (array of objects): Helm repositories to add during the cluster setup. Example: `[{ "name": "repo1", "url": "https://charts.repo1.com" }]`.
 * `k0s.extensions.helm.charts` (array of objects): Helm charts to be installed during bootstrap. Example: `[{ "name": "chart1", "namespace": "kube-system", "chartname": "repo1/chart1" }]`.
 
