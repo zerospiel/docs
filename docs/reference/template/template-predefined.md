@@ -8,6 +8,7 @@ for `ClusterTemplate` objects, run:
     ```bash
     kubectl get clustertemplates -n kcm-system -l helm.toolkit.fluxcd.io/name=kcm-templates
     ```
+
     ```console
     NAMESPACE    NAME                            VALID
     kcm-system   adopted-cluster-{{{ extra.docsVersionInfo.k0rdentVersion }}}           true

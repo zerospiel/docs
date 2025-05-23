@@ -4,7 +4,6 @@
 
 To deploy an OpenStack cluster, the following are the primary parameters in the `ClusterDeployment` resource:
 
-
 | Parameter                         | Example                               | Description                                                 |
 |-----------------------------------|---------------------------------------|-------------------------------------------------------------|
 | `.spec.credential`                | `openstack-cluster-identity-cred`     | Reference to the `Credential` object.                       |
@@ -30,10 +29,7 @@ Specify the SSH public key using the `.spec.config.controlPlane.sshKeyName` and 
 
 Specify `.spec.config.bastion.enabled` to enable it as well as provide `sshKeyName`, `flavor` and `image` in `.spec.config.bastion.spec`, similarly to workers and control plane.
 
-
 Example `ClusterDeployment with enabled bastion can be found [below](#example-clusterdeployment).
-
-
 
 ### Machine Configuration
 
@@ -60,7 +56,6 @@ If your user doesn't have access to or your cloud doesn't utilize octavia load b
 `.spec.config.apiServerLoadBalancer.enabled` as `false`.
 
 > WARNING: Disabling loadbalancer blocks usage of `LoadBalancer` type services in cluster until one is manually installed.
-
 
 ### Example ClusterDeployment
 

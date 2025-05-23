@@ -8,7 +8,7 @@ Follow these steps to set up a k0smotron-hosted control plane on Google Cloud:
 
     - A management Kubernetes cluster (Kubernetes v1.28+) deployed on GCP with [{{{ docsVersionInfo.k0rdentName }}} installed](../installation/install-k0rdent.md).
     - A GCP Cloud Controller Manager installed to manage Services with the `Load Balancer` type.
-    - A [default storage class](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/) configured 
+    - A [default storage class](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/) configured
       on the management cluster to support Persistent Volumes.
 
     > NOTE:  
@@ -36,6 +36,7 @@ Follow these steps to set up a k0smotron-hosted control plane on Google Cloud:
           instanceType: n1-standard-2 # Select your desired instance type (find it via `gcloud compute machine-types list | grep REGION`)
           image: projects/ubuntu-os-cloud/global/images/ubuntu-2004-focal-v20250213 # Select image (find it via `gcloud compute images list --uri`)
     ```
+
     Apply the `ClusterDeployment` manifest to the management cluster, as in:
 
     ```shell

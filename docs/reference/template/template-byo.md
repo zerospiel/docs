@@ -22,14 +22,17 @@ The source can be one of the following types:
 - [GitRepository](https://fluxcd.io/flux/components/source/gitrepositories/)
 - [Bucket](https://fluxcd.io/flux/components/source/buckets/)
 
-> INFO: 
+> INFO:
 > `ConfigMap` and `Secret` can only be used as a source of kustomization or raw resources for `ServiceTemplate`.
 > To deploy kustomization using `ConfigMap` or `Secret` the kustomization folder must be archived in *.tar.gz and
 > then `ConfigMap` or `Secret` must be created from resulting archive:
+>
 > ```console
 > kubectl create configmap foo --from-file=kustomization.tar.gz
 > ```
+>
 > To deploy raw resources using `ConfigMap` or `Secret` source object must be created from raw resource files:
+>
 > ```console
 > kubectl create configmap bar --from-file=namespace.yaml --from-file=deployment.yaml
 > ```
@@ -126,6 +129,7 @@ A `SourceSpec` includes:
 > Fields `.spec.*.remoteSourceSpec.git`, `.spec.*.remoteSource.Spec.bucket` and `.spec.*.remoteSourceSpec.oci` are mutually exclusive.
 
 Example using `.spec.kustomize`:
+
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ServiceTemplate
@@ -144,6 +148,7 @@ spec:
 ```
 
 Example using `.spec.resources`:
+
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ServiceTemplate
@@ -160,7 +165,6 @@ spec:
 ```
 
 All of the above follow the same mutual exclusivity and version constraint rules as Helm.
-
 
 ## Required and exposed providers definition
 
