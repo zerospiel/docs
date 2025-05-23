@@ -6,7 +6,7 @@ versions:
     default: false
   - branch: "release-v1.0.0"
     version: "1.0.0" 
-    title: "v1.0.0"
+    title: "v1.0.0 (latest)"
     aliases: ["latest","stable"]
     default: true
   - branch: "release-v0.3.0"
