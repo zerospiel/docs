@@ -97,11 +97,13 @@ jobs:
       - name: Fetch gh-pages branch
         run: git fetch origin gh-pages:gh-pages
 
-      - name: Force change in release branch /docs
+      - name: Force a dummy change in gh-pages to enable retitle
         run: |
-          echo "Built: $(date)" > docs/.buildinfo
-          git add docs/.buildinfo
-          git commit -m "Trigger rebuild with updated .buildinfo" || echo "Nothing to commit"
+          git checkout gh-pages
+          mkdir -p .meta
+          echo "build: $(date -u +"%Y-%m-%dT%H:%M:%SZ")" > .meta/last-build.txt
+          git add .meta/last-build.txt
+          git commit -m "Trigger gh-pages update" || echo "No changes to commit"
       
       - name: Deploy site with mike (no push yet)
         run: |
