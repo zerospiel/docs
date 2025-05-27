@@ -20,7 +20,7 @@ Before proceeding, make sure your management cluster meets the following require
 
 ## Create a Secret object containing the private SSH key to access remote machines
 
-Create a `Secret` object to securely store the private SSH key, under the key `value`, for accessing all remote machines that will be part of the cluster. Save this configuration in a YAML file named `remote-ssh-key-secret.yaml`. Ensure you replace the placeholder `PRIVATE_SSH_KEY_B64` with your base64-encoded private SSH key:
+Create a `Secret` object to securely store the private SSH key, under the key `value`, for accessing all remote machines that will be part of the cluster. Start by setting the following environment variables, for example by adding them to an `.env` file and sourcing it. (Make sure to either update the `KEY_PATH` to point to the keyfile or enter the directly under `PRIVATE_SSH-KEY_B64`.)
 
 ```shell
 # Setup Environment
@@ -34,6 +34,8 @@ CLUSTER_DEPLOYMENT_NAME=my-remote-clusterdeployment1
 MACHINE_0_ADDRESS=127.0.0.1
 MACHINE_1_ADDRESS=127.0.0.2
 ```
+
+Now create the `remote-ssh-key-secret.yaml` file:
 
 ```shell
 cat > remote-ssh-key-secret.yaml << EOF
@@ -53,6 +55,9 @@ EOF
 Apply the YAML to the {{{ docsVersionInfo.k0rdentName }}} management cluster:
 ```shell
 kubectl apply -f remote-ssh-key-secret.yaml
+```
+```console
+secret/remote-ssh-key created
 ```
 
 ## Create the KCM Credential Object
@@ -81,16 +86,13 @@ Apply the YAML to your cluster:
 ```shell
 kubectl apply -f remote-cred.yaml
 ```
-
-You should see output of:
-
 ```console
 credential.k0rdent.mirantis.com/remote-cred created
 ```
 
 ## Create the Cluster Identity resource template ConfigMap
 
-Now we create the {{{ docsVersionInfo.k0rdentName }}} Cluster Identity resource template `ConfigMap`. As in prior steps, create a YAML file called `remote-ssh-key-resource-template.yaml`:
+Now we create the {{{ docsVersionInfo.k0rdentName }}} `ClusterIdentity` resource template `ConfigMap`. As in prior steps, create a YAML file called `remote-ssh-key-resource-template.yaml`:
 
 ```shell
 cat > remote-ssh-key-resource-template.yaml << EOF
@@ -105,7 +107,7 @@ metadata:
     projectsveltos.io/template: "true"
 EOF
 ```
-Note that the `ConfigMap` is empty. This is expected, as we don't need to template any object inside child clusters, but we can use that object in the future if the need arises.
+Note that the `ConfigMap` doesn't have any values, only metadata. This is expected, as we don't need to template any object inside child clusters, but we can use that object in the future if the need arises.
 
 Now apply this YAML to your management cluster:
 
