@@ -1,9 +1,12 @@
-name: Deploy docs
+name: Deploy Docs Reusable Workflow
 
 on:
-  push:
-    branches:
-      - '**'
+  workflow_call:
+    inputs:
+      branch:
+        required: false
+        type: string
+        description: "The branch to deploy docs for"
 
 permissions:
   contents: write
@@ -36,7 +39,7 @@ jobs:
           python3 <<EOF
           import os, sys, yaml
 
-          branch = os.environ["GITHUB_REF_NAME"]
+          branch = os.environ.get("INPUT_BRANCH") or os.environ["GITHUB_REF_NAME"]
           print(f"::group::Parsing versions.yml for branch '{branch}'")
 
           with open("versions.yml") as f:
@@ -77,7 +80,7 @@ jobs:
       - name: Checkout branch content
         uses: actions/checkout@v4
         with:
-          ref: ${{ github.ref_name }}
+          ref: ${{ inputs.branch || github.ref_name }}
           fetch-depth: 0
 
       - name: Configure git identity
