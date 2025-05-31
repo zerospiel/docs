@@ -105,10 +105,10 @@ spec:
 ...
 ```
 
-## Non root volumes
+## Non-root volumes
 
-To configure options for the non root storage volumes set the corresponding
-fields in the `ClusterDeployment` responsible for these settings depending on the template in use:
+To configure options for non-root storage volumes, set the corresponding
+fields in the `ClusterDeployment` responsible for these settings, which depend on the template in use:
 
 | Template | Section(s) |
 | --- | --- |
