@@ -1,16 +1,169 @@
 # KOF Alerts
 
-KOF uses the [data source managed rules](https://grafana.com/docs/grafana/latest/alerting/fundamentals/alert-rules/#data-source-managed-alert-rules):
+## Summary
 
-* to store and execute rules closer to the source data,
-* to reduce the load on Grafana,
-* to improve scalability and performance when handling large volumes of alerts.
+At this point you have metrics collected and visualized. It is important to check them manually,
+but it is even better to **automate detection and notification about the issues found in the data.**
 
 We believe the rules should be configured using YAML IaC (Infrastructure as Code),
-while temporary management like adding "Silences" can be done using UI.
+while temporary management like [Silences](https://grafana.com/docs/grafana/latest/alerting/configure-notifications/create-silence/)
+can be done using UI.
 
-Alerting and recording rules in KOF are based on the [PrometheusRules](https://github.com/prometheus-community/helm-charts/tree/5a42485c22e5beb3da772b32fbfd18719793bc5e/charts/kube-prometheus-stack/templates/prometheus/rules-1.14)
-from the [kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack#readme).
+[Alerting rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/)
+and [recording rules](https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/#recording-rules)
+in KOF are based on the [PrometheusRules](https://github.com/prometheus-community/helm-charts/tree/5a42485c22e5beb3da772b32fbfd18719793bc5e/charts/kube-prometheus-stack/templates/prometheus/rules-1.14)
+from the [kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack#readme) chart
+with per-cluster [customization](#custom-rules) options.
+
+KOF uses the [data source managed rules](https://grafana.com/docs/grafana/latest/alerting/fundamentals/alert-rules/#data-source-managed-alert-rules)
+to store and [execute](#execution-of-rules) recording rules in regional clusters closer to the source data,
+and to reduce the load on Grafana even for alerting rules executed by Promxy in the management cluster.
+
+Promxy is used as a data source and executor of alerting rules
+instead of [VMAlert](https://docs.victoriametrics.com/operator/resources/vmalert/) because:
+
+* "For example, if you wanted to know that the global error rate was <10%
+    this would be impossible on the individual prometheus hosts
+    (without federation, or re-scraping) but trivial in promxy."
+    ([Promxy FAQ](https://github.com/jacksontj/promxy/tree/v0.0.93?tab=readme-ov-file#how-do-i-use-alertingrecording-rules-in-promxy))
+
+* It fixes the "See graph" button in Grafana Alerting rules UI,
+    as Grafana gets the metrics from all regional clusters via Promxy.
+
+[VMAlertManager](https://docs.victoriametrics.com/operator/resources/vmalertmanager/)
+aggregates and sends alerts to various receivers like Slack
+with [advanced routing](#advanced-routing) options.
+
+Let's start from the demo of the alert received,
+followed by customization options and details of implementation.
+
+## Alertmanager Demo
+
+1. Add to the `mothership-values.yaml` file:
+    ```yaml
+    victoriametrics:
+      vmalert:
+        vmalertmanager:
+          config: |
+            route:
+              receiver: webhook
+            receivers:
+              - name: webhook
+                webhook_configs:
+                  - url: $WEBHOOK_URL
+    ```
+
+2. Open the [https://webhook.site/](https://webhook.site/), copy "Your unique URL",
+    and paste it instead of `$WEBHOOK_URL` above.
+
+3. Apply the `mothership-values.yaml` file as described in the [Management Cluster](./kof-install.md#management-cluster) section.
+
+4. Wait a bit until the [https://webhook.site/](https://webhook.site/)
+    shows the `Watchdog` alert like this:
+    ```json
+    {
+      "receiver": "webhook",
+      "status": "firing",
+      "alerts": [
+        {
+          "status": "firing",
+          "labels": {
+            "alertgroup": "general.rules",
+            "alertname": "Watchdog",
+            "severity": "none",
+            "source": "promxy"
+          },
+          "annotations": {
+            "description": "This is an alert meant to ensure that the entire alerting pipeline is functional...",
+            "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/general/watchdog",
+            "summary": "An alert that should always be firing to certify that Alertmanager is working properly."
+          },
+          "startsAt": "2025-06-02T10:27:29.14Z",
+          "endsAt": "0001-01-01T00:00:00Z",
+          "generatorURL": "http://kof-mothership-promxy-...",
+    ```
+
+## Advanced Routing
+
+Please use these guides to configure advanced routing:
+
+* [Prometheus Alertmanager configuration reference](https://prometheus.io/docs/alerting/latest/configuration/#file-layout-and-global-settings) - all possible options.
+
+* [VMAlertManager Slack example](https://github.com/VictoriaMetrics/VictoriaMetrics/blob/v1.118.0/docs/victoriametrics-cloud/alertmanager-setup-for-deployment.md#configuration-example) -
+    a multichannel notification system to ensure that critical alerts
+    are promptly delivered to the responsible teams.
+
+* [Matchers](https://prometheus.io/docs/alerting/latest/configuration/#composition-of-matchers) -
+    configurable routing rules that determine where and how alerts are directed
+    (for example, email, Slack, PagerDuty) based on severity, source, or other attributes.
+
+* [Grouping docs](https://prometheus.io/docs/alerting/latest/alertmanager/#grouping) and
+    [example from Prometheus](https://prometheus.io/docs/alerting/latest/configuration/#example)
+    with `group_by: [cluster, alertname]` -
+    you may want to use `group_by: [alertgroup, alertname]` instead
+    for alert correlation across clusters to identify systemic issues and reduce noise
+    when the same alert fires in multiple clusters.
+
+## Alertmanager UI
+
+To access the Alertmanager UI:
+
+1. Run in the management cluster:
+    ```shell
+    kubectl port-forward -n kof svc/vmalertmanager-cluster 9093:9093
+    ```
+
+2. Open [http://127.0.0.1:9093/](http://127.0.0.1:9093/)
+    and check the tabs like "Alerts" and "Silences".
+
+## Grafana Alerting UI
+
+To access Grafana Alerting UI:
+
+1. Apply the [Access to Grafana](./kof-using.md/#access-to-grafana) step.
+
+2. In Grafana UI open the "Alerting" and then "Alert rules" or "Silences", like this:
+
+TODO: Demo video will be added here soon.
+
+## Execution of rules
+
+```mermaid
+sequenceDiagram
+    box rgba(0, 0, 255, 0.2) Regional kof-storage
+        participant VMR as Recording VMRules
+        participant VMA as VMAlert
+        participant VMS as VMStorage
+    end
+
+    box rgba(255, 0, 0, 0.2) Management kof-mothership
+        participant MP as Promxy
+        participant MVMS as VMStorage
+        participant VMAM as VMAlertManager
+    end
+
+    VMA->>VMR: execute
+    VMA->>VMS: read "expr" metrics
+    VMA->>VMS: write "record" metrics
+
+    note over MP: execute<br>Alerting /etc/promxy/rules
+    MP->>VMS: read "expr" metrics
+    MP->>MVMS: write "ALERTS" metrics
+    MP->>VMAM: Notify about alert
+```
+
+* Recording `VMRules` are executed by `VMAlert`, reading and writing to `VMStorage`.
+    * All this happens in `kof-storage` in each regional cluster.
+    * The [From Management to Management](./kof-storing.md#from-management-to-management) case is special:
+        `VMRules` are provided by `kof-storage` chart in the management cluster,
+        while `VMAlert` and `VMStorage` are provided by `kof-mothership` -
+        to avoid having two VictoriaMetrics engines in the same cluster.
+
+* Alerting rules are:
+    * executed by the `kof-mothership` Promxy in the management cluster,
+    * reading metrics from all regional `VMStorages`,
+    * writing to the management `VMStorage`,
+    * and notifying `VMAlertManager` in the management cluster.
 
 ## Custom rules
 
@@ -116,131 +269,3 @@ in the same management cluster, then:
 2. Add `-f vmrules.yaml` to the `helm upgrade ... kof-storage` command
     described in the [From Management to Management](./kof-storing.md#from-management-to-management) section
     and apply it.
-
-## Execution of rules
-
-```mermaid
-sequenceDiagram
-    box rgba(0, 0, 255, 0.2) Regional kof-storage
-        participant VMR as Recording VMRules
-        participant VMA as VMAlert
-        participant VMS as VMStorage
-    end
-
-    box rgba(255, 0, 0, 0.2) Management kof-mothership
-        participant MP as Promxy
-        participant MVMS as VMStorage
-        participant VMAM as VMAlertManager
-    end
-
-    VMA->>VMR: execute
-    VMA->>VMS: read "expr" metrics
-    VMA->>VMS: write "record" metrics
-
-    note over MP: execute<br>Alerting /etc/promxy/rules
-    MP->>VMS: read "expr" metrics
-    MP->>MVMS: write "ALERTS" metrics
-    MP->>VMAM: Notify about alert
-```
-
-* Recording `VMRules` are executed by `VMAlert`, reading and writing to `VMStorage`.
-    * All this happens in `kof-storage` in each regional cluster.
-    * The [From Management to Management](./kof-storing.md#from-management-to-management) case is special:
-        `VMRules` are provided by `kof-storage` chart in the management cluster,
-        while `VMAlert` and `VMStorage` are provided by `kof-mothership` -
-        to avoid having two VictoriaMetrics engines in the same cluster.
-
-* Alerting rules are:
-    * executed by the `kof-mothership` Promxy in the management cluster,
-    * reading metrics from all regional `VMStorages`,
-    * writing to the management `VMStorage`,
-    * and notifying `VMAlertManager` in the management cluster.
-
-## VMAlertManager
-
-`VMAlertManager` aggregates and sends alerts to various receivers like Slack.
-
-### Minimal test
-
-1. Add to the `mothership-values.yaml` file:
-    ```yaml
-    victoriametrics:
-      vmalert:
-        vmalertmanager:
-          config: |
-            route:
-              receiver: webhook
-            receivers:
-              - name: webhook
-                webhook_configs:
-                  - url: $WEBHOOK_URL
-    ```
-
-2. Open the [https://webhook.site/](https://webhook.site/), copy "Your unique URL",
-    and paste it instead of `$WEBHOOK_URL` above.
-
-3. Apply the `mothership-values.yaml` file as described in the [Management Cluster](./kof-install.md#management-cluster) section.
-
-4. Wait a bit until the [https://webhook.site/](https://webhook.site/)
-    shows the `Watchdog` alert like this:
-    ```json
-    {
-      "receiver": "webhook",
-      "status": "firing",
-      "alerts": [
-        {
-          "status": "firing",
-          "labels": {
-            "alertgroup": "general.rules",
-            "alertname": "Watchdog",
-            "severity": "none",
-            "source": "promxy"
-          },
-          "annotations": {
-            "description": "This is an alert meant to ensure that the entire alerting pipeline is functional...",
-            "runbook_url": "https://runbooks.prometheus-operator.dev/runbooks/general/watchdog",
-            "summary": "An alert that should always be firing to certify that Alertmanager is working properly."
-          },
-          "startsAt": "2025-06-02T10:27:29.14Z",
-          "endsAt": "0001-01-01T00:00:00Z",
-          "generatorURL": "http://kof-mothership-promxy-...",
-    ```
-
-### Advanced routing
-
-Now you can update the `config` above using:
-
-* [Prometheus Alertmanager configuration reference](https://prometheus.io/docs/alerting/latest/configuration/#file-layout-and-global-settings) - all possible options.
-
-* [VMAlertManager Slack multichannel example](https://github.com/VictoriaMetrics/VictoriaMetrics/blob/v1.118.0/docs/victoriametrics-cloud/alertmanager-setup-for-deployment.md#configuration-example).
-
-* [Routing based on severity, etc](https://prometheus.io/docs/alerting/latest/configuration/#composition-of-matchers).
-
-* [Example from Prometheus](https://prometheus.io/docs/alerting/latest/configuration/#example)
-    with `group_by: [cluster, alertname]` - see [Grouping docs](https://prometheus.io/docs/alerting/latest/alertmanager/#grouping).
-
-* You may want to use `group_by: [alertgroup, alertname]` instead -
-    for alert correlation across clusters to identify systemic issues and reduce noise
-    when the same alert fires in multiple clusters.
-
-### Alertmanager UI
-
-To access the Alertmanager UI:
-
-1. Run in the management cluster:
-    ```shell
-    kubectl port-forward -n kof svc/vmalertmanager-cluster 9093:9093
-    ```
-
-2. Open [http://127.0.0.1:9093/](http://127.0.0.1:9093/)
-    and check the tabs like "Alerts" and "Silences".
-
-## Grafana Alerting UI
-
-To access Grafana Alerting UI:
-
-1. Apply the [Access to Grafana](./kof-using.md/#access-to-grafana) step.
-
-2. In Grafana UI open the "Alerting" and then "Alert rules" or "Silences", like this:
-
-TODO: Demo video will be added here soon.
