@@ -34,8 +34,7 @@ instead of [VMAlert](https://docs.victoriametrics.com/operator/resources/vmalert
 aggregates and sends alerts to various receivers like Slack
 with [advanced routing](#advanced-routing) options.
 
-Let's start from the demo of the alert received,
-followed by customization options and details of implementation.
+Let's start from the demo of the alert sent and received.
 
 ## Alertmanager Demo
 
@@ -85,7 +84,9 @@ followed by customization options and details of implementation.
 
 ## Advanced Routing
 
-Please use these guides to configure advanced routing:
+The `config` in [Alertmanager Demo](#alertmanager-demo) is very basic.
+
+Please use these guides to apply advanced routing options:
 
 * [Prometheus Alertmanager configuration reference](https://prometheus.io/docs/alerting/latest/configuration/#file-layout-and-global-settings) - all possible options.
 
@@ -97,7 +98,7 @@ Please use these guides to configure advanced routing:
     configurable routing rules that determine where and how alerts are directed
     (for example, email, Slack, PagerDuty) based on severity, source, or other attributes.
 
-* [Grouping docs](https://prometheus.io/docs/alerting/latest/alertmanager/#grouping) and
+* [Grouping](https://prometheus.io/docs/alerting/latest/alertmanager/#grouping) and
     [example from Prometheus](https://prometheus.io/docs/alerting/latest/configuration/#example)
     with `group_by: [cluster, alertname]` -
     you may want to use `group_by: [alertgroup, alertname]` instead
@@ -116,54 +117,18 @@ To access the Alertmanager UI:
 2. Open [http://127.0.0.1:9093/](http://127.0.0.1:9093/)
     and check the tabs like "Alerts" and "Silences".
 
+See the demo in [Grafana Alerting UI](#grafana-alerting-ui) section
+where Alertmanager UI shows the same data.
+
 ## Grafana Alerting UI
 
-To access Grafana Alerting UI:
+To access the Grafana Alerting UI:
 
 1. Apply the [Access to Grafana](./kof-using.md/#access-to-grafana) step.
 
-2. In Grafana UI open the "Alerting" and then "Alert rules" or "Silences", like this:
+2. Open: Grafana - Alerting - and then "Alert rules" or "Silences", like this:
 
-TODO: Demo video will be added here soon.
-
-## Execution of rules
-
-```mermaid
-sequenceDiagram
-    box rgba(0, 0, 255, 0.2) Regional kof-storage
-        participant VMR as Recording VMRules
-        participant VMA as VMAlert
-        participant VMS as VMStorage
-    end
-
-    box rgba(255, 0, 0, 0.2) Management kof-mothership
-        participant MP as Promxy
-        participant MVMS as VMStorage
-        participant VMAM as VMAlertManager
-    end
-
-    VMA->>VMR: execute
-    VMA->>VMS: read "expr" metrics
-    VMA->>VMS: write "record" metrics
-
-    note over MP: execute<br>Alerting /etc/promxy/rules
-    MP->>VMS: read "expr" metrics
-    MP->>MVMS: write "ALERTS" metrics
-    MP->>VMAM: Notify about alert
-```
-
-* Recording `VMRules` are executed by `VMAlert`, reading and writing to `VMStorage`.
-    * All this happens in `kof-storage` in each regional cluster.
-    * The [From Management to Management](./kof-storing.md#from-management-to-management) case is special:
-        `VMRules` are provided by `kof-storage` chart in the management cluster,
-        while `VMAlert` and `VMStorage` are provided by `kof-mothership` -
-        to avoid having two VictoriaMetrics engines in the same cluster.
-
-* Alerting rules are:
-    * executed by the `kof-mothership` Promxy in the management cluster,
-    * reading metrics from all regional `VMStorages`,
-    * writing to the management `VMStorage`,
-    * and notifying `VMAlertManager` in the management cluster.
+![alerts-demo](../../assets/kof/alerts-2025-06-05.gif)
 
 ## Custom rules
 
@@ -183,14 +148,14 @@ For example, let's update `CPUThrottlingHigh` alert in the `kubernetes-resources
         kubernetes-resources:
           CPUThrottlingHigh:
             expr: |-
-              sum(increase(container_cpu_cfs_throttled_periods_total{cluster="cluster1", container!="", job="kubelet", metrics_path="/metrics/cadvisor", }[5m])) without (id, metrics_path, name, image, endpoint, job, node)
+              sum(increase(container_cpu_cfs_throttled_periods_total{cluster="cluster1", container!=""}[5m])) without (id, metrics_path, name, image, endpoint, job, node)
                 / on (cluster, namespace, pod, container, instance) group_left
-              sum(increase(container_cpu_cfs_periods_total{cluster="cluster1", job="kubelet", metrics_path="/metrics/cadvisor", }[5m])) without (id, metrics_path, name, image, endpoint, job, node)
+              sum(increase(container_cpu_cfs_periods_total{cluster="cluster1"}[5m])) without (id, metrics_path, name, image, endpoint, job, node)
                 > ( 42 / 100 )
     ```
     Note the `cluster="cluster1"` filters and the `> ( 42 / 100 )` threshold.
 
-3. Add a similar patch for the `cluster10` to the same file.
+3. Add a similar patch for the `cluster10` to the same `clusterAlertRules`.
 
 4. Now that we have special `CPUThrottlingHigh` alerts for `cluster1` and `cluster10`,
     we want to exclude these clusters from the default `CPUThrottlingHigh` alert
@@ -202,12 +167,12 @@ For example, let's update `CPUThrottlingHigh` alert in the `kubernetes-resources
       kubernetes-resources:
         CPUThrottlingHigh:
           expr: |-
-            sum(increase(container_cpu_cfs_throttled_periods_total{cluster!~"^cluster1$|^cluster10$", container!="", job="kubelet", metrics_path="/metrics/cadvisor", }[5m])) without (id, metrics_path, name, image, endpoint, job, node)
+            sum(increase(container_cpu_cfs_throttled_periods_total{cluster!~"^cluster1$|^cluster10$", container!=""}[5m])) without (id, metrics_path, name, image, endpoint, job, node)
               / on (cluster, namespace, pod, container, instance) group_left
-            sum(increase(container_cpu_cfs_periods_total{cluster!~"^cluster1$|^cluster10$", job="kubelet", metrics_path="/metrics/cadvisor", }[5m])) without (id, metrics_path, name, image, endpoint, job, node)
+            sum(increase(container_cpu_cfs_periods_total{cluster!~"^cluster1$|^cluster10$"}[5m])) without (id, metrics_path, name, image, endpoint, job, node)
               > ( 25 / 100 )
     ```
-    Note the `cluster!~"^cluster1$|^cluster10$"` filter and the default threshold.
+    Note the `cluster!~"^cluster1$|^cluster10$"` filters and the default threshold.
 
 5. You can also update or create recording rules [in the same way](https://github.com/k0rdent/kof/blob/332f66ff03bae8abd37cc7e754dd8d7a42d059a7/charts/kof-mothership/values.yaml#L511-L537),
     but the whole rule group should be redefined, because the `record` field is not unique.
@@ -242,7 +207,7 @@ graph TB
   RCD[Regional ClusterDeployment] --"kof-operator:<br>clusterdeployment_controller<br>creates empty"--> KRVM
 ```
 
-* Rules patches (empty by default) are rendered from the `mothership-values.yaml`
+* Rules patches (empty by default) are rendered from `kof-mothership` values
     to the input `ConfigMaps`, which are merged with upstream `PrometheusRules`,
     [generating](https://github.com/k0rdent/kof/blob/332f66ff03bae8abd37cc7e754dd8d7a42d059a7/kof-operator/internal/controller/configmap_controller.go#L108-L167)
     the output `ConfigMaps`.
@@ -269,3 +234,44 @@ in the same management cluster, then:
 2. Add `-f vmrules.yaml` to the `helm upgrade ... kof-storage` command
     described in the [From Management to Management](./kof-storing.md#from-management-to-management) section
     and apply it.
+
+## Execution of rules
+
+Details of where and how the recording and alerting rules are executed:
+
+```mermaid
+sequenceDiagram
+    box rgba(0, 0, 255, 0.2) Regional kof-storage
+        participant VMR as Recording VMRules
+        participant VMA as VMAlert
+        participant VMS as VMStorage
+    end
+
+    box rgba(255, 0, 0, 0.2) Management kof-mothership
+        participant MP as Promxy
+        participant MVMS as VMStorage
+        participant VMAM as VMAlertManager
+    end
+
+    VMA->>VMR: execute
+    VMA->>VMS: read "expr" metrics
+    VMA->>VMS: write "record" metrics
+
+    note over MP: execute<br>Alerting /etc/promxy/rules
+    MP->>VMS: read "expr" metrics
+    MP->>MVMS: write "ALERTS" metrics
+    MP->>VMAM: Notify about alert
+```
+
+* Recording `VMRules` are executed by `VMAlert`, reading and writing to `VMStorage` -
+    all this happens in `kof-storage` in each regional cluster.
+
+    The [From Management to Management](./kof-storing.md#from-management-to-management) case is special:
+    `VMRules` are provided by `kof-storage` chart in the management cluster,
+    while `VMAlert` and `VMStorage` are provided by `kof-mothership` -
+    to avoid having two VictoriaMetrics engines in the same cluster.
+
+* Alerting rules are executed by Promxy in `kof-mothership` in the management cluster,
+    reading metrics from all regional `VMStorages`,
+    writing to the management `VMStorage`,
+    and notifying `VMAlertManager` in the management cluster.
