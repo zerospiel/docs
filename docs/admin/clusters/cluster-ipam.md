@@ -44,6 +44,9 @@ To use mutual references, follow these steps:
 
     The `ClusterIPAMClaim` resource reserves the required IP address space for the cluster. The node network segment can be defined using either a `cidr` or a static list of `ipAddresses`.
 
+    > NOTE:
+    > The value for `provider` must be `in-cluster` or `ipam-infoblox`.
+
     ```yaml
     apiVersion: k0rdent.mirantis.com/v1beta1
     kind: ClusterIPAMClaim
