@@ -3,9 +3,13 @@
 
 `{{{ docsVersionInfo.k0rdentName }}}` provides a flexible IP Address Management (IPAM) system that enables deterministic allocation of IP addresses throughout the cluster lifecycle.
 
-> WARNING: At the moment **only node network is supported**.
-
-> WARNING: IPAM is currently unsupported on ARM64 architectures.
+> WARNING: 
+>
+> Keep in mind the following about IPAM support:
+>
+> - At the moment **only node network is supported**.
+> - IPAM is currently unsupported on ARM64 architectures.
+> - IPAM has only been tested on VMware VSphere. Support for other providers will be added in the future.
 
 With IPAM enabled, IP addresses can be assigned to both worker and control plane nodes.
 
