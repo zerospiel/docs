@@ -79,7 +79,7 @@ Let's start from the demo of the alert sent and received.
           },
           "startsAt": "2025-06-02T10:27:29.14Z",
           "endsAt": "0001-01-01T00:00:00Z",
-          "generatorURL": "http://kof-mothership-promxy-...",
+          "generatorURL": "http://127.0.0.1:8082/...",
     ```
 
 ## Advanced Routing
@@ -129,6 +129,36 @@ To access the Grafana Alerting UI:
 2. Open: Grafana - Alerting - and then "Alert rules" or "Silences", like this:
 
 ![alerts-demo](../../assets/kof/alerts-2025-06-05.gif)
+
+## Prometheus UI
+
+There are few places where you can find the graph of the firing alert:
+
+1. Grafana - Alerting - Alert rules - rule - See graph.
+
+    This shows the graph in Grafana UI,
+    as in the [Grafana Alerting UI](#grafana-alerting-ui) demo above.
+
+2. Grafana - Alerting - Groups - group - alert - See source - Graph.
+
+    This shows the graph in Prometheus UI.
+
+3. The same Prometheus UI link is sent to receiver like Slack in `generatorURL` field,
+    as shown in the [Alertmanager Demo](#alertmanager-demo).
+
+Prometheus UI looks like this:
+
+![prom-ui](../../assets/kof/prom-ui--2025-06-09.png)
+
+To enable Promxy Prometheus UI, please run this command in the management cluster:
+
+```shell
+kubectl port-forward -n kof svc/kof-mothership-promxy 8082:8082
+```
+
+If you expose Prometheus UI with some external domain,
+please set `promxy.extraArgs."web.external-url"` in `mothership-values.yaml` file
+and reapply it as described in the [Management Cluster](./kof-install.md#management-cluster) section.
 
 ## Custom rules
 
