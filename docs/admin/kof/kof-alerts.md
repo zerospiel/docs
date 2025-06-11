@@ -207,7 +207,11 @@ For example, let's update `CPUThrottlingHigh` alert in the `kubernetes-resources
 5. You can also update or create recording rules [in the same way](https://github.com/k0rdent/kof/blob/332f66ff03bae8abd37cc7e754dd8d7a42d059a7/charts/kof-mothership/values.yaml#L511-L537),
     but the whole rule group should be redefined, because the `record` field is not unique.
 
-6. Apply the `mothership-values.yaml` file as described in the [Management Cluster](./kof-install.md#management-cluster) section.
+6. You may update or create more rules,
+    like the `ContainerHighMemoryUsage` alert that was added [on demand](https://github.com/k0rdent/kof/pull/317)
+    from the [awesome-prometheus-alerts](https://github.com/samber/awesome-prometheus-alerts) collection.
+
+7. Apply the `mothership-values.yaml` file as described in the [Management Cluster](./kof-install.md#management-cluster) section.
 
 ## Generation of rules
 
