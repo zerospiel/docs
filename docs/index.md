@@ -1,5 +1,5 @@
 # Welcome to the {{{ docsVersionInfo.k0rdentName }}} docs 
-## Introduction
+## Introductions
 
 {{{ docsVersionInfo.k0rdentName }}} has been developed to provide a way to manage distributed infrastructure
 at massive scale leveraging kubernetes.
