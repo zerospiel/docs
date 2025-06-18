@@ -111,12 +111,12 @@ Use the `oci://` prefix for OCI registries. Default: `oci://ghcr.io/k0rdent/kcm/
 configuration as `global.registry` (for example, it is used for pulling cluster Helm extensions, such as the Cloud
 Controller Manager and to download required images, such as `etcd` or `kube-proxy`).
 * `insecureRegistry`: Allows connecting to an HTTP registry. Default: `false`.
-* `registryCredsSecret`: Specifies the name of a Kubernetes Secret containing authentication credentials for the 
-registry (optional). This Secret should exist in the system namespace (default: `kcm-system`).
+* `registryCredsSecret`: Specifies the name of a Kubernetes `Secret` containing authentication credentials for the 
+registry (optional). This `Secret` should exist in the system namespace (default: `kcm-system`).
 
 Additionally, if your registry is private and uses a certificate signed by an unknown authority, you can make the
 registry trusted within the K0rdent system by configuring the `registryCertSecret` parameter. This should reference
-the name of a Secret in the system (default: `kcm-system`) namespace containing a client certificate (`tls.crt`)
+the name of a `Secret` in the system (default: `kcm-system`) namespace containing a client certificate (`tls.crt`)
 and a private key (`tls.key`) and/or a CA certificate (`ca.crt`) for the registry endpoint.
 
 > NOTE:
@@ -142,7 +142,7 @@ spec:
 > Prior to K0rdent v0.3.0, the `templatesRepoURL` parameter was named `defaultRegistryURL`.
 > (See: [K0rdent v0.3.0 Release Notes](https://github.com/k0rdent/kcm/releases/tag/v0.3.0)).
 
-Example of a Secret with Registry Credentials:
+Example of a `Secret` with Registry Credentials:
 
 ```yaml
 apiVersion: v1
@@ -155,7 +155,7 @@ stringData:
   password: "my-password-123"
 ```
 
-Example of a Secret with Registry Certificate:
+Example of a `Secret` with Registry Certificate:
 
 ```yaml
 apiVersion: v1
@@ -237,7 +237,7 @@ spec:
           k0sURLCertSecret: k0s-url-cert
 ```
 
-Example of a Secret with K0s URL Certificate:
+Example of a `Secret` with K0s URL Certificate:
 
 ```yaml
 apiVersion: v1
