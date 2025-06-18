@@ -1,11 +1,11 @@
-# Using a Private Secure Registry to deploy K0rdent
+# Using a Private Secure Registry to deploy {{{ docsVersionInfo.k0rdentName }}}
 
 ## Prerequisites
 
-If you are deploying K0rdent with registry overrides (see
+If you are deploying {{{ docsVersionInfo.k0rdentName }}} with registry overrides (see
 [Configuring a Custom OCI Registry for KCM components](appendix-extend-mgmt.md#configuring-a-custom-oci-registry-for-kcm-components)),
 and your registry endpoint is secured with a certificate signed by an unknown Certificate Authority (CA), you must
-ensure that the CA certificate is trusted by your management cluster nodes before deploying K0rdent.
+ensure that the CA certificate is trusted by your management cluster nodes before deploying {{{ docsVersionInfo.k0rdentName }}}.
 
 To do this, add the CA certificate to the system’s trust store on each management cluster node.
 
@@ -25,7 +25,7 @@ Before starting the k0s controller, do the following:
     sudo update-ca-certificates
     ```
 
-3. Proceed to install k0s as usual
+3. Proceed to install k0s as usual.
 
 ### For Management Clusters Running on Kind
 
