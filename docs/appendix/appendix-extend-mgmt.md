@@ -286,7 +286,7 @@ spec:
 
 ### Configuring manager settings for CAPI providers
 
-Starting from `v0.3.0`, k0rdent supports configuring manager settings for CAPI providers. You can override
+Starting from `v0.3.0`, {{{ docsVersionInfo.k0rdentName }}} supports configuring manager settings for CAPI providers. You can override
 these settings by defining the `spec.providers[*].config.manager` section. The values under the `manager` section should
 follow the format described here:
 https://github.com/kubernetes-sigs/cluster-api-operator/blob/v0.18.1/api/v1alpha2/provider_types.go#L126.
