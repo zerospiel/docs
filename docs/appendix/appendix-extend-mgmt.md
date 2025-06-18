@@ -115,7 +115,7 @@ Controller Manager and to download required images, such as `etcd` or `kube-prox
 registry (optional). This `Secret` should exist in the system namespace (default: `kcm-system`).
 
 Additionally, if your registry is private and uses a certificate signed by an unknown authority, you can make the
-registry trusted within the K0rdent system by configuring the `registryCertSecret` parameter. This should reference
+registry "trusted" within the K0rdent system by configuring the `registryCertSecret` parameter. This should reference
 the name of a `Secret` in the system (default: `kcm-system`) namespace containing a client certificate (`tls.crt`)
 and a private key (`tls.key`) and/or a CA certificate (`ca.crt`) for the registry endpoint.
 
@@ -211,8 +211,8 @@ spec:
 ### Configuring a global K0s URL
 
 You can override the default URL from which to download the k0s binary in {{{ docsVersionInfo.k0rdentName }}} by
-specifying the `globalK0sURL` and optionally `k0sURLCertSecret` (if the k0s download URL is private and uses a
-certificate signed by an unknown authority) under `spec.core.kcm.config.controller`. This is optional and is only
+specifying the `globalK0sURL`, and optionally `k0sURLCertSecret` (if the k0s download URL is private and uses a
+certificate signed by an unknown authority), under `spec.core.kcm.config.controller`. This is optional and is only
 needed when the environment does not have access to the default upstream k0s binaries endpoint. This is required for
 airgapped environments.
 
@@ -286,7 +286,7 @@ spec:
 
 ### Configuring manager settings for CAPI providers
 
-Starting from k0rdent `v0.3.0`, configuring manager settings for CAPI providers is supported. You can override
+Starting from `v0.3.0`, k0rdent supports configuring manager settings for CAPI providers. You can override
 these settings by defining the `spec.providers[*].config.manager` section. The values under the `manager` section should
 follow the format described here:
 https://github.com/kubernetes-sigs/cluster-api-operator/blob/v0.18.1/api/v1alpha2/provider_types.go#L126.
