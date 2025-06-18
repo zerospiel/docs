@@ -235,7 +235,7 @@ nav:
     - Overview: appendix/index.md
     - Glossary: appendix/glossary.md
     - Extended management configuration: appendix/appendix-extend-mgmt.md
-    - Using a Private Secure Registry to deploy K0rdent: appendix/private-secure-registry.md
+    - Deploy from a private secure registry: appendix/private-secure-registry.md
     - Understanding the dry run: appendix/appendix-dryrun.md
     - Cloud provider credentials management in CAPI: appendix/appendix-providers.md
   - Release Notes:
