@@ -184,6 +184,15 @@ and apply this example, or use it as a reference:
       oci://ghcr.io/k0rdent/kof/charts/kof-mothership --version {{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}
     ```
 
+    If you're upgrading from a version less than `1.1.0`, please run after upgrade:
+    ```shell
+    kubectl apply --server-side --force-conflicts -f \
+    https://github.com/grafana/grafana-operator/releases/download/v5.16.0/crds.yaml
+    ```
+
+    There will be a similar step for a regional cluster
+    on [verification step 2](./kof-verification.md#verification-steps).
+
 7. Wait until the value of `VALID` changes to `true` for all `ServiceTemplate` objects:
     ```shell
     kubectl get svctmpl -A
