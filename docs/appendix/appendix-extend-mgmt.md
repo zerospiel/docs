@@ -114,10 +114,25 @@ Controller Manager and to download required images, such as `etcd` or `kube-prox
 * `registryCredsSecret`: Specifies the name of a Kubernetes `Secret` containing authentication credentials for the 
 registry (optional). This `Secret` should exist in the system namespace (default: `kcm-system`).
 
-Additionally, if your registry is private and uses a certificate signed by an unknown authority, you can make the
-registry "trusted" within the K0rdent system by configuring the `registryCertSecret` parameter. This should reference
-the name of a `Secret` in the system (default: `kcm-system`) namespace containing a client certificate (`tls.crt`)
-and a private key (`tls.key`) and/or a CA certificate (`ca.crt`) for the registry endpoint.
+Additionally, if your templates repository (`templatesRepoURL`) and/or registry (`globalRegistry`) is private and
+uses a certificate signed by an unknown authority, you can make them "trusted" within the K0rdent system by configuring
+the `registryCertSecret` parameter. This parameter should reference the name of a `Secret` in the system
+(default: `kcm-system`) namespace that contains the root CA certificate(s) (`ca.crt`) used to verify the server
+certificates of the registry and/or templates repository. If the `templatesRepoURL` and `globalRegistry` refer to
+different endpoints, and each uses a different certificate authority, you can include both certificates concatenated
+in the same `ca.crt` key of the `Secret`, like this:
+
+```
+-----BEGIN CERTIFICATE-----
+<templatesRepo CA cert>
+-----END CERTIFICATE-----
+-----BEGIN CERTIFICATE-----
+<registry CA cert>
+-----END CERTIFICATE-----
+```
+
+> NOTE:
+> This is used for server certificate verification only - mutual TLS (mTLS) is not supported yet.
 
 > NOTE:
 > If you’re using a private registry signed by an unknown certificate authority, refer to
@@ -164,18 +179,6 @@ metadata:
   name: registry-cert
   namespace: kcm-system
 stringData:
-  tls.crt: |
-    -----BEGIN CERTIFICATE-----
-    MIIDfjCCAmagAwIBAgIUV/Ykpp7jzkOdfsZs0wwNZOS9X04wDQYJKoZIhvcNAQEL
-    ...
-    2eVUGBCoHgFcUrkjcZlxvjjdaV5L/Y6mEt6u9mIhsb1M8w==
-    -----END CERTIFICATE-----
-  tls.key: |
-    -----BEGIN PRIVATE KEY-----
-    MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCXi08l8qhKxcU2
-    ...
-    oAO9TAlVxIZtwL7XWyB29w==
-    -----END PRIVATE KEY-----
   ca.crt: |
     -----BEGIN CERTIFICATE-----
     MIIDfjCCAmagAwIBAgIUV/Ykpp7jzkOdfsZs0wwNZOS9X04wDQYJKoZIhvcNAQEL
@@ -218,8 +221,11 @@ airgapped environments.
 
 * `globalK0sURL`: Specifies the prefix of the k0s URL from which to download the k0s binary. This value will be
 propagated to all `ClusterDeployment` objects configuration as `global.k0sURL`.
-* `k0sURLCertSecret`: The name of the secret in the system (default: `kcm-system`) namespace containing a client
-certificate (`tls.crt`) and a private key (`tls.key`) and/or a CA certificate (`ca.crt`) for the k0s download URL.
+* `k0sURLCertSecret`: The name of the secret in the system (default: `kcm-system`) namespace containing the root CA
+certificate (`ca.crt`) for the k0s download URL.
+
+> NOTE:
+> This is used for server certificate verification only - mutual TLS (mTLS) is not supported yet.
 
 > NOTE:
 > If you’re using a private registry signed by an unknown certificate authority, refer to
@@ -246,18 +252,6 @@ metadata:
   name: k0s-url-cert
   namespace: kcm-system
 stringData:
-  tls.crt: |
-    -----BEGIN CERTIFICATE-----
-    MIIDfjCCAmagAwIBAgIUV/Ykpp7jzkOdfsZs0wwNZOS9X04wDQYJKoZIhvcNAQEL
-    ...
-    2eVUGBCoHgFcUrkjcZlxvjjdaV5L/Y6mEt6u9mIhsb1M8w==
-    -----END CERTIFICATE-----
-  tls.key: |
-    -----BEGIN PRIVATE KEY-----
-    MIIEvAIBADANBgkqhkiG9w0BAQEFAASCBKYwggSiAgEAAoIBAQCXi08l8qhKxcU2
-    ...
-    oAO9TAlVxIZtwL7XWyB29w==
-    -----END PRIVATE KEY-----
   ca.crt: |
     -----BEGIN CERTIFICATE-----
     MIIDfjCCAmagAwIBAgIUV/Ykpp7jzkOdfsZs0wwNZOS9X04wDQYJKoZIhvcNAQEL
