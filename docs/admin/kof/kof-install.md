@@ -230,6 +230,8 @@ and apply this example, or use it as a reference:
     kubectl get pod -n kof
     ```
 
+10. Check options to store metrics of the management cluster in the [Storing KOF data](./kof-storing.md) guide.
+
 ## Regional Cluster
 
 To install KOF on the regional cluster,
