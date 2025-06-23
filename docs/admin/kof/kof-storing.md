@@ -45,10 +45,12 @@ To apply this option:
 2. Install the `kof-storage` and `kof-collectors` charts to the management cluster:
     ```shell
     helm upgrade -i --reset-values --wait -n kof kof-storage \
+      -f global-values.yaml \
       -f storage-values.yaml \
       oci://ghcr.io/k0rdent/kof/charts/kof-storage --version {{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}
 
     helm upgrade -i --reset-values --wait -n kof kof-collectors \
+      -f global-values.yaml \
       oci://ghcr.io/k0rdent/kof/charts/kof-collectors --version {{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}
     ```
 
@@ -84,6 +86,7 @@ To apply this option:
 2. Install the `kof-collectors` chart to the management cluster:
     ```shell
     helm upgrade -i --reset-values --wait -n kof kof-collectors \
+      -f global-values.yaml \
       -f collectors-values.yaml \
       oci://ghcr.io/k0rdent/kof/charts/kof-collectors --version {{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}
     ```
@@ -122,6 +125,7 @@ To apply this option:
 2. Install the `kof-collectors` chart to the management cluster:
     ```shell
     helm upgrade -i --reset-values --wait -n kof kof-collectors \
+      -f global-values.yaml \
       -f collectors-values.yaml \
       oci://ghcr.io/k0rdent/kof/charts/kof-collectors --version {{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}
     ```
@@ -209,6 +213,7 @@ For now, however, just for the sake of this demo, you can use the most straightf
 5. Install the `kof-collectors` chart to the management cluster:
     ```shell
     helm upgrade -i --reset-values --wait -n kof kof-collectors \
+      -f global-values.yaml \
       -f collectors-values.yaml \
       oci://ghcr.io/k0rdent/kof/charts/kof-collectors --version {{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}
     ```
