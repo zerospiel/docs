@@ -31,11 +31,12 @@ Finally, verify that KOF installed properly.
     KUBECONFIG=child-kubeconfig kubectl get pod -A
     ```
 
-    If you're upgrading from a version less than `1.1.0`, please run after upgrade:
+    If you're upgrading from KOF version less than `1.1.0`, please run after upgrade:
     ```shell
     KUBECONFIG=regional-kubeconfig kubectl apply --server-side --force-conflicts \
-    -f https://github.com/grafana/grafana-operator/releases/download/v5.16.0/crds.yaml
+    -f https://github.com/grafana/grafana-operator/releases/download/v5.18.0/crds.yaml
     ```
+    This is required by [grafana-operator release notes](https://github.com/grafana/grafana-operator/releases/tag/v5.18.0).
 
 3. Wait until the value of `READY` changes to `True`
     for all certificates in the regional cluster:
