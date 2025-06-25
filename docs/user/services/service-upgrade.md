@@ -11,7 +11,7 @@ When you deploy a service to a cluster, you can specify a `ServiceTemplateChain`
 First, you need to create a `ServiceTemplateChain` object:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ServiceTemplateChain
 metadata:
   name: ingress-nginx-chain
@@ -106,7 +106,7 @@ spec:
 In general, the process of rolling back a service to the previous version is the same as upgrading the service in the first place. You'll need to create a separate `ServiceTemplateChain`, which defines the downgrade path:
 
 ```yaml
-apiVersion: k0rdent.mirantis.com/v1alpha1
+apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ServiceTemplateChain
 metadata:
   name: ingress-nginx-chain
