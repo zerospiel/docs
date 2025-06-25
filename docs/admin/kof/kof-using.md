@@ -4,7 +4,7 @@ Most of the time, you'll access KOF's data through Grafana.
 
 ## Access to Grafana
 
-To make Grafana available, follow these steps:
+To make Grafana available, start with these steps:
 
 1. Get the Grafana username and password:
     ```shell
@@ -26,6 +26,13 @@ To make Grafana available, follow these steps:
 ![collect-from-3-cluster-roles](../../assets/kof/collect-from-3-cluster-roles--2025-04-17.gif)
 
 ![grafana-demo](../../assets/kof/grafana-2025-01-14.gif)
+
+### Single Sign-On
+
+Port forwarding described above is a quick solution.
+
+Single Single-On provides better experience. If you want to enable it,
+please apply this advanced guide: [SSO for Grafana](https://github.com/k0rdent/kof/blob/main/docs/dex-sso.md).
 
 ### Cluster Overview
 
