@@ -31,6 +31,7 @@ Ensure the following before configuring IPAM:
 - The reserved space must accommodate:
     - One IP per control plane node
     - One IP per worker node
+- A valid network gateway IP
 
 ## Define IPAM configuration
 
@@ -60,6 +61,8 @@ To use mutual references, follow these steps:
         # ipAddresses:
         # - <ip-1>
         # - <ip-2>
+        gateway: <network gateway>
+        prefix: <network prefix>
       cluster: <cluster-name>
     ```
 
@@ -93,6 +96,8 @@ To use mutual references, follow these steps:
         # ipAddresses:
         # - <ip-1>
         # - <ip-2>
+        gateway: <network gateway>
+        prefix: <network prefix>
       provider: <provider-name>
     status:
       bound: true
@@ -149,6 +154,8 @@ The IPAM configuration can also be defined inline within the `ClusterDeployment`
             # ipAddresses:
             # - <ip-1>
             # - <ip-2>
+            gateway: <network gateway>
+            prefix: <network prefix>
     ```
 
 2. Apply the `ClusterDeployment`:
