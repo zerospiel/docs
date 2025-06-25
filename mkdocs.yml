@@ -306,7 +306,7 @@ extra:
     k0rdentDigestValue: sha256:d01dd2b6a8aec60670cde301ebdaac6c949644121161b709af6c6470291d77fc
     k0rdentDigestDate: Sun May 25 14:42:29 2025
     kofVersions:
-      kofDotVersion: 1.0.0
+      kofDotVersion: 1.1.0
     providerVersions:
       dashVersions:
         clusterApi: 0-3-0
