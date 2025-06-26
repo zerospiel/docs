@@ -57,6 +57,14 @@ If your user doesn't have access to or your cloud doesn't utilize octavia load b
 
 > WARNING: Disabling loadbalancer blocks usage of `LoadBalancer` type services in cluster until one is manually installed.
 
+### Configuring some of k0s, k0smotron parameters
+
+- `k0s.arch` (string): Defines K0s Arch in its download URL. Available if [global.k0sURL](../../appendix/appendix-extend-mgmt.md#configuring-a-global-k0s-url)
+   is set. Possible values: `"amd64"` (default), `"arm64"`, `"arm"`.
+- `k0s.cpArgs` (array of strings): A list of extra arguments to be passed to k0s controller.
+   See: <https://docs.k0sproject.io/stable/cli/k0s_controller>.
+- `k0s.workerArgs` (array of strings): A list of extra arguments for configuring the k0s worker node. See: <https://docs.k0sproject.io/stable/cli/k0s_worker>.
+
 ### Example ClusterDeployment
 
 ```yaml
