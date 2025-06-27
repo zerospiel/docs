@@ -29,7 +29,7 @@ To make Grafana available, start with these steps:
 
 ### Single Sign-On
 
-Port forwarding described above is a quick solution.
+Port forwarding, as described above, is a quick solution.
 
 Single Single-On provides better experience. If you want to enable it,
 please apply this advanced guide: [SSO for Grafana](https://github.com/k0rdent/kof/blob/main/docs/dex-sso.md).
@@ -101,14 +101,14 @@ Finally there are the cost management features, including:
         echo https://jaeger.$REGIONAL_DOMAIN
         ```
 
-## Access to KOF UI
+## Access to the KOF UI
 
 When the [TargetAllocator](https://opentelemetry.io/docs/platforms/kubernetes/operator/target-allocator/) is in use,
 the configuration of [OpenTelemetryCollectors](https://opentelemetry.io/docs/collector/)
 Prometheus [receivers](https://github.com/open-telemetry/opentelemetry-collector-contrib/tree/main/receiver/prometheusreceiver#prometheus-api-server)
 is distributed across the cluster.
 
-KOF UI collects metrics metadata from the same endpoints that are scraped by Prometheus server:
+The KOF UI collects metrics metadata from the same endpoints that are scraped by the Prometheus server:
 
 ```mermaid
 graph TB
@@ -152,9 +152,9 @@ graph TB
     end
 ```
 
-KOF UI can be accessed by following these steps:
+You can access the KOF UI by following these steps:
 
-1. Forward a port to KOF UI:
+1. Forward a port to the KOF UI:
 
     ```shell
     kubectl port-forward -n kof deploy/kof-mothership-kof-operator 9090:9090
