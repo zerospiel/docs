@@ -43,6 +43,11 @@ The following parameters are available for `controlPlane` (for standalone cluste
 
 * `k0s.version` (string): K0s version.
 * `k0s.api.extraArgs` (object): Map of key-values (strings) for any extra arguments to pass down to the Kubernetes API server process.
+* `k0s.arch` (string): Defines the K0s Arch in its download URL. Available if [global.k0sURL](../../appendix/appendix-extend-mgmt.md#configuring-a-global-k0s-url)
+   is set. Possible values: `"amd64"` (default), `"arm64"`, `"arm"`.
+* `k0s.cpArgs` <sup>only standalone</sup> (array of strings): A list of extra arguments to be passed to k0s controller.
+   See: <https://docs.k0sproject.io/stable/cli/k0s_controller>.
+* `k0s.workerArgs` (array of strings): A list of extra arguments for configuring the k0s worker node. See: <https://docs.k0sproject.io/stable/cli/k0s_worker>.
 
 ### K0smotron Parameters
 
@@ -51,6 +56,9 @@ Available for the hosted cluster template only.
 * `k0smotron.service.type` (string): An ingress method for a service. One of: `ClusterIP`, `NodePort`, `LoadBalancer`. Defaults to: `LoadBalancer`.
 * `k0smotron.service.apiPort` (number): The Kubernetes API port. If empty, K0smotron will pick it automatically.
 * `k0smotron.service.konnectivityPort` (number): The Konnectivity port. If empty, K0smotron will pick it automatically.
+* `k0smotron.controllerPlaneFlags` (array of strings): The `controllerPlaneFlags` parameter enables you to configure additional flags for the k0s control plane
+   and to override existing flags. The default flags are kept unless they are explicitly overriden. Flags with arguments must be specified as a single
+   string, such as `--some-flag=argument`.
 
 ### Extensions parameters
 

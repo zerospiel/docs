@@ -20,14 +20,14 @@ To deploy a cluster using {{{ docsVersionInfo.k0rdentName}}} on any SSH accessib
 * `machines[].useSudo` (boolean): Whether or not to use sudo for running commands on the remote machine. Example: `false`.
 * `machines[].provisionJob.scpCommand` (string): The command to use for copying files to remote machines. Example: `"scp"`.
 * `machines[].provisionJob.sshCommand` (string): The command to use for connecting to remote machines. Example: `"ssh"`.
-* `machines[].provisionJob.jobSpecTemplate.metadata`: Kubernetes metadata for the provisioning job, such as labels or annotations. See: https://docs.k0smotron.io/stable/resource-reference/#remotemachinespecprovisionjobjobspectemplatemetadata for more information.
-* `machines[].provisionJob.jobSpecTemplate.spec`: Specification for the provisioning job, detailing the job’s behavior and configuration. See: https://docs.k0smotron.io/stable/resource-reference/#remotemachinespecprovisionjobjobspectemplatespec for more information.
-* `machines[].k0s.args` (array of strings): A list of extra arguments for configuring the k0s worker node. Example: `["--extra-arg"]`.
+* `machines[].provisionJob.jobSpecTemplate.metadata`: Kubernetes metadata for the provisioning job, such as labels or annotations. See: <https://docs.k0smotron.io/stable/resource-reference/#remotemachinespecprovisionjobjobspectemplatemetadata> for more information.
+* `machines[].provisionJob.jobSpecTemplate.spec`: Specification for the provisioning job, detailing the job’s behavior and configuration. See: <https://docs.k0smotron.io/stable/resource-reference/#remotemachinespecprovisionjobjobspectemplatespec> for more information.
+* `machines[].k0s.args` (array of strings): A list of extra arguments for configuring the k0s worker node. See: <https://docs.k0sproject.io/stable/cli/k0s_worker>.
 
 ### K0smotron Parameters
 
 * `k0smotron.controllerPlaneFlags` (array of strings): The `controllerPlaneFlags` parameter enables you to configure additional flags for the k0s control plane and to override existing flags. The default flags are kept unless they are explicitly overriden. Flags with arguments must be specified as a single string, such as `--some-flag=argument`.
-* `k0smotron.persistence.type` (string): This parameter defines the persistence type for the control plane’s state. Example: `"EmptyDir"`. See https://docs.k0smotron.io/stable/configuration/#persistence for more information.
+* `k0smotron.persistence.type` (string): This parameter defines the persistence type for the control plane’s state. Example: `"EmptyDir"`. See <https://docs.k0smotron.io/stable/configuration/#persistence> for more information.
 * `k0smotron.service.type` (string): This parameter defines the type of service for the Kubernetes API server: `"ClusterIP"`, `"NodePort"`, or `"LoadBalancer"`.
 * `k0smotron.service.apiPort` (number): This parameter defines the port for accessing the Kubernetes API server. Example: `30443`.
 * `k0smotron.service.konnectivityPort` (number): This parameter indicates the port for the Konnectivity service. Example: `30132`.
@@ -35,6 +35,8 @@ To deploy a cluster using {{{ docsVersionInfo.k0rdentName}}} on any SSH accessib
 ### K0s Parameters
 
 * `k0s.version` (string): Specifies the version of the k0s Kubernetes distribution. Example: `"v1.32.2+k0s.0"`.
+* `k0s.arch` (string): Defines K0s Arch in its download URL. Available if [global.k0sURL](../../appendix/appendix-extend-mgmt.md#configuring-a-global-k0s-url)
+   is set. Possible values: `"amd64"` (default), `"arm64"`, `"arm"`.
 * `k0s.api.extraArgs`: Additional arguments to pass to the Kubernetes API server. Example: `{"--some-arg": "value"}`.
 * `k0s.network`: Network settings for the k0s cluster. Example: `{"dns": "8.8.8.8"}`.
 * `k0s.extensions.helm.repositories` (array of objects): Helm repositories to add during the cluster setup. Example: `[{ "name": "repo1", "url": "https://charts.repo1.com" }]`.
