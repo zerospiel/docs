@@ -1,4 +1,4 @@
-## Extended Management Configuration
+# Extended Management Configuration
 
 {{{ docsVersionInfo.k0rdentName }}} is deployed with the following default configuration, which may vary
 depending on the release version:
@@ -29,7 +29,6 @@ by {{{ docsVersionInfo.k0rdentName }}}, such as Sveltos.
 To see what is included in a specific release, look at the `release.yaml` file in the tagged release.
 For example, here is the [v0.0.7 release.yaml](https://github.com/k0rdent/kcm/releases/download/v0.0.7/release.yaml).
 
-
 {{{ docsVersionInfo.k0rdentName }}} allows you to customize its default configuration by modifying the spec of the `Management` object.
 This enables you to manage the list of providers to deploy and adjust the default settings for core components.
 
@@ -49,40 +48,41 @@ There are two options to override the default management configuration of {{{ do
     - Create `management.yaml` file and configure core components and providers.
       For example:
 
-           ```yaml
-           apiVersion: k0rdent.mirantis.com/v1beta1
-           kind: Management
-           metadata:
-             name: kcm
-           spec:
-             core:
-               capi: {}
-               kcm:
-                 config:
-                   controller:
-                     templatesRepoURL: "oci://ghcr.io/my-oci-registry-name/kcm/charts"
-             providers:
-             - name: k0smotron
-             - name: cluster-api-provider-aws
-             - name: projectsveltos
-             release: kcm-0-0-7
-           ```
-      In the example above, the `Management` object is configured with custom registry settings for the KCM controller
-      and a reduced list of providers.
+        ```yaml
+        apiVersion: k0rdent.mirantis.com/v1beta1
+        kind: Management
+        metadata:
+          name: kcm
+        spec:
+          core:
+            capi: {}
+            kcm:
+              config:
+                controller:
+                  templatesRepoURL: "oci://ghcr.io/my-oci-registry-name/kcm/charts"
+          providers:
+          - name: k0smotron
+          - name: cluster-api-provider-aws
+          - name: projectsveltos
+          release: kcm-0-0-7
+        ```
+
+        In the example above, the `Management` object is configured with custom registry settings for the KCM controller
+        and a reduced list of providers.
 
     - Specify `--create-management=false` controller argument and install {{{ docsVersionInfo.k0rdentName }}}:
       If installing using `helm` add the following parameter to the `helm
       install` command:
 
-        ```shell
+        ```bash
         --set="controller.createManagement=false"
         ```
 
     - Create `kcm` `Management` object after {{{ docsVersionInfo.k0rdentName }}} installation:
 
-           ```bash
-           kubectl --kubeconfig <path-to-management-kubeconfig> create -f management.yaml
-           ```
+        ```bash
+        kubectl --kubeconfig <path-to-management-kubeconfig> create -f management.yaml
+        ```
 
 You can customize the default configuration options for core components by updating the
 `.spec.core.<core-component-name>.config` section in the `Management` object. For example, to override the default
@@ -100,18 +100,21 @@ and may include the `template` and `config` fields:
   template: <provider-template> # optional. If omitted, the default template from the `Release` object will be used
   config: {} # optional provider configuration containing provider Helm Chart values in YAML format
 ```
+
 ## Examples and Use Cases
+
 ### Configuring a Custom OCI Registry for KCM components
+
 You can override the default registry settings in {{{ docsVersionInfo.k0rdentName }}} by specifying the `templatesRepoURL`, `insecureRegistry`,
 and `registryCredsSecret` parameters under `spec.core.kcm.config.controller`.
 
-* `templatesRepoURL`: Specifies the registry URL for downloading Helm charts representing templates.
+- `templatesRepoURL`: Specifies the registry URL for downloading Helm charts representing templates.
 Use the `oci://` prefix for OCI registries. Default: `oci://ghcr.io/k0rdent/kcm/charts`.
-* `globalRegistry`: Specifies the global registry. This value will be propagated to all `ClusterDeployment` objects
+- `globalRegistry`: Specifies the global registry. This value will be propagated to all `ClusterDeployment` objects
 configuration as `global.registry` (for example, it is used for pulling cluster Helm extensions, such as the Cloud
 Controller Manager and to download required images, such as `etcd` or `kube-proxy`).
-* `insecureRegistry`: Allows connecting to an HTTP registry. Default: `false`.
-* `registryCredsSecret`: Specifies the name of a Kubernetes `Secret` containing authentication credentials for the 
+- `insecureRegistry`: Allows connecting to an HTTP registry. Default: `false`.
+- `registryCredsSecret`: Specifies the name of a Kubernetes `Secret` containing authentication credentials for the
 registry (optional). This `Secret` should exist in the system namespace (default: `kcm-system`).
 
 Additionally, if your templates repository (`templatesRepoURL`) and/or registry (`globalRegistry`) is private and
@@ -122,7 +125,7 @@ certificates of the registry and/or templates repository. If the `templatesRepoU
 different endpoints, and each uses a different certificate authority, you can include both certificates concatenated
 in the same `ca.crt` key of the `Secret`, like this:
 
-```
+```text
 -----BEGIN CERTIFICATE-----
 <templatesRepo CA cert>
 -----END CERTIFICATE-----
@@ -219,9 +222,9 @@ certificate signed by an unknown authority), under `spec.core.kcm.config.control
 needed when the environment does not have access to the default upstream k0s binaries endpoint. This is required for
 airgapped environments.
 
-* `globalK0sURL`: Specifies the prefix of the k0s URL from which to download the k0s binary. This value will be
+- `globalK0sURL`: Specifies the prefix of the k0s URL from which to download the k0s binary. This value will be
 propagated to all `ClusterDeployment` objects configuration as `global.k0sURL`.
-* `k0sURLCertSecret`: The name of the secret in the system (default: `kcm-system`) namespace containing the root CA
+- `k0sURLCertSecret`: The name of the secret in the system (default: `kcm-system`) namespace containing the root CA
 certificate (`ca.crt`) for the k0s download URL.
 
 > NOTE:
@@ -263,7 +266,7 @@ stringData:
 ### Configuring a Custom Image for KCM controllers
 
 You can override the default image for the KCM controllers by specifying the `repository`, `tag` and `pullPolicy`
-parameters under `spec.core.kcm.config.image`: 
+parameters under `spec.core.kcm.config.image`:
 
 Example Configuration:
 
@@ -282,11 +285,12 @@ spec:
 
 Starting from `v0.3.0`, {{{ docsVersionInfo.k0rdentName }}} supports configuring manager settings for CAPI providers. You can override
 these settings by defining the `spec.providers[*].config.manager` section. The values under the `manager` section should
-follow the format described here:
-https://github.com/kubernetes-sigs/cluster-api-operator/blob/v0.18.1/api/v1alpha2/provider_types.go#L126.
+follow the format defined by the [CAPI Operator](https://pkg.go.dev/sigs.k8s.io/cluster-api-operator/api/v1alpha2#ManagerSpec).
 
-> WARNING: This is not supported for the `k0sproject-k0smotron` provider due to a bug in the CAPI Operator:
+> WARNING: Prior to `v1.1.0` {{{ docsVersionInfo.k0rdentName }}}, this is not supported for the `k0sproject-k0smotron` provider due to a bug in the CAPI Operator:
 > [CAPI operator incorrectly finds the manager container if the number of containers is >1](https://github.com/kubernetes-sigs/cluster-api-operator/issues/787).
+>
+> Starting `v1.1.0` {{{ docsVersionInfo.k0rdentName }}} shipped with a CAPI Operator version with [the issue addressed](https://github.com/kubernetes-sigs/cluster-api-operator/pull/796).
 
 For example, to override feature gates for the Cluster API Provider AWS, configure the following:
 
@@ -300,4 +304,24 @@ spec:
           MachinePool: true
           EKSEnableIAM: true
           EKSAllowAddRoles: true
+```
+
+### Configuring the Sveltos Stuck Tokens Controller
+
+If a management cluster has some maintenance activity or hardware issue causing it to go down for more than ~30 minutes,
+the token for the management `sveltoscluster` object expires. This leads to continuous errors and
+failure to reconcile the management `sveltoscluster` object. [Related issue: KCM #995](https://github.com/k0rdent/kcm/issues/995).
+
+A dedicated controller that automatically detects and renews stuck tokens is shipped with
+{{{ docsVersionInfo.k0rdentName }}} starting `v1.1.0` and is *disabled* by default.
+
+To enable the controller, set:
+
+```yaml
+spec:
+  core:
+    kcm:
+      config:
+        controller:
+          enableSveltosExpiredCtrl: true
 ```
