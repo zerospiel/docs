@@ -137,6 +137,10 @@ and apply this example, or use it as a reference:
       storageClass: <EXAMPLE_STORAGE_CLASS>
     ```
 
+    If `kubectl get sc` shows nothing
+    or just `kubernetes.io/no-provisioner` in the `PROVISIONER` column,
+    apply [OpenEBS](https://docs.k0sproject.io/stable/examples/openebs/) or similar.
+
 4. If you've applied the [DNS auto-config](#dns-auto-config) section,
     add its information to the `kcm:` object in the `mothership-values.yaml` file.
 
@@ -180,6 +184,16 @@ and apply this example, or use it as a reference:
       oci://ghcr.io/k0rdent/kof/charts/kof-mothership --version {{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}
     ```
 
+    If you're upgrading from KOF version less than `1.1.0`, after upgrade please run:
+    ```shell
+    kubectl apply --server-side --force-conflicts \
+    -f https://github.com/grafana/grafana-operator/releases/download/v5.18.0/crds.yaml
+    ```
+    This is required by [grafana-operator release notes](https://github.com/grafana/grafana-operator/releases/tag/v5.18.0).
+
+    There is a similar step for each regional cluster
+    on [verification step 2](./kof-verification.md#verification-steps).
+
 7. Wait until the value of `VALID` changes to `true` for all `ServiceTemplate` objects:
     ```shell
     kubectl get svctmpl -A
@@ -216,6 +230,8 @@ and apply this example, or use it as a reference:
     ```shell
     kubectl get pod -n kof
     ```
+
+10. Check options to store metrics of the management cluster in the [Storing KOF data](./kof-storing.md) guide.
 
 ## Regional Cluster
 
