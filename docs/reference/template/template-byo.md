@@ -76,10 +76,15 @@ For defining the Helm chart, you have three choices. You can either:
 
 1. Specify the actual Helm chart definition in the `.spec.helm.chartSpec` field of the
    [HelmChartSpec](https://fluxcd.io/flux/components/source/api/v1/#source.toolkit.fluxcd.io/v1.HelmChartSpec) kind,
-2. Reference an existing `HelmChart` object in `.spec.helm.chartRef`, or
+2. Reference an existing `HelmChart` object in `.spec.helm.chartRef`
 
 > NOTE:
-> `spec.helm.chartSpec` and `spec.helm.chartRef` are mutually exclusive.
+> Next option is supported for `ServiceTemplate` objects only
+
+3. Reference FluxCD source of the Helm chart in `.spec.helm.chartSource`
+
+> NOTE:
+> `spec.helm.chartSpec`, `spec.helm.chartRef`, `spec.helm.chartSource` are mutually exclusive.
 
 To automatically create the `HelmChart` for the `Template`, configure the following custom helm chart parameters
 under `spec.helm.chartSpec`:

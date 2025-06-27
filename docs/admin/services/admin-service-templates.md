@@ -44,7 +44,7 @@ Helm-based `ServiceTemplate` can be created in three ways:
 - by defining or referring source provided by FluxCD
 
 > NOTE:
-> `ServiceTemplate` can refer existing `HelmChart` object in `.spec.helm.chartRef` field if only `HelmChart` is backed by `HelmRepository` object.
+> `ServiceTemplate` can be defined using `.spec.helm.chartSpec` or `.spec.helm.chartRef` if only Helm chart being defined or referred is backed by `HelmRepository` or `GitRepository` object.
 > To use FluxCD sources, `ServiceTemplate` must be defined using `.spec.helm.chartSource` field.
 
 FluxCD sources supported by `ServiceTemplate` are:
@@ -92,10 +92,10 @@ FluxCD sources supported by `ServiceTemplate` are:
          kind: HelmChart
          name: ingress-nginx-4.11.3
    ```
-   
+
    In this case, we're creating a `ServiceTemplate` called `ingress-nginx-4.11.3` in the
    `my-target-namespace` namespace.  It references the existing `ingress-nginx-4.11.3` Helm chart.
-   
+
 3. Referring existing FluxCD source
 
    ```yaml
@@ -112,11 +112,11 @@ FluxCD sources supported by `ServiceTemplate` are:
            name: k0rdent-catalog
          path: "./charts/ingress-nginx"
    ```
-   
+
    In this case, we're creating a `ServiceTemplate` called `ingress-nginx-4.11.3` in the
-   `my-target-namespace` namespace.  It references the existing `GitRepository` object called 
+   `my-target-namespace` namespace.  It references the existing `GitRepository` object called
    `k0rdent-catalog` and the Helm chart located in the `charts/ingress-nginx` path.
-   
+
 4. Defining Helm chart source, which can be one of types provided by FluxCD:
 
    ```yaml
@@ -136,7 +136,7 @@ FluxCD sources supported by `ServiceTemplate` are:
    ```
 
    In this case, we're creating a `ServiceTemplate` called `ingress-nginx-4.11.3` in the
-   `my-target-namespace` namespace.  It defines the source of the Helm chart located in the 
+   `my-target-namespace` namespace.  It defines the source of the Helm chart located in the
    `s3://bucket/path/to/charts` bucket and path where the Helm chart is located within the bucket.
 
 For more information on creating templates, see the [Template Guide](../../reference/template/index.md).
@@ -195,8 +195,8 @@ When `.spec.kustomize.remoteSourceSpec` is defined, the controller will create c
 
 ### Creating Raw-Resources-based ServiceTemplate
 
-This type of source is quite similar to the kustomization sources, with the only exception: 
-when using `ConfigMap` or `Secret` as a source, the field `.spec.resources.localSourceRef.path` will be ignored 
+This type of source is quite similar to the kustomization sources, with the only exception:
+when using `ConfigMap` or `Secret` as a source, the field `.spec.resources.localSourceRef.path` will be ignored
 and the resources' manifests to be deployed must be inlined in the source's `data`.
 
 Example of the `ConfigMap` and corresponding `ServiceTemplate`:
