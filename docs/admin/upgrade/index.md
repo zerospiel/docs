@@ -12,7 +12,7 @@ Upgrading {{{ docsVersionInfo.k0rdentName }}} involves making upgrades to the `M
     Kubernetes Cluster API.  For example, the v{{{ extra.docsVersionInfo.k0rdentDotVersion }}} `Release` object looks like this:
 
     ```yaml
-    apiVersion: k0rdent.mirantis.com/v1alpha1
+    apiVersion: k0rdent.mirantis.com/v1beta1
     kind: Release
     metadata:
       name: kcm-{{{ extra.docsVersionInfo.k0rdentVersion }}}
