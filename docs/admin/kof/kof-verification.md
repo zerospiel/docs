@@ -31,7 +31,7 @@ Finally, verify that KOF installed properly.
     KUBECONFIG=child-kubeconfig kubectl get pod -A
     ```
 
-    If you're upgrading from KOF version less than `1.1.0`, please run after upgrade:
+    If you're upgrading from a KOF version less than `1.1.0`, after upgrade please run the following:
     ```shell
     KUBECONFIG=regional-kubeconfig kubectl apply --server-side --force-conflicts \
     -f https://github.com/grafana/grafana-operator/releases/download/v5.18.0/crds.yaml
