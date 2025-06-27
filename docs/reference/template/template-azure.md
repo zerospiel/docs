@@ -61,9 +61,9 @@ Detailed information regarding image can be found in [CAPZ documentation](https:
 
 By default, the latest official CAPZ Ubuntu based image is used.
 
-## Configuring some of k0s, k0smotron parameters
+## Configuring k0s, k0smotron parameters
 
-* `k0s.arch` (string): Defines K0s Arch in its download URL. Available if [global.k0sURL](../../appendix/appendix-extend-mgmt.md#configuring-a-global-k0s-url)
+* `k0s.arch` (string): Defines the K0s Arch in its download URL. Available if [global.k0sURL](../../appendix/appendix-extend-mgmt.md#configuring-a-global-k0s-url)
    is set. Possible values: `"amd64"` (default), `"arm64"`, `"arm"`.
 * `k0s.cpArgs` <sup>only standalone</sup> (array of strings): A list of extra arguments to be passed to k0s controller.
    See: <https://docs.k0sproject.io/stable/cli/k0s_controller>.
