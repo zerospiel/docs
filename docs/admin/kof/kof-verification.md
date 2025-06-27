@@ -36,7 +36,7 @@ Finally, verify that KOF installed properly.
     KUBECONFIG=regional-kubeconfig kubectl apply --server-side --force-conflicts \
     -f https://github.com/grafana/grafana-operator/releases/download/v5.18.0/crds.yaml
     ```
-    This is required by [grafana-operator release notes](https://github.com/grafana/grafana-operator/releases/tag/v5.18.0).
+    This is noted as required in the [grafana-operator release notes](https://github.com/grafana/grafana-operator/releases/tag/v5.18.0).
 
 3. Wait until the value of `READY` changes to `True`
     for all certificates in the regional cluster:
