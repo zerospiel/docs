@@ -14,6 +14,9 @@ be deployed as a complete application.
 
 ### Helm-based ServiceTemplate
 
+> NOTE:
+> `ServiceTemplate` can be defined using `.spec.helm.chartSpec` or `.spec.helm.chartRef` if only Helm chart being defined or referred is backed by `HelmRepository` or `GitRepository` object.
+
 Helm-based `ServiceTemplate` can be created in three ways:
 
 - by defining Helm chart right in the template object
@@ -34,7 +37,7 @@ Helm-based `ServiceTemplate` can be created in three ways:
           kind: HelmRepository
           name: foo-repository
   ```
-  
+
   In this case the corresponding `HelmChart` object will be created by the controller.
 
 - by referring the existing Helm chart
@@ -74,7 +77,7 @@ Helm-based `ServiceTemplate` can be created in three ways:
           name: foo-repository
         path: "./charts"
   ```
-  
+
   ```yaml
   apiVersion: k0rdent.mirantis.com/v1beta1
   kind: ServiceTemplate
@@ -113,7 +116,7 @@ Kustomize-based `ServiceTemplate` can be created with either local or remote sou
       deploymentType: Remote
       path: "./base"
   ```
-  
+
   `ConfigMap` or `Secret` in this case must embed the tar-gzipped archive containing the kustomization files. This can be done by the following command, assuming the the archive was already created:
 
   ```shell
@@ -139,7 +142,7 @@ Kustomize-based `ServiceTemplate` can be created with either local or remote sou
       deploymentType: Remote
       path: "./overlays"
   ```
-  
+
   `.spec.kustomize.remoteSourceSpec` has mutual exclusive fields `.git`, `.bucket` and `.oci` which inline `GitRepositorySpec`, `BucketSpec` and `OCIRepositorySpec` respectively.
 
 ### Raw-resources-based ServiceTemplate
@@ -148,4 +151,4 @@ Similar to kustomize-based `ServiceTemplate`, raw-resources-based `ServiceTempla
 kustomize-based `ServiceTemplate`, however using local source slightly differ in case `ConfigMap` or `Secret` object is referred as a source:
 
 - `spec.resources.localSourceRef.path` will be ignored
-- referred `ConfigMap` or `Secret` must contain inlined resources' definitions instead of embedding tar-gzipped archive. 
+- referred `ConfigMap` or `Secret` must contain inlined resources' definitions instead of embedding tar-gzipped archive.
