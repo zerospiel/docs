@@ -6,8 +6,8 @@ At this point you have metrics collected and visualized. It is important to chec
 but it is even better to **automate detection and notification about the issues found in the data.**
 
 We believe the rules should be configured using YAML IaC (Infrastructure as Code),
-while temporary management like [Silences](https://grafana.com/docs/grafana/latest/alerting/configure-notifications/create-silence/)
-can be done using UI.
+while you can perform temporary management such as [Silences](https://grafana.com/docs/grafana/latest/alerting/configure-notifications/create-silence/)
+using the UI.
 
 [Alerting rules](https://prometheus.io/docs/prometheus/latest/configuration/alerting_rules/)
 and [recording rules](https://prometheus.io/docs/prometheus/latest/configuration/recording_rules/#recording-rules)
@@ -17,28 +17,30 @@ with per-cluster [customization](#custom-rules) options.
 
 KOF uses the [data source managed rules](https://grafana.com/docs/grafana/latest/alerting/fundamentals/alert-rules/#data-source-managed-alert-rules)
 to store and [execute](#execution-of-rules) recording rules in regional clusters closer to the source data,
-and to reduce the load on Grafana even for alerting rules executed by Promxy in the management cluster.
+and to reduce the load on Grafana, even for alerting rules executed by Promxy in the management cluster.
 
 Promxy is used as a data source and executor of alerting rules
 instead of [VMAlert](https://docs.victoriametrics.com/operator/resources/vmalert/) because:
 
-* "For example, if you wanted to know that the global error rate was <10%
+* As the [Promxy FAQ](https://github.com/jacksontj/promxy/tree/v0.0.93?tab=readme-ov-file#how-do-i-use-alertingrecording-rules-in-promxy) says, "for example, if you wanted to know that the global error rate was < 10%,
     this would be impossible on the individual prometheus hosts
     (without federation, or re-scraping) but trivial in promxy."
-    ([Promxy FAQ](https://github.com/jacksontj/promxy/tree/v0.0.93?tab=readme-ov-file#how-do-i-use-alertingrecording-rules-in-promxy))
 
-* It fixes the "See graph" button in Grafana Alerting rules UI,
+* It fixes the "See graph" button in the Grafana Alerting rules UI,
     as Grafana gets the metrics from all regional clusters via Promxy.
 
 [VMAlertManager](https://docs.victoriametrics.com/operator/resources/vmalertmanager/)
 aggregates and sends alerts to various receivers like Slack
 with [advanced routing](#advanced-routing) options.
 
-Let's start from the demo of the alert sent and received.
+Let's start with the demo of an alert sent and received.
 
 ## Alertmanager Demo
 
-1. Add to the `mothership-values.yaml` file:
+1. Open the [https://webhook.site/](https://webhook.site/) and save "Your unique URL"
+    for the next step.
+
+1. Add the following to the `mothership-values.yaml` file, replacing `$WEBHOOK_URL` with the URL from step 1:
     ```yaml
     victoriametrics:
       vmalert:
@@ -52,13 +54,10 @@ Let's start from the demo of the alert sent and received.
                   - url: $WEBHOOK_URL
     ```
 
-2. Open the [https://webhook.site/](https://webhook.site/), copy "Your unique URL",
-    and paste it instead of `$WEBHOOK_URL` above.
-
 3. Apply the `mothership-values.yaml` file as described in the [Management Cluster](./kof-install.md#management-cluster) section.
 
-4. Wait a bit until the [https://webhook.site/](https://webhook.site/)
-    shows the `Watchdog` alert like this:
+4. Wait until the [https://webhook.site/](https://webhook.site/)
+    shows the `Watchdog` alert, as in:
     ```json
     {
       "receiver": "webhook",
@@ -84,7 +83,7 @@ Let's start from the demo of the alert sent and received.
 
 ## Advanced Routing
 
-The `config` in [Alertmanager Demo](#alertmanager-demo) is very basic.
+The configuration of the [Alertmanager Demo](#alertmanager-demo) is very basic.
 
 Please use these guides to apply advanced routing options:
 
@@ -109,15 +108,15 @@ Please use these guides to apply advanced routing options:
 
 To access the Alertmanager UI:
 
-1. Run in the management cluster:
+1. In the management cluster, forward the alertmanager port:
     ```shell
     kubectl port-forward -n kof svc/vmalertmanager-cluster 9093:9093
     ```
 
 2. Open [http://127.0.0.1:9093/](http://127.0.0.1:9093/)
-    and check the tabs like "Alerts" and "Silences".
+    and check tabs such as "Alerts" and "Silences".
 
-See the demo in [Grafana Alerting UI](#grafana-alerting-ui) section
+See the demo in the [Grafana Alerting UI](#grafana-alerting-ui) section
 where Alertmanager UI shows the same data.
 
 ## Grafana Alerting UI
@@ -146,7 +145,7 @@ There are few places where you can find the graph of the firing alert:
 3. The same Prometheus UI link is sent to receiver like Slack in `generatorURL` field,
     as shown in the [Alertmanager Demo](#alertmanager-demo).
 
-Prometheus UI looks like this:
+The Prometheus UI looks like this:
 
 ![prom-ui](../../assets/kof/prom-ui--2025-06-09.png)
 
@@ -156,7 +155,7 @@ To enable Promxy Prometheus UI, please run this command in the management cluste
 kubectl port-forward -n kof svc/kof-mothership-promxy 8082:8082
 ```
 
-If you expose Prometheus UI with some external domain,
+If you expose the Prometheus UI with some external domain,
 please set `promxy.extraArgs."web.external-url"` in `mothership-values.yaml` file
 and reapply it as described in the [Management Cluster](./kof-install.md#management-cluster) section.
 
@@ -166,7 +165,7 @@ You can update or create rules for all or specific clusters in a centralized way
 passing [values](https://github.com/k0rdent/kof/blob/332f66ff03bae8abd37cc7e754dd8d7a42d059a7/charts/kof-mothership/values.yaml#L484-L537)
 to the `kof-mothership` chart [installed in the management cluster](./kof-install.md#management-cluster).
 
-For example, let's update `CPUThrottlingHigh` alert in the `kubernetes-resources` group:
+For example, let's update the `CPUThrottlingHigh` alert in the `kubernetes-resources` group:
 
 1. Note the [original alert](https://github.com/k0rdent/kof/blob/332f66ff03bae8abd37cc7e754dd8d7a42d059a7/charts/kof-mothership/templates/prometheus/rules/kubernetes-resources.yaml#L250-L281)
     in the `PrometheusRule` has the threshold `> ( 25 / 100 )`.
@@ -185,7 +184,7 @@ For example, let's update `CPUThrottlingHigh` alert in the `kubernetes-resources
     ```
     Note the `cluster="cluster1"` filters and the `> ( 42 / 100 )` threshold.
 
-3. Add a similar patch for the `cluster10` to the same `clusterAlertRules`.
+3. Add a similar patch for `cluster10` to the same `clusterAlertRules`.
 
 4. Now that we have special `CPUThrottlingHigh` alerts for `cluster1` and `cluster10`,
     we want to exclude these clusters from the default `CPUThrottlingHigh` alert
@@ -259,7 +258,7 @@ graph TB
 If you've [selected to store](./kof-storing.md) KOF data of the management cluster
 in the same management cluster, then:
 
-1. Copy the generated mothership recording rules from the output `ConfigMap` to YAML file:
+1. Copy the generated mothership recording rules from the output `ConfigMap` to a YAML file:
     ```shell
     kubectl get cm -n kof kof-record-vmrules-mothership -o yaml \
     | yq -r .data.values > vmrules.yaml
