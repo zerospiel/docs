@@ -1,12 +1,9 @@
-name: Deploy Docs Reusable Workflow
+name: Deploy Docs Consumer (Runs manually or on cron)
 
 on:
-  workflow_call:
-    inputs:
-      branch:
-        required: false
-        type: string
-        description: "The branch to deploy docs for"
+  schedule:
+    - cron: '*/15 * * * *'  # every 15 minutes
+  workflow_dispatch:       # manual trigger via GitHub UI
 
 permissions:
   contents: write
@@ -14,127 +11,109 @@ permissions:
   id-token: write
 
 jobs:
-  deploy:
+  dispatch:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout this branch
-        uses: actions/checkout@v4
-        with:
-          fetch-depth: 1
-
-      - name: Fetch versions.yml from main
-        run: |
-          git fetch origin main
-          if git ls-tree -r origin/main --name-only | grep -q '^versions.yml$'; then
-            git checkout origin/main -- versions.yml
-          else
-            echo "versions.yml not found in main. Exiting."
-            exit 1
-          fi
-
-      - name: Parse versions.yml for this branch
-        id: vars
-        run: |
-          python3 <<EOF
-          import os, sys, yaml
-
-          branch = os.environ.get("INPUT_BRANCH") or os.environ["GITHUB_REF_NAME"]
-          print(f"::group::Parsing versions.yml for branch '{branch}'")
-
-          with open("versions.yml") as f:
-              data = yaml.safe_load(f)
-
-          match = next((v for v in data["versions"] if v["branch"] == branch), None)
-          if not match:
-              print(f"::notice:: No match for branch {branch}. Exiting.")
-              sys.exit(0)
-
-          for key in ("version", "title", "aliases"):
-              if key not in match:
-                  print(f"::error:: Missing key '{key}' in entry for branch {branch}")
-                  sys.exit(1)
-
-          version = match["version"]
-          title = match["title"]
-          aliases = match["aliases"]
-          default = 'true' if match.get('default', False) else 'false'
-
-          print(f"version: {version}")
-          print(f"title: {title}")
-          print(f"aliases: {aliases}")
-          print(f"default: {default}")
-
-          with open(os.environ["GITHUB_OUTPUT"], "a") as ghout:
-              ghout.write(f"version={version}\n")
-              ghout.write(f"title={title}\n")
-              ghout.write(f"aliases={' '.join(aliases)}\n")
-              ghout.write(f"default={default}\n")
-          EOF
-
-      - name: Set up Python and install requirements
-        run: |
-          python3 -m pip install --upgrade pip
-          pip install -r requirements.txt
-
-      - name: Checkout branch content
-        uses: actions/checkout@v4
-        with:
-          ref: ${{ inputs.branch || github.ref_name }}
-          fetch-depth: 0
-
       - name: Configure git identity
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
 
-      - name: Ensure gh-pages branch exists
+      - name: Checkout workflow-queue branch
+        uses: actions/checkout@v4
+        with:
+          ref: workflow-queue
+          fetch-depth: 0
+
+      - name: Configure authenticated GitHub URL for future clones
         run: |
-          if ! git ls-remote --exit-code --heads origin gh-pages > /dev/null; then
-            echo "gh-pages branch not found. Initializing with dummy version."
-            mike deploy --push --update-aliases --allow-empty dummy
-            mike delete --push dummy
-          else
-            echo "gh-pages branch already exists."
+          echo "https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com" > ~/.git-credentials
+          git config --global credential.helper store
+
+      - name: Grab queue, clear, and process all branches
+        run: |
+          set -euo pipefail
+
+          touch queue.txt
+          QUEUE_LENGTH=$(grep -c -v '^\s*$' queue.txt || true)
+          if [[ "$QUEUE_LENGTH" == "0" ]]; then
+            echo "Queue is empty. Nothing to process."
+            exit 0
           fi
 
-      - name: Deploy site with mike (no push yet)
-        run: |
-          mike deploy --update-aliases --allow-empty \
-            "${{ steps.vars.outputs.version }}" \
-            ${{ steps.vars.outputs.aliases }}
+          mapfile -t QUEUE < queue.txt
+          for i in "${!QUEUE[@]}"; do
+            QUEUE[$i]=$(echo "${QUEUE[$i]}" | tr -d '[:space:]')
+          done
 
-      - name: Make dummy change in gh-pages to enable retitle commit
-        run: |
-          mkdir -p .meta
-          echo "build: $(date -u +"%Y-%m-%dT%H:%M:%SZ")" > .meta/last-build.txt
-          git add .meta/last-build.txt
+          CLEAN_QUEUE=()
+          for item in "${QUEUE[@]}"; do
+            if [[ -n "$item" ]]; then
+              CLEAN_QUEUE+=("$item")
+            fi
+          done
+          QUEUE=("${CLEAN_QUEUE[@]}")
 
-      - name: Retitle version for mike
-        run: mike retitle "${{ steps.vars.outputs.version }}" "${{ steps.vars.outputs.title }}"
+          > queue.txt
+          git add queue.txt
+          git commit -m "Cleared queue for processing"
+          git push origin workflow-queue
 
-      - name: Set aliases for mike
-        run: |
-          if [ -z "${{ steps.vars.outputs.aliases }}" ]; then
-            mike alias "${{ steps.vars.outputs.version }}"
-          else
-            mike alias "${{ steps.vars.outputs.version }}" ${{ steps.vars.outputs.aliases }}
-          fi
+          TMPDIR=$(mktemp -d)
+          echo "Working in $TMPDIR"
 
-      - name: Set default version (if applicable)
-        if: ${{ steps.vars.outputs.default == 'true' }}
-        run: mike set-default "${{ steps.vars.outputs.version }}"
+          git clone https://github.com/${{ github.repository }} "$TMPDIR"
+          cd "$TMPDIR"
+          git remote set-url origin https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}
 
-      - name: Commit and push to gh-pages
-        run: |
-          git commit -am "Update version metadata and trigger deploy" || echo "No changes to commit"
-          git push origin gh-pages
+          for BRANCH in "${QUEUE[@]}"; do
+            if ! echo "$BRANCH" | grep -Eq '^main$|^release-v[0-9]+(\.[0-9]+)*$'; then
+              echo "Skipping invalid branch: $BRANCH"
+              continue
+            fi
 
-      - name: Final reminder
-        run: |
-          echo "⚠️ If you've deleted and rebuilt the gh-pages branch:"
-          echo "➡️  Re-enable GitHub Pages publishing under repo → Settings → Pages"
-          echo
-          echo "⚠️ If no default version is set in versions.json:"
-          echo "➡️  The site will 404 at its root URL. Set one using:"
-          echo "    mike set-default <version> && git push origin gh-pages"
+            echo "=== Processing $BRANCH ==="
+
+            if ! git checkout "$BRANCH"; then
+              echo "ERROR: Branch $BRANCH doesn't exist, skipping"
+              continue
+            fi
+
+            rm -rf .venv
+            python3 -m venv .venv
+            source .venv/bin/activate
+
+            if [ -f requirements.txt ]; then
+              echo "Installing requirements for $BRANCH"
+              pip install -r requirements.txt
+            else
+              echo "No requirements.txt in $BRANCH — skipping pip install"
+            fi
+
+            echo "Deploying docs for branch: $BRANCH"
+
+            git fetch origin gh-pages || echo "gh-pages does not exist remotely"
+            if git show-ref --verify --quiet refs/remotes/origin/gh-pages; then
+              git branch -f gh-pages origin/gh-pages
+            else
+              echo "No origin/gh-pages ref — skipping branch sync"
+            fi
+
+            if [[ "$BRANCH" == "main" ]]; then
+              mike deploy -t "next" --update-aliases --push --alias-type=copy next head
+
+            elif [[ "$BRANCH" == "release-v1.0.0" ]]; then
+              mike deploy -t "v1.0.0 (latest)" --update-aliases --push --alias-type=copy v1.0.0 latest stable
+              mike set-default --push latest
+
+            else
+              version="${BRANCH#release-}"
+              mike deploy -t "$version" --update-aliases --push "$version"
+
+            fi
+
+            deactivate
+          done
+
+          echo "All branches processed."
