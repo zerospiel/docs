@@ -330,19 +330,19 @@ extra:
         k0smotron: 1-0-4
         adoptedCluster: 1-0-1
         awsEksCluster: 1-0-2
-        awsHostedCpCluster: 1-0-8
-        awsStandaloneCpCluster: 1-0-9
+        awsHostedCpCluster: 1-0-9
+        awsStandaloneCpCluster: 1-0-10
         azureAksCluster: 1-0-1
-        azureHostedCpCluster: 1-0-7
-        azureStandaloneCpCluster: 1-0-7
+        azureHostedCpCluster: 1-0-8
+        azureStandaloneCpCluster: 1-0-8
         dockerHostedCpCluster: 1-0-2
-        gcpGkeCluster: 1-0-2
-        gcpHostedCpCluster: 1-0-8
-        gcpStandaloneCpCluster: 1-0-8
-        openstackStandaloneCpCluster: 1-0-8
-        remoteCluster: 1-0-7
-        vsphereHostedCpCluster: 1-0-7
-        vsphereStandaloneCpCluster: 1-0-8
+        gcpGkeCluster: 1-0-3
+        gcpHostedCpCluster: 1-0-9
+        gcpStandaloneCpCluster: 1-0-9
+        openstackStandaloneCpCluster: 1-0-9
+        remoteCluster: 1-0-8
+        vsphereHostedCpCluster: 1-0-8
+        vsphereStandaloneCpCluster: 1-0-9
         sveltosProvider: 0-54-0
       dotVersions:
         clusterApi: 1.0.4
@@ -357,19 +357,19 @@ extra:
         k0smotron: 1.0.4
         adoptedCluster: 1.0.1
         awsEksCluster: 1.0.2
-        awsHostedCpCluster: 1.0.8
-        awsStandaloneCpCluster: 1.0.9
+        awsHostedCpCluster: 1.0.9
+        awsStandaloneCpCluster: 1.0.10
         azureAksCluster: 1.0.1
-        azureHostedCpCluster: 1.0.7
-        azureStandaloneCpCluster: 1.0.7
+        azureHostedCpCluster: 1.0.8
+        azureStandaloneCpCluster: 1.0.8
         dockerHostedCpCluster: 1.0.2
-        gcpGkeCluster: 1.0.2
-        gcpHostedCpCluster: 1.0.8
-        gcpStandaloneCpCluster: 1.0.8
-        openstackStandaloneCpCluster: 1.0.8
-        remoteCluster: 1.0.7
-        vsphereHostedCpCluster: 1.0.7
-        vsphereStandaloneCpCluster: 1.0.8
+        gcpGkeCluster: 1.0.3
+        gcpHostedCpCluster: 1.0.9
+        gcpStandaloneCpCluster: 1.0.9
+        openstackStandaloneCpCluster: 1.0.9
+        remoteCluster: 1.0.8
+        vsphereHostedCpCluster: 1.0.8
+        vsphereStandaloneCpCluster: 1.0.9
         sveltosProvider: 0.54.0
     servicesVersions:
       dashVersions:
