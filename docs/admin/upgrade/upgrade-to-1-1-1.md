@@ -1,6 +1,12 @@
-# Upgrading to {{{ docsVersionInfo.k0rdentName}}} 1.0.0
+# Upgrading to {{{ docsVersionInfo.k0rdentName}}} v1.1.1
 
-After upgrading KOF to v1.1.0, please run:
+## API versions and upgrading from pre-1.0.0 versions
+
+Because of the change from `v1alpha1` to `v1beta1`, clusters running k0rdent versions older than v1.0.0 cannot be upgraded directly to v1.1.1. First follow the [directions](index.md) to [upgrade to v1.0.0](upgrade-to-1-0-0.md), and then perform a second upgrade to v1.1.1.
+
+## Upgrade k0rdent Observability and FinOps (KOF)
+
+After upgrading KOF to v1.1.1, please run:
 
   ```bash
   kubectl apply --server-side --force-conflicts \

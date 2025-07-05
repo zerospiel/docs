@@ -110,6 +110,7 @@ plugins:
         appendix-providers.md: appendix/appendix-providers.md
         k0rdent-documentation-contributors-guide.md: contrib/k0rdent-documentation-contributors-guide.md
         k0rdent-documentation-style-guide.md: contrib/k0rdent-documentation-style-guide.md
+        admin/upgrade/upgrade-to-1-1-0.md: admin/upgrade/upgrade-to-1-1-1.md
  
 nav:
   - Welcome to the docs: index.md
@@ -180,7 +181,7 @@ nav:
       - Upgrade to v0.2.0: admin/upgrade/upgrade-to-0-2-0.md
       - Upgrade to v0.3.0: admin/upgrade/upgrade-to-0-3-0.md
       - Upgrade to v1.0.0: admin/upgrade/upgrade-to-1-0-0.md
-      - Upgrade to v1.1.0: admin/upgrade/upgrade-to-1-1-0.md
+      - Upgrade to v1.1.1: admin/upgrade/upgrade-to-1-1-1.md
     - Access Management:
       - Overview: admin/access/index.md
       - k0rdent Credentials Management: 
