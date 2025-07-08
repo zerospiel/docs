@@ -62,13 +62,13 @@ In order to pass credentials to {{{ docsVersionInfo.k0rdentName }}} so it can ta
     spec:
       template: aws-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsStandaloneCpCluster }}}
       credential: aws-cluster-credential
-        config:
+      config:
         clusterLabels: {}
         region: us-east-2
         controlPlane:
-        instanceType: t3.small
+          instanceType: t3.small
         worker:
-        instanceType: t3.small
+          instanceType: t3.small
     ```
 
     As you can see, the user doesn't have to pass anything but the name of the `Credential` in order to deploy the cluster. So all an administrator has to do is add these `Credential`objects to the system and make them available. Note also that the `Credential` has to be available in the `ClusterDeployment`s namespace. (See [Cloud provider credentials propagation](./credentials-propogation.md) for more information on how that works. )
