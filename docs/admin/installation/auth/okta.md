@@ -1,6 +1,6 @@
 # Kubernetes OIDC Authentication Setup Guide for Okta
 
-This setion explains how to configure {{{ docsVersionInfo.k0rdentName}}} to use Okta as an OIDC provider for authentication. While the examples use k0s for demonstration purposes, the concepts and procedures are fully applicable to any Kubernetes environment that meets the minimum requirements for k0rdent.
+This section explains how to configure {{{ docsVersionInfo.k0rdentName}}} to use Okta as an OIDC provider for authentication. While the examples use k0s for demonstration purposes, the concepts and procedures are fully applicable to any Kubernetes environment that meets the minimum requirements for k0rdent.
 
 ## Prerequisites
 
@@ -11,7 +11,7 @@ Before you begin, ensure that your environment meets the following prerequisites
 Make sure your development machine has the following installed:
 
 - **[Docker](https://docs.docker.com/):** Container runtime to build and run containerized applications.
-- **{{{ docsVersionInfo.k0rdentName}}} Management Cluster:** Although k0s is used in this guide, you may use any {{{ docsVersionInfo.k0rdentName}}} management cluster (for example, [Minikube](https://minikube.sigs.k8s.io/docs/start/), [MicroK8s](https://microk8s.io/), or a cloud-based cluster) that supports deploying k0rdent.
+- **{{{ docsVersionInfo.k0rdentName}}} Management Cluster:** Although k0s is used in this guide, you may use any [{{{ docsVersionInfo.k0rdentName}}} management cluster](../create-mgmt-clusters/index.md) (for example, [Minikube](https://minikube.sigs.k8s.io/docs/start/), [MicroK8s](https://microk8s.io/), or a cloud-based cluster) that supports deploying k0rdent.
 - **[Helm](https://helm.sh/):** A package manager for Kubernetes to install and manage applications. 
 - **[Coreutils](https://www.gnu.org/software/coreutils/):** Standard UNIX utilities for various file operations. 
 - **[jq](https://stedolan.github.io/jq/):** A lightweight and flexible command-line JSON processor. 
