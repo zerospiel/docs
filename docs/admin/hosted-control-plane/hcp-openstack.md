@@ -7,6 +7,7 @@ Follow these steps to set up a k0smotron-hosted control plane on OpenStack:
     Before proceeding, make sure you have the following:
 
     * A management Kubernetes cluster (Kubernetes v1.28 or later) deployed on OpenStack with [{{{ docsVersionInfo.k0rdentName }}} installed](../installation/install-k0rdent.md).
+    * An OpenStack Cloud Controller Manager installed to manage Services with the `Load Balancer` type.
     * A [default storage class](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/) configured on the management cluster to support Persistent Volumes.
     * An OpenStack Credential object and resource-template ConfigMap must exist in the namespace where the cluster
       will be deployed. Refer to steps 4–6 in the [OpenStack management cluster preparation guide](../installation/prepare-mgmt-cluster/openstack.md).
