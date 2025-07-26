@@ -157,8 +157,8 @@ Follow these steps to install and prepare an [Amazon EKS](https://ca-central-1.c
     eksctl create nodegroup --cluster <CLUSTER_NAME> \
     --name <WORKER_NODE_GROUP> \
     --node-type t3.medium \
-    --nodes 2 \
-    --nodes-min 2 \
+    --nodes 3 \
+    --nodes-min 3 \
     --nodes-max 5 \
     --node-labels "role=worker"
     ```
@@ -180,6 +180,7 @@ Follow these steps to install and prepare an [Amazon EKS](https://ca-central-1.c
     nodename2.compute.internal   Ready    <none>   4h14m   v1.31.7-eks-5d632ec
     nodename5.compute.internal   Ready    <none>   82s     v1.31.7-eks-5d632ec
     nodename3.compute.internal   Ready    <none>   4h14m   v1.31.7-eks-5d632ec
+    nodename6.compute.internal   Ready    <none>   4h14m   v1.31.7-eks-5d632ec
     ```
 
 1. Verify pods
