@@ -287,10 +287,10 @@ Starting from `v0.3.0`, {{{ docsVersionInfo.k0rdentName }}} supports configuring
 these settings by defining the `spec.providers[*].config.manager` section. The values under the `manager` section should
 follow the format defined by the [CAPI Operator](https://pkg.go.dev/sigs.k8s.io/cluster-api-operator/api/v1alpha2#ManagerSpec).
 
-> WARNING: Prior to `v1.1.0` {{{ docsVersionInfo.k0rdentName }}}, this is not supported for the `k0sproject-k0smotron` provider due to a bug in the CAPI Operator:
+> WARNING: Prior to `v1.2.0` {{{ docsVersionInfo.k0rdentName }}}, this is not supported for the `k0sproject-k0smotron` provider due to a bug in the CAPI Operator:
 > [CAPI operator incorrectly finds the manager container if the number of containers is >1](https://github.com/kubernetes-sigs/cluster-api-operator/issues/787).
 >
-> Starting `v1.1.0` {{{ docsVersionInfo.k0rdentName }}} shipped with a CAPI Operator version with [the issue addressed](https://github.com/kubernetes-sigs/cluster-api-operator/pull/796).
+> Starting `v1.2.0` {{{ docsVersionInfo.k0rdentName }}} shipped with a CAPI Operator version with [the issue addressed](https://github.com/kubernetes-sigs/cluster-api-operator/pull/796).
 
 For example, to override feature gates for the Cluster API Provider AWS, configure the following:
 
