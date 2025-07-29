@@ -57,6 +57,32 @@ parameters:
 There are multiple self-excluding ways to define the image source (for example Azure
 Compute Gallery, Azure Marketplace, and so on).
 
+If `image` is not specified, the default will be the `ubuntu-2204` image from the Azure Marketplace.
+
+Only one of the following image sources can be configured at a time:
+
+* image.id
+* image.computeGallery
+* image.marketplace
+
+If multiple sources are specified, the precedence is as follows:
+
+1. `id`
+2. `computeGallery`
+3. `marketplace`
+
+Example:
+
+```yaml
+spec:
+  config:
+    image:
+      computeGallery:
+        gallery: aksazurelinux-f7c7cda5-1c9a-4bdc-a222-9614c968580b
+        name: V2gen2arm64
+        version: 202501.05.0
+```
+
 Detailed information regarding image can be found in [CAPZ documentation](https://capz.sigs.k8s.io/self-managed/custom-images)
 
 By default, the latest official CAPZ Ubuntu based image is used.
