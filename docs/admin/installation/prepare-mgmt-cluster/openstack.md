@@ -238,8 +238,8 @@
     > NOTE:
     > When deploying clusters with `openstack-standalone-cp` template version `1-0-12` or newer, the
     > `identityRef.name` parameter is ignored and can be omitted.
-    > For older template versions, this parameter is required and must match the name of the Secret containing the
-    > clouds.yaml configuration.
+    > For older template versions, this parameter is required and must match the name of the `Secret` containing the
+    > `clouds.yaml` configuration.
 
     You can adjust `flavor`, `image name`, `region name`, and `authURL` to match your OpenStack environment. For more information about the configuration options, see the [OpenStack Template Parameters Reference](../../../reference/template/template-openstack.md).
 
