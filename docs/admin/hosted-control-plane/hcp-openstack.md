@@ -90,8 +90,8 @@ Follow these steps to set up a k0smotron-hosted control plane on OpenStack:
     > NOTE:
     > When deploying clusters with `openstack-hosted-cp` template version `1-0-2` or newer, the
     > `identityRef.name` parameter is ignored and can be omitted.
-    > For older template versions, this parameter is required and must match the name of the Secret containing the
-    > clouds.yaml configuration.
+    > For older template versions, this parameter is required and must match the name of the `Secret` containing the
+    > `clouds.yaml` configuration.
 
     You can adjust `flavor`, `image name`, `region name`, `network`, `subnet` and `router` configuration to match your
     OpenStack environment.
