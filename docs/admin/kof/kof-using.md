@@ -164,4 +164,8 @@ You can access the KOF UI by following these steps:
 
 3. Check the state of the endpoints:
 
-![kof-ui-demo](../../assets/kof/ui-2025-06-09.png)
+![kof-ui-prometheus-targets](../../assets/kof/ui_prometheus_targets.gif)
+
+The KOF UI also allows you to monitor internal telemetry from OpenTelemetry collectors, enabling comprehensive observability of their health and performance.
+
+![kof-ui-collectors-metrics](../../assets/kof/ui_collectors_metrics.gif)
