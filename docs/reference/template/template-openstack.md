@@ -18,8 +18,8 @@ To deploy an OpenStack cluster, the following are the primary parameters in the 
 > When deploying OpenStack clusters with `openstack-standalone-cp` template version 1-0-12
 > or newer or `openstack-hosted-cp` template version 1-0-2 or newer, the `identityRef.name` parameter is ignored and
 > can be omitted.
-> For older template versions, this parameter is required and must match the name of the Secret containing the
-> clouds.yaml configuration.
+> For older template versions, this parameter is required and must match the name of the `Secret` containing the
+> `clouds.yaml` configuration.
 
 ### SSH Configuration
 
