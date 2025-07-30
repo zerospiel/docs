@@ -14,6 +14,13 @@ To deploy an OpenStack cluster, the following are the primary parameters in the 
 | `.spec.config.clusterLabels`      | `k0rdent: demo`                       | Labels to apply to the cluster. Used by MultiClusterService.|
 | `.spec.config.ccmRegional`         | `true`                                | Enables the OpenStack CCM OS_CCM_REGIONAL envvar feature and allows OpenStack CCM to define the region in nodes |
 
+> NOTE:
+> When deploying OpenStack clusters with `openstack-standalone-cp` template version 1-0-12
+> or newer or `openstack-hosted-cp` template version 1-0-2 or newer, the `identityRef.name` parameter is ignored and
+> can be omitted.
+> For older template versions, this parameter is required and must match the name of the `Secret` containing the
+> `clouds.yaml` configuration.
+
 ### SSH Configuration
 
 To access deployed machines over ssh requires two things:
