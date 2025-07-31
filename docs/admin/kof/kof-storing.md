@@ -42,12 +42,34 @@ To apply this option:
       enabled: true
     ```
 
-2. If you want to use a non-default storage class, add to the `storage-values.yaml` file:
+    If you want to use a non-default storage class, add to the `storage-values.yaml` file:
     ```yaml
     victoria-logs-cluster:
       vlstorage:
         persistentVolume:
           storageClassName: <EXAMPLE_STORAGE_CLASS>
+    ```
+
+2. Create the `collectors-values.yaml` file:
+    ```yaml
+    opentelemetry-kube-stack:
+      clusterName: mothership
+      defaultCRConfig:
+        config:
+          processors:
+            resource/k8sclustername:
+              attributes:
+                - action: insert
+                  key: k8s.cluster.name
+                  value: mothership
+                - action: insert
+                  key: k8s.cluster.namespace
+                  value: kcm-system
+          exporters:
+            prometheusremotewrite:
+              external_labels:
+                cluster: mothership
+                clusterNamespace: kcm-system
     ```
 
 3. Install the `kof-storage` and `kof-collectors` charts to the management cluster:
@@ -57,6 +79,7 @@ To apply this option:
       oci://ghcr.io/k0rdent/kof/charts/kof-storage --version {{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}
 
     helm upgrade -i --reset-values --wait -n kof kof-collectors \
+      -f collectors-values.yaml \
       oci://ghcr.io/k0rdent/kof/charts/kof-collectors --version {{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}
     ```
 
@@ -74,13 +97,29 @@ To apply this option:
 1. Create the `collectors-values.yaml` file:
     ```shell
     cat >collectors-values.yaml <<EOF
-    kof:
-      logs:
-        endpoint: https://vmauth.$REGIONAL_DOMAIN/vls/insert/opentelemetry/v1/logs
-      metrics:
-        endpoint: https://vmauth.$REGIONAL_DOMAIN/vm/insert/0/prometheus/api/v1/write
-      traces:
-        endpoint: https://jaeger.$REGIONAL_DOMAIN/collector
+    opentelemetry-kube-stack:
+      clusterName: mothership
+      defaultCRConfig:
+        config:
+          processors:
+            resource/k8sclustername:
+              attributes:
+                - action: insert
+                  key: k8s.cluster.name
+                  value: mothership
+                - action: insert
+                  key: k8s.cluster.namespace
+                  value: kcm-system
+          exporters:
+            prometheusremotewrite:
+              endpoint: https://vmauth.$REGIONAL_DOMAIN/vm/insert/0/prometheus/api/v1/write
+              external_labels:
+                cluster: mothership
+                clusterNamespace: kcm-system
+            otlphttp/logs:
+              logs_endpoint: https://vmauth.$REGIONAL_DOMAIN/vls/insert/opentelemetry/v1/logs
+            otlphttp/traces:
+              endpoint: https://jaeger.$REGIONAL_DOMAIN/collector
     opencost:
       opencost:
         prometheus:
@@ -112,12 +151,29 @@ To apply this option:
     cat >collectors-values.yaml <<EOF
     kof:
       basic_auth: false
-      logs:
-        endpoint: http://$REGIONAL_CLUSTER_NAME-logs:9428/insert/opentelemetry/v1/logs
-      metrics:
-        endpoint: http://$REGIONAL_CLUSTER_NAME-vminsert:8480/insert/0/prometheus/api/v1/write
-      traces:
-        endpoint: http://$REGIONAL_CLUSTER_NAME-jaeger-collector:4318
+    opentelemetry-kube-stack:
+      clusterName: mothership
+      defaultCRConfig:
+        config:
+          processors:
+            resource/k8sclustername:
+              attributes:
+                - action: insert
+                  key: k8s.cluster.name
+                  value: mothership
+                - action: insert
+                  key: k8s.cluster.namespace
+                  value: kcm-system
+          exporters:
+            prometheusremotewrite:
+              endpoint: http://$REGIONAL_CLUSTER_NAME-vminsert:8480/insert/0/prometheus/api/v1/write
+              external_labels:
+                cluster: mothership
+                clusterNamespace: kcm-system
+            otlphttp/logs:
+              logs_endpoint: http://$REGIONAL_CLUSTER_NAME-logs:9428/insert/opentelemetry/v1/logs
+            otlphttp/traces:
+              endpoint: http://$REGIONAL_CLUSTER_NAME-jaeger-collector:4318
     opencost:
       opencost:
         prometheus:
@@ -161,7 +217,10 @@ For now, however, just for the sake of this demo, you can use the most straightf
 
 4. Create the `collectors-values.yaml` file:
     ```shell
-    COLLECTOR_CONFIG="
+    cat >collectors-values.yaml <<EOF
+    opentelemetry-kube-stack:
+      clusterName: mothership
+      defaultCRConfig:
         env:
           - name: AWS_ACCESS_KEY_ID
             valueFrom:
@@ -173,43 +232,35 @@ For now, however, just for the sake of this demo, you can use the most straightf
               secretKeyRef:
                 name: cloudwatch-credentials
                 key: AWS_SECRET_ACCESS_KEY
-        exporters:
-          awscloudwatchlogs:
-            region: us-east-2
-            log_group_name: management
-            log_stream_name: logs"
-
-    cat >collectors-values.yaml <<EOF
-    kof:
-      logs:
-        endpoint: ""
-      metrics:
-        endpoint: ""
-      traces:
-        endpoint: ""
-    collectors:
-      k8scluster:$COLLECTOR_CONFIG
-        service:
-          pipelines:
-            logs:
-              exporters:
+        config:
+          processors:
+            resource/k8sclustername:
+              attributes:
+                - action: insert
+                  key: k8s.cluster.name
+                  value: mothership
+                - action: insert
+                  key: k8s.cluster.namespace
+                  value: kcm-system
+          exporters:
+            awscloudwatchlogs:
+              region: us-east-2
+              log_group_name: management
+              log_stream_name: logs
+            prometheusremotewrite: null
+            otlphttp/logs: null
+            otlphttp/traces: null
+          service:
+            pipelines:
+              logs:
+                exporters:
                 - awscloudwatchlogs
                 - debug
-            metrics:
-              exporters:
+              metrics:
+                exporters:
                 - debug
-      node:$COLLECTOR_CONFIG
-        service:
-          pipelines:
-            logs:
-              exporters:
-                - awscloudwatchlogs
-                - debug
-            metrics:
-              exporters:
-                - debug
-            traces:
-              exporters:
+              traces:
+                exporters:
                 - debug
     EOF
     ```
