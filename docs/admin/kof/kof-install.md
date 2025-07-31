@@ -42,6 +42,7 @@ you can use the most straightforward (though less secure) [static credentials](h
       -n kof external-dns-aws-credentials \
       --from-file external-dns-aws-credentials
     ```
+
 #### Azure
 
 To enable DNS auto-config on Azure, use DNS Zone Contributor.
@@ -67,6 +68,15 @@ To enable DNS auto-config on Azure, use DNS Zone Contributor.
       --from-file azure.json
     ```
 See [external-dns Azure documentation](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/azure.md) for more details.
+
+#### OpenStack and others
+
+Please check `external-dns` [tutorials](https://github.com/kubernetes-sigs/external-dns/tree/master/docs/tutorials)
+and [new providers](https://github.com/kubernetes-sigs/external-dns?tab=readme-ov-file#new-providers)
+to find instructions on how to create a secret.
+
+For example the `external-dns-openstack-credentials` could be created
+by applying the [external-dns-openstack-webhook docs](https://github.com/inovex/external-dns-openstack-webhook/blob/main/README.md#installation).
 
 ### Istio
 
@@ -168,14 +178,38 @@ and apply this example, or use it as a reference:
               - external-dns-azure-credentials
     ```
 
+    For OpenStack, add:
+
+    ```yaml
+      kof:
+        clusterProfiles:
+          kof-openstack-dns-secrets:
+            matchLabels:
+              k0rdent.mirantis.com/kof-openstack-dns-secrets: "true"
+            secrets:
+              - external-dns-openstack-credentials
+    ```
+
     This enables Sveltos to auto-distribute the DNS secret to regional clusters.
 
-5. Two secrets are auto-created by default:
-    * `storage-vmuser-credentials` is a secret used by VictoriaMetrics.
-        You don't need to use it directly.
-        It is auto-distributed to other clusters by `clusterProfiles` [here](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-mothership/values.yaml).
-    * `grafana-admin-credentials` is a secret that we will use in the [Grafana](./kof-using.md#access-to-grafana) section.
-        It is auto-created [here](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-mothership/templates/grafana/secret.yaml).
+5. Examples of `ClusterDeployments` in [Regional Cluster](#regional-cluster)
+    and [Child Cluster](#child-cluster) sections are both using `namespace: kcm-system`
+    for a child cluster to connect to a regional cluster easily.
+
+    If you plan to have multiple tenants/namespaces in the management cluster,
+    please note they are isolated by default: a child cluster in `namespace: tenantA`
+    will be able to connect to a regional cluster in `namespace: tenantA` only.
+
+    If you want to allow a child cluster in one namespace
+    to connect to a regional cluster in another namespace,
+    enable the `crossNamespace` value in the `mothership-values.yaml` file:
+
+    ```yaml
+    kcm:
+      kof:
+        operator:
+          crossNamespace: true
+    ```
 
 6. Install `kof-mothership`:
     ```shell
@@ -184,15 +218,7 @@ and apply this example, or use it as a reference:
       oci://ghcr.io/k0rdent/kof/charts/kof-mothership --version {{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}
     ```
 
-    If you're upgrading from KOF version less than `1.1.0`, after upgrade please run:
-    ```shell
-    kubectl apply --server-side --force-conflicts \
-    -f https://github.com/grafana/grafana-operator/releases/download/v5.18.0/crds.yaml
-    ```
-    This is required by [grafana-operator release notes](https://github.com/grafana/grafana-operator/releases/tag/v5.18.0).
-
-    There is a similar step for each regional cluster
-    on [verification step 2](./kof-verification.md#verification-steps).
+    If you're upgrading KOF from an earlier version, please also apply the [Upgrading KOF](./kof-upgrade.md) guide.
 
 7. Wait until the value of `VALID` changes to `true` for all `ServiceTemplate` objects:
     ```shell
@@ -217,6 +243,9 @@ and apply this example, or use it as a reference:
         `ingress-nginx.enabled` and `cert-manager.enabled` to `false`.
     * You may want to [customize collectors](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/docs/collectors.md#example)
         for all child clusters at once now, or for each child cluster later, or just use the default values.
+    * If all your regional clusters will use OpenStack,
+        you may set the OpenStack-specific values described in step 10 of the [Regional Cluster](#regional-cluster) section
+        as a values file with `storage:` key passed to `kof-regional` chart here.
     * Install these charts into the management cluster with default or custom values:
         ```shell
         helm upgrade -i --reset-values --wait -n kof kof-regional \
@@ -243,9 +272,15 @@ and apply this example for AWS, or use it as a reference:
     ```shell
     REGION=us-east-2
     REGIONAL_CLUSTER_NAME=aws-$REGION
-    REGIONAL_DOMAIN=$REGIONAL_CLUSTER_NAME.kof.example.com
     ADMIN_EMAIL=$(git config user.email)
-    echo "$REGIONAL_CLUSTER_NAME, $REGIONAL_DOMAIN, $ADMIN_EMAIL"
+    echo "$REGION, $REGIONAL_CLUSTER_NAME, $ADMIN_EMAIL"
+    ```
+
+    If you have not applied the [Istio](#istio) section,
+    set the `REGIONAL_DOMAIN` too, using your own domain:
+    ```shell
+    REGIONAL_DOMAIN=$REGIONAL_CLUSTER_NAME.kof.example.com
+    echo "$REGIONAL_DOMAIN"
     ```
 
 2. Use the up-to-date `ClusterTemplate`, as in:
@@ -339,6 +374,12 @@ and apply this example for AWS, or use it as a reference:
     k0rdent.mirantis.com/kof-azure-dns-secrets: "true"
     ```
 
+    For OpenStack, add:
+
+    ```yaml
+    k0rdent.mirantis.com/kof-openstack-dns-secrets: "true"
+    ```
+
 5. If you've applied the [Istio](#istio) section, update the `regional-cluster.yaml` file:
 
     * Replace this line:
@@ -381,10 +422,54 @@ and apply this example for AWS, or use it as a reference:
     ```yaml
     k0rdent.mirantis.com/kof-write-metrics-endpoint: https://vmauth.$REGIONAL_DOMAIN/vm/insert/0/prometheus/api/v1/write
     k0rdent.mirantis.com/kof-read-metrics-endpoint: https://vmauth.$REGIONAL_DOMAIN/vm/select/0/prometheus
-    k0rdent.mirantis.com/kof-write-logs-endpoint: https://vmauth.$REGIONAL_DOMAIN/vls/insert/opentelemetry/v1/logs
+    k0rdent.mirantis.com/kof-write-logs-endpoint: https://vmauth.$REGIONAL_DOMAIN/vli/insert/opentelemetry/v1/logs
     k0rdent.mirantis.com/kof-read-logs-endpoint: https://vmauth.$REGIONAL_DOMAIN/vls
     k0rdent.mirantis.com/kof-write-traces-endpoint: https://jaeger.$REGIONAL_DOMAIN/collector
     ```
+
+    If you've applied the [Istio](#istio) section, default endpoints are:
+    ```yaml
+    k0rdent.mirantis.com/kof-write-metrics-endpoint: http://$REGIONAL_CLUSTER_NAME-vminsert:8480/insert/0/prometheus/api/v1/write
+    k0rdent.mirantis.com/kof-read-metrics-endpoint: http://$REGIONAL_CLUSTER_NAME-vmselect:8481/select/0/prometheus
+    k0rdent.mirantis.com/kof-write-logs-endpoint: http://$REGIONAL_CLUSTER_NAME-logs-insert:9481/insert/opentelemetry/v1/logs
+    k0rdent.mirantis.com/kof-read-logs-endpoint: http://$REGIONAL_CLUSTER_NAME-logs-select:9471
+    k0rdent.mirantis.com/kof-write-traces-endpoint: http://$REGIONAL_CLUSTER_NAME-jaeger-collector:4318
+    ```
+
+    If you want to skip creation of the regional cluster completely,
+    but still let child clusters discover your custom endpoints,
+    you may create a regional `ConfigMap` instead of a regional `ClusterDeployment`:
+    ```shell
+    cat >regional-configmap.yaml <<EOF
+    apiVersion: v1
+    kind: ConfigMap
+    metadata:
+      name: $REGIONAL_CLUSTER_NAME
+      namespace: kcm-system
+      labels:
+        k0rdent.mirantis.com/kof-cluster-role: regional
+    data:
+      regional_cluster_name: $REGIONAL_CLUSTER_NAME
+      regional_cluster_namespace: kcm-system
+      regional_cluster_cloud: aws
+      aws_region: $REGION
+      azure_location: ""
+      openstack_region: ""
+      vsphere_datacenter: ""
+      istio_role: ""
+      kof_http_config: ""
+      write_metrics_endpoint: https://vmauth.$REGIONAL_DOMAIN/vm/insert/0/prometheus/api/v1/write
+      read_metrics_endpoint: https://vmauth.$REGIONAL_DOMAIN/vm/select/0/prometheus
+      write_logs_endpoint: https://vmauth.$REGIONAL_DOMAIN/vli/insert/opentelemetry/v1/logs
+      read_logs_endpoint: https://vmauth.$REGIONAL_DOMAIN/vls
+      write_traces_endpoint: https://jaeger.$REGIONAL_DOMAIN/collector
+    EOF
+
+    cat regional-configmap.yaml
+    kubectl apply -f regional-configmap.yaml
+    ```
+
+    Note that a similar `ConfigMap` is generated automatically from a regional `ClusterDeployment` too.
 
 9. If you need a custom http client configuration for `PromxyServerGroup` and `GrafanaDatasource`,
     add it to the `regional-cluster.yaml` file in the `.metadata.annotations`. For example:
@@ -402,6 +487,26 @@ and apply this example for AWS, or use it as a reference:
       victoria-logs-cluster:
         vlinsert:
           replicaCount: 2
+    ```
+
+    For OpenStack, add:
+    ```yaml
+    k0rdent.mirantis.com/kof-storage-values: |
+      external-dns:
+        provider:
+          name: webhook
+          webhook:
+            image:
+              repository: ghcr.io/inovex/external-dns-openstack-webhook
+              tag: 1.1.0
+            extraVolumeMounts:
+              - name: oscloudsyaml
+                mountPath: /etc/openstack/
+        extraVolumeMounts: null
+        extraVolumes:
+          - name: oscloudsyaml
+            secret:
+              secretName: external-dns-openstack-credentials
     ```
 
 11. Verify and apply the Regional `ClusterDeployment`:
@@ -424,10 +529,11 @@ look through the default values of the [kof-operators](https://github.com/k0rden
 and [kof-collectors](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-collectors/values.yaml) charts,
 and apply this example for AWS, or use it as a reference:
 
-1. Set your own value below, verifing [the variables](#regional-cluster):
+1. Ensure you still have the variables set in the [Regional Cluster](#regional-cluster) section,
+    and set your own value for the `CHILD_CLUSTER_NAME` variable:
     ```shell
     CHILD_CLUSTER_NAME=$REGIONAL_CLUSTER_NAME-child1
-    echo "$CHILD_CLUSTER_NAME, $REGIONAL_DOMAIN"
+    echo "$CHILD_CLUSTER_NAME"
     ```
 
 2. Use the up-to-date `ClusterTemplate`, as in:
@@ -522,6 +628,11 @@ and apply this example for AWS, or use it as a reference:
     add this regional cluster name to the `child-cluster.yaml` file in the `.metadata.labels`:
     ```yaml
     k0rdent.mirantis.com/kof-regional-cluster-name: $REGIONAL_CLUSTER_NAME
+    ```
+
+    If you've enabled the `crossNamespace` value, specify the namespace too, for example:
+    ```yaml
+    k0rdent.mirantis.com/kof-regional-cluster-namespace: kcm-system
     ```
 
 7. The `MultiClusterService` named [kof-child-cluster](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-child/templates/child-multi-cluster-service.yaml)

@@ -255,12 +255,6 @@ Cloud 1..N
   }
 </style>
 
-## Low-level
-
-At a low level, you can see how metrics, logs, and traces work their way around the system.
-
-![kof-architecture](../../assets/kof/otel.png)
-
 ## Helm Charts
 
 KOF is deployed as a series of Helm charts at various levels.
