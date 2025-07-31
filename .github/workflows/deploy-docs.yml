@@ -104,7 +104,7 @@ jobs:
               mike deploy -t "next" --update-aliases --push --alias-type=copy next head
 
             elif [[ "$BRANCH" == "release-v1.2.0" ]]; then
-              mike deploy -t "v1.1.1 (latest)" --update-aliases --push --alias-type=copy v1.2.0 latest stable
+              mike deploy -t "v1.2.0 (latest)" --update-aliases --push --alias-type=copy v1.2.0 latest stable
               mike set-default --push latest
 
             else
