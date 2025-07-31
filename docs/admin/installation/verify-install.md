@@ -121,7 +121,7 @@ kubectl get clustertemplate -n kcm-system
 
 ```console
 NAME                            VALID
-adopted-cluster-{{{ extra.docsVersionInfo.k0rdentVersion }}}           true
+adopted-cluster-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApi }}}           true
 aws-eks-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsEksCluster }}}                   true
 aws-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsHostedCpCluster }}}             true
 aws-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsStandaloneCpCluster }}}         true
@@ -148,5 +148,5 @@ kubectl get management -n kcm-system
 ```
 ```console
 NAME   READY   RELEASE         AGE
-kcm    True    kcm-1-1-0-rc1   18m
+kcm    True    kcm-{{{ docsVersionInfo.k0rdentVersion}}}   18m
 ```
