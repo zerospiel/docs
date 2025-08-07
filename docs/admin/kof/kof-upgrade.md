@@ -11,6 +11,12 @@
     * Replace `job="integrations/kubernetes/cadvisor"` with `job="kubelet", metrics_path="/metrics/cadvisor"`.
     * Replace `job="prometheus-node-exporter"` with `job="node-exporter"`.
 
+Also:
+
+* To upgrade from `cert-manager-1-16-4` to `cert-manager-v1-16-4`
+    please install this patch to management cluster:
+    https://github.com/k0rdent/kof/pull/467/files
+
 ## Upgrade to v1.1.0
 
 * After you `helm upgrade` the `kof-mothership` chart, please run the following:
