@@ -89,7 +89,7 @@ Finally there are the cost management features, including:
     * Get the regional Jaeger username and password:
         ```shell
         KUBECONFIG=regional-kubeconfig kubectl get secret \
-          -n kof jaeger-credentials -o yaml | yq '{
+          -n kof jaeger-admin-credentials -o yaml | yq '{
           "user": .data.username | @base64d,
           "pass": .data.password | @base64d
         }'
