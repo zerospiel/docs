@@ -340,7 +340,24 @@ spec:
     kcm:
       config:
         controller:
-           defaultHelmTimeout: 20m
+          defaultHelmTimeout: 20m
 ```
 
 This value accepts standard duration format (e.g., 20m, 1h).
+
+### Configuring Telemetry
+
+To configure [Telemetry](./telemetry/index.md) options via the
+[Management](../reference/crds/index.md#management) object
+set values under the `telemetry` block, e.g. to disable collection:
+
+```yaml
+spec:
+  core:
+    kcm:
+      telemetry:
+        mode: disabled
+```
+
+Follow the [telemetry configuration page](./telemetry/configuration.md)
+for all of the possible values.

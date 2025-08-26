@@ -16,3 +16,6 @@ site/
 __pycache__/
 *.pyc
 *.pyo
+
+# Ignore macOS-related files
+.DS_Store
