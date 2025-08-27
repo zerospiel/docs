@@ -7,6 +7,7 @@ Most of the time, you'll access KOF's data through Grafana.
 To make Grafana available, start with these steps:
 
 1. Get the Grafana username and password:
+
     ```shell
     kubectl get secret -n kof grafana-admin-credentials -o yaml | yq '{
       "user": .data.GF_SECURITY_ADMIN_USER | @base64d,
@@ -15,6 +16,7 @@ To make Grafana available, start with these steps:
     ```
 
 2. Forward a port to the Grafana dashboard:
+
     ```shell
     kubectl port-forward -n kof svc/grafana-vm-service 3000:3000
     ```
@@ -74,6 +76,7 @@ Finally there are the cost management features, including:
 2. If you've applied the [Istio](./kof-install.md#istio) section:
 
     * Forward a port to the Jaeger UI:
+
         ```shell
         KUBECONFIG=regional-kubeconfig kubectl port-forward \
           -n kof svc/kof-storage-jaeger-query 16686:16686
@@ -87,6 +90,7 @@ Finally there are the cost management features, including:
     * Ensure you have the `REGIONAL_DOMAIN` variable set on the [installation step](./kof-install.md#regional-cluster).
 
     * Get the regional Jaeger username and password:
+
         ```shell
         KUBECONFIG=regional-kubeconfig kubectl get secret \
           -n kof jaeger-admin-credentials -o yaml | yq '{
@@ -97,6 +101,7 @@ Finally there are the cost management features, including:
 
     * Get the the Jaeger UI URL, open it,
         and login with the username/password printed above:
+
         ```shell
         echo https://jaeger.$REGIONAL_DOMAIN
         ```
@@ -166,6 +171,10 @@ You can access the KOF UI by following these steps:
 
 ![kof-ui-prometheus-targets](../../assets/kof/ui_prometheus_targets.gif)
 
-The KOF UI also allows you to monitor internal telemetry from OpenTelemetry collectors, enabling comprehensive observability of their health and performance.
+If there is a misconfiguration in the Prometheus targets (for example, if multiple targets scrape the same URL), the UI will display an error:
 
-![kof-ui-collectors-metrics](../../assets/kof/ui_collectors_metrics.gif)
+![kof-ui-prometheus-targets-misconfiguration](../../assets/kof/ui_prometheus_targets_misconf.gif)
+
+The KOF UI also allows you to monitor internal telemetry from OpenTelemetry collectors and VictoriaMetrics/Logs, enabling comprehensive observability of their health and performance.
+
+![kof-ui-collectors-metrics](../../assets/kof/ui_vm_and_collectors_metrics.gif)
