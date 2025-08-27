@@ -24,7 +24,7 @@ telemetry:
 
 ## Local mode storage settings
 
-When `telemetry.mode: local`, configure where and how files are stored:
+When `telemetry.mode` is set to `local`, you can configure where and how files are stored:
 
 ```yaml
 telemetry:
