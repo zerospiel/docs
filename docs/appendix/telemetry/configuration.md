@@ -1,8 +1,7 @@
 # Configuring telemetry
 
-Telemetry can be configured either via the helm values during the installation
-via `--set` flag
-or via the [Management](../../reference/crds/index.md#management) object as
+{{{ docsVersionInfo.k0rdentName}}} enables you to configure telemetry either by using the `--set` flag to set helm values during installation
+or by editing the [Management](../../reference/crds/index.md#management) object for an existing management cluster, as
 shown in the [Extended Management Configuration](../appendix-extend-mgmt.md#configuring-telemetry).
 
 ## Main settings block
@@ -17,7 +16,7 @@ telemetry:
   jitter: 10              # % jitter (1..99)
 ```
 
-* `mode` controls collection and storage mechanism. `online` sends to Segment;
+* `mode` controls the collection and storage mechanism. `online` sends to Segment;
   `local` writes files; `disabled` turns it off. *(Default: `online`)*
 * `concurrency` is how many child clusters are scraped in parallel.
 * `interval` is the scrape frequency.
