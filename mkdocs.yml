@@ -262,6 +262,7 @@ nav:
     - Overview: release-notes/index.md
     - v1.0.0: release-notes/release-notes-v1.0.0.md
     - v1.1.0: release-notes/release-notes-v1.1.0.md
+    - v1.3.0: release-notes/release-notes-v1.3.0.md
   - Contributing:
     - Overview: contrib/index.md
     - k0rdent documentation contributor's guide: contrib/k0rdent-documentation-contributors-guide.md
