@@ -13,7 +13,7 @@ The key principles of the architecture include:
 * Support for integration with custom components downstream
 
 > NOTE:
-> This document is a ongoing work in progress, and we would welcome suggestions and questions. 
+> This document is a ongoing work in progress, and we would welcome suggestions and questions.
 
 ## Overview
 
@@ -43,7 +43,7 @@ We’ll take a closer look at these pieces under [Roles and Responsibilities](#r
 
 ## Cluster Deployments
 
-A cluster deployment is also known as a child cluster, or a workload cluster. It’s a Kubernetes cluster provisioned and managed by the management cluster, and it’s where developers run their applications and workloads. These are “regular” Kubernetes clusters, and don’t host any management components. Clusters are fully isolated from the management cluster via namespaces, and also from each other, making it possible to create multi-tenant environments. 
+A cluster deployment is also known as a child cluster, or a workload cluster. It’s a Kubernetes cluster provisioned and managed by the management cluster, and it’s where developers run their applications and workloads. These are “regular” Kubernetes clusters, and don’t host any management components. Clusters are fully isolated from the management cluster via namespaces, and also from each other, making it possible to create multi-tenant environments.
 
 You can tailor a child cluster to specific use cases, with customized addons such as ingress controllers, monitoring tools, and logging solutions. You can also define specific Kubernetes configurations (for example, network policies, storage classes, and security policies) so they work for you and your applications or environments.
 
@@ -61,14 +61,14 @@ One of the important tenets of the platform engineering philosophy is the use of
 Major template types used in {{{ docsVersionInfo.k0rdentName }}} include:
 
 * **Cluster Templates:** `ClusterTemplate` objects define clusters in coordination with the clouds and infrastructures on which they run. They're designed to be immutable; they get invoked by {{{ docsVersionInfo.k0rdentName }}} objects such as `ClusterDeployment` objects to create and manage individual clusters and groups of clusters.
-* **Service Templates:** `ServiceTemplate` objects define services, addons, and workloads that run on clusters. They're also designed to be immutable, and get invoked by `ClusterDeployment` objects and other {{{ docsVersionInfo.k0rdentName }}} objects so that IDPs/platforms can be declared and managed as units. 
+* **Service Templates:** `ServiceTemplate` objects define services, addons, and workloads that run on clusters. They're also designed to be immutable, and get invoked by `ClusterDeployment` objects and other {{{ docsVersionInfo.k0rdentName }}} objects so that IDPs/platforms can be declared and managed as units.
 
 ## Roles and responsibilities
 
 {{{ docsVersionInfo.k0rdentName }}} was designed to be used by several groups of people, with hierarchical and complementary roles and responsibilities. You may have your own names for them, but we’ll refer to them as:
 
 * **Platform Architect:** This person or team has global responsibility to the business and technical stakeholders for designing IDPs/platforms for later adaptation to particular clouds and infrastructures, workloads, performance and cost objectives, security and regulatory regimes, and operational requirements. {{{ docsVersionInfo.k0rdentName }}} enables Platform Architects to create sets of reusable `ClusterTemplate` and `ServiceTemplate` objects, closely defining IDPs/platforms in the abstract.
-* **Platform Lead:** This person or team (sometimes referred to as 'CloudOps') is primarily responsible for actions corresponding to {{{ docsVersionInfo.k0rdentName }}} Cluster Manager (KCM). They adapt `ClusterTemplate` objects to the correct cloud, and they make sure that everything is working properly. They’re also responsible for limiting the Project Team’s access to the `Cluster` and `Service` templates necessary to do their jobs. For example, they might limit the templates that can be deployed to an approved set, or provide CAPI operators for only the clouds on which the company wants applications to run, helping to eliminate shadow IT. 
+* **Platform Lead:** This person or team (sometimes referred to as 'CloudOps') is primarily responsible for actions corresponding to {{{ docsVersionInfo.k0rdentName }}} Cluster Manager (KCM). They adapt `ClusterTemplate` objects to the correct cloud, and they make sure that everything is working properly. They’re also responsible for limiting the Project Team’s access to the `Cluster` and `Service` templates necessary to do their jobs. For example, they might limit the templates that can be deployed to an approved set, or provide CAPI operators for only the clouds on which the company wants applications to run, helping to eliminate shadow IT.
 * **Platform Engineer:** This person or team is responsible for the day-to-day management of the environment. They use `ClusterTemplate` and `ServiceTemplate` objects provided by the Platform Lead (as authorized to do so) and may create additional `ServiceTemplate` objects to customize their own Kubernetes cluster so that it's appropriate for their application.
 
 ## Credentials
@@ -82,7 +82,7 @@ To solve this problem, {{{ docsVersionInfo.k0rdentName }}} lets you create a `Cr
 3. Developers reference the `Credential` object, which gives the cluster the ability to access these credentials (little “c”) without having to expose them to developers directly.
 
 > NOTE:
-> To be sure credentials are not visible to developers, make sure to [limit access](../admin/access/rbac/roles-summary.md#limit-credential-access) to the `kcm-system` namespace.
+> To be sure credentials are not visible to developers, make sure to [limit access](../admin/access/rbac/limiting-access.md#limiting-credential-access) to the `kcm-system` namespace.
 
 ## TL;DR - Conclusion
 
