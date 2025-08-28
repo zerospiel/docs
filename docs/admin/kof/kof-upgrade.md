@@ -1,5 +1,14 @@
 # Upgrading KOF
 
+## Upgrade to v1.3.0
+
+* If you are not using [Istio](kof-install.md#istio),
+    then on the step 8 of the [Management Cluster](kof-install.md#management-cluster) upgrade
+    please apply this temporary workaround for the [Reconciling MultiClusterService](https://github.com/k0rdent/kcm/issues/1914) issue:
+    ```shell
+    kubectl rollout restart -n kcm-system deploy/kcm-controller-manager
+    ```
+
 ## Upgrade to v1.2.0
 
 * As part of the KOF 1.2.0 overhaul of metrics collection and representation, we switched from the [victoria-metrics-k8s-stack](https://github.com/VictoriaMetrics/helm-charts/tree/master/charts/victoria-metrics-k8s-stack) metrics and dashboards to [opentelemetry-kube-stack](https://github.com/open-telemetry/opentelemetry-helm-charts/tree/main/charts/opentelemetry-kube-stack) metrics and [kube-prometheus-stack](https://github.com/prometheus-community/helm-charts/tree/main/charts/kube-prometheus-stack) dashboards.
