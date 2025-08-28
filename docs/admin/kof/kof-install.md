@@ -254,6 +254,11 @@ and apply this example, or use it as a reference:
         helm upgrade -i --reset-values --wait -n kof kof-child \
           oci://ghcr.io/k0rdent/kof/charts/kof-child --version {{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}
         ```
+    * As a temporary workaround for the [Reconciling MultiClusterService](https://github.com/k0rdent/kcm/issues/1914) issue
+        please restart `kcm-controller-manager`:
+        ```shell
+        kubectl rollout restart -n kcm-system deploy/kcm-controller-manager
+        ```
 
 9. Wait for all pods to show that they're `Running`:
     ```shell
