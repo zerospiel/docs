@@ -32,7 +32,7 @@ spec:
         namespace: ingress-nginx
 ```
 
-Any number of ServiceTemplates (ingress-nginx-4-11-3 in this example) can be added to the MultiClusterService's `.spec.serviceSpec.services` field. See [Using and Creating ServiceTemplates](./admin-service-templates.md) for how to create ServiceTemplates.
+Any number of ServiceTemplates (ingress-nginx-4-11-3 in this example) can be added to the MultiClusterService's `.spec.serviceSpec.services` field. See [Using and Creating ServiceTemplates](./ksm-service-templates.md) for how to create ServiceTemplates.
 
 To verify that the ingress-nginx-4-11-3 beach-head service was sucessfully deployed, the status of the MultiClusterService can be queried with:
 
@@ -64,4 +64,4 @@ status:
       type: ingress-nginx.ingress-nginx/SveltosHelmReleaseReady
 ```
 
-See [Creating multi-cluster services](./admin-create-multiclusterservice.md) for more detail on deploying beach-head services using MultiClusterService.
+See [Creating multi-cluster services](./ksm-multiclusterservice.md) for more detail on deploying beach-head services using MultiClusterService.
