@@ -1,10 +1,6 @@
 # k0rdent 1.3 Release Notes
 **Release date:** 2025-08-28
 
-k0rdent 1.3 brings major improvements across the platform, with a new provider-agnostic service orchestration API, stronger observability, and stability fixes across cluster management.
-
----
-
 ## Highlights
 - **ServiceSet API & Sveltos provider (KSM/KCM):** 
     - New abstraction for managing services with explicit dependencies and ordered upgrades. Enables smoother rollouts and future multi-provider support.
