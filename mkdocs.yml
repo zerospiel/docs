@@ -262,7 +262,7 @@ nav:
     - Overview: release-notes/index.md
     - v1.0.0: release-notes/release-notes-v1.0.0.md
     - v1.1.0: release-notes/release-notes-v1.1.0.md
-    - v1.3.0: release-notes/release-notes-v1.3.0.md
+    - v1.3.1: release-notes/release-notes-v1.3.1.md
   - Contributing:
     - Overview: contrib/index.md
     - k0rdent documentation contributor's guide: contrib/k0rdent-documentation-contributors-guide.md
@@ -325,14 +325,14 @@ extra:
             using our <a href="https://github.com/k0rdent/docs/issues/new" target="_blank" rel="noopener">feedback form</a>.
   docsVersionInfo:
     k0rdentName: k0rdent
-    k0rdentVersion: 1-3-0
-    k0rdentDotVersion: 1.3.0
+    k0rdentVersion: 1-3-1
+    k0rdentDotVersion: 1.3.1
     ociRegistry: oci://ghcr.io/k0rdent/kcm/charts/kcm
     k0rdentDigestValue: sha256:80c4b016b8d7b8a3d5e7d23dd25c1174a662d10db75a42a4ef0af2058539b8b8
     k0rdentDigestDate: Thu Jul 31 18:36:23 2025
     k0rdentTagList: https://github.com/k0rdent/kcm/tags
     kofVersions:
-      kofDotVersion: 1.3.0
+      kofDotVersion: 1.3.1
     providerVersions:
       dashVersions:
         clusterApi: 1-0-5

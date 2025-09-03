@@ -138,7 +138,15 @@
 ---
 
 ## Known Issues
-- No critical issues reported at release. Track [GitHub issues](https://github.com/k0rdent/kcm/issues) for updates.
+
+KSM (fixed in k0rdent 1.3.1):
+
+- [Inconsistent services status reporting](https://github.com/k0rdent/kcm/issues/1951)
+- ["Reconciling MultiClusterService" loop stops, pod restart is required](https://github.com/k0rdent/kcm/issues/1914)
+- [Multiclusterservice cleanup issues](https://github.com/k0rdent/kcm/issues/1927)
+- [Adopted clusters are not handled by ksm](https://github.com/k0rdent/kcm/issues/1926)
+
+Track [GitHub issues](https://github.com/k0rdent/kcm/issues) for updates.
 
 ---
 
