@@ -109,7 +109,7 @@ new `ServiceTemplate` objects:
 ```bash
 kubectl describe clusterrole kcm-namespace-editor-role -n kcm-system
 ```
-```console 
+```console
 Name:         kcm-namespace-editor-role
 Labels:       app.kubernetes.io/managed-by=Helm
               helm.toolkit.fluxcd.io/name=kcm
