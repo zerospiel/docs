@@ -211,6 +211,10 @@ nav:
       - Upgrades and Rollbacks: admin/backup/upgrades-rollbacks.md
       - Caveats: admin/backup/caveats.md
       - Customization: admin/backup/customization.md
+  - Template How-To:
+    - Overview: templatehowto/index.md
+    - The Templating System Common Threads: templatehowto/the-templating-system-common-threads.md
+    - Modifying ServiceTemplates: templatehowto/modifying-serviceTemplates.md
   - User Guide:
     - Overview: user/index.md
     - Creating clusters: user/user-create-cluster.md
