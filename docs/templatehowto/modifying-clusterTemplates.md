@@ -1,6 +1,6 @@
-# How to Build or Modify a {{{ docsVersionInfo.k0rdentName }}} ClusterTemplate
+# How to Build or Modify a {{{ docsVersionInfo.k0rdentName }}} Template
 
-One of the most important benefits of {{{ docsVersionInfo.k0rdentName }}} is the ability to create your own `ClusterTemplate` objects.
+One of the most important benefits of {{{ docsVersionInfo.k0rdentName }}} is the ability to create your own `ServiceTemplate`, `ClusterTemplate`, and `ProviderTemplate` objects. The concepts are largely the same for all three, so we'll demonstrate the process with a `ClusterTemplate`.
 
 ## Anatomy of a ClusterTemplate
 
@@ -116,7 +116,7 @@ k0s:
   version: v1.32.6+k0s.0
   cpArgs:
     - "--enable-worker"
-    - "--enable-calico"
+    - "--enable-calico" 
   workerArgs:
     - "--labels=network=calico"
 ```
@@ -148,7 +148,7 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: HelmRepository
 metadata:
   name: custom-repo
-  namespace: kcm-system
+  namespace: project-ottowa
   labels:
     k0rdent.mirantis.com/managed: "true"
 spec:
@@ -157,15 +157,18 @@ spec:
   interval: 10m
 ```
 
+Make sure the repository object is in the same namespace in which you will be creating the `ClusterTemplate` and `ClusterDeployment`.
+
 ## Creating the ClusterTemplate Resource
 
-With the source in place, you can now define a `ClusterTemplate` CR that references your Helm chart:
+With the source in place, you can now define a `ClusterTemplate` that references your Helm chart:
 
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterTemplate
 metadata:
   name: custom-aws-standalone
+  namespace: project-ottowa
 spec:
   helm:
     chartSpec:
@@ -181,14 +184,14 @@ At this point, the {{{ docsVersionInfo.k0rdentName }}} controller validates the 
 
 ## Deploying with a ClusterTemplate
 
-Creating a `ClusterTemplate` does not deploy a cluster. Actual clusters are instantiated through **ClusterDeployment** objects, which reference `ClusterTemplates` and may override their default values. For example:
+Creating a `ClusterTemplate` does not deploy a cluster. Actual clusters are instantiated through **`ClusterDeployment`** objects, which reference `ClusterTemplates` and may override their default values. For example:
 
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1beta1
 kind: ClusterDeployment
 metadata:
   name: my-cluster
-  namespace: kcm-system
+  namespace: project-ottowa
 spec:
   template: custom-aws-standalone
   credential: aws-cluster-identity-cred

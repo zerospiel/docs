@@ -213,8 +213,8 @@ nav:
       - Customization: admin/backup/customization.md
   - Template How-To:
     - Overview: templatehowto/index.md
-    - The Templating System Common Threads: templatehowto/the-templating-system-common-threads.md
-    - Modifying ServiceTemplates: templatehowto/modifying-serviceTemplates.md
+    - The Templating System: templatehowto/the-templating-system-common-threads.md
+    - Creating and Modifying Templates: templatehowto/modifying-clusterTemplates.md
   - User Guide:
     - Overview: user/index.md
     - Creating clusters: user/user-create-cluster.md

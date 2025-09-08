@@ -30,3 +30,6 @@ Understanding this architectural pattern is essential before diving into specifi
 - **Governance and validation:** Templates can include schemas that enforce correct usage and prevent invalid settings.  
 
 In {{{ docsVersionInfo.k0rdentName }}}, templates are not just convenience wrappers, they're the backbone of how infrastructure and services are declared, standardized, and delivered.
+
+- [The Templating System – Common Threads](the-templating-system-common-threads.md)
+- [Creating and Modifying Templates](modifying-clusterTemplates.md)
