@@ -282,48 +282,42 @@ annotations:
 
 ## Compatibility Attributes
 
-Templates can also declare compatibility with specific CAPI versions, provider contracts, or Kubernetes versions.
-
-* Use Semantic Versioning for Kubernetes.
-* Set values in `.spec` or annotations. `.spec` takes precedence.
+Templates can also declare compatibility with specific CAPI versions, provider contracts, or Kubernetes versions. These values can be set in the template `.spec`, or they can be set in the chart annotations, as in the section on [Required and Exposed Providers](#required-and-exposed-providers). In case of a coflict between the two, the value specified in the template `.spec` takes precedence. 
 
 > NOTE:
-> Validation only occurs when both sides of a comparison are defined.
+> All of the compatibility attributes are optional, and validation checks only take place
+> if **both** of the corresponding type attributes
+> (for example, provider contract versions in both `ProviderTemplate` and `ClusterTemplate`) are set.
 
-### ProviderTemplate
-* Use [CAPI contract format](https://cluster-api.sigs.k8s.io/developer/providers/contracts/overview) for CAPI.
+### ServiceTemplate and Kubernetes Version Constraints
 
-Define supported CAPI contract versions in `.spec.capiContracts`.
+If a workload can only run on specific versions of Kubernetes, you can define Kubernetes version constraints in `.spec.k8sConstraint`:
 
 **Spec example:**
 
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1beta1
-kind: ProviderTemplate
+kind: ServiceTemplate
+metadata:
+  name: nginx-service
+  namespace: project-ottowa
 spec:
-  providers:
-  - infrastructure-aws
-  capiContracts:
-    v1alpha3: v1alpha3
-    v1alpha4: v1alpha4
-    v1beta1: v1beta1_v1beta2
+  k8sConstraint: "^1.30.0"
+  helm:
+    chartRef:
+      name: nginx-chart
+      namespace: project-ottowa
 ```
 
-**Chart.yaml example:**
+Or you can define it in the Helm chart that backs the `ServiceTemplate`:
 
 ```yaml
-annotations:
-  cluster.x-k8s.io/provider: infrastructure-aws
-  cluster.x-k8s.io/v1alpha3: v1alpha3
-  cluster.x-k8s.io/v1alpha4: v1alpha4
-  cluster.x-k8s.io/v1beta1: v1beta1_v1beta2
+k0rdent.mirantis.com/k8s-version-constraint: ^1.30.0
 ```
 
-### ClusterTemplate
+### ClusterTemplate and Kubernetes version compatibility
 
-Define Kubernetes version and required provider contracts.
-
-**Spec example:**
+You can also set the target Kubernetes version for `ClusterTemplate` objects:
 
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1beta1
@@ -340,7 +334,7 @@ spec:
     infrastructure-aws: v1beta2
 ```
 
-**Chart.yaml example:**
+You can also set it using `annotations` in the underlying chart:
 
 ```yaml
 annotations:
@@ -351,33 +345,51 @@ annotations:
   k0rdent.mirantis.com/k8s-version: 1.30.0
 ```
 
-### ServiceTemplate
+### ProviderTemplate and CAPI contract versions
 
-Define Kubernetes version constraints in `.spec.k8sConstraint`.
+The `ProviderTemplate` resource has dedicated fields to set compatible [`CAPI` contract ](https://cluster-api.sigs.k8s.io/developer/providers/contracts/overview), along
+with CRDs contract versions supported by the provider. These contract versions will then be set accordingly in the `.status` field.
+Compatibility contract versions are key-value pairs, where the key is **the core `CAPI` contract version**,
+and the value is an underscore-delimited (_) list of provider contract versions supported by the core `CAPI`.
+For the core `CAPI` Template values should be empty.
 
-**Spec example:**
+You can define the supported CAPI contract versions in `.spec.capiContracts`:
 
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1beta1
-kind: ServiceTemplate
+kind: ProviderTemplate
 spec:
-  k8sConstraint: "^1.30.0"
+  providers:
+  - infrastructure-aws
+  capiContracts:
+    v1alpha3: v1alpha3
+    v1alpha4: v1alpha4
+    v1beta1: v1beta1_v1beta2
 ```
 
-**Chart.yaml example:**
+You can also set them in the chart `annotations`:
 
 ```yaml
-k0rdent.mirantis.com/k8s-version-constraint: ^1.30.0
+...
+annotations:
+  cluster.x-k8s.io/provider: infrastructure-aws
+  cluster.x-k8s.io/v1alpha3: v1alpha3
+  cluster.x-k8s.io/v1alpha4: v1alpha4
+  cluster.x-k8s.io/v1beta1: v1beta1_v1beta2
 ```
 
----
 
-## Compatibility Enforcement
+### Compatibility Enforcement
 
-The system validates compatibility as follows:
+The aforedescribed attributes are checked for compliance with the following rules:
 
-* If both exact and constraint versions are not set, no check occurs.
-* A `ClusterTemplate` that requires unsupported provider contracts cannot update its `ClusterDeployment`.
-* A `ProviderTemplate` with a CAPI contract version missing from the core CAPI template cannot update its `Management` object.
-* A `ClusterTemplate` with an incompatible Kubernetes version cannot update its `ClusterDeployment`.
+* Both the exact and constraint version of the same type (for example `k8sVersion` and `k8sConstraint`) must
+be set, otherwise no check is performed;
+* If a `ClusterTemplate` object's provider's contract version does not satisfy contract versions
+from the related `ProviderTemplate` object, updates to the `ClusterDeployment` object will be blocked;
+* If a `ProviderTemplate` object's `CAPI` contract version
+(for example, in a `v1beta1: v1beta1_v1beta2` key-value pair, the key `v1beta1` is the core `CAPI` contract version)
+is not listed in the core `CAPI` `ProviderTemplate` object, the updates to the `Management` object will be blocked;
+* If a `ClusterTemplate` object's exact kubernetes version does not satisfy the kubernetes version
+constraint from the related `ServiceTemplate` object, the updates to the `ClusterDeployment` object will be blocked.
 
