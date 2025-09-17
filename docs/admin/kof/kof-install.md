@@ -1,5 +1,45 @@
 # Installing {{{ docsVersionInfo.k0rdentName }}} Observability and FinOps
 
+## Options
+
+KOF may be installed using different options:
+
+```mermaid
+flowchart TD
+    S((Start))
+    S --> AWS[AWS]
+    S --> AZ[Azure]
+    S --> OS[OpenStack<br>and others]
+
+    AWS --> NAG[No Air Gap]
+    AZ --> NAG
+    OS --> NAG
+
+    NAG --> AD[Auto DNS]
+    NAG --> I[**Istio**]
+    NAG --> MD[Manual DNS]
+
+    OS --> AG[**Aig Gap**]
+    AG --> I
+    AG --> MD
+
+    AD --> R[Regional...]
+    I --> R
+    MD --> R
+    R --> CD[...ClusterDeployment]
+    R --> CM[...ConfigMap]
+
+    CD --> M2[Store KOF data<br>from Management...]
+    CM --> M2
+
+    M2 --> M2M[**...to Management**]
+    M2 --> M2R[...to Regional<br>with Istio<br>or without]
+    M2 --> M2TP[...to Third-party]
+```
+
+Opinionated default installation we plan to simplify in the next release
+is shown in **bold** style.
+
 ## Prerequisites
 
 Before beginning KOF installation, you should have the following components in place:
