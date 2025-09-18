@@ -11,26 +11,33 @@ flowchart TD
     S --> AZ[Azure]
     S --> OS[OpenStack<br>and others]
 
+    AWS -.-> AG[**Aig Gap**]
+    AZ -.-> AG
+    OS --> AG
+
     AWS --> NAG[No Air Gap]
     AZ --> NAG
     OS --> NAG
 
-    NAG --> AD[Auto DNS]
-    NAG --> I[**Istio**]
-    NAG --> MD[Manual DNS]
+    AG --> I[**Istio**]
+    AG --> MD[Manual DNS]
+    AG -.-> AD[Auto DNS]
 
-    OS --> AG[**Aig Gap**]
-    AG --> I
-    AG --> MD
+    NAG --> I
+    NAG --> MD
+    NAG --> AD
 
     AD --> R[Regional...]
     I --> R
     MD --> R
+
     R --> CD[...ClusterDeployment]
     R --> CM[...ConfigMap]
+    R --> RIM[...in Management]
 
     CD --> M2[Store KOF data<br>from Management...]
     CM --> M2
+    RIM --> M2
 
     M2 --> M2M[**...to Management**]
     M2 --> M2R[...to Regional<br>with Istio<br>or without]
