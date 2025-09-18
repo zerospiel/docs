@@ -66,26 +66,6 @@ and [Istio](./kof-install.md#istio), you will need to do the following:
     echo vmauth.$REGIONAL_DOMAIN
     ```
 
-## Sveltos
+## KOF UI
 
-Use the [Sveltos dashboard](https://projectsveltos.github.io/sveltos/getting_started/install/dashboard/#platform-administrator-example)
-to verify secrets have been auto-distributed to the required clusters:
-
-1. Start by preparing the system:
-
-    ```bash
-    kubectl create sa platform-admin
-    kubectl create clusterrolebinding platform-admin-access \
-      --clusterrole cluster-admin --serviceaccount default:platform-admin
-
-    kubectl create token platform-admin --duration=24h
-    kubectl port-forward -n kof svc/dashboard 8081:80
-    ```
-
-2. Now open [http://127.0.0.1:8081/login](http://127.0.0.1:8081/login) and paste the token output in step 1 above.
-3. Open the `ClusterAPI` tab: [http://127.0.0.1:8081/sveltos/clusters/ClusterAPI/1](http://127.0.0.1:8081/sveltos/clusters/ClusterAPI/1)
-4. Check both regional and child clusters:
-    * Cluster profiles should be `Provisioned`.
-    * Secrets should be distributed.
-
-![sveltos-demo](../../assets/kof/sveltos-2025-02-13.gif)
+You can use the KOF UI to find and debug errors or misconfigurations. Check the [Access to the KOF UI](kof-using.md#access-to-the-kof-ui) section to learn how to access it and read about its features.

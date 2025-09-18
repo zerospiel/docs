@@ -178,3 +178,14 @@ If there is a misconfiguration in the Prometheus targets (for example, if multip
 The KOF UI also allows you to monitor internal telemetry from OpenTelemetry collectors and VictoriaMetrics/Logs, enabling comprehensive observability of their health and performance.
 
 ![kof-ui-collectors-metrics](../../assets/kof/ui_vm_and_collectors_metrics.gif)
+
+To identify and debug issues in deployed clusters, check if KOF UI shows any errors in these monitored resources:
+
+* ClusterDeployment
+* ClusterSummaries
+* MultiClusterService
+* ServiceSet
+* StateManagementProvider
+* SveltosCluster
+
+![kof-ui-resources-monitoring](../../assets/kof/ui_resources_monitoring.gif)
