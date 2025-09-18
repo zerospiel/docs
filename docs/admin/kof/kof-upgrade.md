@@ -2,21 +2,28 @@
 
 ## Upgrade to any version
 
-* Open the latest version of the [Installing KOF](kof-install.md) guide.
-* Make sure you see the expected new version in the top navigation bar.
-* Go to the directory with YAML files created the last time you've applied the guide.
-* Create their backup copies:
+* Create a backup of each KOF chart values in each cluster, for example:
     ```shell
-    for file in *.yaml; do cp $file $file.bak; done
-    ```
-* If you don't have such files, you may get them like this:
-    ```shell
-    helm get values -n kof kof-mothership -o yaml > mothership-values.yaml.bak
+    # Management cluster uses default KUBECONFIG=""
+    for cluster in "" regional-kubeconfig child-kubeconfig; do
+      for namespace in kof istio-system; do
+        for chart in $(KUBECONFIG=$cluster helm list -qn $namespace); do
+          KUBECONFIG=$cluster helm get values -n $namespace $chart -o yaml \
+            > values-$cluster-$chart.bak
+        done
+      done
+    done
+    ls values-*.bak
     ```
 * Ideally, [create a backup](../backup/index.md) of everything including VictoriaMetrics/Logs data volumes.
+* Open the latest version of the [Installing KOF](kof-install.md) guide.
+* Make sure you see the expected new version in the top navigation bar.
 * Apply the guide step by step, but:
     * Skip unchanged credentials like `external-dns-aws-credentials`.
-    * Verify how YAML files have changed with `diff -u $file.bak $file` before using them.
+    * Before applying new YAML files, verify what has changed, for example:
+        ```shell
+        diff -u values--kof-mothership.bak mothership-values.yaml
+        ```
     * Run all `helm upgrade` commands with the new `--version` and files as documented.
 * Do the same for other [KOF guides](index.md#guides).
 * Apply each relevant "Upgrade to" section of this page from older to newer.
