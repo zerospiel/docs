@@ -344,3 +344,5 @@ For now, however, just for the sake of this demo, you can use the most straightf
       "timestamp": 1744305535107,
       "message": "{\"body\":\"10.244.0.1 - - [10/Apr/2025 17:18:55] \\\"GET /-/ready HTTP/1.1 200 ...
     ```
+
+See also: [KOF Retention](./kof-retention.md) for details on configuring retention periods and replication factors for VictoriaMetrics and VictoriaLogs.

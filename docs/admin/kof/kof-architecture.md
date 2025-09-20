@@ -334,3 +334,38 @@ KOF is deployed as a series of Helm charts at various levels.
 
 - [opentelemetry-kube-stack](https://github.com/open-telemetry/opentelemetry-helm-charts/tree/main/charts/opentelemetry-kube-stack) for hardware, OS, and Kubernetes metrics
 - [OpenCost](https://www.opencost.io/) "shines a light into the black box of Kubernetes spend"
+
+## Deployment Scenarios
+
+KOF supports two topologies:
+
+### Production (Regional Clusters)
+* Management-cluster telemetry is stored locally on the {{{ docsVersionInfo.k0rdentName }}} management cluster.
+* Child workloads send telemetry to their regional cluster, supporting data sovereignty and isolation.
+
+### Development / QA (Regionless)
+* No regions are defined. All telemetry (management  child) is stored on the {{{ docsVersionInfo.k0rdentName }}} management cluster.
+
+## Component Roles & Rationale
+
+| Component | Role | Notes |
+|---|---|---|
+| k0rdent | Orchestration | Multi-cluster lifecycle  service templates |
+| OpenTelemetry | Collection | Metrics, logs, traces; auto-instrumentation options |
+| Promxy | Query Federation | Cross-cluster PromQL  alert rule evaluation at management |
+| VictoriaMetrics | Metrics Storage | Scalable TSDB; selected over Prometheus for clustering  efficiency |
+| VictoriaLogs | Log Storage | Scalable log TSDB with retention controls |
+| Jaeger | Tracing | Trace store/visualization; regional awareness |
+| Grafana | Visualization | Unified dashboards; SSO/RBAC |
+| Dex | SSO | OIDC provider for Grafana |
+| OpenCost | FinOps | Cost allocation and efficiency ratios |
+
+## Dex Integration
+
+KOF uses Dex as an identity provider to enable Single Sign‑On (SSO) with OAuth2 and OIDC.
+
+- Authentication flow: Dex issues ID tokens to Grafana and other clients after authenticating against an upstream identity provider (IdP).
+- External IdP integration: Dex can delegate to providers such as Okta, Entra ID, GitHub, or LDAP.
+- Group membership mapping: Dex propagates group membership claims, which KOF uses to enforce RBAC. Grafana dashboards and KOF namespaces can be restricted based on these groups.
+
+This model centralizes authentication, while authorization remains controlled via Kubernetes RBAC and Grafana roles.

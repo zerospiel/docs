@@ -39,6 +39,26 @@ helping them to identify and resolve issues quickly.
 * **Finance Teams:** Finance teams can leverage KOF's FinOps capabilities to track and manage cloud spending, 
 ensuring resources are used efficiently and costs are optimized.
 
+## Managing KOF as Code
+
+We recommend keeping a dedicated Git repository for your KOF deployment, separate from the {{{ docsVersionInfo.k0rdentName }}} repo itself and separate from application workload repos.
+
+That repository should contain the Helm chart directories such as:
+
+```
+charts/
+  kof-storage/
+  kof-operators/
+  kof-dashboards/
+```
+
+With this setup you can:
+- Track all KOF configuration changes in Git.
+- Use CI/CD pipelines to run `helm upgrade --install` against your management and regional clusters.
+- Manage dashboards, retention policies, and observability settings as code for consistency across environments.
+
+Other sections in this documentation, such as Dashboard Lifecycle and Retention assume you have such a repo and a CI/CD pipeline in place.
+
 ## Guides
 
 Get started with the basic documentation:
@@ -49,8 +69,13 @@ Get started with the basic documentation:
 - [Storing KOF data](kof-storing.md)
 - [Using KOF](kof-using.md)
 - [KOF Alerts](kof-alerts.md)
+- [KOF Tracing](kof-tracing.md)
+- [Retention and Replication ](kof-retention.md)
+- [Limits](kof-limits.md)
 - [Scaling KOF](kof-scaling.md)
 - [Maintaining KOF](kof-maintainence.md)
+- [Upgrading KOF](kof-upgrade.md)
+- [FAQ](kof-faq.md)
 
 Once you have KOF up and running,
 check [k0rdent/kof/docs](https://github.com/k0rdent/kof/tree/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/docs)

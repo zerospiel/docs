@@ -62,6 +62,8 @@ Before beginning KOF installation, you should have the following components in p
       This is the only option which does not need access to create external DNS records
       for service endpoints such as `kof.example.com`.
 
+For for information on long-term storage planning, review the [KOF Retention](./kof-retention.md) page, which covers retention and replication strategies.
+
 ### DNS auto-config
 
 To avoid [manual configuration of DNS records](./kof-verification.md#manual-dns-config) for service endpoints later,
@@ -722,3 +724,4 @@ and apply this example for AWS, or use it as a reference:
     clusterctl describe cluster -n kcm-system $CHILD_CLUSTER_NAME \
       --show-conditions all
     ```
+
