@@ -1,3 +1,4 @@
+# THIS FILE WILL BE REMOVED IN FINAL COMMIT.
 
 KOF Technical Overview
 
