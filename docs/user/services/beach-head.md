@@ -145,3 +145,34 @@ spec:
 ```
 
 In this case, the host and port information will be fetched from the spec of the CAPI cluster that hosts this `ClusterDeployment`.
+
+## Service Dependencies
+Dependencies among beach-head services can also be defined using the `.spec.serviceSpec.services[].dependsOn` field in the `ClusterDeployment` or `MultiClusterService` object. A service will not be deployed until all services that it depends on have been successfully deployed. For example:
+
+```yaml
+apiVersion: k0rdent.mirantis.com/v1beta1
+kind: ClusterDeployment
+metadata:
+  name: my-clusterdeployment
+  namespace: kcm-system
+spec:
+  . . .
+  serviceSpec:
+    services:
+      - template: cert-manager-1-18-2
+        name: cert-manager
+        namespace: cert-manager
+        values: |
+          cert-manager:
+            crds:
+              enabled: true
+      - template: ingress-nginx-4-13-0
+        name: nginx
+        namespace: nginx
+        dependsOn:
+          - name: cert-manager
+            namespace: cert-manager
+    . . .
+```
+
+In this case, nginx will not be deployed until cert-manager has been successfully deployed. If there already exists a cert-manager with the same name and namespace deployed by another MultiClusterService with higher priorirty, k0rdent will still recognize it as a fulfilled dependency for nginx and start deploying nginx.
