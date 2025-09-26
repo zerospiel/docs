@@ -156,6 +156,12 @@ nav:
       - Updating standalone clusters: admin/clusters/update-cluster.md
       - Adopting clusters: admin/clusters/admin-adopting-clusters.md
       - IP Address Management (IPAM): admin/clusters/cluster-ipam.md
+    - Working with regional clusters:
+      - Overview: admin/regional-clusters/index.md
+      - Regional Components Segregation Overview: admin/regional-clusters/components-segregation.md
+      - Register Regional Cluster: admin/regional-clusters/regional-cluster-registration.md
+      - Creating Credential in Region: admin/regional-clusters/creating-credential-in-region.md
+      - Deploying Clusters in Region: admin/regional-clusters/deploying-clusters-in-region.md
     - Working with services:
       - Overview: admin/ksm/index.md
       - KSM Providers: admin/ksm/ksm-providers.md
