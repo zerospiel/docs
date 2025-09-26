@@ -19,14 +19,6 @@ Finally, verify that KOF installed properly.
     kubectl logs -n projectsveltos deploy/addon-controller | less
     ```
 
-    If you are not using [Istio](kof-install.md#istio),
-    please ensure you've applied [this workaround](kof-upgrade.md/#upgrade-to-v130)
-    by checking that `Reconciling MultiClusterService` is logged every 10 seconds, more than 3 times:
-    ```bash
-    kubectl logs -n kcm-system deploy/kcm-controller-manager -f \
-      | grep 'Reconciling MultiClusterService'
-    ```
-
 2. Wait for all pods in the regional and child clusters to show as `Running`
     in the namespaces `kof, kube-system, projectsveltos`:
     ```bash
