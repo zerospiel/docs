@@ -11,10 +11,8 @@ Backing up KOF requires backing up the following:
 
 ## Health Monitoring
 
-To implement health monitoring:
-
-1. Apply the steps in the [Verification](./kof-verification.md) section
-2. Apply the steps in the [Sveltos](./kof-verification.md#sveltos) section
+To implement health monitoring
+apply the steps in the [Verification](./kof-verification.md) section.
 
 ## Uninstallation
 

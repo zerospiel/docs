@@ -42,7 +42,7 @@
 
 ## Upgrade Notes
 - **KOF**:
-    - Please apply the "Reconciling MultiClusterService" [workaround](/admin/kof/kof-upgrade/#upgrade-to-v130).
+    - Please apply the "Reconciling MultiClusterService" [workaround](../admin/kof/kof-upgrade.md/#upgrade-to-v130).
 - **Providers:**  
     - Align pinned dependencies with new versions (k0smotron 1.6.2, CAPI Azure 1.20.2).  
     - Build/test environments should use Go 1.24.6.
