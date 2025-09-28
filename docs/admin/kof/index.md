@@ -1,17 +1,28 @@
-# {{{ docsVersionInfo.k0rdentName }}} Observability and FinOps
+# k0rdent Observability and FinOps
 
-KOF transforms Kubernetes from an operational black box into a transparent, accountable, and scalable platform for both engineers and business leaders.
+Kubernetes is extremely powerful, but it's often hard to understand exactly what's going on, especially with the granuality you need to find and solve problems. k0rdent Observability and FinOps (KOF) helps both engineers and business leaders get the information they need to make Kubernetes transparent, accountable, and scalable.
 
 ## Why KOF Exists
 
 Running Kubernetes at scale introduces two universal problems:
 
-1. **Observability is fragmented.** Teams struggle to piece together metrics, logs, and traces across clusters.
-2. **Cloud bills are opaque.** Finance sees rising costs, but engineering can’t explain who or what is responsible.
+1. **Observability is all over the place.** Teams struggle to piece together metrics, logs, and traces across clusters.
+2. **Cloud bills make no sense.** Finance sees rising costs, but engineering can’t explain who or what is responsible.
 
-**KOF (k0rdent Observability & FinOps)** solves both problems by unifying observability and cost management in a single, GitOps-driven platform.
+**KOF (k0rdent Observability & FinOps)** solves both problems by bringing together observability and cost management in a single, GitOps-driven platform.
 
-## The Problems KOF Solves
+## Core Capabilities (at a Glance)
+
+k0rdent Observability and FinOps includes everything you need to know what's going on inside your cluster, including:
+
+* **Metrics:** Enterprise-grade time series storage (VictoriaMetrics).
+* **Logs:** Centralized collection and analysis (VictoriaLogs).
+* **Tracing:** Distributed tracing for microservices (Jaeger + OpenTelemetry).
+* **Cost Management:** Kubernetes-aware cost visibility (OpenCost).
+* **GitOps Integration:** Manage dashboards, alerts, and retention policies as code.
+* **Compliance:** Retention policies, audit trails, RBAC, and TLS-secured communication.
+
+## The Problems KOF Solvess
 
 KOF solves a number of problems that keep business from truly extracting the value from Kubernetes, such as:
 
@@ -131,16 +142,7 @@ Got it — here’s the next section, **“Who Benefits”**, written audience-f
 
 Here’s the **“KOF in Action”** case study section, designed as a narrative that shows how different teams interact with KOF to solve a real-world problem. It reads like a story instead of a manual, which helps “sell” the platform.
 
-## Core Capabilities (at a Glance)
 
-k0rdent Observability and FinOps includes the everything you need to know what's going on inside your cluster, including:
-
-* **Metrics:** Enterprise-grade time series storage (VictoriaMetrics).
-* **Logs:** Centralized collection and analysis (VictoriaLogs).
-* **Tracing:** Distributed tracing for microservices (Jaeger + OpenTelemetry).
-* **Cost Management:** Kubernetes-aware cost visibility (OpenCost).
-* **GitOps Integration:** Manage dashboards, alerts, and retention policies as code.
-* **Compliance:** Retention policies, audit trails, RBAC, and TLS-secured communication.
 
 
 
