@@ -4,8 +4,6 @@
 
 A: The simplest way to change the Kubernetes version of a specific child cluster is by updating the `ClusterDeployment` object. Where to updated it depends on the `ClusterTemplate` on which the `ClusterDeployment` is based.  For example, for built-in AWS, Azure, GCP, OpenStack, and Vsphere cluster templates (both standalone and hosted) you set the `spec.config.k0s.version` value to the desired Kubernetes version. For EKS, and AKS, you set `kubernetes.version`, and for GKE you set the `version` value. Note that this applies to built-in templates only; Custom templates may have another parameter exposed to represent the Kubernetes version.
 
-If you change the Kubernetes version used in a `ClusterTemplate`, all `ClusterDeployments` based on that template will be upgraded to the new version.
-
 You can also [create a new `ClusterTemplate`](../templatehowto/index.md) that will set the version for new clusters created based on that template.
 
 **Q: Is it possible to control the version of the provider in the KCM Management object? For example, what if {{{ docsVersionInfo.k0rdentName }}} is using the Kubernetes Cluster API for OpenStack (CAPO) v0.12.4 but I want to use v0.12.2?**
@@ -18,5 +16,6 @@ spec:
   - name: cluster-api-provider-openstack
     template: new-capo-provider-template-name
 ```
+
 
 
