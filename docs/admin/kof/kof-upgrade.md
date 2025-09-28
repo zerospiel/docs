@@ -3,7 +3,7 @@
 ## Upgrade to any version
 
 * Create a backup of each KOF chart values in each cluster, for example:
-    ```shell
+    ```bash
     # Management cluster uses default KUBECONFIG=""
     for cluster in "" regional-kubeconfig child-kubeconfig; do
       for namespace in kof istio-system; do
@@ -21,7 +21,7 @@
 * Apply the guide step by step, but:
     * Skip unchanged credentials like `external-dns-aws-credentials`.
     * Before applying new YAML files, verify what has changed, for example:
-        ```shell
+        ```bash
         diff -u values--kof-mothership.bak mothership-values.yaml
         ```
     * Run all `helm upgrade` commands with the new `--version` and files as documented.
@@ -30,6 +30,17 @@
     * For example, if you're upgrading from v1.1.0 to v1.3.0,
     * first apply the [Upgrade to v1.2.0](#upgrade-to-v120) section,
     * then apply the [Upgrade to v1.3.0](#upgrade-to-v130) section.
+
+## Upgrade to v1.4.0
+
+* `PromxyServerGroup` CRD was moved from the `crds/` directory to the `templates/` directory for auto-upgrade.
+* Please use `--take-ownership` on upgrade of `kof-mothership` to 1.4.0:
+    ```bash
+    helm upgrade --take-ownership \
+      --reset-values --wait -n kof kof-mothership -f mothership-values.yaml \
+      oci://ghcr.io/k0rdent/kof/charts/kof-mothership --version 1.4.0
+    ```
+* This will not be required in future upgrades.
 
 ## Upgrade to v1.3.0
 
