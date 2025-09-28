@@ -2,7 +2,7 @@
 
 **Q: What is the best way to upgrade the Kubernetes version of a {{{ docsVersionInfo.k0rdentName }}} child cluster?**
 
-A: The simplest way to change the Kubernetes version of a specific child cluster is by updating the `ClusterDeployment` object. Set the `spec.config.k0s.version` value to the desired Kubernetes version. 
+A: The simplest way to change the Kubernetes version of a specific child cluster is by updating the `ClusterDeployment` object. Where to updated it depends on the `ClusterTemplate` on which the `ClusterDeployment` is based.  For example, for built-in AWS, Azure, GCP, OpenStack, and Vsphere cluster templates (both standalone and hosted) you set the `spec.config.k0s.version` value to the desired Kubernetes version. For EKS, and AKS, you set `kubernetes.version`, and for GKE you set the `version` value. Note that this applies to built-in templates only; Custom templates may have another parameter exposed to represent the Kubernetes version.
 
 If you change the Kubernetes version used in a `ClusterTemplate`, all `ClusterDeployments` based on that template will be upgraded to the new version.
 
@@ -18,4 +18,5 @@ spec:
   - name: cluster-api-provider-openstack
     template: new-capo-provider-template-name
 ```
+
 
