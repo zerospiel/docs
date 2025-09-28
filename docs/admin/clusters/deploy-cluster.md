@@ -27,8 +27,8 @@ Follow these steps to deploy a standalone Kubernetes cluster tailored to your sp
     Start by creating a `Credential` object that includes all required authentication details for your chosen infrastructure provider. Follow the instructions in the [chapter about credential management](../access/credentials/index.md), as well as the specific instructions for your [target infrastructure](../installation/prepare-mgmt-cluster/index.md).
 
     > NOTE:
-    > A Credential may optionally specify the `spec.region` field. When set, all ClusterDeployments that reference
-    > this Credential will be deployed to the corresponding regional cluster.
+    > A `Credential` may optionally specify the `spec.region` field. When set, all `ClusterDeployment` objects that reference
+    > this `Credential` will be deployed to the corresponding regional cluster.
     > Learn more in [Creating a Credential in a Region](../regional-clusters/creating-credential-in-region.md).
 
     > TIP: 
@@ -170,3 +170,4 @@ Follow these steps to deploy a standalone Kubernetes cluster tailored to your sp
     ```
 
     Store the kubeconfig file securely, as it contains authentication details for accessing the cluster.
+
