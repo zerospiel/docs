@@ -120,7 +120,7 @@ Refer to "Configuring Custom Values" in [Deploy beach-head Services using Cluste
 Refer to "Templating Custom Values" in [Deploy beach-head Services using Cluster Deployment](../../user/services/beach-head.md#configuring-custom-values) for more information about dynamic custom values.
 
 ## Service Dependencies
-Refer to "Service Dependencies" in [Deploy beach-head Services using Cluster Deployment](../../user/services/beach-head.md#service-dependencies) for more information about service depedencies. The only difference compared to ClusterDeployment is that when using service dependencies in a MultiClusterService object, the dependencies will be evaluated separately for each of the matching clusters.
+Refer to "Service Dependencies" in [Deploy beach-head Services using Cluster Deployment](../../user/services/beach-head.md#service-dependencies) for more information about service depedencies. The only difference compared to a `ClusterDeployment` is that when using service dependencies in a `MultiClusterService` object, the dependencies will be evaluated separately for each of the matching clusters.
 
 ### Services Priority and Conflict
 
