@@ -6128,6 +6128,13 @@ The string type is used in order to allow for templating.<br/>
         </td>
         <td>false</td>
       </tr><tr>
+        <td><b><a href="#multiclusterservicespecservicespecservicesindexhelmoptions">helmOptions</a></b></td>
+        <td>object</td>
+        <td>
+          HelmOptions are the options used during the helm install of the service.
+        </td>
+        <td>false</td>
+      </tr><tr>
         <td><b><a href="#multiclusterservicespecservicespecservicesindexvaluesfromindex">valuesFrom</a></b></td>
         <td>[]object</td>
         <td>
@@ -6195,6 +6202,137 @@ and Sveltos will continue processing other ValueFroms.<br/>
         </td>
         <td>false</td>
       </tr></tbody>
+</table>
+
+
+
+### MultiClusterService.spec.serviceSpec.services[index].helmOptions
+<sup><sup>[↩ Parent](#multiclusterservicespecservicespecservicesindex)</sup></sup>
+
+
+
+
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Required</th>
+        </tr>
+    </thead>
+    <tbody><tr>
+        <td><b>enableClientCache</b></td>
+        <td>boolean</td>
+        <td>
+          enableClientCache is a flag to enable Helm client cache. If it is not specified, it will be set to false.
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>dependencyUpdate </b></td>
+        <td>boolean</td>
+        <td>
+          dependencyUpdate is a flag to update dependencies if they are missing before installing the chart<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>wait</b></td>
+        <td>boolean</td>
+        <td>
+          Wait if set, will wait until all Pods, PVCs, Services, and minimum number of Pods of a Deployment, StatefulSet, or ReplicaSet are in a ready state before marking the release as successful. It will wait for as long as --timeout<br/>
+        </td>
+        <td>false</td>
+      </tr>
+	  <tr>
+        <td><b>waitForJobs</b></td>
+        <td>boolean</td>
+        <td>
+          waitForJobs if set and --wait enabled, will wait until all Jobs have been completed before marking the release as successful. It will wait for as long as --timeout
+        </td>
+        <td>false</td>
+      </tr>
+	  <tr>
+        <td><b>createNamespace</b></td>
+        <td>boolean</td>
+        <td>
+          createNamespace if set will create a namespace for the helm release when installed
+        </td>
+        <td>false</td>
+      </tr>
+	  <tr>
+        <td><b>skipCRDs</b></td>
+        <td>boolean</td>
+        <td>
+          skipCRDs controls whether CRDs should be installed during install/upgrade operation. By default, CRDs are installed if not already present.
+        </td>
+        <td>false</td>
+      </tr>
+	  <tr>
+        <td><b>atomic</b></td>
+        <td>boolean</td>
+        <td>
+          atomic if set, the installation process deletes the installation/upgrades on failure. The --wait flag will be set automatically if --atomic is used
+        </td>
+        <td>false</td>
+      </tr>
+	  <tr>
+        <td><b>disableHooks</b></td>
+        <td>boolean</td>
+        <td>
+          disableHooks prevent hooks from running during install/upgrade/uninstall
+        </td>
+        <td>false</td>
+      </tr>
+	  <tr>
+        <td><b>disableOpenAPIValidation</b></td>
+        <td>boolean</td>
+        <td>
+          disableOpenAPIValidation if set, the installation process will not validate rendered templates against the Kubernetes OpenAPI Schema
+        </td>
+        <td>false</td>
+      </tr>
+	  <tr>
+        <td><b>timeout</b></td>
+        <td>string</td>
+        <td>
+          time to wait for any individual Kubernetes operation (like Jobs for hooks) (default 5m0s)
+        </td>
+        <td>false</td>
+      </tr>
+	  <tr>
+        <td><b>skipSchemaValidation</b></td>
+        <td>boolean</td>
+        <td>
+          skipSchemaValidation determines if JSON schema validation is disabled.
+        </td>
+        <td>false</td>
+      </tr>
+	  <tr>
+        <td><b>replace</b></td>
+        <td>boolean</td>
+        <td>
+          replace if set indicates to replace an older release with this one
+        </td>
+        <td>false</td>
+      </tr>
+	  <tr>
+        <td><b>labels</b></td>
+        <td>map[string]string</td>
+        <td>
+          labels that would be added to release metadata.
+        </td>
+        <td>false</td>
+      </tr>
+	  	  <tr>
+        <td><b>description</b></td>
+        <td>string</td>
+        <td>
+          description is the description of an helm operation
+        </td>
+        <td>false</td>
+      </tr>
+	  </tbody>
 </table>
 
 
@@ -9404,7 +9542,16 @@ ServiceTemplateSpec defines the desired state of ServiceTemplate
           Version is the semantic version of the application backed by template.<br/>
         </td>
         <td>false</td>
-      </tr></tbody>
+      </tr>
+	  <tr>
+        <td><b><a href="#multiclusterservicespecservicespecservicesindexhelmoptions">helmOptions</a></b></td>
+        <td>object</td>
+        <td>
+          HelmOptions are the options used during the helm install of the service.
+        </td>
+        <td>false</td>
+      </tr>
+	  </tbody>
 </table>
 
 
