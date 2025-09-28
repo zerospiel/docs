@@ -33,7 +33,7 @@
 
 ## Upgrade to v1.4.0
 
-* `PromxyServerGroup` CRD was moved from `crds/` to `templates/` directory for auto-upgrade.
+* `PromxyServerGroup` CRD was moved from the `crds/` directory to the `templates/` directory for auto-upgrade.
 * Please use `--take-ownership` on upgrade of `kof-mothership` to 1.4.0:
     ```bash
     helm upgrade --take-ownership \
