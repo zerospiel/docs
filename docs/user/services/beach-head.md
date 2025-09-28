@@ -175,4 +175,5 @@ spec:
     . . .
 ```
 
-In this case, nginx will not be deployed until cert-manager has been successfully deployed. If there already exists a cert-manager with the same name and namespace deployed by another MultiClusterService with higher priorirty, k0rdent will still recognize it as a fulfilled dependency for nginx and start deploying nginx.
+In this case, `nginx` will not be deployed until `cert-manager` has been successfully deployed. If there already a `cert-manager` service already exists in the specified namespace (for example, if it was deployed by another `MultiClusterService` with higher priorirty), {{{ docsVersionInfo.k0rdentName }}} will still recognize it as a fulfilled dependency for `nginx` and start deploying `nginx`.
+
