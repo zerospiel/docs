@@ -24,6 +24,7 @@ The main goal of the feature is to provide:
 * **Disaster Recovery:** The ability to restore {{{ docsVersionInfo.k0rdentName }}} on another management cluster, plus ensuring that clusters are not
   recreated or lost.
 * **Rollback:** The possibility to manually restore after a specific event, such as a failed {{{ docsVersionInfo.k0rdentName }}} upgrade
+
 ## Velero as Provider for Management Backups
 
 [`Velero`](https://velero.io/) is an open-source tool that simplifies backing up and restoring clusters as well as individual resources. It seamlessly integrates into the {{{ docsVersionInfo.k0rdentName }}} management environment to provide robust disaster recovery capabilities.

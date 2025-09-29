@@ -22,16 +22,16 @@ The [Velero helm chart](https://vmware-tanzu.github.io/helm-charts/) is supplied
      --create-namespace \
      --namespace kcm-system \
      --set-file velero.credentials.secretContents.cloud=<full-path-to-file> \
-     --set velero.credentials.useSecret=true \
-     --set velero.backupsEnabled=true \
-     --set velero.configuration.backupStorageLocation[0].name=<backup-storage-location-name> \
-     --set velero.configuration.backupStorageLocation[0].provider=<provider-name> \
-     --set velero.configuration.backupStorageLocation[0].bucket=<bucket-name> \
-     --set velero.configuration.backupStorageLocation[0].config.region=<region> \
-     --set velero.initContainers[0].name=velero-plugin-for-<provider-name> \
-     --set velero.initContainers[0].image=velero/velero-plugin-for-<provider-name>:<provider-plugin-tag> \
-     --set velero.initContainers[0].volumeMounts[0].mountPath=/target \
-     --set velero.initContainers[0].volumeMounts[0].name=plugins
+     --set regional.velero.credentials.useSecret=true \
+     --set regional.velero.backupsEnabled=true \
+     --set regional.velero.configuration.backupStorageLocation[0].name=<backup-storage-location-name> \
+     --set regional.velero.configuration.backupStorageLocation[0].provider=<provider-name> \
+     --set regional.velero.configuration.backupStorageLocation[0].bucket=<bucket-name> \
+     --set regional.velero.configuration.backupStorageLocation[0].config.region=<region> \
+     --set regional.velero.initContainers[0].name=velero-plugin-for-<provider-name> \
+     --set regional.velero.initContainers[0].image=velero/velero-plugin-for-<provider-name>:<provider-plugin-tag> \
+     --set regional.velero.initContainers[0].volumeMounts[0].mountPath=/target \
+     --set regional.velero.initContainers[0].volumeMounts[0].name=plugins
     ```
 
 1. Create or modify the existing `Management` object in the `.spec.config.kcm`.

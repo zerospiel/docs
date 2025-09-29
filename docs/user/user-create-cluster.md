@@ -1,6 +1,6 @@
 # Deploying a Cluster
 
-{{{ docsVersionInfo.k0rdentName }}} simplifies the process of deploying and managing Kubernetes clusters across various cloud platforms through the use of `ClusterDeployment` objects, which include all of the information {{{ docsVersionInfo.k0rdentName }}} needs to know in order to create the cluster you want. This `ClusterDeployment` system relies on predefined templates and credentials. 
+{{{ docsVersionInfo.k0rdentName }}} simplifies the process of deploying and managing Kubernetes clusters across various cloud platforms through the use of `ClusterDeployment` objects, which include all of the information {{{ docsVersionInfo.k0rdentName }}} needs to know in order to create the cluster you want. This `ClusterDeployment` system relies on predefined templates and credentials.
 
 A cluster deployment typically involves:
 
@@ -19,6 +19,7 @@ Follow these steps to deploy a standalone Kubernetes cluster:
     ```bash
     kubectl get credentials -n accounting
     ```
+
     When you find a `Credential` that looks appropriate, you can get more information by `describe`-ing it, as in:
 
     ```bash
@@ -46,7 +47,7 @@ Follow these steps to deploy a standalone Kubernetes cluster:
     If the `Credential` you need doesn't yet exist, you can ask your cloud administrator to create it, or you can
     follow the instructions in the [Credential System](../admin/access/credentials/index.md), as well as the specific instructions for your [target infrastructure](../admin/installation/prepare-mgmt-cluster/index.md), to create it yourself.
 
-    > TIP: 
+    > TIP:
     > Double-check to make sure that your credentials have sufficient permissions to create resources on the target infrastructure.
 
 2. Select a Template
@@ -62,6 +63,7 @@ Follow these steps to deploy a standalone Kubernetes cluster:
     ```bash
     kubectl get clustertemplate -n kcm-system
     ```
+
     ```console
     NAMESPACE    NAME                            VALID
     kcm-system   adopted-cluster-{{{ extra.docsVersionInfo.providerVersions.dashVersions.adoptedCluster }}}           true
@@ -89,7 +91,7 @@ Follow these steps to deploy a standalone Kubernetes cluster:
 
 3. Create a ClusterDeployment YAML Configuration
 
-    Once you have the `Credential` and the `ClusterTemplate` you can create the `ClusterDeployment` object configuration. 
+    Once you have the `Credential` and the `ClusterTemplate` you can create the `ClusterDeployment` object configuration.
     It includes:
 
     * The template to use.
@@ -108,6 +110,7 @@ Follow these steps to deploy a standalone Kubernetes cluster:
       template: <template-name>
       credential: <infrastructure-provider-credential-name>
       dryRun: <"true" or "false" (default: "false")>
+      cleanupOnDeletion: <"true" or "false" (default: "false")>
       config:
         <cluster-configuration>
     ```
@@ -131,7 +134,14 @@ Follow these steps to deploy a standalone Kubernetes cluster:
         worker:
           instanceType: t3.small
     ```
+
     Note that the `.spec.credential` value should match the `.metadata.name` value of a created `Credential` object.
+
+    > TIP:
+    > If automatic cleanup of potentially orphaned *LoadBalancer Services* and *Storage devices* during deletion of
+    > the `ClusterDeployment` object is required, set `.spec.cleanupOnDeletion` to `true`.
+    > This is a best-effort cleanup: if there is no possibility to acquire a managed cluster's kubeconfig,
+    > the cleanup will **not** happen.
 
 4. Apply the Configuration
 
@@ -141,7 +151,7 @@ Follow these steps to deploy a standalone Kubernetes cluster:
     kubectl apply -f clusterdeployment.yaml
     ```
 
-    This step submits your deployment request to {{{ docsVersionInfo.k0rdentName }}}. 
+    This step submits your deployment request to {{{ docsVersionInfo.k0rdentName }}}.
 
 5. Verify Deployment Status
 
@@ -168,6 +178,7 @@ Follow these steps to deploy a standalone Kubernetes cluster:
     ```bash
     kubectl get secret -n <namespace> <cluster-name>-kubeconfig -o=jsonpath={.data.value} | base64 -d > kubeconfig
     ```
+
     You can then use this file to access the cluster, as in:
 
     ```bash
@@ -180,7 +191,7 @@ Follow these steps to deploy a standalone Kubernetes cluster:
 ## Cleanup
 
 When you're finished you'll want to remove the cluster. Because the cluster is represented by the `ClusterDeployment` object,
-deleting the cluster is a simple matter of deleting that object.  For example:
+deleting the cluster is a simple matter of deleting that object. For example:
 
 ```bash
 kubectl delete clusterdeployment <cluster-name> -n kcm-system

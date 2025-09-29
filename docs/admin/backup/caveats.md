@@ -62,7 +62,4 @@ spec:
 > deletes it from both
 > the management cluster and from the cloud storage.
 
-Optionally, delete the created `DeleteBackupRequest` object
-from the cluster after `Backup` has been deleted.
-
 For reference, follow the [official documentation](https://velero.io/docs/v1.15/backup-reference/#deleting-backups).

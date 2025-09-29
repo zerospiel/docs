@@ -2,7 +2,7 @@
 
 ## Preparation
 
-> NOTE: 
+> NOTE:
 > The following instructions are tailored for AWS. Please adapt them to your chosen platform and storage.
 
 Before you create a manual one-off or scheduled backup, review the steps below and update your configuration accordingly:
@@ -14,6 +14,7 @@ Before you create a manual one-off or scheduled backup, review the steps below a
     ```sh
     kubectl get management kcm -n kcm-system -o yaml > management.yaml
     ```
+
     then edit the `management.yaml` file so that the velero plugin details are filled in under `spec.core.kcm`:
 
     ```yaml
@@ -62,13 +63,14 @@ Before you create a manual one-off or scheduled backup, review the steps below a
 
       > NOTE:
       > If you're using EKS, the "user" is actually a role. If you get an error such as...
-      > 
-      > ```
+      >
+      > ```text
       > AccessDenied: User: arn:aws:sts::026090528175:assumed-role/eksctl-JohnDoeEKSK0rdentMgmtClus-NodeInstanceRole-j0olMRJHrM0A/i-0f7dad2d91447f173 is not authorized to perform: s3:ListBucket on resource: "arn:aws:s3:::nick-chase-backup-bucket" because no identity-based policy allows the s3:ListBucket action
       > ```
-      > 
+      >
       > ...you can extract the role from the message (in this example, it's the assumed-role) and create the policy. For example:
-      > ```
+      >
+      > ```text
       > aws iam put-role-policy
       > --role-name eksctl-JohnDoeEKSK0rdentMgmtClus-NodeInstanceRole-j0olMRJHrM0A
       > --policy-name velero
@@ -76,11 +78,13 @@ Before you create a manual one-off or scheduled backup, review the steps below a
       > ```
 
       Generate the necessary base64-encoded credentials using:
+
       ```sh
       base64 -w0 credentials.txt; echo
       ```
 
       Use this base64 value in the `data.cloud` field in the `creds-and-backup-storage-location.yaml` you'll create next. Also make sure to substitute the appropriate `REGION-NAME` and `BUCKET-NAME`:
+
       ```yaml
       ---
       apiVersion: v1
@@ -115,22 +119,29 @@ Before you create a manual one-off or scheduled backup, review the steps below a
       ```
 
 1. Create the necessary Kubernetes resources in your k0rdent cluster by applying the YAML to the management cluster:
+
     ```sh
     kubectl apply -f creds-and-backup-storage-location.yaml
     kubectl apply -f management.yaml
     ```
+
 1. Confirm that the previous steps were applied correctly:
+
     ```sh
     kubectl get management kcm -n kcm-system -o yaml
     ```
-    The management configuration yaml should have the new velero plugin details, as shown in step 2. 
+
+    The management configuration yaml should have the new velero plugin details, as shown in step 2.
 
     Now make sure the `backupstoragelocation` shows as `Available`:
+
     ```sh
     kubectl get backupstoragelocation -n kcm-system
     ```
+
     ```console
     NAME     PHASE       LAST VALIDATED   AGE   DEFAULT
     aws-s3   Available   27s              2d    true
     ```
+
 You can get more information on how to build these objects at the [official Velero documentation](https://velero.io/docs/v1.15/locations).
