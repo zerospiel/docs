@@ -3,7 +3,7 @@
 > NOTE:
 > After running the helm install command, please wait 5 to 10 minutes for the deployment to stabilize.
 
-To understand whether installation is complete, start by making sure all pods are ready in the `kcm-system` namespace. There should be 20 pod entries:
+To understand whether installation is complete, start by making sure all pods are ready in the `kcm-system` namespace. There should be 21 pod entries:
 
 ```bash
 kubectl get pods -n kcm-system
@@ -37,7 +37,7 @@ kubectl get pods -n kcm-system --no-headers | wc -l
 ```
 
 ```console
-20
+21
 ```
 
 State management is handled by Project Sveltos, so you'll want to make sure that all 10 pods are running/completed in the `projectsveltos` namespace:
@@ -64,7 +64,7 @@ kubectl get pods -n projectsveltos --no-headers | wc -l
 ```
 
 ```console
-10
+9
 ```
 
 If any of these pods are missing, simply give {{{ docsVersionInfo.k0rdentName }}} more time. If there's a problem, you'll see pods crashing and restarting, and you can see what's happening by describing the pod, as in:
@@ -95,7 +95,6 @@ Next verify whether the KCM templates have been successfully installed and recon
 ```bash
 kubectl get providertemplate -n kcm-system
 ```
-
 ```console
 NAME                                   VALID
 cluster-api-{{{ extra.docsVersionInfo.providerVersions.dashVersions.clusterApi }}}                                 true
@@ -103,11 +102,14 @@ cluster-api-provider-aws-{{{ docsVersionInfo.providerVersions.dashVersions.clust
 cluster-api-provider-azure-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderAzure }}}                  true
 cluster-api-provider-docker-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderDocker }}}                 true
 cluster-api-provider-gcp-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderGcp }}}                    true
+cluster-api-provider-infoblox-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderInfoblox }}}               true
+cluster-api-provider-ipam-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderIpam }}}                   true
 cluster-api-provider-k0sproject-k0smotron-{{{ docsVersionInfo.providerVersions.dashVersions.k0smotron }}}   true
 cluster-api-provider-openstack-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderOpenstack }}}              true
 cluster-api-provider-vsphere-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderVsphere }}}                true
 k0smotron-{{{ docsVersionInfo.providerVersions.dashVersions.k0smotron }}}                                   true
 kcm-{{{ docsVersionInfo.k0rdentVersion }}}                                         true
+kcm-regional-{{{ docsVersionInfo.providerVersions.dashVersions.regional }}}                                true
 projectsveltos-{{{ docsVersionInfo.providerVersions.dashVersions.sveltosProvider }}}                             true
 ```
 
@@ -118,20 +120,20 @@ You'll also want to make sure the `ClusterTemplate` objects are installed and va
 ```bash
 kubectl get clustertemplate -n kcm-system
 ```
-
 ```console
-NAME                            VALID
-adopted-cluster-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApi }}}           true
-aws-eks-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsEksCluster }}}                   true
+NAME                             VALID
+adopted-cluster-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApi }}}            true
+aws-eks-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsEksCluster }}}                    true
 aws-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsHostedCpCluster }}}             true
 aws-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsStandaloneCpCluster }}}         true
-azure-aks-{{{ extra.docsVersionInfo.providerVersions.dashVersions.azureAksCluster }}}                 true
+azure-aks-{{{ extra.docsVersionInfo.providerVersions.dashVersions.azureAksCluster }}}                  true
 azure-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.azureHostedCpCluster }}}           true
 azure-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.azureStandaloneCpCluster }}}       true
 docker-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.azureHostedCpCluster }}}          true
-gcp-gke-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsEksCluster }}}                   true
+gcp-gke-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsEksCluster }}}                    true
 gcp-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsHostedCpCluster }}}             true
 gcp-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsStandaloneCpCluster }}}         true
+openstack-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.openstackStandaloneCpCluster }}}       true
 openstack-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.openstackStandaloneCpCluster }}}   true
 remote-cluster-{{{ extra.docsVersionInfo.providerVersions.dashVersions.openstackStandaloneCpCluster }}}            true
 vsphere-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.vsphereHostedCpCluster }}}         true
