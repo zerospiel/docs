@@ -36,6 +36,12 @@ In order to pass credentials to {{{ docsVersionInfo.k0rdentName }}} so it can ta
 
 2. Now you can create a `Credential` object that references the `ClusterIdentity`, thus making the credentials available and specifying the namespaces where it can be used. Continuing our AWS example:
 
+    > NOTE:
+    > A `Credential` may optionally specify the `spec.region` field. When set, all `ClusterDeployment` objects that reference
+    > this `Credential` will be deployed to the corresponding regional cluster. In this case, the required
+    > `ClusterIdentity` resources must exist in that regional cluster.
+    > Learn more in [Creating a Credential in a Region](../../regional-clusters/creating-credential-in-region.md).
+
     ```yaml
     apiVersion: k0rdent.mirantis.com/v1beta1
     kind: Credential
@@ -89,3 +95,4 @@ In order to pass credentials to {{{ docsVersionInfo.k0rdentName }}} so it can ta
     access to the credentials. Thus credentials could be used by engineers
     without a need to have access to actual credentials or underlying resources,
     like `ClusterIdentity`.
+

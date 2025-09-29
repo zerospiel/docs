@@ -41,9 +41,43 @@ The management cluster is the core of the {{{ docsVersionInfo.k0rdentName }}} ar
 
 We’ll take a closer look at these pieces under [Roles and Responsibilities](#roles-and-responsibilities).
 
+## Regional cluster
+
+> NOTE:
+> Regional clusters are available starting from version 1.4.0.
+
+A **regional cluster** is an optional separate cluster where user workloads and provider-related infrastructure
+(such as CAPI providers, clusters, and machines) are created.
+
+Using a regional cluster is helpful if you don’t want the management cluster to host cluster-related objects. For
+example, separating hosted control plane pods from the mothership cluster to improve both networking and security.
+
+Regional clusters are optional. The management cluster can host infrastructure cluster resources if needed as it used
+to be until 1.4.0.
+
+A regional cluster includes the following components:
+
+1. Cert Manager
+2. Velero
+3. CAPI providers and operator
+4. ClusterIdentity resources
+
+It does not include: {{{ docsVersionInfo.k0rdentName }}} API and KCM controller and Flux's Helm and Source controllers.
+
+The management cluster remains the single pane of glass, responsible for managing ClusterDeployments, Credentials,
+Templates, and other {{{ docsVersionInfo.k0rdentName }}} resources.
+
+To set up a regional cluster, you need an existing cluster that is accessible from the management cluster. This can be
+either:
+
+* A cluster created with a k0rdent ClusterDeployment, or
+* An external cluster.
+
+Learn more in [Regional Clusters](../admin/regional-clusters/index.md).
+
 ## Cluster Deployments
 
-A cluster deployment is also known as a child cluster, or a workload cluster. It’s a Kubernetes cluster provisioned and managed by the management cluster, and it’s where developers run their applications and workloads. These are “regular” Kubernetes clusters, and don’t host any management components. Clusters are fully isolated from the management cluster via namespaces, and also from each other, making it possible to create multi-tenant environments.
+A cluster deployment is also known as a child cluster, or a workload cluster. It’s a Kubernetes cluster provisioned and managed by the management or regional cluster, and it’s where developers run their applications and workloads. These are “regular” Kubernetes clusters, and don’t host any management or regional components. Clusters are fully isolated from the management cluster via namespaces, and also from each other, making it possible to create multi-tenant environments.
 
 You can tailor a child cluster to specific use cases, with customized addons such as ingress controllers, monitoring tools, and logging solutions. You can also define specific Kubernetes configurations (for example, network policies, storage classes, and security policies) so they work for you and your applications or environments.
 

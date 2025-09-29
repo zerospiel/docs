@@ -135,3 +135,4 @@ This Administration Guide provides information on:
 - [Upgrading {{{ docsVersionInfo.k0rdentName }}}](upgrade/index.md)
 - [Access Management (Credentials and RBAC)](access/index.md)
 - [Backup and Restore](backup/index.md)
+- [Regional Clusters](regional-clusters/index.md)
