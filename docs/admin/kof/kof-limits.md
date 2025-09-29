@@ -47,3 +47,13 @@ See also: [System Requirements](https://github.com/k0rdent/kof/blob/v{{{ extra.d
     requests:
       memory: 128Mi
   ```
+
+## Why VictoriaMetrics instead of Prometheus?
+
+KOF uses VictoriaMetrics as the metrics backend, rather than Prometheus alone, for several reasons.
+
+- Scalability: VictoriaMetrics supports horizontal clustering for large multi-cluster environments.
+- Compression: VictoriaMetrics stores high-cardinality metrics efficiently.
+- Federation: VictoriaMetrics integrates cleanly with Promxy for cross-cluster queries.
+
+We still use Prometheus at the collection layer, but long-term storage and query efficiency are handled by VictoriaMetrics.

@@ -58,14 +58,58 @@ The logging interface will also be available, including:
   <source src="../../../assets/kof/victoria-logs-dashboard--2025-03-11.mp4" type="video/mp4" />
 </video>
 
-### Cost Management
+## Dashboard Categories
 
-Finally there are the cost management features, including:
+KOF ships with dashboards across:
+* Infrastructure: Provides infrastructure-related metrics, such as kube clusters, nodes, API server, networking, storage, or GPU.
+* Applications: Provides metrics for applications, such as VictoriaMetrics, VictoriaLogs, Jaeger and OpenCost.
+* Service Mesh: Provides metrics for service mesh, such as Istio control-plane and traffic.
+* Platform: Provides metrics for the platform itself, including KCM, Cluster API, and Sveltos.
 
-* Resource cost tracking
-* Usage analysis
-* Budget monitoring
-* Optimization recommendations
+## Dashboard Lifecycle (GitOps Workflow)
+
+All dashboards are managed as code to keep environments consistent. To add or change a dashboard, follow these steps:
+
+**Add a new dashboard**
+1. Create a YAML file under `charts/kof-dashboards/files/dashboards/` with the new dashboard definition.
+2. Commit and push the change to Git.
+3. Your CI/CD pipeline applies the Helm chart to the target cluster.
+
+**Update an existing dashboard**
+1. Edit the corresponding YAML file.
+2. Commit and push changes.
+3. CI/CD will roll out the update automatically.
+
+**Delete a dashboard**
+1. Remove the YAML file.
+2. Commit and push changes.
+3. CI/CD pipeline removes the dashboard from Grafana.
+
+> WARNING: 
+> Avoid editing dashboards directly in the Grafana UI. Changes will be overwritten by the next Helm release.
+
+## Cost Management (OpenCost)
+
+ KOF includes OpenCost, which provides cost management features for Kubernetes clusters. Common signals available in Grafana are:
+* `node_total_hourly_cost` (per-node hourly cost)
+* Namespace and pod-level cost allocation
+* Historical spend trends and efficiency ratios
+
+Once you have this information, you can optimize your cluster. Typical optimizations include:
+* Identify under-utilized resources and right-size workloads
+* Budgeting and monitoring with Grafana alerts
+
+Common OpenCost metrics include:
+
+| Metric | Description |
+|--------|-------------|
+| `node_total_hourly_cost` | Hourly cost per node (includes CPU, memory, storage) |
+| `namespace_cpu_cost` | CPU cost aggregated by namespace |
+| `namespace_memory_cost` | Memory cost aggregated by namespace |
+| `pod_cost` | Cost allocation at pod granularity |
+| `cluster_efficiency` | Ratio of requested vs actual resource usage |
+
+These metrics appear in the pre-installed Grafana FinOps dashboards.
 
 ## Access to Jaeger
 
