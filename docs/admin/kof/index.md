@@ -1,150 +1,48 @@
-# k0rdent Observability and FinOps
+# k0rdent Observability & FinOps (KOF)
 
-Kubernetes is extremely powerful, but it's often hard to understand exactly what's going on, especially with the granuality you need to find and solve problems. k0rdent Observability and FinOps (KOF) helps both engineers and business leaders get the information they need to make Kubernetes transparent, accountable, and scalable.
+Running multiple clusters means you end up wrestling with half a dozen monitoring and cost tools, all with their own configs and upgrade headaches. k0rdent Observability & FinOps (KOF) saves you from duct-taping that stack together by bundling metrics, logs, traces, and cost tracking into one setup. It's built to roll out the same way everywhere, so you don’t have to reinvent the wheel every time you spin up a new cluster.
 
-## Why KOF Exists
+## KOF makes sure every cluster is observable and accountable for cost
 
-Running Kubernetes at scale introduces two universal problems:
+{{{ docsVersionInfo.k0rdentName }}} estates can be large. They consist of a management cluster, potentially running many child (workload) clusters, often spread across multiple datacenters, regions, and clouds. In sthese kinds of environments, you need to both observe what clusters and workloads are doing (using metrics, logs, traces) and be accountable for what they cost (using allocation and trends).  
 
-1. **Observability is all over the place.** Teams struggle to piece together metrics, logs, and traces across clusters.
-2. **Cloud bills make no sense.** Finance sees rising costs, but engineering can’t explain who or what is responsible.
+KOF gives {{{ docsVersionInfo.k0rdentName }}} platform engineering teams the ability to guarantee that observability and cost management are deployed with every cluster they create, and then keep them consistent and automatically lifecycle-managed. 
 
-**KOF (k0rdent Observability & FinOps)** solves both problems by bringing together observability and cost management in a single, GitOps-driven platform.
+## Without KOF you would be forced to integrate and maintain multiple systems
 
-## Core Capabilities (at a Glance)
+KOF is optional, but if you were to build this yourself, you would need to select, integrate, and maintain separate systems for metrics, logs, tracing, dashboards, and cost visibility. At scale, this arrangement introduces persistent difficulties:
 
-k0rdent Observability and FinOps includes everything you need to know what's going on inside your cluster, including:
+- **Component selection and versioning.** Each subsystem has its own CRDs, operators, and configuration. Keeping them consistent across many clusters is complex. Version skew and CRD drift cause brittle rollouts and difficult upgrades.  (See [OpenTelemetry Collector on Kubernetes](https://opentelemetry.io/docs/platforms/kubernetes/collector/).)
 
-* **Metrics:** Enterprise-grade time series storage (VictoriaMetrics).
-* **Logs:** Centralized collection and analysis (VictoriaLogs).
-* **Tracing:** Distributed tracing for microservices (Jaeger + OpenTelemetry).
-* **Cost Management:** Kubernetes-aware cost visibility (OpenCost).
-* **GitOps Integration:** Manage dashboards, alerts, and retention policies as code.
-* **Compliance:** Retention policies, audit trails, RBAC, and TLS-secured communication.
+- **Cross-cluster aggregation.** To query estate-wide, you need to build federation or remote-write topologies. These can work, but are fragile and add operational overhead. (See [Prometheus federation](https://prometheus.io/docs/prometheus/latest/federation/).)
 
-## The Problems KOF Solvess
+- **Retention and placement.** You need to plan where long-term metrics and logs live (per-cluster, regional, or dedicated) and engineer routing, storage, and query paths. 
 
-KOF solves a number of problems that keep business from truly extracting the value from Kubernetes, such as:
+- **Access, identity, and network.** SSO, RBAC, mTLS, and inter-cluster routing must be implemented and maintained consistently across the estate.
 
-* **Cluster sprawl:** KOF provides one control plane for metrics, logs, traces, and costs across all clusters.
-* **Escalating cloud bills:** KOF presents namespace- and pod-level cost dashboards tied directly to workloads.
-* **Slow troubleshooting:** KOF exposes logs, metrics, and distributed traces side-by-side for faster root-cause analysis.
-* **Compliance pressure:** KOF enbales policy-driven retention and replication for metrics and logs (from 30–365+ days).
-* **Operational drift:** KOF enables you to manage dashboards, alerts, and retention policies as code through CI/CD.
+KOF standardizes these decisions so they are consistent, repeatable, and auditable in k0rdent.
 
-## Who Needs KOF
+## KOF delivers unified observability and cost management across the estate
 
-KOF simplifes Kubernetes usage and operations throughout the organization.
+By packaging observability and FinOps as a single subsystem, KOF connects operational signals and cost signals:
 
-* **Platform Engineers:** Simplify multi-cluster observability, scale beyond Prometheus limits, enforce GitOps workflows.
-* **DevOps Teams:** Debug faster with integrated logs, metrics, and tracing. Gain a single view across hybrid/multi-cloud deployments.
-* **Finance / FinOps Teams:** Track real-time costs, run chargeback/showback, and forecast budgets with confidence.
-* **Compliance & Security:** Retain data for audits, enforce RBAC, and secure communications by default.
+- **Estate-wide visibility.** Every cluster participates, and data is aggregated centrally.  
+- **Actionable costs.** Workload and namespace spend is visible in the same dashboards as performance indicators.  
+- **Standardized retention.** Documented options define where data lives and how long it is kept.  
+- **Lifecycle management.** KOF is delivered as charts and operators, which can be consistently deployed and upgraded across the estate.  
+- **Compliance and audit.** Central policy ensures retention, RBAC, and secure transport are enforced everywhere.
 
+## KOF consists of well-established open source components wired for multi-cluster use
 
-# Pain Points & Solutions
+- **Metrics:** [VictoriaMetrics](https://docs.victoriametrics.com/) with vmcluster and vmauth.  
+- **Logs:** [VictoriaLogs](https://docs.victoriametrics.com/victorialogs/).  
+- **Tracing:** [Jaeger](https://www.jaegertracing.io/) with [OpenTelemetry](https://opentelemetry.io/).  
+- **Cost:** [OpenCost](https://opencost.io/).  
+- **Dashboards:** Grafana managed by grafana-operator.  
+- **Aggregation:** [Promxy](https://github.com/jacksontj/promxy) for Prometheus-compatible fan-out.  
+- **Control:** kof-operators for lifecycle and configuration.  
 
-KOF works to solve pratical problems involved in running Kubernetes in production.
-
-## Cluster Sprawl and Fragmented Observability
-
-**The problem:** As Kubernetes adoption grows, teams end up with dozens of clusters, each running its own Prometheus, Grafana, and logging stack. Dashboards drift, troubleshooting spans multiple tools, and SREs burn hours stitching together partial data.
-
-**KOF solution:** KOF provides a **single control plane** for metrics, logs, traces, and cost data across management, regional, and child clusters. Dashboards, alerts, and retention rules are managed via GitOps, keeping environments consistent.
-
-**Business impact:** Simplifies operations, reduces tool sprawl, and saves engineering time by providing one unified view of cluster health.
-
-## Escalating Cloud Bills With No Accountability
-
-**The problem:** Finance sees rising Kubernetes costs, but engineering can’t explain who’s responsible. Cost reports are high-level cloud invoices, not actionable insights.
-
-**KOF solution:** KOF integrates **OpenCost**, surfacing pod-, namespace-, and team-level costs directly in Grafana. It enables **chargeback/showback** so teams can own their spend.
-
-**Business impact:** Turns cloud bills into actionable insights, reduces waste, and promotes cost accountability across teams.
-
-## Slow Troubleshooting in Microservices Environments
-
-**The problem:** In distributed systems, issues hide across logs, metrics, and traces. Without a unified view, root cause analysis takes days, and downtime costs escalate.
-
-**KOF solution:** KOF integrates **VictoriaMetrics, VictoriaLogs, and Jaeger** under one roof. Engineers can correlate metrics, logs, and traces from the same dashboard.
-
-**Business impact:** Cuts mean-time-to-resolution (MTTR), reduces downtime costs, and increases developer confidence in production.
-
-## Compliance and Audit Pressure
-
-**The problem:** Regulations often require retaining logs and metrics for 90–365 days or more. DIY Prometheus/log stacks can’t scale without spiraling storage costs.
-
-**KOF solution:** KOF supports **policy-driven retention and replication**, with scalable backends like VictoriaMetrics and VictoriaLogs. Configure once, enforce everywhere.
-
-**Business impact:** Meets audit requirements cost-effectively while keeping engineers focused on delivery instead of compliance plumbing.
-
-## Operational Drift Across Teams
-
-**The problem:** Different teams edit Grafana dashboards, alert rules, or log retention policies by hand, causing environments to drift out of sync.
-
-**KOF solution:** KOF enforces a **GitOps workflow**. Dashboards, alerts, and retention settings are stored in Git, deployed via CI/CD pipelines, and version-controlled.
-
-**Business impact:** Eliminates configuration drift, improves collaboration, and ensures repeatability across dev, staging, and production.
-
-Got it — here’s the next section, **“Who Benefits”**, written audience-first. Each role gets its own story of why KOF matters to them, in plain language that connects to their responsibilities.
-
-
-
-# Who Benefits from KOF
-
-## Platform Engineers & SREs
-
-**Your challenge:** You manage Kubernetes clusters at scale, but every new region or cluster brings another Prometheus, another Grafana, another set of YAML to maintain. Observability stacks drift, upgrades break, and scale testing becomes painful.
-
-**How KOF helps you:**
-
-* One control plane across management, regional, and child clusters.
-* Handles millions of metrics per second without federation hacks.
-* GitOps-native: dashboards, alerts, and retention policies are versioned in Git and deployed via CI/CD.
-
-**What this means for you:** Fewer moving parts, fewer late-night firefights, and the ability to scale observability as fast as you scale Kubernetes itself.
-
-## DevOps & Application Teams
-
-**Your challenge:** You’re on the hook for application performance, but your current tools split logs, metrics, and traces across silos. Finding the root cause of a production issue takes hours, sometimes days.
-
-**How KOF helps you:**
-
-* Unified dashboards that correlate metrics, logs, and traces.
-* Jaeger-powered distributed tracing to follow requests across microservices.
-* Instant cost visibility for the workloads you own.
-
-**What this means for you:** Faster MTTR, fewer blind spots in production, and real-time cost accountability that’s baked into the same Grafana dashboards you already use.
-
-## Finance & FinOps Teams
-
-**Your challenge:** Cloud bills arrive as massive line items with little visibility into *who* or *what* drove the spend. You’re left begging engineers for explanations — and they can’t connect usage to dollars.
-
-**How KOF helps you:**
-
-* Namespace- and pod-level cost allocation via OpenCost.
-* Chargeback and showback dashboards to attribute spend to teams, projects, or departments.
-* Budget alerts tied directly to Kubernetes workloads.
-
-**What this means for you:** Finally, cost visibility that matches how your business operates — and the leverage to hold teams accountable for their cloud footprint.
-
-## Compliance, Security & Governance
-
-**Your challenge:** You must meet strict audit and retention requirements, but current observability stacks aren’t built for compliance. Logs disappear too soon, retention is inconsistent, and auditors don’t care that Prometheus is “hard to scale.”
-
-**How KOF helps you:**
-
-* Policy-driven retention (30–365+ days) for logs and metrics.
-* Secure by default: RBAC and TLS encryption baked in.
-* Audit trails and dashboards that prove compliance.
-
-**What this means for you:** Compliance without compromise — observability data is preserved, secured, and accessible when regulators come knocking.
-
-Here’s the **“KOF in Action”** case study section, designed as a narrative that shows how different teams interact with KOF to solve a real-world problem. It reads like a story instead of a manual, which helps “sell” the platform.
-
-
-
-
+KOF is deployed through Helm charts and MultiClusterServices: `kof-operators`, `kof-mothership`, `kof-storage`, `kof-collectors`, with optional `kof-istio`, plus per-role services such as `kof-child` and `kof-regional`. (See [KOF architecture](https://docs.k0rdent.io/latest/admin/kof/kof-architecture/).)
 
 ## KOF in Action: A Day in the Life (and A Sudden Cost Spike)
 
@@ -178,7 +76,7 @@ They work with DevOps to roll out a fix via GitOps: right-sizing the deployment 
 
 By the end of the day, Finance refreshes the **chargeback dashboard**. Costs for the “recommendation-engine” namespace are already trending down. The CFO gets a simple, confident answer for tomorrow’s meeting:
 
-"We found the root cause, fixed it, and costs are back under control."
+"We found the root cause, we fixed it, and costs are back under control."
 
 ### The Outcome
 
@@ -188,6 +86,7 @@ By the end of the day, Finance refreshes the **chargeback dashboard**. Costs for
 * **Leadership**: Confidence that teams are in control of performance *and* costs.
 
 In a single day, KOF turned a vague cost spike into a resolved issue, with every team playing their part in one unified system.
+
 # Getting Started
 
 KOF lets you get started with some quick wins. For example, you can easily:
@@ -198,7 +97,31 @@ KOF lets you get started with some quick wins. For example, you can easily:
 * Start retaining logs and metrics for compliance right out of the box.
 
 
+## KOF architecture places collectors everywhere and lets you choose where to store and aggregate
 
+k0rdent defines a management cluster and many child clusters. KOF follows this and adds an optional regional role for storage and aggregation. Placement options are documented and configurable:
+
+- **Child clusters.** Always run collectors (OpenTelemetry, OpenCost) to gather metrics, logs, and traces at the source. This is the "beach-head" service that travels with every cluster.
+
+- **Management cluster.** Runs Grafana, promxy, operators, and policy. It may also run VictoriaMetrics for its own telemetry and alert evaluation via the `kof-mothership` chart.
+
+- **Storage and aggregation.** The main VictoriaMetrics, VictoriaLogs, and Jaeger stack can run in:  
+  - the management cluster (for management data, with Grafana and VM provided by `kof-mothership`),  
+  - a regional KOF deployment (collecting from child clusters in that region), or  
+  - a third-party service for selected streams (for example, logs exported to AWS CloudWatch).  
+  See: [Storing KOF data](https://docs.k0rdent.io/latest/admin/kof/kof-storing/).
+
+Data flows from child clusters into the chosen storage or aggregation point. On the management cluster, promxy and Grafana provide the consolidated UI.
+
+## KOF can be extended with your own dashboards, pipelines, and destinations
+
+KOF is fully functional out of the box, but you can also add additional capabilities through extensions.
+
+- **Dashboards and alerts.** Add Grafana dashboards and VMRules in Git; k0rdent `MultiClusterService` distributes them consistently.  
+- **Collector pipelines.** Extend OpenTelemetry collectors with custom receivers, processors, or exporters.  
+- **External destinations.** Route specific streams to third-party systems (recipes are included for CloudWatch and others).  
+
+All extensions are managed through the same GitOps lifecycle as the rest of the platform.
 
 ## Managing KOF as Code
 
@@ -218,7 +141,8 @@ With this setup you can:
 - Use CI/CD pipelines to run `helm upgrade --install` against your management and regional clusters.
 - Manage dashboards, retention policies, and observability settings as code for consistency across environments.
 
-Other sections in this documentation, such as Dashboard Lifecycle and Retention assume you have such a repo and a CI/CD pipeline in place.
+Other sections in this documentation, such as [Dashboard Lifecycle](kof-using.md) and [Retention](kof-retention.md) assume you have such a repo and a CI/CD pipeline in place.
+
 
 ## DIY Stack vs. KOF
 
@@ -257,3 +181,6 @@ Get started with the basic documentation:
 Once you have KOF up and running,
 check [k0rdent/kof/docs](https://github.com/k0rdent/kof/tree/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/docs)
 for advanced guides.
+
+
+
