@@ -1,6 +1,6 @@
 # Deploying a Cluster
 
-{{{ docsVersionInfo.k0rdentName }}} is designed to simplify the process of deploying and managing Kubernetes clusters across various cloud platforms. It does this through the use of `ClusterDeployment` objects, which include all of the information {{{ docsVersionInfo.k0rdentName }}} needs to know in order to create the cluster you're looking for. This `ClusterDeployment` system relies on predefined templates and credentials. 
+{{{ docsVersionInfo.k0rdentName }}} is designed to simplify the process of deploying and managing Kubernetes clusters across various cloud platforms. It does this through the use of `ClusterDeployment` objects, which include all of the information {{{ docsVersionInfo.k0rdentName }}} needs to know in order to create the cluster you're looking for. This `ClusterDeployment` system relies on predefined templates and credentials.
 
 A cluster deployment typically involves:
 
@@ -15,7 +15,7 @@ Follow these steps to deploy a standalone Kubernetes cluster tailored to your sp
     Credentials are essential for {{{ docsVersionInfo.k0rdentName }}} to communicate with the infrastructure provider (for example, AWS, Azure, vSphere). These credentials enable {{{ docsVersionInfo.k0rdentName }}} to provision resources such as virtual machines, networking components, and storage.
 
     `Credential` objects are generally created ahead of time and made available to users, so before you look into creating a
-    new one be sure what you're looking for doesn't already exist. You can see all of the existing `Credential` objects by 
+    new one be sure what you're looking for doesn't already exist. You can see all of the existing `Credential` objects by
     querying the management cluster:
 
     ```bash
@@ -47,6 +47,7 @@ Follow these steps to deploy a standalone Kubernetes cluster tailored to your sp
     ```bash
     kubectl get clustertemplate -n kcm-system
     ```
+
     ```console
     NAME                            VALID
     adopted-cluster-{{{ extra.docsVersionInfo.providerVersions.dashVersions.adoptedCluster }}}           true
@@ -92,6 +93,7 @@ Follow these steps to deploy a standalone Kubernetes cluster tailored to your sp
       template: <template-name>
       credential: <infrastructure-provider-credential-name>
       dryRun: <"true" or "false" (default: "false")>
+      cleanupOnDeletion: <"true" or "false" (default: "false")>
       config:
         <cluster-configuration>
     ```
@@ -118,7 +120,14 @@ Follow these steps to deploy a standalone Kubernetes cluster tailored to your sp
           instanceType: t3.small
           rootVolumeSize: 32
     ```
+
     Note that the `.spec.credential` value should match the `.metadata.name` value of a created `Credential` object.
+
+    > TIP:
+    > If automatic cleanup of potentially orphaned *LoadBalancer Services* and *Storage devices* during deletion of
+    > the `ClusterDeployment` object is required, set `.spec.cleanupOnDeletion` to `true`.
+    > This is a best-effort cleanup: if there is no possibility to acquire a managed cluster's kubeconfig,
+    > the cleanup will **not** happen.
 
 4. Apply the Configuration
 
@@ -162,6 +171,7 @@ Follow these steps to deploy a standalone Kubernetes cluster tailored to your sp
     ```bash
     kubectl get secret -n <namespace> <cluster-name>-kubeconfig -o=jsonpath={.data.value} | base64 -d > kubeconfig
     ```
+
     You can then use this file to access the cluster, as in:
 
     ```bash

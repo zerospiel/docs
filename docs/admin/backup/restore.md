@@ -21,10 +21,10 @@ In the event of disaster, you can restore from a backup by doing the following:
      --set controller.createAccessManagement=false \
      --set controller.createRelease=false \
      --set controller.createTemplates=false \
-     --set velero.initContainers[0].name=velero-plugin-for-<provider-name> \
-     --set velero.initContainers[0].image=velero/velero-plugin-for-<provider-name>:<provider-plugin-tag> \
-     --set velero.initContainers[0].volumeMounts[0].mountPath=/target \
-     --set velero.initContainers[0].volumeMounts[0].name=plugins
+     --set regional.velero.initContainers[0].name=velero-plugin-for-<provider-name> \
+     --set regional.velero.initContainers[0].image=velero/velero-plugin-for-<provider-name>:<provider-plugin-tag> \
+     --set regional.velero.initContainers[0].volumeMounts[0].mountPath=/target \
+     --set regional.velero.initContainers[0].volumeMounts[0].name=plugins
     ```
 
 1. Create the `BackupStorageLocation`/`Secret` objects that were created during the [preparation stage](./prepare-backups.md)
