@@ -3,27 +3,44 @@
 > NOTE:
 > Regional clusters are available starting from version 1.4.0.
 
-To register an existing cluster as a regional cluster in {{{ docsVersionInfo.k0rdentName }}}, you must create
-a `Region` object.
+To register an existing Kubernetes cluster as a regional cluster in {{{ docsVersionInfo.k0rdentName }}}, you must create
+a `Region` object. For example:
+
+```yaml
+apiVersion: k0rdent.mirantis.com/v1beta1
+kind: Region
+metadata:
+  name: region1
+spec:
+  kubeConfig:
+    name: kubeconfig-secret-name
+    key: value
+  providers:
+  - name: cluster-api-provider-k0sproject-k0smotron
+  - name: cluster-api-provider-openstack
+  - name: projectsveltos
+```
 
 ## Configuration Parameters
 
+Use the `spec` to configure the `Region` object. For example:
+
 * `spec.kubeConfig`
 
-Reference to the Secret containing the kubeconfig of the cluster being onboarded as a regional
-cluster. The Secret must reside in the system namespace (default: `kcm-system`). Must specify both the `name`
-of the Secret and the `key` where the kubeconfig content is stored. Required.
+This field contains a reference to the `Secret` containing the kubeconfig of the cluster being onboarded as a regional
+cluster. This `Secret` must reside in the system namespace (default: `kcm-system`). The field must specify both the `name`
+of the `Secret` and the `key` where the kubeconfig content is stored within that `Secret`. Required.
 
 * `spec.core`
 
 The core KCM and CAPI configuration. Allows modification of regional components (CAPI, Cluster API Operator, Velero,
-Cert Manager). If unspecified, defaults are applied.
+Cert Manager). This field is optional; if unspecified, {{{ docsVersionInfo.k0rdentName }}} will apply the defaults.
 
 * `spec.providers`
 
-List of enabled providers to deploy on the regional cluster.
+This field includes a list of enabled providers to deploy on the regional cluster.
 
-It is possible to override the configuration (`config`) or template (`template`) of the core regional components or
+You can use this field to override the configuration (`config`) or template (`template`) of the core regional components or
 providers. Example:
 
 ```yaml
@@ -42,26 +59,9 @@ spec:
     template: <provider-template-name>
 ```
 
-## Examples
+## Overriding Core Values with Regional Components: Image Overrides
 
-### Basic
-
-```yaml
-apiVersion: k0rdent.mirantis.com/v1beta1
-kind: Region
-metadata:
-  name: region1
-spec:
-  kubeConfig:
-    name: kubeconfig-secret-name
-    key: value
-  providers:
-  - name: cluster-api-provider-k0sproject-k0smotron
-  - name: cluster-api-provider-openstack
-  - name: projectsveltos
-```
-
-### Example with Regional Components Image Overrides
+You can change the images CAPI uses for various functions by specifying the `spec.core.kcm.config` field. For example:
 
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1beta1
@@ -103,14 +103,14 @@ spec:
 
 ## After the Region is Created
 
-Once the Region object is created:
+Once you create the `Region` object within the management cluster:
 
 * The regional core components and enabled providers start installing on the regional cluster automatically.
-* You can monitor the Region’s status and readiness using `kubectl wait`, for example:
+* You can monitor the Region's status and readiness using `kubectl wait`. For example:
 
 ```bash
 kubectl wait --for=condition=Ready=True region/<region-name>
 ```
 
-Once the Region is ready, you can start creating `Credentials` and deploy clusters in that region. See:
+Once the `Region` is ready, you can start creating `Credentials` and deploy clusters in that region. For more infromation, see:
 [Creating Credential in Region](creating-credential-in-region.md).
