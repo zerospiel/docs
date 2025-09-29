@@ -32,6 +32,8 @@ By packaging observability and FinOps as a single subsystem, KOF connects operat
 - **Lifecycle management.** KOF is delivered as charts and operators, which can be consistently deployed and upgraded across the estate.  
 - **Compliance and audit.** Central policy ensures retention, RBAC, and secure transport are enforced everywhere.
 
+Performance issues and cost spikes usually come from the same workloads, so you can't separate one from the other. When observability data and cost data live in the same place, it’s easier to spot the cause and fix both at once.
+
 ## KOF consists of well-established open source components wired for multi-cluster use
 
 - **Metrics:** [VictoriaMetrics](https://docs.victoriametrics.com/) with vmcluster and vmauth.  
