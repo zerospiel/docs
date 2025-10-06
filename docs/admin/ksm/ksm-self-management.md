@@ -26,6 +26,8 @@ spec:
       k0rdent.mirantis.com/management-cluster: "true"
       sveltos-agent: present
   serviceSpec:
+    provider:
+      selfManagement: true
     services:
       - template: ingress-nginx-4-11-3
         name: ingress-nginx
