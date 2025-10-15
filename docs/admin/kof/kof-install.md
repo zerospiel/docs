@@ -131,7 +131,7 @@ by applying the [external-dns-openstack-webhook docs](https://github.com/inovex/
 
 If you've selected to skip both [DNS auto-config](#dns-auto-config) now and [Manual DNS config](./kof-verification.md#manual-dns-config) later, you can apply these steps to enable the [Istio](https://istio.io/) service mesh:
 
-1. Check the overview in the [istio repository](https://github.com/k0rdent/istio) and this video:
+1. Check the overview in the [k0rdent/istio repository](https://github.com/k0rdent/istio) and this video:
 
   <video controls width="1024" style="max-width: 100%">
     <source src="../../../assets/kof/kof-istio.mp4" type="video/mp4" />
@@ -144,7 +144,7 @@ If you've selected to skip both [DNS auto-config](#dns-auto-config) now and [Man
   kubectl label namespace kof istio-injection=enabled
   ```
 
-3. Install the `istio` charts to the management cluster:
+3. Install the `k0rdent/istio` charts to the management cluster:
   
   ```bash
   helm upgrade -i --reset-values --wait \
@@ -152,18 +152,14 @@ If you've selected to skip both [DNS auto-config](#dns-auto-config) now and [Man
     oci://ghcr.io/k0rdent/istio/charts/k0rdent-istio-base --version 0.1.0 \
     --set cert-manager-service-template.enabled=false \
     --set injectionNamespaces={kof}
-  ```
 
-  ```bash
-  helm upgrade -i --reset-values --wait \
-    --create-namespace -n istio-system k0rdent-istio \
+  helm upgrade -i --reset-values --wait -n istio-system k0rdent-istio \
     oci://ghcr.io/k0rdent/istio/charts/k0rdent-istio --version 0.1.0 \
     --set "istiod.meshConfig.extensionProviders[0].name=otel-tracing" \
     --set "istiod.meshConfig.extensionProviders[0].opentelemetry.port=4317" \
     --set "istiod.meshConfig.extensionProviders[0].opentelemetry.service=kof-collectors-daemon-collector.kof.svc.cluster.local"
   ```
 
-  You may want to [customize the collectors](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/docs/collectors.md#example) by passing values to the [kof-child](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/templates/istio-child-multi-cluster-service.yaml) for all child clusters at once now, or for each child cluster later. You can also opt for using the default values.
 
 ## Management Cluster
 
