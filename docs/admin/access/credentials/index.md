@@ -4,3 +4,4 @@ In order for {{{ docsVersionInfo.k0rdentName }}} to be able to take action on a 
 
 - [The Credentials Process](credentials-process.md)
 - [Credential Propagation](credentials-propagation.md)
+- [Cluster Identity Distribution](cluster-identity-distribution.md)

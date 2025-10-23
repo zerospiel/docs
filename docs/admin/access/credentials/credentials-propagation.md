@@ -106,8 +106,13 @@ Each access rule specifies:
 
 <!-- TODO show an example of the AccessManagement object. -->
 
-The KCM controller copies the specified `Credential` objects from the `system` namespace to the target
-namespaces based on the `accessRules` in the `AccessManagement` spec.
+The KCM controller copies the specified `Credential` objects from the `system` (defaults to `kcm-system`) namespace
+to the target namespaces based on the `accessRules` in the `AccessManagement` spec.
+
+> NOTE:
+> Starting from v1.5.0 KCM controller also copies all the cluster identity resources and all the referenced
+> identity objects across namespaces. Follow [Cluster Identity Distribution System](cluster-identity-distribution.md)
+> for details.
 
 > INFO:
 > Access rules can also include `Cluster` and `Service` Template Chains (`ClusterTemplateChain` objects and
@@ -140,4 +145,54 @@ spec:
 In this example, the `aws-demo` and `azure-demo` `Credential` objects will be distributed to the `dev` and `test`
 namespaces.
 
+### Regional Credential Distribution
 
+To deploy clusters correctly, the `ClusterIdentity` object (for example, `AWSClusterStaticIdentity`) and all of its
+referenced resources (such as `Secrets`) must exist in the same cluster where the CAPI objects are created.
+When a cluster is deployed in a specific region, all required ClusterIdentity objects must be present in the
+corresponding regional cluster.
+
+Starting from v1.5.0, when creating regional Credentials (with `spec.region`), all ClusterIdentity objects and
+their referenced resources are automatically synchronized with the regional cluster.
+
+For example, when you create the following Credential object:
+
+```yaml
+apiVersion: k0rdent.mirantis.com/v1beta1
+kind: Credential
+metadata:
+  name: aws-cluster-credential
+  namespace: test
+spec:
+  region: region1
+  description: "Credential Example"
+  identityRef:
+    apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
+    kind: AWSClusterStaticIdentity
+    name: aws-cluster-identity
+```
+
+and `AWSClusterStaticIdentity` references the `aws-cluster-identity-secret` secret:
+
+```yaml
+apiVersion: infrastructure.cluster.x-k8s.io/v1beta2
+kind: AWSClusterStaticIdentity
+metadata:
+  name: aws-cluster-identity
+spec:
+  secretRef: aws-cluster-identity-secret
+  allowedNamespaces: {}
+```
+
+The KCM controller will do the following:
+
+1. Copy the `aws-cluster-identity-secret` from the system namespace of the management cluster to the system namespace
+of the regional cluster.
+2. Copy the `aws-cluster-identity` AWSClusterStaticIdentity object from the management cluster to the regional cluster.
+
+> WARNING:
+> For Cluster Identity distribution to function correctly, the corresponding ProviderInterface must be properly
+> configured. Providers included with {{{ docsVersionInfo.k0rdentName }}} already have a preconfigured
+> ProviderInterface as part of the ProviderTemplate. If you are using a custom or Bring-Your-Own provider,
+> you must properly configure the ProviderInterface to enable Cluster Identity distribution.
+> For detailed instructions, refer to the [Cluster Identity Distribution System](cluster-identity-distribution.md) documentation.
