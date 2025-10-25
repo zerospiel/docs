@@ -4,7 +4,12 @@
 > Regional clusters are available starting from version 1.4.0.
 
 To register an existing Kubernetes cluster as a regional cluster in {{{ docsVersionInfo.k0rdentName }}}, you must create
-a `Region` object. For example:
+a `Region` object. There are two ways to register a regional cluster:
+
+* By providing a kubeconfig `Secret` in the system namespace
+* By referencing an existing `ClusterDeployment` to onboard it as a regional cluster
+
+## Region Object with a Kubeconfig Secret Reference
 
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1beta1
@@ -21,6 +26,23 @@ spec:
   - name: projectsveltos
 ```
 
+## Region Object with a ClusterDeployment Reference
+
+```yaml
+apiVersion: k0rdent.mirantis.com/v1beta1
+kind: Region
+metadata:
+  name: region1
+spec:
+  clusterDeployment:
+    name: regional-cluster
+    namespace: test
+  providers:
+  - name: cluster-api-provider-k0sproject-k0smotron
+  - name: cluster-api-provider-aws
+  - name: projectsveltos
+```
+
 ## Configuration Parameters
 
 Use the `spec` to configure the `Region` object. For example:
@@ -29,7 +51,14 @@ Use the `spec` to configure the `Region` object. For example:
 
 This field contains a reference to the `Secret` containing the kubeconfig of the cluster being onboarded as a regional
 cluster. This `Secret` must reside in the system namespace (default: `kcm-system`). The field must specify both the `name`
-of the `Secret` and the `key` where the kubeconfig content is stored within that `Secret`. Required.
+of the `Secret` and the `key` where the kubeconfig content is stored within that `Secret`.
+This field is mutually exclusive with `spec.clusterDeployment`.
+
+* `spec.clusterDeployment`
+
+Specifies a reference to an existing ClusterDeployment object to be onboarded as a regional cluster. This field must
+include both the `name` and the `namespace` of the ClusterDeployment object.
+This field is mutually exclusive with `spec.kubeConfig`.
 
 * `spec.core`
 
