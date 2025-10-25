@@ -192,6 +192,7 @@ nav:
         - Overview: admin/access/credentials/index.md
         - The Credentials Process: admin/access/credentials/credentials-process.md
         - Credential Propagation: admin/access/credentials/credentials-propagation.md
+        - Cluster Identity Distribution: admin/access/credentials/cluster-identity-distribution.md
       - k0rdent Role Based Access Control (RBAC):
         - Overview: admin/access/rbac/index.md
         - What Roles Do: admin/access/rbac/what-roles-do.md

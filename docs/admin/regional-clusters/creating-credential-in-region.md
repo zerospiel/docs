@@ -17,14 +17,24 @@ referencing this Credential will be deployed to the corresponding regional clust
 ## Creating Cluster Identity objects
 
 > WARNING:
-> Create `ClusterIdentity` resources and the resource template `ConfigMap` in the **regional** cluster, and **not the management cluster**.
+> Starting from {{{ docsVersionInfo.k0rdentName }}} v1.5.0 the ClusterIdentity resources for regional Credential
+> are synced with the regional cluster. Which means, when the regional Credential object references some
+> ClusterIdentity as `identityRef` (for example `AWSClusterStaticIdentity`) this identity object and all referenced
+> objects (for example, `Secrets`) will be copied from the management to the regional cluster. To get more information
+> follow [Regional Credential Distribution](../access/credentials/credentials-propagation.md#regional-credential-distribution).
+>
+> Before {{{ docsVersionInfo.k0rdentName }}} v1.5.0 you should manually create `ClusterIdentity` resources
+> for regional Credential in the **regional** cluster, and **not the management cluster**.
+>
+> This does not apply to the resource template `ConfigMap` which should be manually created in the **regional**
+> cluster.
 
 Depending on the provider, you need to create `ClusterIdentity` resources to allow provider components to interact
-with the cloud. This should be done using the regional cluster kubeconfig so these objects are part of the regional cluster.
+with the cloud.
 
 ### Example: AWS
 
-1. Create the `Secret` with your AWS cloud credential in the regional cluster
+1. Create the `Secret` with your AWS cloud credential
 
     Create a YAML file called `aws-cluster-identity-secret.yaml` and add the following text, replacing the
 `EXAMPLE_ACCESS_KEY_ID` and `EXAMPLE_SECRET_ACCESS_KEY` with corresponding cloud values:
@@ -44,10 +54,10 @@ with the cloud. This should be done using the regional cluster kubeconfig so the
     ```
 
     ```bash
-    kubectl apply -f aws-cluster-identity-secret.yaml -n kcm-system --kubeconfig <path-to-regional-cluster-kubeconfig>
+    kubectl apply -f aws-cluster-identity-secret.yaml -n kcm-system --kubeconfig <path-to-management-cluster-kubeconfig>
     ```
 
-2. Create the `AWSClusterStaticIdentity` in the regional cluster
+2. Create the `AWSClusterStaticIdentity`
 
    Create the `AWSClusterStaticIdentity` object in a file named `aws-cluster-identity.yaml`:
 
@@ -67,13 +77,17 @@ with the cloud. This should be done using the regional cluster kubeconfig so the
 
    Notice that the `secretRef` references the `Secret` you created in the previous step.
 
-   Apply the YAML to your regional cluster:
+   Apply the YAML to your management cluster:
 
    ```bash
-   kubectl apply -f aws-cluster-identity.yaml --kubeconfig <path-to-regional-cluster-kubeconfig>
+   kubectl apply -f aws-cluster-identity.yaml --kubeconfig <path-to-management-cluster-kubeconfig>
    ```
 
 3. Create the `ClusterIdentity` resource template `ConfigMap` in the regional cluster
+
+> WARNING:
+> Create `ClusterIdentity` resource template `ConfigMap` in the **regional** cluster, and
+> **not the management cluster**.
 
    Now we create `ClusterIdentity` resource template `ConfigMap`. As in prior steps, create a YAML file called `aws-cluster-identity-resource-template.yaml`:
 
@@ -105,7 +119,7 @@ with the cloud. This should be done using the regional cluster kubeconfig so the
 After configuring the `ClusterIdentity` objects in the regional cluster, create the `Credential` in the management cluster, referencing that
 `ClusterIdentity`.
 
-The `Credential` should be created in the same namespace as the previously created `ClusterIdentity` objects.
+For AWS, the `Credential` should be created in the same namespace as the previously created `ClusterIdentity` objects.
 The `spec.region` should be configured and refer the name of the `Region` object that points to the cluster where the
 `ClusterIdentity` resources have been created:
 
