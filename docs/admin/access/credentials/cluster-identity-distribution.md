@@ -68,27 +68,27 @@ the process step-by-step:
     type: Opaque
     ```
    
-2. The KCM controller retrieves all the ProviderInterfaces from the regional cluster registered with `region1` Region
-and looks for the `AzureClusterIdentity` object definition under `spec.clusterIdentities` of each ProviderInterface
+2. The KCM controller retrieves all the `ProviderInterfaces` from the regional cluster registered with `region1` Region
+and looks for the `AzureClusterIdentity` object definition under `spec.clusterIdentities` of each `ProviderInterface`
 object. If nothing found, the cluster identity distribution will not work.
 
 3. The KCM controller copies the `test/azure-cluster-identity-secret` `Secret` and `test/azure-cluster-identity`
-AzureClusterIdentity objects from the management to the regional cluster.
+`AzureClusterIdentity` objects from the management to the regional cluster.
 
 ## ProviderInterface Configuration
 
-A Credential in k0rdent could reference more than one ClusterIdentity type and each of those identities might have
+A `Credential` in k0rdent could reference more than one `ClusterIdentity` type and each of those identities might have
 its own transitive references.
 It’s important to have a mechanism to reliably identify all referenced resources to e.g. distribute them across
 namespaces and multiple regions.
 
-The ProviderInterface object which is a part of the ProviderTemplate should define a set of identity kinds, each
+The `ProviderInterface` object which is a part of the `ProviderTemplate` should define a set of identity kinds, each
 with its own reference-resolution instructions. Providers included with {{{ docsVersionInfo.k0rdentName }}} already
-have a preconfigured ProviderInterface as part of the ProviderTemplate. If you are using a custom or Bring-Your-Own
+have a preconfigured ProviderInterface as part of the `ProviderTemplate`. If you are using a custom or Bring-Your-Own
 provider, you must properly configure the ProviderInterface `spec.clusterIdentities` field to enable Cluster
 Identity distribution.
 
-The example of the ProviderInterface object for the Azure provider:
+The example of the `ProviderInterface` object for the Azure provider:
 
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1beta1
@@ -134,4 +134,5 @@ a `Secret` with the name defined under `spec.clientSecret.name` and the namespac
 > Cluster Identity distribution will not work if the ProviderInterface for a particular provider does not exist or
 > does not have `spec.clusterIdentities` field defined. The KCM controller will not fail, but it will not create any cluster
 > identity resources automatically. You will have to create it manually.
+
 
