@@ -38,7 +38,7 @@ In order to pass credentials to {{{ docsVersionInfo.k0rdentName }}} so it can ta
     > A `Credential` may optionally specify the `spec.region` field. When set, all `ClusterDeployment` objects that reference
     > this `Credential` will be deployed to the corresponding regional cluster. In this case, the required
     > `ClusterIdentity` resources must exist in that regional cluster. For {{{ docsVersionInfo.k0rdentName }}}
-    > v1.5.0 the `ClusterIdentity` resources for regional Credential are automatically synced with the regional cluster.
+    > v1.5.0 the `ClusterIdentity` resources for regional `Credential` are automatically synced with the regional cluster.
     > Learn more in [Creating a Credential in a Region](../../regional-clusters/creating-credential-in-region.md).
 
     ```yaml
@@ -94,4 +94,5 @@ In order to pass credentials to {{{ docsVersionInfo.k0rdentName }}} so it can ta
     access to the credentials. Thus credentials could be used by engineers
     without a need to have access to actual credentials or underlying resources,
     like `ClusterIdentity`.
+
 
