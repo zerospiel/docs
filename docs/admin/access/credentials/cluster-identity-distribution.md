@@ -4,8 +4,8 @@ To deploy clusters correctly, the `ClusterIdentity` object (for example, `AWSClu
 referenced resources (such as `Secrets`) must exist in the same cluster where the CAPI objects are created.
 This configuration is different for each provider.
 
-Starting from v1.5.0 the Cluster Identity Distribution system was introduced. This applies to the regional Credential
-objects (with `spec.region`) and for the Credential distributed by {{{ docsVersionInfo.k0rdentName }}}
+Starting from v1.5.0 the Cluster Identity Distribution system was introduced. This applies to the regional `Credential`
+objects (with `spec.region`) and for the `Credential` distributed by the {{{ docsVersionInfo.k0rdentName }}}
 AccessManagement system (Credentials with `k0rdent.mirantis.com/managed: "true"` label)
 (see [The Credential Distribution System](credentials-propagation.md#the-credential-distribution-system)).
 
@@ -15,17 +15,17 @@ AccessManagement system (Credentials with `k0rdent.mirantis.com/managed: "true"`
 > 1. The ProviderInterface object is correctly configured. For details, see 
 > [ProviderInterface Configuration](#providerinterface-configuration).
 > 
-> 2. When distributing ClusterIdentity objects to regional clusters, the provider that defines the corresponding
-> ClusterIdentity CRDs must be enabled on the management and on the regional cluster. For example, to distribute
-> an AWSClusterStaticIdentity to a regional cluster, the AWS provider must be enabled on both the
+> 2. When distributing `ClusterIdentity` objects to regional clusters, the provider that defines the corresponding
+> `ClusterIdentity` CRDs must be enabled on the management and on the regional cluster. For example, to distribute
+> an `AWSClusterStaticIdentity` to a regional cluster, the AWS provider must be enabled on both the
 > management and regional clusters.
 
 ## Cluster Identity Distribution Process
 
-When you create a Credential object, Cluster Identity distribution begins. The example below walks through
+When you create a `Credential` object, Cluster Identity distribution begins. The example below walks through
 the process step-by-step:
 
-1. User creates the following Credential and identity objects for the Azure provider in `region1` region:
+1. User creates the following `Credential` and identity objects for the Azure provider in `region1` region:
 
     ```yaml
     apiVersion: k0rdent.mirantis.com/v1beta1
@@ -72,7 +72,7 @@ the process step-by-step:
 and looks for the `AzureClusterIdentity` object definition under `spec.clusterIdentities` of each ProviderInterface
 object. If nothing found, the cluster identity distribution will not work.
 
-3. The KCM controller copies the `test/azure-cluster-identity-secret` Secret and `test/azure-cluster-identity`
+3. The KCM controller copies the `test/azure-cluster-identity-secret` `Secret` and `test/azure-cluster-identity`
 AzureClusterIdentity objects from the management to the regional cluster.
 
 ## ProviderInterface Configuration
@@ -134,3 +134,4 @@ a `Secret` with the name defined under `spec.clientSecret.name` and the namespac
 > Cluster Identity distribution will not work if the ProviderInterface for a particular provider does not exist or
 > does not have `spec.clusterIdentities` field defined. The KCM controller will not fail, but it will not create any cluster
 > identity resources automatically. You will have to create it manually.
+
