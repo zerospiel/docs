@@ -6,8 +6,8 @@
 To register an existing Kubernetes cluster as a regional cluster in {{{ docsVersionInfo.k0rdentName }}}, you must create
 a `Region` object. There are two ways to register a regional cluster:
 
-* By providing a kubeconfig Secret in the system namespace
-* By referencing an existing ClusterDeployment to onboard it as a regional cluster
+* By providing a kubeconfig `Secret` in the system namespace
+* By referencing an existing `ClusterDeployment` to onboard it as a regional cluster
 
 ## Region Object with a Kubeconfig Secret Reference
 
