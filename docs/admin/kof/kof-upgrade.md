@@ -34,6 +34,10 @@
 ## Upgrade to v1.5.0
 
 **Important!!!**
+
+> NOTICE:
+> This is for users of **kof-istio** only.
+
 Starting from **v1.5.0** release, Istio has been moved to a separate repository, which changes the installation and upgrade process. Upgrading KOF **will trigger a complete uninstallation** of all components across Istio clusters. To prevent data loss and ensure a smooth migration, carefully follow the steps in the given order. The steps below are only required if any Istio clusters were deployed.
 
 ### 1. Back Up Data from Istio Clusters
