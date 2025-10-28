@@ -119,7 +119,7 @@ Refer to "Configuring Custom Values" in [Deploy beach-head Services using Cluste
 ### Templating Custom Values
 Refer to "Templating Custom Values" in [Deploy beach-head Services using Cluster Deployment](../../user/services/beach-head.md#configuring-custom-values) for more information about dynamic custom values.
 
-## Service Dependencies
+### Service Dependencies
 Refer to "Service Dependencies" in [Deploy beach-head Services using Cluster Deployment](../../user/services/beach-head.md#service-dependencies) for more information about service depedencies. The only difference compared to a `ClusterDeployment` is that when using service dependencies in a `MultiClusterService` object, the dependencies will be evaluated separately for each of the matching clusters.
 
 ### Services Priority and Conflict
@@ -141,6 +141,57 @@ This is where `.spec.serviceSpec.priority` can be used to specify who gets the p
 
 > NOTE:
 > If `priority` values are equal, the first one to reach the cluster wins and deploys its beach-head services.
+
+### MCS Dependencies
+Dependencies among MultiClusterServices can be defined using the `.spec.dependsOn[]` field in the `MultiClusterService` object. If `mcs2` depends on `mcs1`, then services defined by `mcs2` will not be deployed on a matching cluster until all services defined by `mcs1` have been successfully deployed on that cluster. For Example:
+
+```yaml
+apiVersion: k0rdent.mirantis.com/v1beta1
+kind: MultiClusterService
+metadata:
+  name: mcs1
+spec:
+  clusterSelector:
+    matchLabels:
+      owner: dev-team
+  serviceSpec:
+    services:
+      - template: cert-manager-1-18-2
+        name: cert-manager
+        namespace: cert-manager
+        values: |
+          cert-manager:
+            crds:
+              enabled: true
+---
+apiVersion: k0rdent.mirantis.com/v1beta1
+kind: MultiClusterService
+metadata:
+  name: mcs2
+spec:
+  clusterSelector:
+    matchLabels:
+      owner: dev-team
+  dependsOn:
+    - mcs1
+  serviceSpec:
+    services:
+      - template: ingress-nginx-4-13-0
+        name: ingress-nginx
+        namespace: ingress-nginx
+        values: |
+          ingress-nginx:
+            controller:
+              replicaCount: 3
+      - template: postgres-operator-1-14-0
+        name: postgres-operator
+        namespace: postgres-operator
+        dependsOn:
+          - name: ingress-nginx
+            namespace: ingress-nginx
+```
+
+In this example, for all matching clusters, `ingress-nginx` and `postgres-operators` defined by `mcs2` will not be deployed until `cert-manager` defined by `mcs1` has been successfully deployed.
 
 ## Checking Status
 
