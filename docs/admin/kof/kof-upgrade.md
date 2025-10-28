@@ -38,11 +38,12 @@
 > NOTICE:
 > This is for users of **kof-istio** only.
 
-Starting from **v1.5.0** release, Istio has been moved to a separate repository, which changes the installation and upgrade process. Upgrading KOF **will trigger a complete uninstallation** of all components across Istio clusters. To prevent data loss and ensure a smooth migration, carefully follow the steps in the given order. The steps below are only required if any Istio clusters were deployed.
+Starting from the **v1.5.0** release, Istio has been moved to a separate repository, which changes the installation and upgrade process. Upgrading KOF **will trigger a complete uninstallation** of all components across Istio clusters. To prevent data loss and ensure a smooth migration, you must carefully follow the steps in the given order. Again, the steps below are only required if any Istio clusters were deployed.
 
 ### 1. Back Up Data from Istio Clusters
 
-> **Note:** Perform all backup steps in this section **for each Istio cluster** individually. Each cluster must have its own backup before proceeding with the upgrade.
+> NOTE:
+> Perform all backup steps in this section **for each Istio cluster** individually. Each cluster must have its own backup before proceeding with the upgrade.
 
 #### Create a PersistentVolumeClaim
 
@@ -65,7 +66,8 @@ spec:
 EOF
 ```
 
-> **Note:** To estimate how much storage you need for the backup, open the [kof-ui](./ui.md), navigate to the `VictoriaMetrics/Logs` section, and click the `VictoriaMetrics storage` pod name on the cluster you want to back up. Find the `Data Size` metric and multiply this value by at least two (or by at least five for VictoriaLogs). This is because the metric shows data compressed using the VictoriaMetrics algorithm, while the backup will be stored in a simple gzip format, which does not compress as efficiently.
+> NOTE:
+> To estimate how much storage you need for the backup, open the [kof-ui](./ui.md), navigate to the `VictoriaMetrics/Logs` section, and click the `VictoriaMetrics storage` pod name on the cluster you want to back up. Find the `Data Size` metric and multiply this value by at least two (or by at least five for VictoriaLogs). This is because the metric shows data compressed using the VictoriaMetrics algorithm, while the backup will be stored in a simple gzip format, which does not compress as efficiently.
 
 #### Create a Backup Pod with `curl`
 
@@ -104,7 +106,7 @@ EOF
 
 #### Retrieve Cluster Endpoints
 
-Locate the regional cluster ConfigMap named `kof-<cluster-name>` in the `kcm-system` namespace of the management cluster.
+Locate the regional cluster `ConfigMap` named `kof-<cluster-name>` in the `kcm-system` namespace of the management cluster.
 
 Record the following endpoint values:
 
@@ -141,9 +143,10 @@ kubectl cp -n kof <BACKUP_DEPLOYMENT_POD_NAME>:victoria-metrics-backup.gz ./vict
 kubectl cp -n kof <BACKUP_DEPLOYMENT_POD_NAME>:victoria-logs-backup.gz ./victoria-logs-backup.gz
 ```
 
-### 2. Cleanup the Old Istio Clusters
+### 2. Clean Up the Old Istio Clusters
 
-**Important**: Ensure that both VictoriaMetrics and VictoriaLogs backup files have been successfully created and verified before the cluster cleanup.
+> IMPORTANT:
+> Ensure that both `VictoriaMetrics` and `VictoriaLogs` backup files have been successfully created and verified before the cluster cleanup.
 
 #### Pause Synchronization on Managed Clusters
 
@@ -184,7 +187,7 @@ kubectl get crd -o name | grep --color=never 'istio.io' | xargs kubectl delete
 Once the cleanup of all regional and child clusters is complete,
 run `unset KUBECONFIG` to use the **management** cluster in the next steps.
 
-### 3. Remove Old Istio Chart
+### 3. Remove the Old Istio Chart
 
 Remove the old Istio release and related resources from the management cluster:
 
@@ -196,9 +199,9 @@ kubectl get crd -o name | grep --color=never 'istio.io' | xargs kubectl delete
 
 ### 4. Deploy New Istio Release
 
-Install new Istio release to the management cluster.
+Install the new Istio release to the management cluster.
 
-#### Install `k0rdent-istio-base` Chart
+#### Install the `k0rdent-istio-base` Chart
 
 ```bash
 helm upgrade -i --wait \
@@ -213,7 +216,7 @@ helm upgrade -i --wait \
 * `cert-manager-service-template.enabled=false` disables the deployment of the cert-manager service template. It should already be deployed as part of KOF.
 * `injectionNamespaces="{kof}"` ensures Istio sidecars are injected only into the `kof` namespace. To inject sidecars into additional namespaces, list them comma-separated: `{kof,<YOUR_NAMESPACE>}`.
 
-#### Install `k0rdent-istio` Chart
+#### Install the `k0rdent-istio` Chart
 
 ```bash
 helm upgrade -i --wait -n istio-system k0rdent-istio \
@@ -224,13 +227,13 @@ helm upgrade -i --wait -n istio-system k0rdent-istio \
   oci://ghcr.io/k0rdent/istio/charts/k0rdent-istio --version 0.1.0
 ```
 
-### 5. Upgrade KOF Version
+### 5. Upgrade the KOF Version
 
 Upgrade KOF to the target version following standard upgrade procedures.
 
-### 6. Restart KOF Pods
+### 6. Restart the KOF Pods
 
-Restarting KOF pods on the management cluster is required to update the `istio-proxy` sidecar. Without restarting, you may encounter connection errors or Istio pod crashes.
+You must restart the KOF pods on the management cluster to update the `istio-proxy` sidecar. Without restarting, you may encounter connection errors or Istio pod crashes.
 
 ```bash
 kubectl delete pod --all -n kof
