@@ -6,14 +6,17 @@ shown in the [Extended Management Configuration](../appendix-extend-mgmt.md#conf
 
 ## Main settings block
 
-Telemetry is configured under the `telemetry` block:
+Telemetry is configured under the `telemetry` block of the `kcm-regional` chart (see [Components segregation](../../admin/regional-clusters/components-segregation.md)).
+
+In a `managements` object set the following:
 
 ```yaml
-telemetry:
-  mode: online            # disabled | local | online (default: online)
-  concurrency: 5          # scrape N clusters in parallel (1..100)
-  interval: 24h           # scrape cadence
-  jitter: 10              # % jitter (1..99)
+regional:
+  telemetry:
+    mode: online            # disabled | local | online (default: online)
+    concurrency: 5          # scrape N clusters in parallel (1..100)
+    interval: 1h            # scrape cadence
+    jitter: 10              # % jitter (1..99)
 ```
 
 * `mode` controls the collection and storage mechanism. `online` sends to Segment;
@@ -21,6 +24,24 @@ telemetry:
 * `concurrency` is how many child clusters are scraped in parallel.
 * `interval` is the scrape frequency.
 * `jitter` spreads scrapes across time to avoid thundering herds.
+
+In a corresponding `regions` object set the following:
+
+```yaml
+telemetry:
+  mode: online            # disabled | local | online (default: online)
+  concurrency: 5          # scrape N clusters in parallel (1..100)
+  interval: 1h            # scrape cadence
+  jitter: 10              # % jitter (1..99)
+```
+
+Note, that the only change is the absence of the `regional` subpath.
+
+> NOTE:
+> Here and after all of the examples are given **without** the `regional`
+> top subpath. Set or remove it accordingly depending what resource
+> is being edited: **add** it if a `managements` object is being edited,
+> do **not add** it if a `regions` object is being edited.
 
 ## Local mode storage settings
 
@@ -91,7 +112,8 @@ telemetry:
 
 > NOTE: **Note on a legacy flag**
 >
-> `controller.enableTelemetry` is **deprecated in favor of the `telemetry`
+> `controller.enableTelemetry` is **deprecated in 1.4.0
+> and removed in 1.5.0 version in favor of the `telemetry`
 > block**. It may still appear as a container arg for backward compatibility,
 > but you should configure telemetry via the `telemetry` values going forward.
 
@@ -116,7 +138,7 @@ No data is collected or stored.
 telemetry:
   mode: online      # default
   concurrency: 5    # default
-  interval: 24h     # default
+  interval: 1h      # default
   jitter: 10        # default
 ```
 
@@ -182,8 +204,61 @@ telemetry:
 Chart creates a hostPath PV at `/var/lib/telemetry` and a matching PVC;
 prefer PVC-backed options in HA clusters.
 
+## Controller settings
+
+> NOTE:
+> Added in 1.5.0 version.
+
+There are numerions settings to customize the dedicated telemetry controller.
+The list of default settings is as follows:
+
+```yaml
+telemetry:
+  # Telemetry runner configuration
+  controller:
+    # Number of replicas
+    replicas: 1
+    # Image configuration
+    image:
+      # Name of the image
+      repository: ghcr.io/k0rdent/kcm/telemetry
+      # Tag of the image
+      tag: latest
+      # Image pull policy, one of [IfNotPresent, Always, Never]
+      pullPolicy: IfNotPresent
+    # Container resources
+    resources:
+      limits:
+        cpu: 500m
+        memory: 256Mi
+      requests:
+        cpu: 100m
+        memory: 64Mi
+    # Node selector to constrain the pod to run on specific nodes
+    nodeSelector: {}
+    # Affinity rules for pod scheduling
+    affinity: {}
+    # Tolerations to allow the pod to schedule on tainted nodes
+    tolerations: []
+    # Global runner's logger settings
+    logger:
+      # Development defaults to (encoder=console,logLevel=debug,stackTraceLevel=warn) Production defaults to (encoder=json,logLevel=info,stackTraceLevel=error)
+      devel: false
+      # Encoder type, one of [json, console]
+      encoder: ""
+      # Log level, one of [info, debug, error]
+      log-level: ""
+      # Level on which to produce stacktraces, one of [info, error, panic]
+      stacktrace-level: ""
+      # Type of time encoding, one of [epoch, millis, nano, iso8601, rfc3339, rfc3339nano]
+      time-encoding: rfc3339
+```
+
 ## Troubleshooting
 
+* **Settings are not applied**:
+  make sure that the correct `regional` subpath is either added (if `managements` object)
+  or is absent (if `regions` object).
 * **No local files appear**:
   ensure `telemetry.mode: local` and that a volume source is configured.
   Check the init container `telemetry-data-permissions` completed successfully.
@@ -192,5 +267,4 @@ prefer PVC-backed options in HA clusters.
   either pin the PV with `nodeAffinity` or switch to a PVC-backed option.
 * **Conflicting settings**:
   if you previously set `controller.enableTelemetry`, migrate to the
-  `telemetry` block; the old flag is deprecated and may be removed in a
-  future release.
+  `telemetry` block; the old flag is deprecated and is removed in the 1.5.0 version.

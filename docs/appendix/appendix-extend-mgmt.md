@@ -348,15 +348,16 @@ This value accepts standard duration format (e.g., 20m, 1h).
 ### Configuring Telemetry
 
 To configure [Telemetry](./telemetry/index.md) options via the
-[Management](../reference/crds/index.md#management) object, 
-set values under the `telemetry` block. For example, you can disable collection by setting 'mode' to 'disabled':
+[Management](../reference/crds/index.md#management) object,
+set values under the `telemetry` block. For example, you can disable collection by setting `mode` to `disabled`:
 
 ```yaml
 spec:
   core:
     kcm:
-      telemetry:
-        mode: disabled
+      regional:
+        telemetry:
+          mode: disabled
 ```
 
 Follow the [telemetry configuration page](./telemetry/configuration.md)
