@@ -219,7 +219,7 @@ nav:
     - KOF Alerts: admin/kof/kof-alerts.md
     - Scaling KOF: admin/kof/kof-scaling.md
     - Maintaining KOF: admin/kof/kof-maintainence.md
-    - Resource Limits: admin/kof/kof-limits.md
+    - Resource Requirements: admin/kof/kof-resources.md
     - Version Compatibility: admin/kof/kof-version-compat.md
   - Template How-To:
     - Overview: templatehowto/index.md

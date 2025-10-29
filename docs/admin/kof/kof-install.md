@@ -268,8 +268,7 @@ and apply this example, or use it as a reference:
 
 7. If you're upgrading KOF from an earlier version, apply the [Upgrading KOF](./kof-upgrade.md) guide.
 
-8. If you have not applied the [Istio](#istio) section:
-
+9. Apply shared configuration for the existing and upcoming regional and child clusters:
     * Wait until the value of `VALID` changes to `true` for all `ServiceTemplate` objects:
         ```bash
         kubectl get svctmpl -A
