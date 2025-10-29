@@ -174,9 +174,7 @@ and apply this example, or use it as a reference:
       oci://ghcr.io/k0rdent/kof/charts/kof-operators --version {{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}
     ```
 
-2. Create an empty `mothership-values.yaml` file.
-
-    If you have not applied the [Istio](#istio) section, add to this file:
+2. Create the `mothership-values.yaml` file and add there:
     ```yaml
     kcm:
       installTemplates: true
