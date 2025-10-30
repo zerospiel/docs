@@ -35,13 +35,12 @@
 
 ## Upgrade Notes
 
-  * **IMPORTANT**: While existing `ClusterDeployments` are unaffected, due to version conflicts in CAPA, this version of k0rdent cannot deploy or upgrade Amazon EKS clusters. If you need to deploy EKS clusters, **DO NOT EXECUTE THIS UPGRADE**.  Use k0rdent 1.4.0 instead.
-  * After CAPA/CAPZ bumps, revisit **ClusterIdentity** policies. If you previously relied on an “empty selector” in `.spec.allowedNamespaces`, you may need to set an **empty object** (`{}`) to avoid “Namespace is not permitted” errors.
+  * **IMPORTANT**: Avoid upgrading to 1.5.0 if you plan to have or have existing `ClusterDeployments` using `aws-eks-1-0-*` `ClusterTemplates`. Use k0rdent 1.4.0 instead.
 
   * New/stricter **Region validation** may surface issues with configurations that were previously accepted. Dry-run manifests before rollout.
   * **Region restoration** flow is new; confirm backup/restore procedures for regional components.
 
-  * CI images are now **distroless**. If you consume these images directly, verify any assumptions about embedded tooling.
+  * CI images switched base images from `scratch` to `gcr.io/distroless/static-debian12:nonroot`
 
 ---
 
@@ -99,3 +98,4 @@
 ## References
 
 * [Compare KCM v1.4.0…main](https://github.com/k0rdent/kcm/compare/v1.4.0...main)
+
