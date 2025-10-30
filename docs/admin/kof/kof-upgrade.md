@@ -73,7 +73,7 @@ curl -H 'Content-Encoding: gzip' -sSX POST \
   <write_logs_endpoint>/insert/jsonline
 ```
 
-*N.B.* the default `write_logs_endpoint` ends with `/insert/opentelemetry/v1/logs`, it is replaced with `/insert/jsonline`
+*N.B.* the default `write_logs_endpoint` ends with `/insert/opentelemetry/v1/logs`: replace it with `/insert/jsonline`.
 
 With Istio servicemesh:
 
