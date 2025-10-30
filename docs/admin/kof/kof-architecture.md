@@ -51,7 +51,10 @@ To update the diagram:
     opencost
     opentelemetry-kube-stack
 
-  kof-regional and kof-child
+  Either kof-istio
+    Certificates
+    ClusterProfiles
+  Or kof-regional and kof-child
     MultiClusterServices
 
 Cloud 1..N
@@ -77,9 +80,16 @@ Cloud 1..N
 
       cert-manager
       ingress-nginx
+      istio/gateway
+
+      kof-istio chart
+        cert-manager-istio-csr
+        istio/base
+        istiod
 
     <b>Child Cluster 1</b>
       cert-manager
+      Optional kof-istio
 
       kof-operators chart
         Disabled grafana-operator
@@ -144,7 +154,16 @@ Cloud 1..N
     </div>
   </div>
   <div class="o">
-    kof-regional and kof-child
+    Either kof-istio
+    <div class="o">
+      Certificates
+    </div>
+    <div class="o">
+      ClusterProfiles
+    </div>
+  </div>
+  <div class="o">
+    Or kof-regional and kof-child
     <div class="o">
       MultiClusterServices
     </div>
@@ -204,11 +223,29 @@ Cloud 1..N
       <div class="o">
         ingress-nginx
       </div>
+      <div class="o">
+        istio/gateway
+      </div>
+      <div class="o">
+        kof-istio chart
+        <div class="o">
+          cert-manager-istio-csr
+        </div>
+        <div class="o">
+          istio/base
+        </div>
+        <div class="o">
+          istiod
+        </div>
+      </div>
     </div>
     <div class="o">
       <b>Child Cluster 1</b>
       <div class="o">
         cert-manager
+      </div>
+      <div class="o">
+        Optional kof-istio
       </div>
       <div class="o">
         kof-operators chart
@@ -277,6 +314,10 @@ KOF is deployed as a series of Helm charts at various levels.
 
 - [MultiClusterService](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-child/templates/child-multi-cluster-service.yaml)
   which configures and installs `kof-collectors` and other charts to child clusters
+
+### kof-istio
+
+- Optional [Istio](https://istio.io/) support for secure connectivity between clusters without external DNS
 
 ### kof-storage
 
