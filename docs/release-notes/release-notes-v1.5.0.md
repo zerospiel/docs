@@ -28,7 +28,7 @@
   * **Migrate Child Clusters**: A `ClusterDeployment` can now be moved from one management cluster to another.
   * **Credentials & Identities**: Distribute cluster identities across regions.
   * **RBAC Manager**: Introduced as a first-class KCM management component.
-  * **Dependency Recognition**: k0rdent now understands dependencies, avoiding extraneous error messages.
+  * **Dependency Recognition**: k0rdent now understands `MultiClusterService` dependencies, avoiding extraneous error messages.
   * **Operational changes**: You can now pause Sveltos profile reconciliation via a `ServiceSet` annotation, easing tasks like troubleshooting and disaster recovery.
 
 ---
