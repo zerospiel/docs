@@ -73,12 +73,13 @@ Available for the hosted cluster template only.
 * `project` (string): The name of the GCP project where the cluster is deployed.
 * `enableAutopilot` (boolean): Indicates whether to enable Autopilot for this GKE cluster.
 * `releaseChannel` (string): The release channel of the GKE cluster.
-* `controlPlaneVersion` (string): The control plane version of the GKE cluster. If unspecified, the default version supported by GKE is used.
+* `controlPlaneVersion` (string): **Deprecated**. Use the `version` field instead. The control plane version of the GKE cluster. If unspecified, the default version supported by GKE is used.
 * `masterAuthorizedNetworksConfig` (object): Configuration options for the master authorized networks feature. If unspecified, the feature is disabled.
 * `region` (string): The GCP region where the cluster is deployed.
 * `location` (string): The location where the GKE cluster is created. If unspecified, the cluster is regional; otherwise, specifying a location creates a zonal cluster.
 * `network.name` (string): The GCP network name.
 * `network.mtu` (number): Maximum Transmission Unit (MTU) in bytes.
+* `version` (string): Represents the control plane version of the GKE cluster.
 
 ### GKE Managed Machines Parameters
 
