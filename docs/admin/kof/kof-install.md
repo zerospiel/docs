@@ -660,8 +660,8 @@ and apply this example for AWS, or use it as a reference:
 
     > NOTE:
     > There is no need to create a gateway in the child cluster
-    > using `k0rdent.mirantis.com/istio-gateway: "true"` label.
-    > Child cluster uses the gateway in the regional cluster to [store KOF data](./kof-storing.md).
+    > using the `k0rdent.mirantis.com/istio-gateway: "true"` label.
+    > The child cluster uses the gateway in the regional cluster to [store KOF data](./kof-storing.md).
 
 5. This `ClusterDeployment` uses propagation of its `.metadata.labels`
     to the resulting `Cluster` because there are no `.spec.config.clusterLabels` here.
@@ -710,3 +710,4 @@ and apply this example for AWS, or use it as a reference:
     ```
 
 Now that you have installed KOF, please [verify it](./kof-verification.md).
+
