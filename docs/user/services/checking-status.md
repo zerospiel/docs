@@ -1,8 +1,31 @@
 # Checking status
 
-The `.status.services` field of the `ClusterDeployment` object shows the status for each of the beach-head services.
-For example, if you were to `describe` the `ClusterDeployment` with these services, you would see conditions that show
-status information, as in:
+The `.status.services` field of the `ClusterDeployment` and `MultiClusterService` objects shows the deployment status for each service.
+
+## Service Status Structure
+
+Each entry in `.status.services[]` contains:
+
+- `type`: Deployment type - `Helm`, `Kustomize`, or `Resource`
+- `name`: Service name
+- `namespace`: Service namespace
+- `template`: ServiceTemplate name used
+- `version`: Application version from the ServiceTemplate
+- `state`: Current deployment state (see below)
+- `failureMessage`: Error message if state is `Failed`
+- `lastStateTransitionTime`: When the state last changed
+
+### Service States
+
+- **`Pending`**: Service is waiting (e.g., for dependencies to be satisfied)
+- **`Provisioning`**: Service is currently being deployed
+- **`Deployed`**: Service successfully deployed and running
+- **`Failed`**: Service deployment failed (check `failureMessage`)
+- **`Deleting`**: Service is being removed
+
+## ClusterDeployment Status Example
+
+For example, if you were to `describe` the `ClusterDeployment` with these services, you would see status information such as:
 
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1beta1
@@ -28,24 +51,20 @@ status:
   . . .
   observedGeneration: 1
   services:
-  - clusterName: my-cluster-deployment
-    clusterNamespace: kcm-system
-    conditions:
     - lastTransitionTime: "2024-12-11T23:03:05Z"
-      message: ""
-      reason: Provisioned
-      status: "True"
+      name: ingress-nginx
+      namespace: ingress-nginx
+      state: Deployed
+      template: ingress-nginx-4-11-3
       type: Helm
+      version: ingress-nginx-4-11-3
     - lastTransitionTime: "2024-12-11T23:03:05Z"
-      message: Release kyverno/kyverno
-      reason: Managing
-      status: "True"
-      type: kyverno.kyverno/SveltosHelmReleaseReady
-    - lastTransitionTime: "2024-12-11T23:03:05Z"
-      message: Release ingress-nginx/ingress-nginx
-      reason: Managing
-      status: "True"
-      type: ingress-nginx.ingress-nginx/SveltosHelmReleaseReady
+      name: kyverno
+      namespace: kyverno
+      state: Deployed
+      template: kyverno-3-2-6
+      type: Helm
+      version: kyverno-3-2-6
 ```
 
 Based on the information above both kyverno and ingress-nginx are installed in their respective namespaces on the target cluster.
@@ -69,5 +88,96 @@ NAME                                       READY   STATUS    RESTARTS   AGE
 ingress-nginx-controller-cbcf8bf58-zhvph   1/1     Running   0          24m
 ```
 
-Youc an get more information on how to access the child cluster in the [create a cluster deployment](../../admin/clusters/deploy-cluster.md)
+You can get more information on how to access the child cluster in the [create a cluster deployment](../../admin/clusters/deploy-cluster.md)
 chapter, and more on `ServiceTemplate` objects in the [Template Guide](../../reference/template/index.md).
+
+## Checking Service Upgrade Paths
+
+Both `ClusterDeployment` and `MultiClusterService` provide upgrade path information in `.status.servicesUpgradePaths[]`:
+
+```yaml
+status:
+  servicesUpgradePaths:
+    - name: ingress-nginx
+      namespace: ingress-nginx
+      template: ingress-nginx-4-11-3
+      availableUpgrades:
+        - upgradePaths:
+            - ingress-nginx-4-11-5
+            - ingress-nginx-4-12-0
+```
+
+This shows which ServiceTemplates the current service can be upgraded to. See [Service Upgrade](service-upgrade.md) for more details.
+
+## Monitoring Commands
+
+**View service status:**
+```bash
+kubectl get clusterdeployment <name> -n <namespace> -o jsonpath='{.status.services[*].state}'
+```
+
+**Check for failed services:**
+```bash
+kubectl get clusterdeployment <name> -n <namespace> -o jsonpath='{.status.services[?(@.state=="Failed")]}'
+```
+
+**View failure messages:**
+```bash
+kubectl get clusterdeployment <name> -n <namespace> -o jsonpath='{.status.services[*].failureMessage}' | tr ' ' '\n'
+```
+
+**Check service versions:**
+```bash
+kubectl get clusterdeployment <name> -n <namespace> -o jsonpath='{range .status.services[*]}{.name}{"\t"}{.version}{"\n"}{end}'
+```
+
+## MultiClusterService Status
+
+For `MultiClusterService`, the status includes service upgrade paths for all defined services and `MultiClusterService` conditions:
+
+```yaml
+status:
+  conditions:
+    - lastTransitionTime: "2025-11-07T23:25:25Z"
+      message: ""
+      observedGeneration: 2
+      reason: Succeeded
+      status: "True"
+      type: ServicesReferencesValidation
+    - lastTransitionTime: "2025-11-07T23:25:25Z"
+      message: ""
+      observedGeneration: 2
+      reason: Succeeded
+      status: "True"
+      type: ServicesDependencyValidation
+    - lastTransitionTime: "2025-11-07T23:25:25Z"
+      message: ""
+      observedGeneration: 2
+      reason: Succeeded
+      status: "True"
+      type: MultiClusterServiceDependencyValidation
+    - lastTransitionTime: "2025-11-07T23:28:44Z"
+      message: 1/1
+      reason: Succeeded
+      status: "True"
+      type: ClusterInReadyState
+    - lastTransitionTime: "2025-11-07T23:28:44Z"
+      message: Object is ready
+      reason: Succeeded
+      status: "True"
+      type: Ready
+  observedGeneration: 2
+  servicesUpgradePaths:
+    - availableUpgrades:
+        - upgradePaths:
+            - external-secrets-7vpwh
+      name: managed-eso
+      namespace: global
+      template: external-secrets-7vpwh
+```
+
+**Monitor MultiClusterService:**
+```bash
+# View overall status
+kubectl get multiclusterservice <name> -o wide
+```
