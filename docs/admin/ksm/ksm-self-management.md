@@ -27,6 +27,7 @@ spec:
       sveltos-agent: present
   serviceSpec:
     provider:
+      name: ksm-projectsveltos
       selfManagement: true
     services:
       - template: ingress-nginx-4-11-3
@@ -47,23 +48,46 @@ The output should be similar to the following showing that ingress-nginx has bee
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1beta1
 kind: MultiClusterService
-. . .
+metadata: {}
+spec: {}
 status:
-  . . .
-  services:
-  - clusterName: mgmt
-    clusterNamespace: mgmt
-    conditions:
-    - lastTransitionTime: "2025-04-24T10:35:03Z"
+  conditions:
+    - lastTransitionTime: "2025-11-07T23:25:25Z"
       message: ""
-      reason: Provisioned
+      observedGeneration: 2
+      reason: Succeeded
       status: "True"
-      type: Helm
-    - lastTransitionTime: "2025-04-24T10:35:03Z"
-      message: Release ingress-nginx/ingress-nginx
-      reason: Managing
+      type: ServicesReferencesValidation
+    - lastTransitionTime: "2025-11-07T23:25:25Z"
+      message: ""
+      observedGeneration: 2
+      reason: Succeeded
       status: "True"
-      type: ingress-nginx.ingress-nginx/SveltosHelmReleaseReady
+      type: ServicesDependencyValidation
+    - lastTransitionTime: "2025-11-07T23:25:25Z"
+      message: ""
+      observedGeneration: 2
+      reason: Succeeded
+      status: "True"
+      type: MultiClusterServiceDependencyValidation
+    - lastTransitionTime: "2025-11-07T23:28:44Z"
+      message: 1/1
+      reason: Succeeded
+      status: "True"
+      type: ClusterInReadyState
+    - lastTransitionTime: "2025-11-07T23:28:44Z"
+      message: Object is ready
+      reason: Succeeded
+      status: "True"
+      type: Ready
+  observedGeneration: 2
+  servicesUpgradePaths:
+    - availableUpgrades:
+        - upgradePaths:
+            - ingress-nginx-4-11-3
+      name: ingress-nginx
+      namespace: ingress-nginx
+      template: ingress-nginx-4-11-3
 ```
 
 See [Creating multi-cluster services](./ksm-multiclusterservice.md) for more detail on deploying beach-head services using MultiClusterService.

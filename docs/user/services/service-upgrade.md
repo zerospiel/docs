@@ -71,13 +71,23 @@ spec:
   ...
 status:
   servicesUpgradePaths:
-    - availableUpgrades:
-        - upgradePaths:
-            - ingress-nginx-4-11-5
-      name: ingress-nginx
+    - name: ingress-nginx
       namespace: ingress-nginx
       template: ingress-nginx-4-11-3
+      availableUpgrades:
+        - upgradePaths:
+            - ingress-nginx-4-11-5
 ```
+
+The `.status.servicesUpgradePaths[]` array shows:
+- `name`: Service name
+- `namespace`: Service namespace
+- `template`: Currently deployed ServiceTemplate
+- `availableUpgrades[]`: Available upgrade options
+  - `upgradePaths[]`: Array of ServiceTemplate names in the upgrade path
+
+> NOTE:
+> The upgrade paths are calculated from the ServiceTemplateChain. If multiple paths exist to reach the target template version, the shortest path is shown.
 
 Now you can update the `ClusterDeployment` or `MultiClusterService` object to upgrade the service to the available version:
 

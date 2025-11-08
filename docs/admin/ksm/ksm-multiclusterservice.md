@@ -195,9 +195,9 @@ In this example, for all matching clusters, `ingress-nginx` and `postgres-operat
 
 ## Checking Status
 
-The status for the `MultiClusterService` object shows the deployment status for the beach-head services managed
-by it on each of the CAPI target clusters that it matches. Consider the same example where 2 ClusterDeployments
-and 1 MultiClusterService is deployed. The status for the `global-ingress` `MultiClusterService` appears as:
+The status for the `MultiClusterService` object shows the overall status of the `MultiClusterService` object
+along with upgrade paths available for services defined in `.spec.serviceSpec.services[]`. Status of the deployments
+can be observed in the matching `ClusterDeployment` objects `.status`:
 
 ```yaml
 apiVersion: k0rdent.mirantis.com/v1beta1
@@ -220,138 +220,43 @@ spec:
   . . .
 status:
   conditions:
-  - lastTransitionTime: "2024-10-25T08:36:24Z"
-    message: ""
-    reason: Succeeded
-    status: "True"
-    type: SveltosClusterProfileReady
-  - lastTransitionTime: "2024-10-25T08:36:24Z"
-    message: MultiClusterService is ready
-    reason: Succeeded
-    status: "True"
-    type: Ready
-  observedGeneration: 1
-  services:
-  - clusterName: dev-cluster-2
-    clusterNamespace: kcm-system
-    conditions:
-    - lastTransitionTime: "2024-10-25T08:36:35Z"
-      message: |
-        cannot manage chart ingress-nginx/ingress-nginx. ClusterSummary p--dev-cluster-2-capi-dev-cluster-2 managing it.
-      reason: Failed
-      status: "False"
-      type: Helm
-    - lastTransitionTime: "2024-10-25T08:36:25Z"
-      message: 'Release ingress-nginx/ingress-nginx: ClusterSummary p--dev-cluster-2-capi-dev-cluster-2
-        managing it'
-      reason: Conflict
-      status: "False"
-      type: ingress-nginx.ingress-nginx/SveltosHelmReleaseReady
-  - clusterName: dev-cluster-1
-    clusterNamespace: kcm-system
-    conditions:
-    - lastTransitionTime: "2024-10-25T08:36:24Z"
+    - lastTransitionTime: "2025-11-07T23:25:25Z"
       message: ""
-      reason: Provisioned
+      observedGeneration: 2
+      reason: Succeeded
       status: "True"
-      type: Helm
-    - lastTransitionTime: "2024-10-25T08:36:25Z"
-      message: Release ingress-nginx/ingress-nginx
-      reason: Managing
-      status: "True"
-      type: ingress-nginx.ingress-nginx/SveltosHelmReleaseReady
-```
-
-The status under `.status.services` shows a conflict for `dev-cluster-2` as expected because the `MultiClusterService` has a lower priority.
-On the other hand, it shows provisioned for `dev-cluster-1` because the `MultiClusterService` has a higher priority.
-
-```yaml
-apiVersion: k0rdent.mirantis.com/v1beta1
-kind: ClusterDeployment
-metadata:
-  . . . 
-  name: dev-cluster-1
-  namespace: kcm-system
-  . . .
-spec:
-  . . .
-  serviceSpec:
-    services:
-    - name: kyverno
-      namespace: kyverno
-      template: kyverno-3-2-6
-    - name: ingress-nginx
-      namespace: ingress-nginx
-      template: ingress-nginx-4-11-0
-    priority: 100
-    . . .
-  . . .
-status:
-  . . .
-  services:
-  - clusterName: dev-cluster-1
-    clusterNamespace: kcm-system
-    conditions:
-    - lastTransitionTime: "2024-10-25T08:36:35Z"
-      message: |
-        cannot manage chart ingress-nginx/ingress-nginx. ClusterSummary global-ingress-capi-dev-cluster-1 managing it.
-      reason: Provisioning
-      status: "False"
-      type: Helm
-    - lastTransitionTime: "2024-10-25T07:44:43Z"
-      message: Release kyverno/kyverno
-      reason: Managing
-      status: "True"
-      type: kyverno.kyverno/SveltosHelmReleaseReady
-    - lastTransitionTime: "2024-10-25T08:36:25Z"
-      message: 'Release ingress-nginx/ingress-nginx: ClusterSummary global-ingress-capi-dev-cluster-1
-        managing it'
-      reason: Conflict
-      status: "False"
-      type: ingress-nginx.ingress-nginx/SveltosHelmReleaseReady
-```
-
-The status under `.status.services` for the `ClusterDeployment` `dev-cluster-1` shows that it is managing Kyverno but unable to manage ingress-nginx because another object with higher priority is managing it, so it shows a conflict instead.
-
-On the otherhand, the `dev-cluster-2` `ClusterDeployment` has a higher priority:
-```yaml
-apiVersion: k0rdent.mirantis.com/v1beta1
-kind: ClusterDeployment
-metadata:
-  . . .
-  name: dev-cluster-2
-  namespace: kcm-system
-  resourceVersion: "30889"
-  . . .
-spec:
-  . . .
-  serviceSpec:
-    services:
-    - name: ingress-nginx
-      namespace: ingress-nginx
-      template: ingress-nginx-4-11-0
-    priority: 500
-    . . .
-  . . .
-status:
-  . . .
-  services:
-  - clusterName: dev-cluster-2
-    clusterNamespace: kcm-system
-    conditions:
-    - lastTransitionTime: "2024-10-25T08:18:22Z"
+      type: ServicesReferencesValidation
+    - lastTransitionTime: "2025-11-07T23:25:25Z"
       message: ""
-      reason: Provisioned
+      observedGeneration: 2
+      reason: Succeeded
       status: "True"
-      type: Helm
-    - lastTransitionTime: "2024-10-25T08:18:22Z"
-      message: Release ingress-nginx/ingress-nginx
-      reason: Managing
+      type: ServicesDependencyValidation
+    - lastTransitionTime: "2025-11-07T23:25:25Z"
+      message: ""
+      observedGeneration: 2
+      reason: Succeeded
       status: "True"
-      type: ingress-nginx.ingress-nginx/SveltosHelmReleaseReady
+      type: MultiClusterServiceDependencyValidation
+    - lastTransitionTime: "2025-11-07T23:28:44Z"
+      message: 1/1
+      reason: Succeeded
+      status: "True"
+      type: ClusterInReadyState
+    - lastTransitionTime: "2025-11-07T23:28:44Z"
+      message: Object is ready
+      reason: Succeeded
+      status: "True"
+      type: Ready
+  observedGeneration: 2
+  servicesUpgradePaths:
+    - availableUpgrades:
+        - upgradePaths:
+            - ingress-nginx-4-11-3
+      name: ingress-nginx
+      namespace: ingress-nginx
+      template: ingress-nginx-4-11-3
 ```
-
-The status under `.status.services` for `ClusterDeployment` `dev-cluster-2` shows that it is managing ingress-nginx, as expected because it has a higher priority.
 
 ## Parameter List
 Refer to "Parameter List" in [Deploy beach-head Services using Cluster Deployment](../../user/services/beach-head.md#deployment-of-beach-head-services) for more information.
