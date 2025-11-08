@@ -6,6 +6,9 @@ You can find more information on [Bringing Your Own Templates](../../reference/t
 in the Template Guide, but this section gives you an idea of how to create a `ServiceTemplate`
 and use it to deploy an application to a {{{ docsVersionInfo.k0rdentName }}} child cluster.
 
+> WARNING:
+> `ServiceTemplate` spec is **immutable** once created. You cannot modify the spec fields after the template is created. To make changes, you must create a new `ServiceTemplate` object with a different name.
+
 `ServiceTemplate` supports the following types as a source:
 
 - [`HelmChart`](https://fluxcd.io/flux/components/source/helmcharts/)
@@ -140,6 +143,207 @@ FluxCD sources supported by `ServiceTemplate` are:
    `s3://bucket/path/to/charts` bucket and path where the Helm chart is located within the bucket.
 
 For more information on creating templates, see the [Template Guide](../../reference/template/index.md).
+
+## ServiceTemplate Specification Fields
+
+### Core Fields
+
+#### `.spec.version`
+Semantic version of the application backed by the template. This field helps track which application version is deployed.
+
+Example:
+```yaml
+spec:
+  version: "4.11.3"
+```
+
+#### `.spec.k8sConstraint`
+Kubernetes version constraint in SemVer format describing compatible K8s versions for the target cluster.
+
+Example:
+```yaml
+spec:
+  k8sConstraint: ">=1.28.0 <1.32.0"
+```
+
+#### `.spec.helmOptions`
+Global Helm options applied when installing or updating the Helm chart. These options control the behavior of Helm operations.
+
+Available options:
+
+- `enableClientCache` (bool): Enable Helm client cache for improved performance
+- `dependencyUpdate` (bool): Update chart dependencies if missing before installation
+- `wait` (bool): Wait until all resources are in ready state before marking release as successful
+- `waitForJobs` (bool): If set and `wait` is enabled, will wait until all Jobs have completed
+- `createNamespace` (bool): Create the release namespace if it doesn't exist
+- `skipCRDs` (bool): Skip installation of CRDs during install/upgrade operations
+- `atomic` (bool): If set, the installation process rolls back on failure (automatically sets `wait: true`)
+- `disableHooks` (bool): Prevent hooks from running during install/upgrade/uninstall
+- `disableOpenAPIValidation` (bool): Skip validation of rendered templates against Kubernetes OpenAPI Schema
+- `timeout` (duration): Time to wait for any individual Kubernetes operation (e.g., "5m", "300s")
+- `skipSchemaValidation` (bool): Disable JSON schema validation
+- `replace` (bool): Replace an older release with this one if it exists
+- `labels` (map[string]string): Labels that would be added to release metadata
+- `description` (string): Description of the Helm operation
+
+Example:
+```yaml
+spec:
+  helmOptions:
+    wait: true
+    waitForJobs: true
+    timeout: 10m
+    atomic: true
+    createNamespace: true
+    labels:
+      environment: production
+      team: platform
+```
+
+> NOTE:
+> These global options can be overridden at the service level when deploying using `.spec.serviceSpec.services[].helmOptions`.
+
+### Validation Rules
+
+The following validation rules apply to `ServiceTemplate`:
+
+1. **Mutually Exclusive Source Types**: Only one of `helm`, `kustomize`, or `resources` can be specified.
+2. **Required Source**: At least one of `helm`, `kustomize`, or `resources` must be specified.
+3. **LocalSourceRef vs RemoteSourceSpec**: When using `helm.chartSource`, `kustomize` or `resources`, only one of `localSourceRef` or `remoteSourceSpec` can be set.
+4. **Helm Chart Sources**: When using Helm, only one of `chartSpec`, `chartRef`, or `chartSource` can be specified.
+5. **ConfigMap/Secret Limitations**: `ConfigMap` and `Secret` sources are **only** supported for `kustomize` and `resources` templates, not for Helm charts.
+
+### Cross-Namespace References
+
+When using `.spec.kustomize.localSourceRef` or `.spec.resources.localSourceRef`:
+
+- **FluxCD Sources** (GitRepository, Bucket, OCIRepository): Cross-namespace references are allowed. You can reference sources in different namespaces.
+- **ConfigMap/Secret**: Cross-namespace references are **not allowed**. The namespace field will be ignored, and the source must exist in the same namespace as the ServiceTemplate.
+
+Example of cross-namespace reference:
+```yaml
+spec:
+  kustomize:
+    localSourceRef:
+      kind: GitRepository
+      name: my-git-repo
+      namespace: flux-system  # Different namespace is OK
+    path: "./base"
+```
+
+### Remote Source Object Creation
+
+When using `.spec.helm.chartSource.remoteSourceSpec`, `.spec.kustomize.remoteSourceSpec`, or `.spec.resources.remoteSourceSpec`, the controller automatically creates corresponding FluxCD source objects (GitRepository, Bucket, or OCIRepository).
+
+These created objects will have:
+- The label `k0rdent.mirantis.com/managed: "true"`
+- Controller reference pointing to the ServiceTemplate
+- Automatic lifecycle management (deleted when ServiceTemplate is deleted)
+
+You can verify created sources with:
+```bash
+kubectl get gitrepositories,buckets,ocirepositories -A -l k0rdent.mirantis.com/managed=true
+```
+
+## ServiceTemplate Status
+
+The `.status` field of a ServiceTemplate contains information about the template's validity and source status.
+
+### Status Fields
+
+#### `.status.valid`
+Boolean indicating whether the template is valid and ready to use.
+
+#### `.status.validationError`
+Contains error details if the template validation failed.
+
+#### `.status.k8sConstraint`
+Reflects the Kubernetes version constraint from the spec.
+
+#### `.status.sourceStatus`
+Provides detailed information about the source backing the template if applicable:
+
+- `kind`: Kind of the source (e.g., GitRepository, HelmChart, Bucket)
+- `name`: Name of the source object
+- `namespace`: Namespace of the source object
+- `artifact`: Information about the fetched artifact
+  - `digest`: The digest of the file in the form of '<algorithm>:<checksum>'
+  - `path`: The relative file path of the Artifact
+  - `url`: URL where the artifact can be accessed
+  - `revision`: Revision/version of the artifact
+  - `lastUpdateTime`: The timestamp corresponding to the last update of the artifact
+  - `size`: The number of bytes in the file
+  - `metadata`: Holds upstream information such as OCI annotations
+- `conditions`: Array of conditions from the source object
+- `observedGeneration`: Latest generation observed by the source controller
+
+#### `.status.config`
+Contains all possible values. Applicable only to `ServiceTemplate` objects based on Helm charts.
+
+#### `.status.chartRef`
+Contains cross-namespace reference to Helm chart object. Applicable only to `ServiceTemplate` objects based on Helm charts.
+
+- `apiVersion`: API version of the source object
+- `kind`: Kind of the source object
+- `name`: Name of the source object
+- `namespace`: Namespace of the source object
+
+Example status:
+```yaml
+status:
+  valid: true
+  k8sConstraint: ">=1.28.0"
+  sourceStatus:
+    kind: GitRepository
+    name: my-app-source
+    namespace: kcm-system
+    artifact:
+      url: http://source-controller/gitrepository/kcm-system/my-app-source/abc123.tar.gz
+      revision: main@sha1:abc123def456
+    conditions:
+    - type: Ready
+      status: "True"
+      reason: Succeeded
+    observedGeneration: 1
+```
+
+### Monitoring Template Status
+
+You can use `kubectl get servicetemplate` to see template status:
+
+```bash
+kubectl get servicetemplate -A
+```
+
+The output includes columns:
+- `VALID`: Whether the template is valid (true/false)
+- `VALIDATIONERROR`: Brief error message if validation failed
+- `DESCRIPTION`: Template description
+
+### Troubleshooting Invalid Templates
+
+If a template shows `VALID=false`:
+
+1. Check the `validationError` in status:
+   ```bash
+   kubectl get servicetemplate <name> -n <namespace> -o jsonpath='{.status.validationError}'
+   ```
+
+2. Check source object status if using remote sources:
+   ```bash
+   kubectl get gitrepository,helmchart,bucket,ocirepository -n <namespace>
+   ```
+
+3. Verify source conditions:
+   ```bash
+   kubectl describe servicetemplate <name> -n <namespace>
+   ```
+
+Common validation errors:
+- Source object not found or not ready
+- Invalid Helm chart reference
+- Network issues fetching remote sources
+- Kubernetes version constraint parsing errors
 
 ### Creating Kustomization-based ServiceTemplate
 
