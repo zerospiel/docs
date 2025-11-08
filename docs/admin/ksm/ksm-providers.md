@@ -10,6 +10,8 @@ will be reconciled and transformed to provider-specific objects. Aside from that
 will validate that all components - [adapter](#adapter), [provisioner](#provisioner) and [required custom resources](#provisioner-crds) - are ready to be used. 
 User-defined CEL rules will be used for this purpose.
 
+It is also possible to [Build Your Own KSM Provider](ksm-byo-provider.md)
+
 Here is an example of built-in `StateManagementProvider` object:
 
 ```yaml

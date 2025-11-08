@@ -14,6 +14,7 @@ Get started with the basic documentation:
 
 - [KSM Providers](ksm-providers.md)
 - [Built-In Provider](ksm-built-in-provider.md)
+- [Build-Your-Own Provider](ksm-byo-provider.md)
 - [Service Templates](ksm-service-templates.md)
 - [Deploy services to multiple clusters](ksm-multiclusterservice.md)
 - [Deploy services to management cluster](ksm-self-management.md)
