@@ -4,7 +4,7 @@
 > Code examples provided below were not validated or compiled. They are provided to outline the idea
 > of how to develop custom provider for the CD tool you prefer and how to integrate it with {{{ docsVersionInfo.k0rdentName }}}.
 
-This guide walks you through creating a custom KSM (K0rdent Service Management) provider. We'll use **FluxCD** as an example, but the same principles apply to any CD tool like ArgoCD, Rancher Fleet, or custom solutions.
+This guide walks you through creating a custom KSM (K0rdent Service Management) provider to reconcile k0rdent API resources. We'll use **FluxCD** as an example, but the same principles apply to any CD tool, such as ArgoCD, Rancher Fleet, or custom solutions.
 
 ## Overview
 
