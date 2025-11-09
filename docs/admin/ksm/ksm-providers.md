@@ -17,6 +17,8 @@ are reconciled and transformed into provider-specific objects. The controller va
 - **Suspend Capability**: Can temporarily suspend provider reconciliation
 - **RBAC Management**: Automatically manages required RBAC permissions
 
+It is also possible to [Build Your Own KSM Provider](ksm-byo-provider.md)
+
 Here is an example of built-in `StateManagementProvider` object:
 
 ```yaml
