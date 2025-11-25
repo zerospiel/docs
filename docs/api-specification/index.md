@@ -5,7 +5,7 @@ hide:
 ---
 
 <!-- Page title for SEO/accessibility; visually hidden -->
-<h1 class="sr-only">MKE4k 4.1.2 API documentation</h1>
+<h1 class="sr-only">k0rdent API documentation</h1>
 
 <!-- Page-specific CSS -->
 <style>
@@ -60,3 +60,4 @@ hide:
     Redoc.init(specUrl, { scrollYOffset: 0 }, document.getElementById("redoc-container"));
   })();
 </script>
+
