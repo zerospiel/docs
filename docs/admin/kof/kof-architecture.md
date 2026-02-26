@@ -18,6 +18,64 @@ flowchart TD
     D ==> G[...]
 ```
 
+## Full-Stack Observability
+
+Main components/features of KOF:
+
+👀 **Collectors**: OpenTelemetry, OpenCost
+
+📦 **Storage**: VictoriaMetrics/Logs/Traces, third party
+
+🌐 **Aggregation**: Promxy (Prometheus proxy), k0rdent/vlogxy (VictoriaLogs proxy)
+
+📈 **Visualization**: Grafana dashboards (optional), KOF UI, Alerts, Events
+
+🔐 **Security**: Dex SSO, Multi-Tenancy, KOF ACL
+
+☁️  **Clouds**: AWS, Azure, OpenStack and others
+
+✨ **Autoconfig**: MultiClusterServices, kof-operator, k0rdent/istio
+
+## Autoconfig
+
+Adding KOF labels to k0rdent `ClusterDeployment`:
+
+```yaml
+apiVersion: k0rdent.mirantis.com/v1beta1
+kind: ClusterDeployment
+metadata:
+  name: $CLUSTER_NAME
+  namespace: kcm-system
+  labels:
+    k0rdent.mirantis.com/kof-cluster-role: child  # or regional
+    k0rdent.mirantis.com/kof-tenant-id: $TENANT_ID  # for child only
+spec:
+  config:
+    region: us-east-1
+    # ...
+```
+
+KOF deploys role-specific Helm charts
+and connects same-region clusters automatically and securely with per-cluster credentials:
+
+```mermaid
+flowchart LR
+  subgraph t2[tenant 2]
+    c4[...]
+  end
+  subgraph t1[tenant 1]
+    c1[child 1<br>us-east-1]
+    c2[child 2<br>us-east-1]
+    c3[child 3<br>us-west-1]
+  end
+  c1 -.- r[regional<br>us-east-1]
+  c2 -.- r
+  r -.- management
+  c3 -.- r2[regional<br>us-west-1]
+  r2 -.- management
+  c4 -.- r3[...] -.- management
+```
+
 ## Mid-level
 
 Getting a little bit more detailed, it's important to undrestand that data flows upwards,

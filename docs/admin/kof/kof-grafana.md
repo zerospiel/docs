@@ -172,6 +172,9 @@ Port forwarding, as described above, is a quick solution.
 Single Single-On provides better experience. If you want to enable it,
 please apply this advanced guide: [SSO for Grafana](https://github.com/k0rdent/kof/blob/main/docs/dex-sso.md).
 
+See also [Multi-tenancy in KOF: Single Sign-On](kof-multi-tenancy.md#single-sign-on)
+and the next sections there for additional examples.
+
 ## Uninstall Grafana
 
 If you have Grafana [installed manually](#install-and-enable-grafana),
