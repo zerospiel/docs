@@ -185,17 +185,18 @@ kof-mothership:
                 - profile
 ```
 
-Details:
+KOF ACL uses either `tenant` claim or `tenant:...` group in the `groups` claim.
 
-* If your OIDC provider creates ID token with `tenant` claim,
-    KOF ACL uses it to identify the tenant.
-* Google ID token doesn't have `tenant` claim,
-    but it has the [`hd` claim](https://developers.google.com/identity/openid-connect/openid-connect#id_token-hd)
-    (Hosted Domain associated with the Google Workspace or Cloud organization of the user)
-    with a value like `example.com`.
-* Dex supports [claimMapping](https://dexidp.io/docs/connectors/oidc/#configuration)
-    of a non-standard claim like `hd` to a standard one,
-    but the `tenant` is not one of the [standard claims](https://openid.net/specs/openid-connect-core-1_0.html#Claims).
-* So the [claimModifications](https://dexidp.io/docs/connectors/oidc/#configuration)
-    in the Dex configuration above add a new group like `tenant:example.com` to the `groups` claim.
-* KOF ACL finds the `tenant:...` group in the `groups` claim to identify the tenant.
+??? note "Details"
+    * If your OIDC provider creates ID token with `tenant` claim,
+        KOF ACL uses it to identify the tenant.
+    * Google ID token doesn't have `tenant` claim,
+        but it has the [`hd` claim](https://developers.google.com/identity/openid-connect/openid-connect#id_token-hd)
+        (Hosted Domain associated with the Google Workspace or Cloud organization of the user)
+        with a value like `example.com`.
+    * Dex supports [claimMapping](https://dexidp.io/docs/connectors/oidc/#configuration)
+        of a non-standard claim like `hd` to a standard one,
+        but the `tenant` is not one of the [standard claims](https://openid.net/specs/openid-connect-core-1_0.html#Claims).
+    * So the [claimModifications](https://dexidp.io/docs/connectors/oidc/#configuration)
+        in the Dex configuration above add a new group like `tenant:example.com` to the `groups` claim.
+    * KOF ACL finds the `tenant:...` group in the `groups` claim to identify the tenant.
