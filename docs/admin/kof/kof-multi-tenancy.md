@@ -42,15 +42,17 @@ k0rdent.mirantis.com/kof-tenant-id: <TENANT_ID>
 
 Dependent resources (secrets, VMUser object) will be updated or created automatically. See [storage credentials](https://github.com/k0rdent/kof/blob/main/docs/storage-creds.md) for details.
 
-## Single Sign-On
-
-KOF uses [Dex SSO](kof-grafana.md#single-sign-on) to identify the tenant of the user.
-
 The next examples assume:
 
-* [Dex SSO](kof-grafana.md#single-sign-on) deployed to `dex.example.com`
+* [Dex SSO](kof-grafana.md#single-sign-on) is deployed to `dex.example.com`
 * Optional [Grafana in KOF](kof-grafana.md) integration is enabled.
-    Other dashboarding tool may be connected in the same way.
+    Some other dashboarding tools may be connected in the same way.
+* Google is used as an OIDC provider.
+    Any other [OIDC provider](https://dexidp.io/docs/connectors/oidc/) can be used.
+
+## Single Sign-On
+
+KOF uses [Dex SSO](kof-grafana.md#single-sign-on) to identify the tenant of the user:
 
 ```mermaid
 sequenceDiagram
@@ -182,3 +184,18 @@ kof-mothership:
                 - email
                 - profile
 ```
+
+Details:
+
+* If your OIDC provider creates ID token with `tenant` claim,
+    KOF ACL uses it to identify the tenant.
+* Google ID token doesn't have `tenant` claim,
+    but it has the [`hd` claim](https://developers.google.com/identity/openid-connect/openid-connect#id_token-hd)
+    (Hosted Domain associated with the Google Workspace or Cloud organization of the user)
+    with a value like `example.com`.
+* Dex supports [claimMapping](https://dexidp.io/docs/connectors/oidc/#configuration)
+    of a non-standard claim like `hd` to a standard one,
+    but the `tenant` is not one of the [standard claims](https://openid.net/specs/openid-connect-core-1_0.html#Claims).
+* So the [claimModifications](https://dexidp.io/docs/connectors/oidc/#configuration)
+    in the Dex configuration above add a new group like `tenant:example.com` to the `groups` claim.
+* KOF ACL finds the `tenant:...` group in the `groups` claim to identify the tenant.
