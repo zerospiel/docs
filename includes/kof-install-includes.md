@@ -26,17 +26,3 @@
       --version {{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}
     ```
 <!--install-kof-end-->
-
-<!--management-custom-start-->
-        ```bash
-        helm upgrade -i --reset-values --wait -n kof kof-regional \
-          {{{ docsVersionInfo.kofVersions.kofOciRegistryBase }}}/charts/kof-regional \
-          --version {{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}
-
-        helm upgrade -i --reset-values --wait -n kof kof-child \
-          {{{ docsVersionInfo.kofVersions.kofOciRegistryBase }}}/charts/kof-child \
-          --version {{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}
-        ```
-<!--management-custom-end-->
-
-

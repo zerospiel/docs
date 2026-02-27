@@ -295,22 +295,20 @@ The structural changes may require reinstallation of storage components, which c
       values:
     ```
 
-    <details>
-      <summary>Alternative: bash script that creates `kof-values.yaml` automatically</summary>
-      ```bash
-      touch kof-values.yaml
-      for filename in kof-*-values.bak; do
-        component="${filename%-values.bak}"
-        yq -i ".$component.values = load(\"$filename\")" kof-values.yaml
-      done
+    ??? note "Alternative: bash script that creates `kof-values.yaml` automatically"
+        ```bash
+        touch kof-values.yaml
+        for filename in kof-*-values.bak; do
+          component="${filename%-values.bak}"
+          yq -i ".$component.values = load(\"$filename\")" kof-values.yaml
+        done
 
-      yq -i '
-        .victoria-metrics-operator.values = .kof-mothership.values.victoria-metrics-operator
-        | del(.kof-mothership.values.victoria-metrics-operator)
-        | del(.victoria-metrics-operator.values | select(. == null))
-      ' kof-values.yaml
-      ```
-    </details>
+        yq -i '
+          .victoria-metrics-operator.values = .kof-mothership.values.victoria-metrics-operator
+          | del(.kof-mothership.values.victoria-metrics-operator)
+          | del(.victoria-metrics-operator.values | select(. == null))
+        ' kof-values.yaml
+        ```
 
 4. **Upgrade to the umbrella chart**:
     ```bash
