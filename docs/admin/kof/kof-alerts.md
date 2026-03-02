@@ -42,22 +42,24 @@ Let's start with the demo of an alert sent and received.
 1. Open the [https://webhook.site/](https://webhook.site/) and save "Your unique URL"
     for the next step.
 
-1. Add the following to the `mothership-values.yaml` file, replacing `$WEBHOOK_URL` with the URL from step 1:
+1. Add the following to the `kof-values.yaml` file, replacing `$WEBHOOK_URL` with the URL from step 1:
     ```yaml
-    victoriametrics:
-      vmalert:
-        manager:
-          spec:
-            configRawYaml: |
-              route:
-                receiver: webhook
-              receivers:
-                - name: webhook
-                  webhook_configs:
-                    - url: $WEBHOOK_URL
+    kof-mothership:
+      values:
+        victoriametrics:
+          vmalert:
+            manager:
+              spec:
+                configRawYaml: |
+                  route:
+                    receiver: webhook
+                  receivers:
+                    - name: webhook
+                      webhook_configs:
+                        - url: $WEBHOOK_URL
     ```
 
-3. Apply the `mothership-values.yaml` file as described in the [Management Cluster](./kof-install.md#management-cluster) section.
+3. Apply the `kof-values.yaml` file as described in the [Management Cluster](./kof-install.md#management-cluster) section.
 
 4. Wait until the [https://webhook.site/](https://webhook.site/)
     shows the `Watchdog` alert, as in:
@@ -159,7 +161,7 @@ kubectl port-forward -n kof svc/kof-mothership-promxy 8082:8082
 ```
 
 If you expose the Prometheus UI with some external domain,
-please set `promxy.extraArgs."web.external-url"` in `mothership-values.yaml` file
+please set `kof-mothership.values.promxy.extraArgs."web.external-url"` in `kof-values.yaml` file
 and reapply it as described in the [Management Cluster](./kof-install.md#management-cluster) section.
 
 ## Custom rules
@@ -173,19 +175,23 @@ For example, let's update the `CPUThrottlingHigh` alert in the `kubernetes-resou
 1. Note the [original alert](https://github.com/k0rdent/kof/blob/1c3337426e089e1ce82a14716ff0ad5d4cb3e4ad/charts/kof-mothership/templates/prometheus/rules/kubernetes-resources.yaml#L251-L266)
     in the `PrometheusRule` has the threshold `> 0.25`.
 
-2. Add this cluster-specific patch to the `mothership-values.yaml` file:
+2. Add this cluster-specific patch to the `kof-values.yaml` file:
     ```yaml
-    clusterAlertRules:
-      cluster1:
-        kubernetes-resources:
-          CPUThrottlingHigh:
-            expr: |-
-              sum by(tenant, cluster, namespace, node, pod, container)
-              (increase(container_cpu_cfs_throttled_periods_total{cluster="cluster1", container!="", job="kubelet", metrics_path="/metrics/cadvisor"}[5m]))
-                /
-              sum by(tenant, cluster, namespace, node, pod, container)
-              (increase(container_cpu_cfs_periods_total{cluster="cluster1", job="kubelet", metrics_path="/metrics/cadvisor"}[5m]))
-                > 0.42
+    kof-mothership:
+      values:
+        clusterAlertRules:
+          cluster1:
+            kubernetes-resources:
+              CPUThrottlingHigh:
+                expr: |-
+                  sum by(tenant, cluster, namespace, node, pod, container)
+                  (increase(container_cpu_cfs_throttled_periods_total{
+                  cluster="cluster1", container!="", job="kubelet", metrics_path="/metrics/cadvisor"}[5m]))
+                    /
+                  sum by(tenant, cluster, namespace, node, pod, container)
+                  (increase(container_cpu_cfs_periods_total{
+                  cluster="cluster1", container!="", job="kubelet", metrics_path="/metrics/cadvisor"}[5m]))
+                    > 0.42
     ```
     Note the `cluster="cluster1"` filters and the `> 0.42` threshold.
 
@@ -197,17 +203,21 @@ For example, let's update the `CPUThrottlingHigh` alert in the `kubernetes-resou
 
     Add this patch to the same file:
     ```yaml
-    defaultAlertRules:
-      kubernetes-resources:
-        CPUThrottlingHigh:
-          expr: |-
-            expr: |-
-              sum by(tenant, cluster, namespace, node, pod, container)
-              (increase(container_cpu_cfs_throttled_periods_total{cluster!~"^cluster1$|^cluster10$", container!="", job="kubelet", metrics_path="/metrics/cadvisor"}[5m]))
-                /
-              sum by(tenant, tenant, cluster, namespace, node, pod, container)
-              (increase(container_cpu_cfs_periods_total{cluster!~"^cluster1$|^cluster10$", job="kubelet", metrics_path="/metrics/cadvisor"}[5m]))
-                > 0.25
+    kof-mothership:
+      values:
+        defaultAlertRules:
+          kubernetes-resources:
+            CPUThrottlingHigh:
+              expr: |-
+                expr: |-
+                  sum by(tenant, cluster, namespace, node, pod, container)
+                  (increase(container_cpu_cfs_throttled_periods_total{
+                  cluster!~"^cluster1$|^cluster10$", container!="", job="kubelet", metrics_path="/metrics/cadvisor"}[5m]))
+                    /
+                  sum by(tenant, tenant, cluster, namespace, node, pod, container)
+                  (increase(container_cpu_cfs_periods_total{
+                  cluster!~"^cluster1$|^cluster10$", container!="", job="kubelet", metrics_path="/metrics/cadvisor"}[5m]))
+                    > 0.25
     ```
     Note the `cluster!~"^cluster1$|^cluster10$"` filters and the default threshold.
 
@@ -218,7 +228,7 @@ For example, let's update the `CPUThrottlingHigh` alert in the `kubernetes-resou
     like the `ContainerHighMemoryUsage` alert that was added [on demand](https://github.com/k0rdent/kof/pull/317)
     from the [awesome-prometheus-alerts](https://github.com/samber/awesome-prometheus-alerts) collection.
 
-7. Apply the `mothership-values.yaml` file as described in the [Management Cluster](./kof-install.md#management-cluster) section.
+7. Apply the `kof-values.yaml` file as described in the [Management Cluster](./kof-install.md#management-cluster) section.
 
 ## Generation of rules
 

@@ -16,16 +16,18 @@ If you want to install Grafana manually and enable its support in KOF, apply the
     This is required because `helm upgrade -i` does not install immutable CRDs
     when a dependency is enabled in an already installed chart.
     KOF 1.6.0 uses [auto-upgradable CRDs](https://github.com/grafana/grafana-operator/pull/2192).
-* Apply `kof-operators` step of the [Management Cluster](kof-install.md/#management-cluster) section,
-    adding:
-    ```bash
-    --set grafana-operator.enabled=true
+* Add to the `kof-values.yaml` file:
+    ```yaml
+    kof-operators:
+      values:
+        grafana-operator:
+          enabled: true
+    kof-mothership:
+      values:
+        grafana:
+          enabled: true
     ```
-* Apply `kof-mothership` step of the [Management Cluster](kof-install.md/#management-cluster) section,
-    adding:
-    ```bash
-    --set grafana.enabled=true
-    ```
+* Apply the `kof-values.yaml` file as described in the [Management Cluster](kof-install.md#management-cluster) section.
 * Install Grafana manually, for example:
     ```bash
     kubectl apply -f - <<EOF
