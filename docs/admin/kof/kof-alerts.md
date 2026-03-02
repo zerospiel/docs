@@ -180,9 +180,11 @@ For example, let's update the `CPUThrottlingHigh` alert in the `kubernetes-resou
         kubernetes-resources:
           CPUThrottlingHigh:
             expr: |-
-              sum by(cluster, namespace, node, pod, container) (increase(container_cpu_cfs_throttled_periods_total{cluster="cluster1", container!="", job="kubelet", metrics_path="/metrics/cadvisor", }[5m]))
+              sum by(tenant, cluster, namespace, node, pod, container)
+              (increase(container_cpu_cfs_throttled_periods_total{cluster="cluster1", container!="", job="kubelet", metrics_path="/metrics/cadvisor"}[5m]))
                 /
-              sum by(cluster, namespace, node, pod, container) (increase(container_cpu_cfs_periods_total{cluster="cluster1", job="kubelet", metrics_path="/metrics/cadvisor", }[5m]))
+              sum by(tenant, cluster, namespace, node, pod, container)
+              (increase(container_cpu_cfs_periods_total{cluster="cluster1", job="kubelet", metrics_path="/metrics/cadvisor"}[5m]))
                 > 0.42
     ```
     Note the `cluster="cluster1"` filters and the `> 0.42` threshold.
@@ -200,9 +202,11 @@ For example, let's update the `CPUThrottlingHigh` alert in the `kubernetes-resou
         CPUThrottlingHigh:
           expr: |-
             expr: |-
-              sum by(cluster, namespace, node, pod, container) (increase(container_cpu_cfs_throttled_periods_total{cluster!~"^cluster1$|^cluster10$", container!="", job="kubelet", metrics_path="/metrics/cadvisor", }[5m]))
+              sum by(tenant, cluster, namespace, node, pod, container)
+              (increase(container_cpu_cfs_throttled_periods_total{cluster!~"^cluster1$|^cluster10$", container!="", job="kubelet", metrics_path="/metrics/cadvisor"}[5m]))
                 /
-              sum by(cluster, namespace, node, pod, container) (increase(container_cpu_cfs_periods_total{cluster!~"^cluster1$|^cluster10$", job="kubelet", metrics_path="/metrics/cadvisor", }[5m]))
+              sum by(tenant, tenant, cluster, namespace, node, pod, container)
+              (increase(container_cpu_cfs_periods_total{cluster!~"^cluster1$|^cluster10$", job="kubelet", metrics_path="/metrics/cadvisor"}[5m]))
                 > 0.25
     ```
     Note the `cluster!~"^cluster1$|^cluster10$"` filters and the default threshold.

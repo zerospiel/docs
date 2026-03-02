@@ -67,89 +67,95 @@ For for information on long-term storage planning, review the [KOF Retention](./
 
 To avoid [manual configuration of DNS records](./kof-verification.md#manual-dns-config) for service endpoints later,
 you can automate the process now using [external-dns](https://kubernetes-sigs.github.io/external-dns/latest/).
+Examples by cloud provider:
 
-#### AWS
+??? note "AWS"
 
-For AWS in production, use the [Node IAM Role](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md#node-iam-role)
-or [IRSA](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md#iam-roles-for-service-accounts) methods in production.
+    For AWS in production, use the [Node IAM Role](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md#node-iam-role)
+    or [IRSA](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md#iam-roles-for-service-accounts) methods in production.
 
-Just for the sake of this demo based on the `aws-standalone` template, however,
-you can use the most straightforward (though less secure) [static credentials](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md#static-credentials) method:
+    Just for the sake of this demo based on the `aws-standalone` template, however,
+    you can use the most straightforward (though less secure) [static credentials](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md#static-credentials) method:
 
-1. Create an `external-dns` IAM user with [this policy](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md#iam-policy).
-2. Create an access key and `external-dns-aws-credentials` file, as in:
-    ```
-    [default]
-    aws_access_key_id = <EXAMPLE_ACCESS_KEY_ID>
-    aws_secret_access_key = <EXAMPLE_SECRET_ACCESS_KEY>
-    ```
-3. Create the `external-dns-aws-credentials` secret in the `kof` namespace:
-    ```bash
-    kubectl create namespace kof
-    kubectl create secret generic \
-      -n kof external-dns-aws-credentials \
-      --from-file external-dns-aws-credentials
-    ```
+    1. Create an `external-dns` IAM user with [this policy](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/aws.md#iam-policy).
+    2. Create an access key and `external-dns-aws-credentials` file, as in:
+        ```
+        [default]
+        aws_access_key_id = <EXAMPLE_ACCESS_KEY_ID>
+        aws_secret_access_key = <EXAMPLE_SECRET_ACCESS_KEY>
+        ```
+    3. Create the `external-dns-aws-credentials` secret in the `kof` namespace:
+        ```bash
+        kubectl create namespace kof
+        kubectl create secret generic \
+          -n kof external-dns-aws-credentials \
+          --from-file external-dns-aws-credentials
+        ```
 
-#### Azure
+??? note "Azure"
 
-To enable DNS auto-config on Azure, use DNS Zone Contributor.
+    To enable DNS auto-config on Azure, use DNS Zone Contributor.
 
-1. Create an Azure service principal with the DNS Zone Contributor permissions. You can find an example [here](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/azure.md#creating-a-service-principal).
+    1. Create an Azure service principal with the DNS Zone Contributor permissions. You can find an example [here](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/azure.md#creating-a-service-principal).
 
-2. Create the `azure.json` text file containing [the service principal configuration data](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/azure.md#configuration-file):
-    ```
-    {
-      "tenantId": "<EXAMPLE_TENANT_ID>",
-      "subscriptionId": "<EXAMPLE_SUBSCRIPTION_ID>",
-      "resourceGroup": "<EXAMPLE_RESOURCE_GROUP>",
-      "aadClientId": "<EXAMPLE_SP_APP_ID>",
-      "aadClientSecret": "<EXAMPLE_SP_PASSWORD>"
-    }
-    ```
+    2. Create the `azure.json` text file containing [the service principal configuration data](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/azure.md#configuration-file):
+        ```
+        {
+          "tenantId": "<EXAMPLE_TENANT_ID>",
+          "subscriptionId": "<EXAMPLE_SUBSCRIPTION_ID>",
+          "resourceGroup": "<EXAMPLE_RESOURCE_GROUP>",
+          "aadClientId": "<EXAMPLE_SP_APP_ID>",
+          "aadClientSecret": "<EXAMPLE_SP_PASSWORD>"
+        }
+        ```
 
-3. Create the `external-dns-azure-credentials` secret in the `kof` namespace:
-    ```bash
-    kubectl create namespace kof
-    kubectl create secret generic \
-      -n kof external-dns-azure-credentials \
-      --from-file azure.json
-    ```
-See [external-dns Azure documentation](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/azure.md) for more details.
+    3. Create the `external-dns-azure-credentials` secret in the `kof` namespace:
+        ```bash
+        kubectl create namespace kof
+        kubectl create secret generic \
+          -n kof external-dns-azure-credentials \
+          --from-file azure.json
+        ```
+    See [external-dns Azure documentation](https://github.com/kubernetes-sigs/external-dns/blob/master/docs/tutorials/azure.md) for more details.
 
-#### OpenStack and others
+??? note "OpenStack and others"
 
-Please check `external-dns` [tutorials](https://github.com/kubernetes-sigs/external-dns/tree/master/docs/tutorials)
-and [new providers](https://github.com/kubernetes-sigs/external-dns?tab=readme-ov-file#new-providers)
-to find instructions on how to create a secret.
+    Please check `external-dns` [tutorials](https://github.com/kubernetes-sigs/external-dns/tree/master/docs/tutorials)
+    and [new providers](https://github.com/kubernetes-sigs/external-dns?tab=readme-ov-file#new-providers)
+    to find instructions on how to create a secret.
 
-For example the `external-dns-openstack-credentials` could be created
-by applying the [external-dns-openstack-webhook docs](https://github.com/inovex/external-dns-openstack-webhook/blob/main/README.md#installation).
+    For example the `external-dns-openstack-credentials` could be created
+    by applying the [external-dns-openstack-webhook docs](https://github.com/inovex/external-dns-openstack-webhook/blob/main/README.md#installation).
 
 ### Istio
 
 If you've selected to skip both [DNS auto-config](#dns-auto-config) now and [Manual DNS config](./kof-verification.md#manual-dns-config) later, you can apply these steps to enable the [Istio](https://istio.io/) service mesh:
 
-1. Check the overview in the [k0rdent/istio repository](https://github.com/k0rdent/istio) and this video:
+??? note "Istio"
 
-    <video controls width="1024" style="max-width: 100%">
-      <source src="../../../assets/kof/kof-istio.mp4" type="video/mp4" />
-    </video>
+    1. Check the overview in the [k0rdent/istio repository](https://github.com/k0rdent/istio) and this video:
 
-2. Create and label the `kof` namespace to allow Istio to inject its sidecars:
+        <video controls width="1024" style="max-width: 100%">
+          <source src="../../../assets/kof/kof-istio.mp4" type="video/mp4" />
+        </video>
 
-    ```bash
-    kubectl create namespace kof
-    kubectl label namespace kof istio-injection=enabled
-    ```
+    2. Create and label the `kof` namespace to allow Istio to inject its sidecars:
 
-3. Install the `k0rdent/istio` charts to the management cluster:
-  
-{%
-    include-markdown "../../../includes/kof-install-includes.md"
-    start="<!--install-istio-start-->"
-    end="<!--install-istio-end-->"
-%}
+        ```bash
+        kubectl create namespace kof
+        kubectl label namespace kof istio-injection=enabled
+        ```
+
+    3. Install the `k0rdent/istio` charts to the management cluster:
+
+    {%
+        include-markdown "../../../includes/kof-install-includes.md"
+        start="<!--install-istio-start-->"
+        end="<!--install-istio-end-->"
+    %}
+
+        Please use helm v3 until we fix [k0rdent/istio issue #40](https://github.com/k0rdent/istio/issues/40)
+        leading to `UPGRADE FAILED: conflict occurred...` when using helm v4.
 
 ### Grafana
 
@@ -169,72 +175,76 @@ and apply this example, or use it as a reference:
     If you want to use a [default storage class](https://kubernetes.io/docs/concepts/storage/storage-classes/#default-storageclass),
     but `kubectl get sc` shows no `(default)`, create it.
     Otherwise you can use a non-default storage class in the `kof-values.yaml` file:
-    ```yaml
-    kof-mothership:
-      values:
-        global:
-          storageClass: <EXAMPLE_STORAGE_CLASS>
-    ```
 
-    If you plan to enable `kof-storage` component (for local/single-cluster deployments), also set:
-    ```yaml
-    kof-storage:
-      values:
-        global:
-          storageClass: <EXAMPLE_STORAGE_CLASS>
-    ```
+    ??? note "Non-default storage class"
 
-      If `kubectl get sc` shows nothing
-      or just `kubernetes.io/no-provisioner` in the `PROVISIONER` column,
-      apply [OpenEBS](https://docs.k0sproject.io/stable/examples/openebs/) or similar.
+        ```yaml
+        kof-mothership:
+          values:
+            global:
+              storageClass: <EXAMPLE_STORAGE_CLASS>
+        ```
+
+        If you plan to enable `kof-storage` component (for local/single-cluster deployments), also set:
+        ```yaml
+        kof-storage:
+          values:
+            global:
+              storageClass: <EXAMPLE_STORAGE_CLASS>
+        ```
+
+    If `kubectl get sc` shows nothing
+    or just `kubernetes.io/no-provisioner` in the `PROVISIONER` column,
+    apply [OpenEBS](https://docs.k0sproject.io/stable/examples/openebs/) or similar.
 
 3. If you've applied the [DNS auto-config](#dns-auto-config) section,
     add the information about `external-dns` credentials to the `kof-values.yaml` file.
+    Examples by cloud provider:
 
-    For AWS, add:
+    ??? note "AWS"
 
-    ```yaml
-    kof-mothership:
-      values:
-        kcm:
-          kof:
-            mcs:
-              kof-aws-dns-secrets:
-                matchLabels:
-                  k0rdent.mirantis.com/kof-aws-dns-secrets: "true"
-                secrets:
-                  - external-dns-aws-credentials
-    ```
+        ```yaml
+        kof-mothership:
+          values:
+            kcm:
+              kof:
+                mcs:
+                  kof-aws-dns-secrets:
+                    matchLabels:
+                      k0rdent.mirantis.com/kof-aws-dns-secrets: "true"
+                    secrets:
+                      - external-dns-aws-credentials
+        ```
 
-    For Azure, add:
+    ??? note "Azure"
 
-    ```yaml
-    kof-mothership:
-      values:
-        kcm:
-          kof:
-            mcs:
-              kof-azure-dns-secrets:
-                matchLabels:
-                  k0rdent.mirantis.com/kof-azure-dns-secrets: "true"
-                secrets:
-                  - external-dns-azure-credentials
-    ```
+        ```yaml
+        kof-mothership:
+          values:
+            kcm:
+              kof:
+                mcs:
+                  kof-azure-dns-secrets:
+                    matchLabels:
+                      k0rdent.mirantis.com/kof-azure-dns-secrets: "true"
+                    secrets:
+                      - external-dns-azure-credentials
+        ```
 
-    For OpenStack, add:
+    ??? note "OpenStack"
 
-    ```yaml
-    kof-mothership:
-      values:
-        kcm:
-          kof:
-            mcs:
-              kof-openstack-dns-secrets:
-                matchLabels:
-                  k0rdent.mirantis.com/kof-openstack-dns-secrets: "true"
-                secrets:
-                  - external-dns-openstack-credentials
-    ```
+        ```yaml
+        kof-mothership:
+          values:
+            kcm:
+              kof:
+                mcs:
+                  kof-openstack-dns-secrets:
+                    matchLabels:
+                      k0rdent.mirantis.com/kof-openstack-dns-secrets: "true"
+                    secrets:
+                      - external-dns-openstack-credentials
+        ```
 
     This enables auto-distribution of the DNS secret to regional clusters.
 
@@ -250,16 +260,64 @@ and apply this example, or use it as a reference:
     to connect to a regional cluster in another namespace,
     enable the `crossNamespace` value in the `kof-values.yaml` file:
 
-    ```yaml
-    kof-mothership:
-      values:
-        kcm:
-          kof:
-            operator:
-              crossNamespace: true
-    ```
+    ??? note "crossNamespace"
 
-5. Install the KOF umbrella chart, which orchestrates the installation of operators, mothership, storage, and collectors:
+        ```yaml
+        kof-mothership:
+          values:
+            kcm:
+              kof:
+                operator:
+                  crossNamespace: true
+        ```
+
+5. Check the high-level [default values](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof/values.yaml)
+    of the `kof` umbrella chart, and more detailed default values of other [charts](https://github.com/k0rdent/kof/tree/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts),
+    to customize your `kof-values.yaml` file where needed, for example:
+
+    ??? note "If your regional clusters already have `cert-manager` and `ingress-nginx`, disable them in KOF:"
+
+        ```yaml
+        kof-regional:
+          values:
+            cert-manager:
+              enabled: false
+            ingress-nginx:
+              enabled: false
+        ```
+
+    ??? note "To customize storage for all regional clusters at once now:"
+
+        ```yaml
+        kof-regional:
+          values:
+            storage:
+              # ...
+        ```
+
+        For example, if all your regional clusters will use OpenStack,
+        you may set the OpenStack-specific values described in step 10 of the [Regional Cluster](#regional-cluster) section
+        under the `storage:` key here.
+
+    ??? note "To customize collectors for all child clusters at once now:"
+
+        ```yaml
+        kof-child:
+          values:
+            collectors:
+              collectors:
+                # ...
+        ```
+
+        Note: the first `collectors` key is to reference the subchart,
+        and the second `collectors` key is part of its [values](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-collectors/values.yaml).
+
+        Check the [examples of OpenTelemetry collectors custom configuration](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/docs/collectors.md#example).
+
+6. If you're upgrading KOF from an earlier version, check the [Upgrading KOF](./kof-upgrade.md) guide.
+
+7. Install the KOF umbrella chart, which orchestrates the installation of
+    operators, mothership, and shared config for all regional and child clusters:
 
 {%
     include-markdown "../../../includes/kof-install-includes.md"
@@ -271,36 +329,12 @@ and apply this example, or use it as a reference:
     
     If helm v4 `failed to call webhook`, apply the workaround from [k0rdent/kof issue #715](https://github.com/k0rdent/kof/issues/715).
 
-6. If you're upgrading KOF from an earlier version, apply the [Upgrading KOF](./kof-upgrade.md) guide.
-
-7. Wait for all HelmReleases to be ready:
+8. Wait for all HelmReleases to be ready:
     ```bash
     kubectl wait --for=condition=Ready helmreleases --all -n kof --timeout=10m
     kubectl get helmreleases -n kof
     ```
 
-8. Apply shared configuration for the existing and upcoming regional and child clusters:
-    * Wait until the value of `VALID` changes to `true` for all `ServiceTemplate` objects:
-        ```bash
-        kubectl wait --for=jsonpath={.status.valid}=true svctmpl -A --all
-        kubectl get svctmpl -A
-        ```
-    * Look through the `MultiClusterService` objects in the [kof-regional](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-regional/templates/regional-multi-cluster-service.yaml)
-        and [kof-child](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-child/templates/child-multi-cluster-service.yaml) charts.
-    * If your regional clusters already have `ingress-nginx` and `cert-manager` services,
-        you can ask the `kof-regional` chart to not install them by setting Helm values
-        `ingress-nginx.enabled` and `cert-manager.enabled` to `false`.
-    * You may want to [customize collectors](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/docs/collectors.md#example)
-        for all child clusters at once now, or for each child cluster later, or just use the default values.
-    * If all your regional clusters will use OpenStack,
-        you may set the OpenStack-specific values described in step 10 of the [Regional Cluster](#regional-cluster) section
-        as a values file with `storage:` key passed to `kof-regional` chart here.
-    * Install these charts into the management cluster with default or custom values:
-{%
-    include-markdown "../../../includes/kof-install-includes.md"
-    start="<!--management-custom-start-->"
-    end="<!--management-custom-end-->"
-%}
 
 9. Wait for all pods to show that they're `Running`:
     ```bash
@@ -315,8 +349,7 @@ and apply this example, or use it as a reference:
 > To use the new [KCM Regional Clusters](../regional-clusters/index.md) with KOF, please apply the [KCM Region With KOF](kof-kcm-region.md) guide on top of the steps below.
 
 To install KOF on the regional cluster,
-look through the default values of the [kof-storage](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-storage/values.yaml) chart,
-and apply this example for AWS, or use it as a reference:
+apply this example for AWS, or use it as a reference:
 
 1. Set your KOF variables using your own values:
     ```bash
@@ -339,110 +372,155 @@ and apply this example for AWS, or use it as a reference:
     TEMPLATE=aws-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsStandaloneCpCluster }}}
     ```
 
-3. Compose the regional `ClusterDeployment`:
+3. Compose the regional `ClusterDeployment`. Examples by cloud provider:
 
-    For AWS:
+    ??? note "AWS"
 
-    ```bash
-    cat >regional-cluster.yaml <<EOF
-    apiVersion: k0rdent.mirantis.com/v1beta1
-    kind: ClusterDeployment
-    metadata:
-      name: $REGIONAL_CLUSTER_NAME
-      namespace: kcm-system
-      labels:
-        k0rdent.mirantis.com/kof-cluster-role: regional
-    spec:
-      template: $TEMPLATE
-      credential: aws-cluster-identity-cred
-      cleanupOnDeletion: true
-      config:
-        clusterIdentity:
-          name: aws-cluster-identity
+        ```bash
+        cat >regional-cluster.yaml <<EOF
+        apiVersion: k0rdent.mirantis.com/v1beta1
+        kind: ClusterDeployment
+        metadata:
+          name: $REGIONAL_CLUSTER_NAME
           namespace: kcm-system
-        clusterAnnotations:
-          k0rdent.mirantis.com/kof-regional-domain: $REGIONAL_DOMAIN
-          k0rdent.mirantis.com/kof-cert-email: $ADMIN_EMAIL
-        region: $REGION
-        controlPlaneNumber: 1
-        controlPlane:
-          instanceType: t3.large
-        workersNumber: 3
-        worker:
-          instanceType: t3.xlarge
-    EOF
-    ```
+          labels:
+            k0rdent.mirantis.com/kof-cluster-role: regional
+        spec:
+          template: $TEMPLATE
+          credential: aws-cluster-identity-cred
+          cleanupOnDeletion: true
+          config:
+            clusterIdentity:
+              name: aws-cluster-identity
+              namespace: kcm-system
+            clusterAnnotations:
+              k0rdent.mirantis.com/kof-regional-domain: $REGIONAL_DOMAIN
+              k0rdent.mirantis.com/kof-cert-email: $ADMIN_EMAIL
+            region: $REGION
+            controlPlaneNumber: 1
+            controlPlane:
+              instanceType: t3.large
+            workersNumber: 3
+            worker:
+              instanceType: t3.xlarge
+        EOF
+        ```
 
-    For Azure:
+    ??? note "Azure"
 
-    ```bash
-    AZURE_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
-    echo "AZURE_SUBSCRIPTION_ID=$AZURE_SUBSCRIPTION_ID"
+        ```bash
+        AZURE_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+        echo "AZURE_SUBSCRIPTION_ID=$AZURE_SUBSCRIPTION_ID"
 
-    cat >regional-cluster.yaml <<EOF
-    apiVersion: k0rdent.mirantis.com/v1beta1
-    kind: ClusterDeployment
-    metadata:
-      name: $REGIONAL_CLUSTER_NAME
-      namespace: kcm-system
-      labels:
-        k0rdent.mirantis.com/kof-cluster-role: regional
-    spec:
-      template: $TEMPLATE
-      credential: azure-cluster-identity-cred
-      cleanupOnDeletion: true
-      config:
-        clusterIdentity:
-          name: azure-cluster-identity
+        cat >regional-cluster.yaml <<EOF
+        apiVersion: k0rdent.mirantis.com/v1beta1
+        kind: ClusterDeployment
+        metadata:
+          name: $REGIONAL_CLUSTER_NAME
           namespace: kcm-system
-        clusterAnnotations:
-          k0rdent.mirantis.com/kof-regional-domain: $REGIONAL_DOMAIN
-          k0rdent.mirantis.com/kof-cert-email: $ADMIN_EMAIL
-        subscriptionID: $AZURE_SUBSCRIPTION_ID
-        location: $REGION
-        controlPlaneNumber: 1
-        controlPlane:
-          vmSize: Standard_A4_v2
-        workersNumber: 3
-        worker:
-          vmSize: Standard_A4_v2
-    EOF
-    ```
+          labels:
+            k0rdent.mirantis.com/kof-cluster-role: regional
+        spec:
+          template: $TEMPLATE
+          credential: azure-cluster-identity-cred
+          cleanupOnDeletion: true
+          config:
+            clusterIdentity:
+              name: azure-cluster-identity
+              namespace: kcm-system
+            clusterAnnotations:
+              k0rdent.mirantis.com/kof-regional-domain: $REGIONAL_DOMAIN
+              k0rdent.mirantis.com/kof-cert-email: $ADMIN_EMAIL
+            subscriptionID: $AZURE_SUBSCRIPTION_ID
+            location: $REGION
+            controlPlaneNumber: 1
+            controlPlane:
+              vmSize: Standard_A4_v2
+            workersNumber: 3
+            worker:
+              vmSize: Standard_A4_v2
+        EOF
+        ```
+
+    ??? note "OpenStack"
+
+        ```bash
+        FLAVOR=m1.large
+        IMAGE=ubuntu-24.04-x86_64
+
+        cat >regional-cluster.yaml <<EOF
+        apiVersion: k0rdent.mirantis.com/v1beta1
+        kind: ClusterDeployment
+        metadata:
+          name: $REGIONAL_CLUSTER_NAME
+          namespace: kcm-system
+          labels:
+            k0rdent.mirantis.com/kof-cluster-role: regional
+        spec:
+          template: $TEMPLATE
+          credential: openstack-cluster-identity-cred
+          cleanupOnDeletion: true
+          config:
+            identityRef:
+              cloudName: openstack
+              region: $REGION
+            clusterAnnotations:
+              k0rdent.mirantis.com/kof-regional-domain: $REGIONAL_DOMAIN
+              k0rdent.mirantis.com/kof-cert-email: $ADMIN_EMAIL
+            controlPlaneNumber: 1
+            controlPlane:
+              flavor: $FLAVOR
+              image:
+                filter:
+                  name: $IMAGE
+            workersNumber: 1
+            worker:
+              flavor: $FLAVOR
+              image:
+                filter:
+                  name: $IMAGE
+        EOF
+        ```
 
 4. If you've applied the [DNS auto-config](#dns-auto-config) section,
     add it to the `.metadata.labels` in the `regional-cluster.yaml` file.
+    Examples by cloud provider:
 
-    For AWS, add:
+    ??? note "AWS"
 
-    ```yaml
-    k0rdent.mirantis.com/kof-aws-dns-secrets: "true"
-    ```
+        ```yaml
+        k0rdent.mirantis.com/kof-aws-dns-secrets: "true"
+        ```
 
-    For Azure, add:
+    ??? note "Azure"
 
-    ```yaml
-    k0rdent.mirantis.com/kof-azure-dns-secrets: "true"
-    ```
+        ```yaml
+        k0rdent.mirantis.com/kof-azure-dns-secrets: "true"
+        ```
 
-    For OpenStack, add:
+    ??? note "OpenStack"
 
-    ```yaml
-    k0rdent.mirantis.com/kof-openstack-dns-secrets: "true"
-    ```
+        ```yaml
+        k0rdent.mirantis.com/kof-openstack-dns-secrets: "true"
+        ```
+
+        See also "OpenStack extra requirement for DNS auto-config" on step 10.
 
 5. If you've applied the [Istio](#istio) section, update the `regional-cluster.yaml` file:
 
-    * Add these lines:
-      ```yaml
-      k0rdent.mirantis.com/istio-role: member
-      k0rdent.mirantis.com/istio-gateway: "true"
-      ```
-      
-    * Delete these lines:
-      ```yaml
-      k0rdent.mirantis.com/kof-regional-domain: $REGIONAL_DOMAIN
-      k0rdent.mirantis.com/kof-cert-email: $ADMIN_EMAIL
-      ```
+    ??? note "Istio"
+
+        * Add these lines:
+          ```yaml
+          k0rdent.mirantis.com/istio-role: member
+          k0rdent.mirantis.com/istio-gateway: "true"
+          ```
+
+        * Delete these lines:
+          ```yaml
+          k0rdent.mirantis.com/kof-regional-domain: $REGIONAL_DOMAIN
+          k0rdent.mirantis.com/kof-cert-email: $ADMIN_EMAIL
+          ```
 
 6. This `ClusterDeployment` uses propagation of its `.metadata.labels`
     to the resulting `Cluster` because there are no `.spec.config.clusterLabels` here.
@@ -461,106 +539,120 @@ and apply this example for AWS, or use it as a reference:
     It uses the endpoints listed below by default.
     If you want to disable the built-in metrics, logs, and traces to use your own existing instances instead,
     add custom endpoints to the `regional-cluster.yaml` file in the `.spec.config.clusterAnnotations`:
-    ```yaml
-    k0rdent.mirantis.com/kof-write-metrics-endpoint: https://vmauth.$REGIONAL_DOMAIN/vm/insert/0/prometheus/api/v1/write
-    k0rdent.mirantis.com/kof-read-metrics-endpoint: https://vmauth.$REGIONAL_DOMAIN/vm/select/0/prometheus
-    k0rdent.mirantis.com/kof-write-logs-endpoint: https://vmauth.$REGIONAL_DOMAIN/vli/insert/opentelemetry/v1/logs
-    k0rdent.mirantis.com/kof-read-logs-endpoint: https://vmauth.$REGIONAL_DOMAIN/vls
-    k0rdent.mirantis.com/kof-write-traces-endpoint: https://vmauth.$REGIONAL_DOMAIN/vti/insert/opentelemetry/v1/traces
-    k0rdent.mirantis.com/kof-read-traces-endpoint: https://vmauth.$REGIONAL_DOMAIN/vts/select/jaeger
-    ```
 
-    If you've applied the [Istio](#istio) section, default endpoints are:
-    ```yaml
-    k0rdent.mirantis.com/kof-write-metrics-endpoint: http://$REGIONAL_CLUSTER_NAME-vmauth:8427/vm/insert/0/prometheus/api/v1/write
-    k0rdent.mirantis.com/kof-read-metrics-endpoint: http://$REGIONAL_CLUSTER_NAME-vmauth:8427/vm/select/0/prometheus
-    k0rdent.mirantis.com/kof-write-logs-endpoint: http://$REGIONAL_CLUSTER_NAME-vmauth:8427/vli/insert/opentelemetry/v1/logs
-    k0rdent.mirantis.com/kof-read-logs-endpoint: http://$REGIONAL_CLUSTER_NAME-vmauth:8427/vls
-    k0rdent.mirantis.com/kof-write-traces-endpoint: http://$REGIONAL_CLUSTER_NAME-vmauth:8427/vti/insert/opentelemetry/v1/traces
-    k0rdent.mirantis.com/kof-read-traces-endpoint: http://$REGIONAL_CLUSTER_NAME-vmauth:8427/vts/select/jaeger
-    ```
+    ??? note "Endpoints"
+
+        ```yaml
+        k0rdent.mirantis.com/kof-write-metrics-endpoint: https://vmauth.$REGIONAL_DOMAIN/vm/insert/0/prometheus/api/v1/write
+        k0rdent.mirantis.com/kof-read-metrics-endpoint: https://vmauth.$REGIONAL_DOMAIN/vm/select/0/prometheus
+        k0rdent.mirantis.com/kof-write-logs-endpoint: https://vmauth.$REGIONAL_DOMAIN/vli/insert/opentelemetry/v1/logs
+        k0rdent.mirantis.com/kof-read-logs-endpoint: https://vmauth.$REGIONAL_DOMAIN/vls
+        k0rdent.mirantis.com/kof-write-traces-endpoint: https://vmauth.$REGIONAL_DOMAIN/vti/insert/opentelemetry/v1/traces
+        k0rdent.mirantis.com/kof-read-traces-endpoint: https://vmauth.$REGIONAL_DOMAIN/vts/select/jaeger
+        ```
+
+        If you've applied the [Istio](#istio) section, default endpoints are:
+        ```yaml
+        k0rdent.mirantis.com/kof-write-metrics-endpoint: http://$REGIONAL_CLUSTER_NAME-vmauth:8427/vm/insert/0/prometheus/api/v1/write
+        k0rdent.mirantis.com/kof-read-metrics-endpoint: http://$REGIONAL_CLUSTER_NAME-vmauth:8427/vm/select/0/prometheus
+        k0rdent.mirantis.com/kof-write-logs-endpoint: http://$REGIONAL_CLUSTER_NAME-vmauth:8427/vli/insert/opentelemetry/v1/logs
+        k0rdent.mirantis.com/kof-read-logs-endpoint: http://$REGIONAL_CLUSTER_NAME-vmauth:8427/vls
+        k0rdent.mirantis.com/kof-write-traces-endpoint: http://$REGIONAL_CLUSTER_NAME-vmauth:8427/vti/insert/opentelemetry/v1/traces
+        k0rdent.mirantis.com/kof-read-traces-endpoint: http://$REGIONAL_CLUSTER_NAME-vmauth:8427/vts/select/jaeger
+        ```
 
     If you want to skip creation of the regional cluster completely,
     but still let child clusters discover your custom endpoints,
     you may create a regional `ConfigMap` instead of a regional `ClusterDeployment`:
-    ```bash
-    cat >regional-configmap.yaml <<EOF
-    apiVersion: v1
-    kind: ConfigMap
-    metadata:
-      name: $REGIONAL_CLUSTER_NAME
-      namespace: kcm-system
-      labels:
-        k0rdent.mirantis.com/kof-cluster-role: regional
-    data:
-      regional_cluster_name: $REGIONAL_CLUSTER_NAME
-      regional_cluster_namespace: kcm-system
-      regional_cluster_cloud: aws
-      aws_region: $REGION
-      azure_location: ""
-      openstack_region: ""
-      vsphere_datacenter: ""
-      istio_role: ""
-      kof_http_config: ""
-      write_metrics_endpoint: https://vmauth.$REGIONAL_DOMAIN/vm/insert/0/prometheus/api/v1/write
-      read_metrics_endpoint: https://vmauth.$REGIONAL_DOMAIN/vm/select/0/prometheus
-      write_logs_endpoint: https://vmauth.$REGIONAL_DOMAIN/vli/insert/opentelemetry/v1/logs
-      read_logs_endpoint: https://vmauth.$REGIONAL_DOMAIN/vls
-      write_traces_endpoint: https://vmauth.$REGIONAL_DOMAIN/vti/insert/opentelemetry/v1/traces
-    EOF
 
-    cat regional-configmap.yaml
-    kubectl apply -f regional-configmap.yaml
-    ```
+    ??? note "Regional ConfigMap"
+
+        ```bash
+        cat >regional-configmap.yaml <<EOF
+        apiVersion: v1
+        kind: ConfigMap
+        metadata:
+          name: $REGIONAL_CLUSTER_NAME
+          namespace: kcm-system
+          labels:
+            k0rdent.mirantis.com/kof-cluster-role: regional
+        data:
+          regional_cluster_name: $REGIONAL_CLUSTER_NAME
+          regional_cluster_namespace: kcm-system
+          regional_cluster_cloud: aws
+          aws_region: $REGION
+          azure_location: ""
+          openstack_region: ""
+          vsphere_datacenter: ""
+          istio_role: ""
+          kof_http_config: ""
+          write_metrics_endpoint: https://vmauth.$REGIONAL_DOMAIN/vm/insert/0/prometheus/api/v1/write
+          read_metrics_endpoint: https://vmauth.$REGIONAL_DOMAIN/vm/select/0/prometheus
+          write_logs_endpoint: https://vmauth.$REGIONAL_DOMAIN/vli/insert/opentelemetry/v1/logs
+          read_logs_endpoint: https://vmauth.$REGIONAL_DOMAIN/vls
+          write_traces_endpoint: https://vmauth.$REGIONAL_DOMAIN/vti/insert/opentelemetry/v1/traces
+        EOF
+
+        cat regional-configmap.yaml
+        kubectl apply -f regional-configmap.yaml
+        ```
 
     Note that a similar `ConfigMap` is generated automatically from a regional `ClusterDeployment` too.
 
 9. If you need a custom http client configuration for `PromxyServerGroup`
     and `GrafanaDatasource` (if [enabled](kof-grafana.md)),
-    add it to the `regional-cluster.yaml` file in the `.metadata.annotations`. For example:
-    ```yaml
-    k0rdent.mirantis.com/kof-http-config: '{"dial_timeout": "10s", "tls_config": {"insecure_skip_verify": true}}'
-    ```
+    add it to the `regional-cluster.yaml` file in the `.metadata.annotations`:
+
+    ??? note "Custom http client configuration"
+
+        ```yaml
+        k0rdent.mirantis.com/kof-http-config: '{"dial_timeout": "10s", "tls_config": {"insecure_skip_verify": true}}'
+        ```
 
 10. `MultiClusterService` named [kof-regional-cluster](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-regional/templates/regional-multi-cluster-service.yaml) configure and install `cert-manager`, `ingress-nginx`, `kof-operators`, `kof-storage`, and `kof-collectors` charts automatically.
 
-    To pass any custom [values](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-storage/values.yaml) to the `kof-storage` chart or its subcharts, such as [victoria-logs-cluster](https://docs.victoriametrics.com/helm/victorialogs-cluster/#parameters), add them to the `regional-cluster.yaml` file in the `.spec.config.clusterAnnotations`.
+    To pass any custom [values](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-storage/values.yaml)
+    to the `kof-storage` chart or its subcharts, such as [victoria-logs-cluster](https://docs.victoriametrics.com/helm/victorialogs-cluster/#parameters),
+    add them to the `regional-cluster.yaml` file in the `.spec.config.clusterAnnotations`.
+    Examples:
 
-    For example:
+    ??? note "VictoriaLogs replicaCount"
 
-    ```yaml
-    k0rdent.mirantis.com/kof-storage-values: |
-      victoria-logs-cluster:
-        vlinsert:
-          replicaCount: 2
-    ```
+        ```yaml
+        k0rdent.mirantis.com/kof-storage-values: |
+          victoria-logs-cluster:
+            vlinsert:
+              replicaCount: 2
+        ```
 
-    For OpenStack, add:
+    ??? note "OpenStack extra requirement for DNS auto-config"
 
-    ```yaml
-    k0rdent.mirantis.com/kof-storage-values: |
-      external-dns:
-        provider:
-          name: webhook
-          webhook:
-            image:
-              repository: ghcr.io/inovex/external-dns-openstack-webhook
-              tag: 1.1.0
-            extraVolumeMounts:
+        ```yaml
+        k0rdent.mirantis.com/kof-storage-values: |
+          external-dns:
+            provider:
+              name: webhook
+              webhook:
+                image:
+                  repository: ghcr.io/inovex/external-dns-openstack-webhook
+                  tag: 1.1.0
+                extraVolumeMounts:
+                  - name: oscloudsyaml
+                    mountPath: /etc/openstack/
+            extraVolumeMounts: null
+            extraVolumes:
               - name: oscloudsyaml
-                mountPath: /etc/openstack/
-        extraVolumeMounts: null
-        extraVolumes:
-          - name: oscloudsyaml
-            secret:
-              secretName: external-dns-openstack-credentials
-    ```
+                secret:
+                  secretName: external-dns-openstack-credentials
+        ```
 
 11. Verify and apply the Regional `ClusterDeployment`:
 
     ```bash
     cat regional-cluster.yaml
+    ```
 
+    ```bash
     kubectl apply -f regional-cluster.yaml
     ```
 
@@ -577,9 +669,7 @@ and apply this example for AWS, or use it as a reference:
 > To use the new [KCM Regional Clusters](../regional-clusters/index.md) with KOF, please apply the [KCM Region With KOF](kof-kcm-region.md) guide on top of the steps below.
 
 To install KOF on the actual cluster to be monitored,
-look through the default values of the [kof-operators](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-operators/values.yaml)
-and [kof-collectors](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-collectors/values.yaml) charts,
-and apply this example for AWS, or use it as a reference:
+apply this example for AWS, or use it as a reference:
 
 1. Ensure you still have the variables set in the [Regional Cluster](#regional-cluster) section,
     and set your own value for the `CHILD_CLUSTER_NAME` variable:
@@ -594,82 +684,120 @@ and apply this example for AWS, or use it as a reference:
     TEMPLATE=aws-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsStandaloneCpCluster }}}
     ```
 
-3. Compose the child `ClusterDeployment`:
+3. Compose the child `ClusterDeployment`. Examples by cloud provider:
 
-    For AWS:
+    ??? note "AWS"
 
-    ```bash
-    cat >child-cluster.yaml <<EOF
-    apiVersion: k0rdent.mirantis.com/v1beta1
-    kind: ClusterDeployment
-    metadata:
-      name: $CHILD_CLUSTER_NAME
-      namespace: kcm-system
-      labels:
-        k0rdent.mirantis.com/kof-cluster-role: child
-    spec:
-      template: $TEMPLATE
-      credential: aws-cluster-identity-cred
-      cleanupOnDeletion: true
-      config:
-        clusterIdentity:
-          name: aws-cluster-identity
+        ```bash
+        cat >child-cluster.yaml <<EOF
+        apiVersion: k0rdent.mirantis.com/v1beta1
+        kind: ClusterDeployment
+        metadata:
+          name: $CHILD_CLUSTER_NAME
           namespace: kcm-system
-        region: $REGION
-        controlPlaneNumber: 1
-        controlPlane:
-          instanceType: t3.large
-        workersNumber: 3
-        worker:
-          instanceType: t3.medium
-    EOF
-    ```
+          labels:
+            k0rdent.mirantis.com/kof-cluster-role: child
+        spec:
+          template: $TEMPLATE
+          credential: aws-cluster-identity-cred
+          cleanupOnDeletion: true
+          config:
+            clusterIdentity:
+              name: aws-cluster-identity
+              namespace: kcm-system
+            region: $REGION
+            controlPlaneNumber: 1
+            controlPlane:
+              instanceType: t3.large
+            workersNumber: 3
+            worker:
+              instanceType: t3.medium
+        EOF
+        ```
 
-    For Azure:
+    ??? note "Azure"
 
-    ```bash
-    AZURE_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
-    echo "AZURE_SUBSCRIPTION_ID=$AZURE_SUBSCRIPTION_ID"
+        ```bash
+        AZURE_SUBSCRIPTION_ID=$(az account show --query id -o tsv)
+        echo "AZURE_SUBSCRIPTION_ID=$AZURE_SUBSCRIPTION_ID"
 
-    cat >child-cluster.yaml <<EOF
-    apiVersion: k0rdent.mirantis.com/v1beta1
-    kind: ClusterDeployment
-    metadata:
-      name: $CHILD_CLUSTER_NAME
-      namespace: kcm-system
-      labels:
-        k0rdent.mirantis.com/kof-cluster-role: child
-    spec:
-      template: $TEMPLATE
-      credential: azure-cluster-identity-cred
-      cleanupOnDeletion: true
-      config:
-        clusterIdentity:
-          name: azure-cluster-identity
+        cat >child-cluster.yaml <<EOF
+        apiVersion: k0rdent.mirantis.com/v1beta1
+        kind: ClusterDeployment
+        metadata:
+          name: $CHILD_CLUSTER_NAME
           namespace: kcm-system
-        subscriptionID: $AZURE_SUBSCRIPTION_ID
-        location: $REGION
-        controlPlaneNumber: 1
-        controlPlane:
-          vmSize: Standard_A4_v2
-        workersNumber: 3
-        worker:
-          vmSize: Standard_A4_v2
-    EOF
-    ```
+          labels:
+            k0rdent.mirantis.com/kof-cluster-role: child
+        spec:
+          template: $TEMPLATE
+          credential: azure-cluster-identity-cred
+          cleanupOnDeletion: true
+          config:
+            clusterIdentity:
+              name: azure-cluster-identity
+              namespace: kcm-system
+            subscriptionID: $AZURE_SUBSCRIPTION_ID
+            location: $REGION
+            controlPlaneNumber: 1
+            controlPlane:
+              vmSize: Standard_A4_v2
+            workersNumber: 3
+            worker:
+              vmSize: Standard_A4_v2
+        EOF
+        ```
+
+    ??? note "OpenStack"
+
+        ```bash
+        FLAVOR=m1.large
+        IMAGE=ubuntu-24.04-x86_64
+
+        cat >regional-cluster.yaml <<EOF
+        apiVersion: k0rdent.mirantis.com/v1beta1
+        kind: ClusterDeployment
+        metadata:
+          name: $CHILD_CLUSTER_NAME
+          namespace: kcm-system
+          labels:
+            k0rdent.mirantis.com/kof-cluster-role: child
+        spec:
+          template: $TEMPLATE
+          credential: openstack-cluster-identity-cred
+          cleanupOnDeletion: true
+          config:
+            identityRef:
+              cloudName: openstack
+              region: $REGION
+            controlPlaneNumber: 1
+            controlPlane:
+              flavor: $FLAVOR
+              image:
+                filter:
+                  name: $IMAGE
+            workersNumber: 1
+            worker:
+              flavor: $FLAVOR
+              image:
+                filter:
+                  name: $IMAGE
+        EOF
+        ```
 
 4. If you've applied the [Istio](#istio) section, update the `child-cluster.yaml` file:
 
-    add this line:
+    ??? note "Istio"
 
-    ```yaml
-    k0rdent.mirantis.com/istio-role: member
-    ```
+        Add this line:
 
-    > NOTE:
-    > There is no need to create a gateway in the child cluster
-    > using the `k0rdent.mirantis.com/istio-gateway: "true"` label.
-    > The child cluster uses the gateway in the regional cluster to [store KOF data](./kof-storing.md).
+        ```yaml
+        k0rdent.mirantis.com/istio-role: member
+        ```
+
+        There is no need to create a gateway in the child cluster
+        using the `k0rdent.mirantis.com/istio-gateway: "true"` label.
+        The child cluster uses the gateway in the regional cluster to [store KOF data](./kof-storing.md).
 
 5. This `ClusterDeployment` uses propagation of its `.metadata.labels`
     to the resulting `Cluster` because there are no `.spec.config.clusterLabels` here.
@@ -689,26 +817,33 @@ and apply this example for AWS, or use it as a reference:
     k0rdent.mirantis.com/kof-regional-cluster-namespace: kcm-system
     ```
 
-7. `MultiClusterService` named [kof-child-cluster](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-child/templates/child-multi-cluster-service.yaml) configure and install `cert-manager`, `kof-operators`, and `kof-collectors` charts automatically.
+7. `MultiClusterService` named [kof-child-cluster](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-child/templates/child-multi-cluster-service.yaml)
+    configures and installs `cert-manager`, `kof-operators`, and `kof-collectors` charts automatically.
 
-    To pass any custom [values](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-collectors/values.yaml) to the `kof-collectors` chart or its subcharts, such as [opencost](https://github.com/opencost/opencost-helm-chart/blob/main/charts/opencost/README.md#values), add them to the `child-cluster.yaml` file in the `.spec.config`. For example:
+    To pass any custom [values](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-collectors/values.yaml)
+    to the `kof-collectors` chart or its subcharts, such as [opencost](https://github.com/opencost/opencost-helm-chart/blob/main/charts/opencost/README.md#values),
+    add them to the `child-cluster.yaml` file in the `.spec.config`. Example:
 
-    ```yaml
-    clusterAnnotations:
-      k0rdent.mirantis.com/kof-collectors-values: |
-        opencost:
-          opencost:
-            exporter:
-              replicas: 2
-    ```
+    ??? note "OpenCost replicas"
 
-    Note: the first `opencost` key is to reference the subchart, and the second `opencost` key is part of its [values](https://github.com/opencost/opencost-helm-chart/blob/main/charts/opencost/README.md#values).
+        ```yaml
+        clusterAnnotations:
+          k0rdent.mirantis.com/kof-collectors-values: |
+            opencost:
+              opencost:
+                exporter:
+                  replicas: 2
+        ```
+
+        Note: the first `opencost` key is to reference the subchart, and the second `opencost` key is part of its [values](https://github.com/opencost/opencost-helm-chart/blob/main/charts/opencost/README.md#values).
 
 8. Verify and apply the `ClusterDeployment`:
 
     ```bash
     cat child-cluster.yaml
+    ```
 
+    ```bash
     kubectl apply -f child-cluster.yaml
     ```
 
