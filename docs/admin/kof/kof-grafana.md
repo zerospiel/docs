@@ -172,10 +172,10 @@ All dashboards are managed as code to keep environments consistent. To add or ch
 Port forwarding, as described above, is a quick solution.
 
 Single Single-On provides better experience. If you want to enable it,
-please apply this advanced guide: [SSO for Grafana](https://github.com/k0rdent/kof/blob/main/docs/dex-sso.md).
+please apply this advanced guide: [Dex SSO for Grafana](https://github.com/k0rdent/kof/blob/main/docs/dex-sso.md).
 
-See also [Multi-tenancy in KOF: Single Sign-On](kof-multi-tenancy.md#single-sign-on)
-and the next sections there for additional examples.
+See also [Multi-tenancy in KOF: Usage Examples](kof-multi-tenancy.md#usage-examples)
+for additional Dex SSO examples.
 
 ## Uninstall Grafana
 
