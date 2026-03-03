@@ -41,25 +41,10 @@ This option stores KOF data of the management cluster in the same management clu
 
 To apply this option:
 
-1. Modify the `kof-values.yaml` file:
+1. Update the `kof-values.yaml` file:
     ```yaml
     kof-storage:
-      values:
-        enabled: true
-    ```
-
-    If you want to use a non-default storage class, add to the `kof-values.yaml` file:
-    ```yaml
-    kof-storage:
-      values:
-        victoria-logs-cluster:
-          vlstorage:
-            persistentVolume:
-              storageClassName: <EXAMPLE_STORAGE_CLASS>
-    ```
-
-2. Modify the `kof-values.yaml` file:
-    ```yaml
+      enabled: true
     kof-collectors:
       enabled: true
       values:
@@ -83,6 +68,16 @@ To apply this option:
                   external_labels:
                     cluster: mothership
                     clusterNamespace: kcm-system
+    ```
+
+2. If you want to use a non-default storage class, add to the `kof-values.yaml` file:
+    ```yaml
+    kof-storage:
+      values:
+        victoria-logs-cluster:
+          vlstorage:
+            persistentVolume:
+              storageClassName: <EXAMPLE_STORAGE_CLASS>
     ```
 
 3. Update the `kof` chart on the management cluster:
