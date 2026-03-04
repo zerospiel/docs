@@ -35,11 +35,21 @@
 
     * **Enhanced telemetry data collection**: Telemetry capabilities have been expanded to enable collection of additional platform properties using CEL expressions, providing more flexible insight into cluster and platform state. This allows operators to gain richer operational visibility while [maintaining control over what telemetry data is collected](../appendix/telemetry/configuration.md).
 
+* **k0rdent Observability Framework (KOF)**
+
+    * **Umbrella Helm chart for simplified deployment**: KOF 1.8.0 introduces a new **`kof` umbrella Helm chart** that consolidates [installation of the entire observability stack](../admin/kof/kof-install.md) and orchestrates it using FluxCD. This significantly simplifies deployment compared to installing individual components separately and provides a consistent, GitOps-driven lifecycle for the full stack. Operators can now deploy KOF across management and regional clusters using a single chart and standardized configuration.
+
+    * **Multi-tenancy with identity-based access control**: KOF expands its [multi-tenancy capabilities](../admin/kof/kof-multi-tenancy.md) by introducing an access-control layer for observability data queries and tenant-aware alert rules, along with support for validating tenant identity via a `tenant` claim. This enables multiple teams or organizations to safely share a centralized observability platform while maintaining strict isolation of logs, metrics, and alerts between tenants. Users can configure [single sign-On](../admin/kof/kof-multi-tenancy.md#single-sign-on), [access control](../admin/kof/kof-multi-tenancy.md#access-control), and [sign in options](../admin/kof/kof-multi-tenancy.md#sign-in-options).
+
+    * **Cross-cluster log aggregation**: KOF integrates **Vlogxy** to enable centralized log aggregation across clusters. This enables operators to query logs from multiple clusters through a unified interface instead of maintaining separate logging stacks per cluster, simplifying troubleshooting and operational analysis in multi-cluster environments. This capability fits into the broader [Full-Stack Observability architecture](../admin/kof/kof-architecture.md#full-stack-observability).
+
+    * **Improved observability architecture and autoconfiguration**: Architectural improvements and enhanced [autoconfiguration](../admin/kof/kof-architecture.md#autoconfig) streamline how observability components are deployed and connected across clusters. These changes help automate the configuration of metrics, logging, and alerting components so that new clusters can be integrated into the observability platform more easily. 
+
 ---
 
 ## Upgrade Notes
 
-Most users can upgrade directly from 1.7.0 → 1.8.0 without manual migration steps, but we recommend validating:
+Most users can upgrade k0rdent's main body directly from 1.7.0 → 1.8.0 without manual migration steps, but we recommend validating:
 
 - certificate issuance
 - service lifecycle operations
@@ -47,26 +57,93 @@ Most users can upgrade directly from 1.7.0 → 1.8.0 without manual migration st
 
 before upgrading production environments.
 
+KOF v1.8.0 introduces a new umbrella chart that consolidates the installation of all KOF components using FluxCD for orchestration. This represents a significant structural change in how KOF is deployed. In addition, the `tenantId` label in metrics has been replaced with the `tenant` label for consistency with `cluster`, `namespace`, and others. If you use KOF multi-tenancy or tenant-scoped access controls, review your identity/claims and tenant labeling conventions before/after upgrading so query/alert isolation works as intended.
+
+For more information, see the [KoF upgrade documentation](https://docs.k0rdent.io/next/admin/kof/kof-upgrade/#upgrade-to-v180)  docs.
+
 ---
 
 ## Changelog
 
+
 ### New Features
 
-* **feat:** add helm actions and install, upgrade and uninstall options for services ([#2324](https://github.com/k0rdent/kcm/pull/2324)) by @kylewuolle
-* **feat(telemetry):** add extra props collection ([#2402](https://github.com/k0rdent/kcm/pull/2402)) by @zerospiel
-* **feat(event)!:** migrate to the new event recorder ([#2423](https://github.com/k0rdent/kcm/pull/2423)) by @zerospiel
-* **feat:** add reloader to kcm-regional ([#2431](https://github.com/k0rdent/kcm/pull/2431)) by @Kshatrix
+-   **feat:** add helm actions and install, upgrade and uninstall options for… ([#2324](https://github.com/k0rdent/kcm/pull/2324)) by @kylewuolle
+    
+-   **feat(telemetry):** add extra props collection ([#2402](https://github.com/k0rdent/kcm/pull/2402)) by @zerospiel
+    
+-   **feat(event)!:** migrate to the new event recorder ([#2423](https://github.com/k0rdent/kcm/pull/2423)) by @zerospiel
+    
+-   **feat:** kof helm chart for simplified deployment ([#725](https://github.com/k0rdent/kof/pull/725)) by @gmlexx
+    
+-   **feat:** implement multi-tenancy access control layer for data querying ([#736](https://github.com/k0rdent/kof/pull/736)) by @AndrejsPon00
+    
+-   **feat:** add script file for waiting opentelemetry collectors ([#795](https://github.com/k0rdent/kof/pull/795)) by @Alex-Vovchuk
+    
+-   **feat:** support bundle analyzer for ci and simplified failures analysis ([#763](https://github.com/k0rdent/kof/pull/763)) by @Alex-Vovchuk
+    
+-   **feat:** auto check values consistency ([#769](https://github.com/k0rdent/kof/pull/769)) by @Alex-Vovchuk
+    
+-   **feat:** integrate vlogxy for cross-cluster log aggregation ([#810](https://github.com/k0rdent/kof/pull/810)) by @AndrejsPon00
+    
+-   **feat:** add multi-tenancy support for alert rules ([#814](https://github.com/k0rdent/kof/pull/814)) by @AndrejsPon00
+    
+-   **feat(acl):** support tenant validation via `tenant` claim ([#822](https://github.com/k0rdent/kof/pull/822)) by @AndrejsPon00
+    
 
 ### Notable Fixes
 
-* **fix:** update status after checking regional cluster ref ([#2389](https://github.com/k0rdent/kcm/pull/2389)) by @eromanova
-* **fix:** bug in service dependson where services are undeployed ([#2391](https://github.com/k0rdent/kcm/pull/2391)) by @wahabmk
-* **fix:** do not validate template/management relationship if the management cluster is deleting ([#2410](https://github.com/k0rdent/kcm/pull/2410)) by @kylewuolle
-* **fix:** do not validate template / multi cluster service relationship if the template is deleting ([#2418](https://github.com/k0rdent/kcm/pull/2418)) by @kylewuolle
-* **fix:** do not patch flux with CA volume if flux is unmanaged by KCM ([#2436](https://github.com/k0rdent/kcm/pull/2436)) by @eromanova
-* **fix:** revert to not using RetryOnConflict to reconcile Profile ([#2433](https://github.com/k0rdent/kcm/pull/2433)) by @wahabmk
-* **fix:** use caching REST mapper with dynamic client for discovery ([#2439](https://github.com/k0rdent/kcm/pull/2439)) by @BROngineer
+-   **fix:** update status after checking regional cluster ref ([#2389](https://github.com/k0rdent/kcm/pull/2389)) by @eromanova
+    
+-   **fix:** bug in service dependson where services are undeployed ([#2391](https://github.com/k0rdent/kcm/pull/2391)) by @wahabmk
+    
+-   **fix:** do not validate template/management relationship if the manageme… ([#2418](https://github.com/k0rdent/kcm/pull/2418)) by @kylewuolle
+    
+-   **fix:** do not validate template / multi cluster service relationship if… ([#2425](https://github.com/k0rdent/kcm/pull/2425)) by @kylewuolle
+    
+-   **fix:** do not patch flux with CA volume if flux is unmanaged by KCM ([#2436](https://github.com/k0rdent/kcm/pull/2436)) by @eromanova
+    
+-   **fix:** revert to not using RetryOnConflict to reconcile Profile ([#2433](https://github.com/k0rdent/kcm/pull/2433)) by @wahabmk
+    
+-   **fix:** use caching REST mapper with dynamic client for discovery ([#2439](https://github.com/k0rdent/kcm/pull/2439)) by @BROngineer
+    
+-   **fix:** determine adopted cluster secret name without suffix parsing ([#714](https://github.com/k0rdent/kof/pull/714)) by @AndrejsPon00
+    
+-   **fix:** disable VMAuth ingress on Istio clusters ([#727](https://github.com/k0rdent/kof/pull/727)) by @AndrejsPon00
+    
+-   **fix:** duplication in kubelet metric led to wrong ContainerHightMemoryUsage calculation ([#735](https://github.com/k0rdent/kof/pull/735)) by @gmlexx
+    
+-   **fix:** trim duplicated v prefix for operator version ([#762](https://github.com/k0rdent/kof/pull/762)) by @gmlexx
+    
+-   **fix:** force KOF components upgrade after `make dev-deploy` ([#766](https://github.com/k0rdent/kof/pull/766)) by @AndrejsPon00
+    
+-   **fix:** merge values properly for kof-collectors ([#767](https://github.com/k0rdent/kof/pull/767)) by @gmlexx
+    
+-   **fix:** block Istio traffic for all services except VMAuth ([#771](https://github.com/k0rdent/kof/pull/771)) by @AndrejsPon00
+    
+-   **fix:** disable resource detection progapation ([#777](https://github.com/k0rdent/kof/pull/777)) by @gmlexx
+    
+-   **fix:** disable victoriametrics for kof-storage using kof chart ([#793](https://github.com/k0rdent/kof/pull/793)) by @gmlexx
+    
+-   **fix:** npm audit, skip dev deps ([#802](https://github.com/k0rdent/kof/pull/802)) by @gmlexx
+    
+-   **fix:** disable ACL by default to prevent errors when dex is not configured ([#800](https://github.com/k0rdent/kof/pull/800)) by @AndrejsPon00
+    
+-   **fix:** duplicate MultiClusterService rendering when Istio is disabled ([#804](https://github.com/k0rdent/kof/pull/804)) by @mcd01
+    
+-   **fix:** add missed logic for custom resources in support bundle ([#807](https://github.com/k0rdent/kof/pull/807)) by @Alex-Vovchuk
+    
+-   **fix:** Renamed `tenantId` label to `tenant` and added it to aggregations in rules to allow filtering ([#812](https://github.com/k0rdent/kof/pull/812)) by @denis-ryzhkov
+    
+-   **fix(acl):** prevent error from duplicate header write ([#818](https://github.com/k0rdent/kof/pull/818)) by @AndrejsPon00
+    
+-   **fix:** correct `kof.mcs` position in values-local.yaml ([#817](https://github.com/k0rdent/kof/pull/817)) by @AndrejsPon00
+    
+-   **fix(acl):** correct tenant label in Vlogxy query injection ([#823](https://github.com/k0rdent/kof/pull/823)) by @AndrejsPon00
+    
+-   **fix(acl):** support alerts endpoint and restrict status endpoints per tenant ([#824](https://github.com/k0rdent/kof/pull/824)) by @AndrejsPon00
+    
+-   **fix:** use kcm-system namespace for fluxcd helm charts ([#828](https://github.com/k0rdent/kof/pull/828)) by @gmlexx
 
 ### Platform & Dependency Updates
 
