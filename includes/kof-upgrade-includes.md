@@ -84,6 +84,17 @@ The structural changes may require reinstallation of storage components, which c
         ' kof-values.yaml
         ```
 
+4. **Patch VictoriaMetrics Operator CRDs upgrade config**:
+
+Run the following command to enable automatic CRD upgrades for `victoria-metrics-operator` during the helm upgrade:
+
+```bash
+yq -i '
+  ."kof-regional".values.storage."victoria-metrics-operator".crds.upgrade.enabled = true |
+  ."kof-regional".values.storage."victoria-metrics-operator".crds.upgrade.forceConflicts = true |
+' kof-values.yaml
+```
+
 4. **Upgrade to the umbrella chart**:
     ```bash
     helm upgrade -i --reset-values --wait \
