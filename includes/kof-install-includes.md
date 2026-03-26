@@ -18,13 +18,13 @@
 <!--install-istio-end-->
 
 <!--install-kof-start-->
-    ```bash
-    helm upgrade -i --reset-values --wait \
-      --create-namespace -n kof kof \
-      -f kof-values.yaml \
-      {{{ docsVersionInfo.kofVersions.kofOciRegistryBase }}}/charts/kof \
-      --version {{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}
-    ```
+  ```bash
+  helm upgrade -i --reset-values --wait \
+    --create-namespace -n kof kof \
+    -f kof-values.yaml \
+    {{{ docsVersionInfo.kofVersions.kofOciRegistryBase }}}/charts/kof \
+    --version {{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}
+  ```
 <!--install-kof-end-->
 
 <!--grafana-intro-start-->
