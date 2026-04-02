@@ -381,20 +381,20 @@ values on:
 - Initial installation values
 
     ```yaml
-	controller:
+    controller:
       imagePullSecret: registry-pull-secret
-	```
+    ```
 
 - Management object configuration
 
     ```yaml
-	spec:
+    spec:
       core:
         kcm:
           config:
             controller:
-			  imagePullSecret: registry-pull-secret
-	```
+              imagePullSecret: registry-pull-secret
+    ```
 
 On initial installation, if registry authentication is required, you must still
 pass `imagePullSecrets` values to all subchart values as follows:
@@ -426,12 +426,3 @@ rbac-manager:
     imagePullSecrets:
     - registry-pull-secret
 ```
-
-> NOTE:
-> When doing initial installation one limitation is applied to the
-> openstack-provider ORC controller, which is installed in the `orc-system`
-> namespace.
-> 
-> To mitigate this you must create the `orc-system` namespace and create the pull
-> secret there manually.
-
