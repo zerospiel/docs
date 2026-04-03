@@ -113,7 +113,7 @@ This MultiClusterService will match any CAPI cluster with the label `app.kuberne
 version 4.11.3 of ingress-nginx service on it.
 
 > NOTE:
-> If the MultiClusterService matches a ClusterDeployment in a namespace other than `kcm-system`, the MCS will expect the ServiceTemplates used in its `.spec.serviceSpec.services` to already be available and ready in that namespace as well as in `kcm-system` namespace.
+> If the `MultiClusterService` matches a `ClusterDeployment` in a namespace other than `kcm-system`, the MCS will expect the `ServiceTemplates` used in its `.spec.serviceSpec.services` to already be available and ready in that namespace as well as in the `kcm-system` namespace.
 
 ### Configuring Custom Values
 
