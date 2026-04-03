@@ -93,15 +93,6 @@ global:
 The `Secret` object automatically propagates to all
 of the existing [regional](../admin/regional-clusters/index.md) clusters.
 
-> WARNING:
-> When doing initial installation one limitation is applied to the
-> `cluster-api-provider-openstack` ORC controller, which is installed in the
-> `orc-system` namespace.
->
-> To mitigate this you must either create the `orc-system` namespace and duplicate
-> the `Secret` there manually or disable the provider in the `Management`
-> object.
-
 ## CAPI Provider Charts
 
 See: [Extended Management Configuration](./appendix-extend-mgmt.md#configuration-guide).
@@ -262,9 +253,9 @@ additional volumes.
 
 As a result the following cannot be configured for HTTPS proxies:
 
-  * Custom CA bundles
-  * Client certificates
-  * Mutual TLS (mTLS)
+* Custom CA bundles
+* Client certificates
+* Mutual TLS (mTLS)
 
 ### `NO_PROXY` Configuration Is Critical
 
@@ -277,13 +268,3 @@ value:
 
 Failing to do so may cause controller failures due to Kubernetes API requests
 being incorrectly routed through the proxy.
-
-### Openstack ORC Controller Requires Intervention
-
-When doing initial installation one limitation is applied to the
-`cluster-api-provider-openstack` ORC controller, which is installed in the
-`orc-system` namespace.
-
-To mitigate this you must either create the `orc-system` namespace and duplicate
-the `Secret` there manually or disable the provider in the `Management`
-object.
