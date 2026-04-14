@@ -27,6 +27,28 @@
   ```
 <!--install-kof-end-->
 
+<!--opencost-openstack-start-->
+    ??? note "OpenCost for OpenStack and other unsupported providers"
+
+        Workaround for [opencost/opencost issue #2925](https://github.com/opencost/opencost/issues/2925)
+        to avoid `Error getting LoadBalancer cost: strconv.ParseFloat: parsing "": invalid syntax`:
+
+        ```yaml
+        k0rdent.mirantis.com/kof-collectors-values: |
+          opencost:
+            opencost:
+              customPricing:
+                enabled: true
+                costModel:
+                  firstFiveForwardingRulesCost: 0
+                  additionalForwardingRuleCost: 0
+                  LBIngressDataCost: 0
+        ```
+
+        Please also consider configuring cost of [default](https://github.com/opencost/opencost-helm-chart/blob/opencost-2.4.0/charts/opencost/values.yaml#L329-L339)
+        and [advanced](https://github.com/opencost/opencost/blob/v1.118.0/pkg/cloud/models/models.go#L121-L198) resources.
+<!--opencost-openstack-end-->
+
 <!--grafana-intro-start-->
 > NOTE:
 > Grafana installation and automatic configuration are now disabled in KOF by default.

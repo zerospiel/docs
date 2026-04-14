@@ -14,7 +14,7 @@ KOF v1.9.0 introduces a [Gateway API](http://gateway-api.sigs.k8s.io/) support.
 
 2. **Migrate to Gateway API from Nginx Ingress**
 
-    Nginx Ingress will be removed and Envoy Gateway be created instead. That might cause a downtime while DNS is propagated from Nginx Ingress to Gateway IP address. If the downtime is not acceptable, consider deploying a new regional cluster with Gateway API and following the [migration to a new cluster](kof-upgrade.md#data-migration-to-a-new-regional-cluster)
+    Nginx Ingress will be removed and Envoy Gateway be created instead. That might cause a downtime while DNS is propagated from Nginx Ingress to Gateway IP address. If the downtime is not acceptable, consider deploying a new regional cluster with Gateway API and following the [migration to a new cluster](../docs/admin/kof/kof-upgrade.md#data-migration-to-a-new-regional-cluster)
 
     Update kof-values.yaml:
 
@@ -29,9 +29,9 @@ KOF v1.9.0 introduces a [Gateway API](http://gateway-api.sigs.k8s.io/) support.
               enabled: true
         ```
 
-    If you are using [DNS auto-config](./kof-install.md#dns-auto-config) DNS will be switched automatically.
+    If you are using [DNS auto-config](../docs/admin/kof/kof-install.md#dns-auto-config) DNS will be switched automatically.
 
-    In case of [Manual DNS config](./kof-verification.md#manual-dns-config), apply gateway address.
+    In case of [Manual DNS config](../docs/admin/kof/kof-verification.md#manual-dns-config), apply gateway address.
 
 
 3. **Upgrade the umbrella chart**:
