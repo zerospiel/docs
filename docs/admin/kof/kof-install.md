@@ -667,6 +667,12 @@ apply this example for AWS, or use it as a reference:
                   secretName: external-dns-openstack-credentials
         ```
 
+{%
+    include-markdown "../../../includes/kof-install-includes.md"
+    start="<!--opencost-openstack-start-->"
+    end="<!--opencost-openstack-end-->"
+%}
+
 11. Verify and apply the Regional `ClusterDeployment`:
 
     ```bash
@@ -843,20 +849,25 @@ apply this example for AWS, or use it as a reference:
 
     To pass any custom [values](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-collectors/values.yaml)
     to the `kof-collectors` chart or its subcharts, such as [opencost](https://github.com/opencost/opencost-helm-chart/blob/main/charts/opencost/README.md#values),
-    add them to the `child-cluster.yaml` file in the `.spec.config`. Example:
+    add them to the `child-cluster.yaml` file in the `.spec.config.clusterAnnotations`. Example:
 
     ??? note "OpenCost replicas"
 
         ```yaml
-        clusterAnnotations:
-          k0rdent.mirantis.com/kof-collectors-values: |
+        k0rdent.mirantis.com/kof-collectors-values: |
+          opencost:
             opencost:
-              opencost:
-                exporter:
-                  replicas: 2
+              exporter:
+                replicas: 2
         ```
 
         Note: the first `opencost` key is to reference the subchart, and the second `opencost` key is part of its [values](https://github.com/opencost/opencost-helm-chart/blob/main/charts/opencost/README.md#values).
+
+{%
+    include-markdown "../../../includes/kof-install-includes.md"
+    start="<!--opencost-openstack-start-->"
+    end="<!--opencost-openstack-end-->"
+%}
 
 8. Verify and apply the `ClusterDeployment`:
 
