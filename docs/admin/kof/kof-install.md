@@ -278,14 +278,14 @@ and apply this example, or use it as a reference:
     of the `kof` umbrella chart, and more detailed default values of other [charts](https://github.com/k0rdent/kof/tree/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts),
     to customize your `kof-values.yaml` file where needed, for example:
 
-    ??? note "If your regional clusters already have `cert-manager` and `ingress-nginx`, disable them in KOF:"
+    ??? note "If your regional clusters already have `cert-manager` and `envoy-gateway`, disable them in KOF:"
 
         ```yaml
         kof-regional:
           values:
             cert-manager:
               enabled: false
-            ingress-nginx:
+            envoy-gateway:
               enabled: false
         ```
 
