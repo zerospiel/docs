@@ -18,8 +18,6 @@ and use it to deploy an application to a {{{ docsVersionInfo.k0rdentName }}} chi
 - `Secret`
 - `ConfigMap`
 
----
-
 ## Path Field Behavior
 
 > NOTE:
@@ -27,8 +25,6 @@ and use it to deploy an application to a {{{ docsVersionInfo.k0rdentName }}} chi
 >
 > - If `path` is not specified, the root of the source artifact is used.
 > - When using `ConfigMap` or `Secret` with `resources`, the `path` field is ignored.
-
----
 
 ### Creating Helm-based ServiceTemplate
 
