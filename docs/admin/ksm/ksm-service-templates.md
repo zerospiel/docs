@@ -18,6 +18,18 @@ and use it to deploy an application to a {{{ docsVersionInfo.k0rdentName }}} chi
 - `Secret`
 - `ConfigMap`
 
+---
+
+## Path Field Behavior
+
+> NOTE:
+> The `path` field in `.spec.helm.chartSource`, `.spec.kustomize`, and `.spec.resources` is **optional**.
+>
+> - If `path` is not specified, the root of the source artifact is used.
+> - When using `ConfigMap` or `Secret` with `resources`, the `path` field is ignored.
+
+---
+
 ### Creating Helm-based ServiceTemplate
 
 Before creating a `ServiceTemplate`, the source of the Helm chart that represents the service can be created. The source object must have the label `k0rdent.mirantis.com/managed: "true"`. For example, this YAML describes a FluxCD source object of `kind` `HelmRepository`:
@@ -113,6 +125,7 @@ FluxCD sources supported by `ServiceTemplate` are:
          localSourceRef:
            kind: GitRepository
            name: k0rdent-catalog
+         # path is optional; defaults to artifact root if omitted
          path: "./charts/ingress-nginx"
    ```
 
@@ -135,6 +148,7 @@ FluxCD sources supported by `ServiceTemplate` are:
            bucket:
              url: s3://bucket/path/to/charts
              interval: 10m0s
+           # path is optional; defaults to artifact root if omitted
            path: "./ingress-nginx"
    ```
 
@@ -212,6 +226,7 @@ The following validation rules apply to `ServiceTemplate`:
 3. **LocalSourceRef vs RemoteSourceSpec**: When using `helm.chartSource`, `kustomize` or `resources`, only one of `localSourceRef` or `remoteSourceSpec` can be set.
 4. **Helm Chart Sources**: When using Helm, only one of `chartSpec`, `chartRef`, or `chartSource` can be specified.
 5. **ConfigMap/Secret Limitations**: `ConfigMap` and `Secret` sources are **only** supported for `kustomize` and `resources` templates, not for Helm charts.
+6. **Path Field**: `path` is optional for all supported source types.
 
 ### Cross-Namespace References
 
@@ -228,6 +243,7 @@ spec:
       kind: GitRepository
       name: my-git-repo
       namespace: flux-system  # Different namespace is OK
+    # path is optional; defaults to repository root
     path: "./base"
 ```
 
@@ -364,6 +380,7 @@ spec:
       kind: GitRepository
       name: project-x
     deploymentType: Remote
+    # path is optional
     path: "./base"
 ```
 
@@ -392,6 +409,7 @@ spec:
           tag: latest
         interval: 10m
     deploymentType: Remote
+    # path is optional
     path: "./overlays"
 ```
 
@@ -437,7 +455,6 @@ spec:
       kind: ConfigMap
       name: project-cm
     deploymentType: Remote
-    path: ""  # will be ignored
 ```
 
 Using the remote source for `ServiceTemplate` based on raw resources is similar to the kustomization-based template:
@@ -457,6 +474,7 @@ spec:
           branch: main
         interval: 10m
     deploymentType: Remote
+    # path is optional
     path: "./overlays"
 ```
 
