@@ -426,3 +426,101 @@ rbac-manager:
     imagePullSecrets:
     - registry-pull-secret
 ```
+
+### Configuring Custom User-Provided Patches for Providers
+
+You can provide custom CAPI Operator `spec.patches` entries per provider by
+setting `spec.providers[].config.patches` in the `Management` object.
+
+This is useful when you need provider-specific adjustments that are not covered
+by default settings, for example adding custom pod annotations, labels, or
+other Deployment-level patch customizations.
+
+Custom patches are merged with built-in provider patches.
+
+Example:
+
+```yaml
+spec:
+  providers:
+  - name: cluster-api-provider-aws
+    config:
+      patches:
+      - patch: |
+          - op: add
+            path: /spec/template/metadata/annotations/example.com~1custom-patch
+            value: "enabled"
+        target:
+          group: apps
+          version: v1
+          kind: Deployment
+          namespace: kcm-system
+```
+
+Example for `k0smotron` provider (patches are defined per corresponding
+sub-provider):
+
+```yaml
+spec:
+  providers:
+  - name: k0smotron
+    config:
+      infrastructure:
+        patches:
+        - patch: |
+            - op: add
+              path: /spec/template/metadata/annotations/example.com~1infra-patch
+              value: "enabled"
+          target:
+            group: apps
+            version: v1
+            kind: Deployment
+            namespace: kcm-system
+      bootstrap:
+        patches:
+        - patch: |
+            - op: add
+              path: /spec/template/metadata/annotations/example.com~1bootstrap-patch
+              value: "enabled"
+          target:
+            group: apps
+            version: v1
+            kind: Deployment
+            namespace: kcm-system
+      controlPlane:
+        patches:
+        - patch: |
+            - op: add
+              path: /spec/template/metadata/annotations/example.com~1control-plane-patch
+              value: "enabled"
+          target:
+            group: apps
+            version: v1
+            kind: Deployment
+            namespace: kcm-system
+```
+
+### Configuring Automatic Provider Reload Annotations
+
+When enabled, k0rdent adds `reloader.stakater.com/auto` annotations to provider
+Deployments (through provider `patches`), so changes in referenced Secrets or
+ConfigMaps can trigger automatic pod reloads.
+
+This is useful in environments where credentials, certificates, or proxy-related
+configuration are rotated and you want provider controllers to pick up changes
+without manual rollout restarts.
+
+> NOTE:
+> This mechanism relies on the [Stakater Reloader](https://github.com/stakater/reloader)
+> controller being installed in
+> the management cluster.
+
+To enable it in the `Management` object:
+
+```yaml
+spec:
+  core:
+    kcm:
+      config:
+        enableProvidersReload: true
+```
