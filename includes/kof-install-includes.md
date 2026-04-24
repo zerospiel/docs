@@ -19,7 +19,7 @@
 
 <!--install-kof-start-->
   ```bash
-  helm upgrade -i --reset-values --wait \
+  helm upgrade -i --reset-values \
     --create-namespace -n kof kof \
     -f kof-values.yaml \
     {{{ docsVersionInfo.kofVersions.kofOciRegistryBase }}}/charts/kof \

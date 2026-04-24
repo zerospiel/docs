@@ -330,11 +330,11 @@ and apply this example, or use it as a reference:
 8. Install the KOF umbrella chart, which orchestrates the installation of
     operators, mothership, and shared config for all regional and child clusters:
 
-{%
-    include-markdown "../../../includes/kof-install-includes.md"
-    start="<!--install-kof-start-->"
-    end="<!--install-kof-end-->"
-%}
+    {%
+        include-markdown "../../../includes/kof-install-includes.md"
+        start="<!--install-kof-start-->"
+        end="<!--install-kof-end-->"
+    %}
 
     The chart uses FluxCD to manage sequential deployment of all KOF components.
     
