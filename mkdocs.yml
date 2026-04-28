@@ -303,7 +303,7 @@ nav:
     - KubeVirt Infrastructure Cluster Preparation: appendix/kubevirt-infra.md
   - Release Notes:
     - Overview: release-notes/index.md
-    - v1.8.0: release-notes/release-notes-v1.8.0.md
+    - v1.9.0: release-notes/release-notes-v1.9.0.md
   - Contributing:
     - Overview: contrib/index.md
     - k0rdent documentation contributor's guide: contrib/k0rdent-documentation-contributors-guide.md
@@ -366,14 +366,14 @@ extra:
             using our <a href="https://github.com/k0rdent/docs/issues/new" target="_blank" rel="noopener">feedback form</a>.
   docsVersionInfo:
     k0rdentName: k0rdent
-    k0rdentVersion: 1-8-0
-    k0rdentDotVersion: 1.8.0
+    k0rdentVersion: 1-9-0
+    k0rdentDotVersion: 1.9.0
     ociRegistry: oci://ghcr.io/k0rdent/kcm/charts/kcm
     k0rdentDigestValue: sha256:0eae48c8098e06138001578945657556ac9aeb21fe9e1f7c4aa8406f9c2f71f0
-    k0rdentDigestDate: Tue Mar 03 12:54:32 2026
+    k0rdentDigestDate: Tue Apr 28 12:54:32 2026
     k0rdentTagList: https://github.com/k0rdent/kcm/tags
     kofVersions:
-      kofDotVersion: 1.8.0
+      kofDotVersion: 1.9.0
       kofOciRegistryBase: oci://ghcr.io/k0rdent/kof
       kofOciRegistryBaseIstio: oci://ghcr.io/k0rdent/istio
     providerVersions:
