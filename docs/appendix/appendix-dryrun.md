@@ -20,6 +20,13 @@ spec:
 
 After validation (this is, you see `TemplateReady` as a condition in `.status.conditions`), remove or disable `.spec.dryRun` to proceed with deployment.
 
+> NOTE:
+> In Dry Run mode, when you update `.spec.template`, k0rdent also checks
+> whether the underlying Helm chart name has changed. If it has, k0rdent sets
+> a non-blocking `HelmChartNameChanged` condition and emits a warning
+> (including webhook warnings during update validation), because Flux will
+> uninstall and reinstall the release under the new chart name.
+
 **Example:** Validated `ClusterDeployment` object:
 
 ```yaml

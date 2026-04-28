@@ -73,13 +73,13 @@ Available for the hosted cluster template only.
 * `project` (string): The name of the GCP project where the cluster is deployed.
 * `enableAutopilot` (boolean): Indicates whether to enable Autopilot for this GKE cluster.
 * `releaseChannel` (string): The release channel of the GKE cluster.
-* `controlPlaneVersion` (string): **Deprecated**. Use the `version` field instead. The control plane version of the GKE cluster. If unspecified, the default version supported by GKE is used.
+* `controlPlaneVersion` (string): **Deprecated**. Use the `version` field instead. The control plane version of the GKE cluster. Set to null or omit to let GKE select the default version. If set, must be a non-empty version string.
 * `masterAuthorizedNetworksConfig` (object): Configuration options for the master authorized networks feature. If unspecified, the feature is disabled.
 * `region` (string): The GCP region where the cluster is deployed.
 * `location` (string): The location where the GKE cluster is created. If unspecified, the cluster is regional; otherwise, specifying a location creates a zonal cluster.
 * `network.name` (string): The GCP network name.
 * `network.mtu` (number): Maximum Transmission Unit (MTU) in bytes.
-* `version` (string): Represents the control plane version of the GKE cluster.
+* `version` (string): Represents the control plane version of the GKE cluster. Set to null or omit to let GKE select the default version. If set, must be a non-empty version string.
 
 ### GKE Managed Machines Parameters
 
@@ -90,7 +90,7 @@ Available for the hosted cluster template only.
 * `machines.scaling.enableAutoscaling` (boolean): Indicates if autoscaling is enabled for this node pool. Defaults to true.
 * `machines.scaling.minCount` (number,null): The minimum number of nodes in the node pool.
 * `machines.scaling.maxCount` (number,null): The maximum number of nodes in the node pool.
-* `machines.scaling.locationPolicy` (string): Location policy used when scaling up a node pool.
+* `machines.scaling.locationPolicy` (string): Location policy used when scaling up a nodepool. Possible values are: `balanced` (default), `any` or `""`. Empty `""` value disables autoscaling.
 * `machines.nodeLocations` (array): The list of zones where the node pool’s nodes are located.
 * `machines.imageType` (string): The image type used for this node pool.
 * `machines.instanceType` (string): The Compute Engine machine type.
