@@ -48,9 +48,9 @@
 
 ### k0rdent Observability an Finance (KOF)
 
-KOF Enterprise v1.3.1 replaces Nginx Ingress with Envoy Gateway by introducing Gateway API support, requiring users to update their Helm values to disable ingress-nginx and enable envoy-gateway before upgrading. This change may cause temporary downtime due to DNS propagation unless a parallel regional cluster migration is used to avoid disruption. The upgrade process involves exporting current Helm values, modifying them for the new gateway configuration, handling DNS updates (automatically or manually), and then performing a Helm upgrade with the updated configuration and registry settings.
+{{{ docsVersionInfo.k0rdentName }}} 1.9.0 replaces Nginx Ingress with Envoy Gateway by introducing Gateway API support, requiring users to update their Helm values to disable ingress-nginx and enable envoy-gateway before upgrading. This change may cause temporary downtime due to DNS propagation unless a parallel regional cluster migration is used to avoid disruption. The upgrade process involves exporting current Helm values, modifying them for the new gateway configuration, handling DNS updates (automatically or manually), and then performing a Helm upgrade with the updated configuration and registry settings.
 
-For full information on [upgrading to KOF 1.8.1, see the full documentation](../admin/kof/kof-upgrade.md).
+For full information on [upgrading to KOF 1.9.0, see the full documentation](../admin/kof/kof-upgrade.md).
 
 ---
 
