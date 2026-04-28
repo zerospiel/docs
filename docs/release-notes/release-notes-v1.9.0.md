@@ -68,6 +68,14 @@ Here’s the structured conversion with proper categorization (and deduping wher
 * **feat(templates):** add auto-reload annotation ([#2592](https://github.com/k0rdent/kcm/pull/2592)) by @zerospiel
 * **feat(cld):** notify release change on dry-run ([#2633](https://github.com/k0rdent/kcm/pull/2633)) by @zerospiel
 * **feat(templates):** upgrade EKS to 1.35 ([#2497](https://github.com/k0rdent/kcm/pull/2497)) by @zerospiel
+* **feat:** migrate to Envoy Gateway from NGINX Ingress ([#798](https://github.com/k0rdent/kcm/pull/798)) by @gmlexx 
+* **feat(ui):** add dark theme ([#843](https://github.com/k0rdent/kcm/pull/843)) by @AndrejsPon00 
+* **feat(ui):** add Istio connectivity monitoring ([#851](https://github.com/k0rdent/kcm/pull/851)) by @AndrejsPon00 
+* **feat:** make Gateway API the default ([#873](https://github.com/k0rdent/kcm/pull/873)) by @gmlexx 
+* **feat:** add agent troubleshooting skill ([#917](https://github.com/k0rdent/kcm/pull/917)) by @gmlexx 
+* **feat:** add StackLight Ceph alert rules and dashboard ([#879](https://github.com/k0rdent/kcm/pull/879)) by @gmlexx 
+* **feat:** simplify KCM Region and cross-namespace resource propagation ([#926](https://github.com/k0rdent/kcm/pull/926)) by @AndrejsPon00 
+* **feat:** add external-dns and envoy-gateway to mothership Helm chart ([#958](https://github.com/k0rdent/kcm/pull/958)) by @gmlexx 
 
 ---
 
@@ -104,6 +112,27 @@ Here’s the structured conversion with proper categorization (and deduping wher
 * **fix(templates):** nullify imagePullSecrets and reload ([#2664](https://github.com/k0rdent/kcm/pull/2664)) by @zerospiel
 * **fix:** ensure drift detection manager deployed on install by @kylewuolle
 
+* **fix:** change git branch for CI tests ([#849](https://github.com/k0rdent/kcm/pull/849)) by @Alex-Vovchuk 
+* **fix:** resolve missing `.Cluster.metadata.annotations` key issue ([#855](https://github.com/k0rdent/kcm/pull/855)) by @denis-ryzhkov 
+* **fix:** set persistent storage class for Victoria Traces from global config ([#859](https://github.com/k0rdent/kcm/pull/859)) by @gmlexx 
+* **fix:** enable customizable HelmRepository.spec in umbrella KOF chart ([#860](https://github.com/k0rdent/kcm/pull/860)) by @denis-ryzhkov 
+* **fix:** update collectors tolerations ([#866](https://github.com/k0rdent/kcm/pull/866)) by @Alex-Vovchuk 
+* **fix:** resolve double custom registry issue in pod images ([#870](https://github.com/k0rdent/kcm/pull/870)) by @denis-ryzhkov 
+* **fix:** improve collector waiter logic ([#805](https://github.com/k0rdent/kcm/pull/805)) by @Alex-Vovchuk 
+* **fix:** resolve instrumentation sidecar trace export failure ([#883](https://github.com/k0rdent/kcm/pull/883)) by @denis-ryzhkov 
+* **fix:** pass daemon collector image tag from chart version ([#888](https://github.com/k0rdent/kcm/pull/888)) by @gmlexx 
+* **fix:** resolve gateway deployment issues on cloud environments ([#891](https://github.com/k0rdent/kcm/pull/891)) by @gmlexx 
+* **fix:** improve release flow and version handling for cloud clusters ([#892](https://github.com/k0rdent/kcm/pull/892)) by @denis-ryzhkov 
+* **fix:** correct solvers values chart configuration ([#896](https://github.com/k0rdent/kcm/pull/896)) by @gmlexx 
+* **fix:** resolve NVLink panel issue ([#913](https://github.com/k0rdent/kcm/pull/913)) by @MirgDenis 
+* **fix:** split kof-storage and victoria-metrics-operator installation ([#920](https://github.com/k0rdent/kcm/pull/920)) by @gmlexx 
+* **fix:** add CLUSTER_NAME to Opencost environment variables ([#935](https://github.com/k0rdent/kcm/pull/935)) by @gmlexx 
+* **fix:** merge Envoy Gateway-related fixes from release/v1.8.1 ([#947](https://github.com/k0rdent/kcm/pull/947)) by @denis-ryzhkov 
+* **fix:** update vmuser MCS propagation on spec changes ([#963](https://github.com/k0rdent/kcm/pull/963)) by @AndrejsPon00 
+* **fix:** add take-ownership option for Helm install/upgrade (vmuser MCS) ([#970](https://github.com/k0rdent/kcm/pull/970)) by @AndrejsPon00 
+* **fix:** conditional Gateway API enablement to avoid HTTPRoute errors ([#972](https://github.com/k0rdent/kcm/pull/972)) by @denis-ryzhkov 
+* **fix:** add dependency ordering for VMUser MCS CRDs ([#971](https://github.com/k0rdent/kcm/pull/971)) by @AndrejsPon00 
+
 ---
 
 ### Platform & Dependency Updates
@@ -129,6 +158,9 @@ Here’s the structured conversion with proper categorization (and deduping wher
 * **chore(deps):** CAPA provider update ([#2648](https://github.com/k0rdent/kcm/pull/2648)) by @zerospiel
 * **chore(deps):** cluster-api updates (v1.12.x series) by @dependabot
 * **chore(deps):** GitHub Actions, CEL, crypto, grpc, and other ecosystem bumps by @dependabot
+* **chore(deps-dev):** bump @types/node by @dependabot 
+* **chore(deps):** bump go.opentelemetry.io/otel/sdk by @dependabot 
+* **chore(deps):** multiple dependency updates across Go, JS, and Kubernetes libraries by @dependabot 
 
 ---
 
@@ -145,6 +177,15 @@ Here’s the structured conversion with proper categorization (and deduping wher
 * **ci:** staging workflow fixes by @zerospiel
 * **refactor:** rearrange make targets ([#2569](https://github.com/k0rdent/kcm/pull/2569)) by @zerospiel
 * **chore:** serviceSet refactor ([#2482](https://github.com/k0rdent/kcm/pull/2482)) by @BROngineer
+* **chore:** update upgrade workflows from release 1.8.0 by @gmlexx 
+* **revert:** remove automatic traces datasource generation for regional clusters ([#837](https://github.com/k0rdent/kcm/pull/837)) by @AndrejsPon00 
+* **chore:** npm audit fixes by @gmlexx 
+* **chore:** add Dependabot auto-updates for kof-operator gomod by @gmlexx 
+* **ci:** add and fix integration tests and workflows (multiple PRs) by @gmlexx and contributors 
+* **chore:** vendor OpenTelemetry types and update KCM version ([#846](https://github.com/k0rdent/kcm/pull/846)) by @gmlexx 
+* **chore:** update scripts and support bundle generation ([#936](https://github.com/k0rdent/kcm/pull/936)) by @denis-ryzhkov 
+* **refactor:** split utils into crypto, logging, and env packages ([#945](https://github.com/k0rdent/kcm/pull/945)) by @AndrejsPon00 
+* **chore:** update KOF to version 1.9.0 by @denis-ryzhkov 
 
 ---
 
