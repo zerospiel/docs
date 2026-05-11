@@ -308,6 +308,9 @@ nav:
     - Overview: contrib/index.md
     - k0rdent documentation contributor's guide: contrib/k0rdent-documentation-contributors-guide.md
     - k0rdent documentation style guide: contrib/k0rdent-documentation-style-guide.md
+  - Governance:
+    - CNCF:
+      - Kubernetes AI Conformance: governance/cncf/ai-conformance/index.md
 
 markdown_extensions:
   - callouts
