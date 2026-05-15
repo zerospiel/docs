@@ -49,7 +49,7 @@ Before beginning KOF installation, you should have the following components in p
       This is the only option which does not need access to create external DNS records
       for service endpoints such as `kof.example.com`.
 
-For information on long-term storage planning, review the [KOF Retention](./kof-retention.md) page, which covers retention and replication strategies.
+For information on long-term storage planning, review the [KOF Retention and Replication](kof-retention.md) guide.
 
 {%
     include-markdown "../../../includes/kof-install-includes.md"
@@ -315,6 +315,8 @@ and apply this example, or use it as a reference:
         For example, if all your regional clusters will use OpenStack,
         you may set the OpenStack-specific values described in step 10 of the [Regional Cluster](#regional-cluster) section
         under the `storage:` key here.
+
+        See also the [KOF Retention and Replication](kof-retention.md) guide.
 
     ??? note "To customize collectors for all child clusters at once now:"
 
@@ -651,7 +653,7 @@ apply this example for AWS, or use it as a reference:
     add them to the `regional-cluster.yaml` file in the `.spec.config.clusterAnnotations`.
     Examples:
 
-    ??? note "VictoriaLogs replicaCount"
+    ??? note "VictoriaLogs vlinsert replicaCount"
 
         ```yaml
         k0rdent.mirantis.com/kof-storage-values: |
@@ -659,6 +661,8 @@ apply this example for AWS, or use it as a reference:
             vlinsert:
               replicaCount: 2
         ```
+
+        See also the [KOF Retention and Replication](kof-retention.md) guide.
 
     ??? note "OpenStack extra requirement for DNS auto-config"
 
