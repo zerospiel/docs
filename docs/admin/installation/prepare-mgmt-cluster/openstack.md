@@ -8,7 +8,7 @@
 
 2. OpenStack CLI (optional)
 
-    If you plan to access OpenStack directly, go ahead and 
+    If you plan to access OpenStack directly, go ahead and
     [install the OpenStack CLI](https://docs.openstack.org/newton/user-guide/common/cli-install-openstack-command-line-clients.html).
 
 3. Configure the OpenStack Application Credential
@@ -55,7 +55,7 @@
     ```
 
     > NOTE:
-    > The name of the `Secret` must follow a specific pattern. See [credential secret](../../../appendix/appendix-providers.md#credential-secret) for details. 
+    > The name of the `Secret` must follow a specific pattern. See [credential secret](../../../appendix/appendix-providers.md#credential-secret) for details.
 
     Apply the YAML to your cluster:
 
@@ -91,7 +91,7 @@
     kubectl apply -f openstack-cluster-identity-cred.yaml
     ```
 
-    Note that `.spec.identityRef.name` must match the `Secret` you created in the previous step, and 
+    Note that `.spec.identityRef.name` must match the `Secret` you created in the previous step, and
     `.spec.identityRef.namespace` must be the same as the one that includes the `Secret` (`kcm-system`).
 
 6. Create the ConfigMap resource-template object
@@ -135,6 +135,9 @@
 
         {{- $network_id := $cluster.status.externalNetwork.id -}}
         {{- $network_name := $cluster.status.externalNetwork.name -}}
+
+        {{- $verify := index $openstack "verify" -}}
+        {{- $ca_cert := index $identity "data" "cacert" -}}
         ---
         apiVersion: v1
         kind: Secret
@@ -165,6 +168,14 @@
             {{- end }}
             region="{{ index $openstack "region_name" }}"
 
+            {{- if or (eq $verify false) (eq (lower (printf "%v" $verify)) "false") }}
+            tls-insecure=true
+            {{- end }}
+
+            {{- if $ca_cert }}
+            ca-file=/etc/cacert/ca.crt
+            {{- end }}
+
             [LoadBalancer]
             {{- if $network_id }}
             floating-network-id="{{ $network_id }}"
@@ -174,8 +185,19 @@
             {{- if $network_name }}
             public-network-name="{{ $network_name }}"
             {{- end }}
+        {{- if $ca_cert }}
+        ---
+        apiVersion: v1
+        kind: Secret
+        metadata:
+          name: openstack-ca-cert
+          namespace: kube-system
+        type: Opaque
+        data:
+          ca.crt: "{{ $ca_cert }}"
+        {{- end }}
     ```
-    
+
     Apply the YAML to your cluster:
 
     ```bash
@@ -190,6 +212,7 @@
     ```bash
     kubectl get clustertemplate -n kcm-system
     ```
+
     ```console { .no-copy }
     NAME                            VALID
     adopted-cluster-{{{ extra.docsVersionInfo.k0rdentVersion }}}           true
@@ -273,14 +296,16 @@
     ```bash
     kubectl get clusterdeployments -A
     ```
+
     ```console { .no-copy }
     NAMESPACE    NAME                          READY   STATUS
     kcm-system   my-openstack-cluster-deployment   True    ClusterDeployment is ready
     ```
+
     ```bash
     kubectl delete clusterdeployments my-openstack-cluster-deployment -n kcm-system
     ```
+
     ```console { .no-copy }
     clusterdeployment.k0rdent.mirantis.com "my-openstack-cluster-deployment" deleted
     ```
-
