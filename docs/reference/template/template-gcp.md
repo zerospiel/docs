@@ -60,6 +60,12 @@ Available for the hosted cluster template only.
    and to override existing flags. The default flags are kept unless they are explicitly overriden. Flags with arguments must be specified as a single
    string, such as `--some-flag=argument`.
 
+### Etcd encryption at rest for hosted and standalone templates
+
+{%
+  include-markdown "../../../includes/template-encryption-at-rest.md"
+%}
+
 ### Extensions parameters
 
 * `extensions.chartRepository` (string): Custom Helm repository.
