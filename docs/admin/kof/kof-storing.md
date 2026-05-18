@@ -23,9 +23,9 @@ When deploying VictoriaMetrics Cluster (used by KOF for metrics storage), consid
 - **Required Space:** Storage requirements depend on your metrics volume, retention period, and replication factor. As a starting point, allocate at least 10–50 GiB per `vmstorage` pod for small clusters, and plan for growth based on actual ingestion rates and retention settings.
 - **Volume Binding Mode:** `WaitForFirstConsumer` is recommended for better pod scheduling and to ensure volumes are provisioned in the correct availability zone or node pool.
 
-For more details, see the [VictoriaMetrics Cluster documentation](https://docs.victoriametrics.com/victoriametrics/cluster-victoriametrics/#cluster-resizing-and-scalability).
-
-See also: [KOF Retention](./kof-retention.md) for details on configuring retention periods and replication factors for VictoriaMetrics and VictoriaLogs.
+See also [KOF Retention and Replication](kof-retention.md) guide
+and [From Management to Management](#from-management-to-management) option
+for the non-default storage class, space, retention, and replication details.
 
 ## From Child and Regional
 
@@ -36,93 +36,16 @@ No additional steps are required here.
 
 This option stores KOF data of the management cluster in the same management cluster.
 
-* VictoriaMetrics is provided by the `kof-mothership` chart, hence disabled in the `kof-storage` chart by default.
-* PromxyServerGroup, VictoriaLogs, and VictoriaTraces are provided by the `kof-storage` chart.
-
 To apply this option:
 
-1. Add this patch to the existing `kof-values.yaml`:
+1. Merge this patch to the existing `kof-values.yaml`:
+
     ```yaml
-    kof-storage:
-      enabled: true
-    kof-collectors:
-      enabled: true
-      values:
-        kcm:
-          monitoring: true
-        opentelemetry-kube-stack:
-          clusterName: mothership
-          defaultCRConfig:
-            config:
-              processors:
-                resource/k8sclustername:
-                  attributes:
-                    - action: insert
-                      key: k8s.cluster.name
-                      value: mothership
-                    - action: insert
-                      key: k8s.cluster.namespace
-                      value: kcm-system
-              exporters:
-                prometheusremotewrite:
-                  external_labels:
-                    cluster: mothership
-                    clusterNamespace: kcm-system
-    ```
-
-    ??? note "If your management cluster is not [k0s](https://k0sproject.io/):"
-
-        KOF scrapes `etcd` metrics using cert files like
-        `/hostfs/${env:PKI_PATH}/pki/apiserver-etcd-client.crt`
-
-        If you have `PKI_PATH` other than `var/lib/k0s`,
-        e.g. when testing with [kind](https://kind.sigs.k8s.io/), merge this:
-
-        ```yaml
-        kof-collectors:
-          values:
-            opentelemetry-kube-stack:
-              defaultCRConfig:
-                env:
-                  - name: PKI_PATH
-                    value: etc/kubernetes
-        ```
-
-    ??? note "If you want to use a non-default storage class, merge this:"
-
-        ```yaml
-        kof-storage:
-          values:
-            victoria-logs-cluster:
-              vlstorage:
-                persistentVolume:
-                  storageClassName: <EXAMPLE_STORAGE_CLASS>
-        ```
-
-2. Apply `kof-values.yaml` to the [Management Cluster](kof-install.md/#management-cluster):
-
-{%
-    include-markdown "../../../includes/kof-install-includes.md"
-    start="<!--install-kof-start-->"
-    end="<!--install-kof-end-->"
-%}
-
-## From Management to Regional
-
-This option stores KOF data of the management cluster in the regional cluster
-with the `REGIONAL_CLUSTER_NAME` configured [here](./kof-install.md#regional-cluster).
-
-To apply this option:
-
-1. Create the patch:
-    ```bash
-    cat <<EOF
     kof-child:
       values:
         fromManagement:
-          toRegionalCluster:
-            name: $REGIONAL_CLUSTER_NAME
-    EOF
+          toManagementCluster:
+            enabled: true
     ```
 
     ??? note "If your management cluster is not [k0s](https://k0sproject.io/):"
@@ -138,16 +61,101 @@ To apply this option:
           values:
             fromManagement:
               collectors:
-                values:
-                  opentelemetry-kube-stack:
-                    defaultCRConfig:
-                      env:
-                        - name: PKI_PATH
-                          value: etc/kubernetes
+                opentelemetry-kube-stack:
+                  defaultCRConfig:
+                    env:
+                      - name: PKI_PATH
+                        value: etc/kubernetes
         ```
 
-2. Add this patch to the existing `kof-values.yaml` file
-    and then apply `kof-values.yaml` to the [Management Cluster](kof-install.md/#management-cluster):
+    ??? note "If you want to use a non-default storage class, space, retention, replication:"
+
+        Adjust and merge this:
+
+        ```yaml
+        kof-mothership:
+          values:
+            victoriametrics:
+              vmcluster:
+                spec:
+                  retentionPeriod: "30d"
+                  replicationFactor: 2
+                  vmstorage:
+                    storage:
+                      volumeClaimTemplate:
+                        spec:
+                          storageClassName: <EXAMPLE_STORAGE_CLASS>
+                          resources:
+                            requests:
+                              storage: "100Gi"
+        kof-child:
+          values:
+            storage:
+              victoria-logs-cluster:
+                vlstorage:
+                  extraArgs:
+                    retentionPeriod: "30d"
+                  persistentVolume:
+                    storageClassName: <EXAMPLE_STORAGE_CLASS>
+                    size: "100Gi"
+              victoria-traces-cluster:
+                vtstorage:
+                  extraArgs:
+                    retentionPeriod: "30d"
+                  persistentVolume:
+                    storageClassName: <EXAMPLE_STORAGE_CLASS>
+                    size: "100Gi"
+        ```
+
+        See details in the [KOF Retention and Replication](kof-retention.md) guide.
+
+2. Apply `kof-values.yaml` to the [Management Cluster](kof-install.md/#management-cluster):
+
+{%
+    include-markdown "../../../includes/kof-install-includes.md"
+    start="<!--install-kof-start-->"
+    end="<!--install-kof-end-->"
+%}
+
+## From Management to Regional
+
+This option stores KOF data of the management cluster in the regional cluster.
+
+To apply this option:
+
+1. Merge this patch to the existing `kof-values.yaml`:
+
+    ```yaml
+    kof-child:
+      values:
+        fromManagement:
+          toRegionalCluster:
+            name: $REGIONAL_CLUSTER_NAME
+    ```
+
+    Make sure to replace `$REGIONAL_CLUSTER_NAME` with its value configured [here](./kof-install.md#regional-cluster).
+
+    ??? note "If your management cluster is not [k0s](https://k0sproject.io/):"
+
+        KOF scrapes `etcd` metrics using cert files like
+        `/hostfs/${env:PKI_PATH}/pki/apiserver-etcd-client.crt`
+
+        If you have `PKI_PATH` other than `var/lib/k0s`,
+        e.g. when testing with [kind](https://kind.sigs.k8s.io/), merge this:
+
+        ```yaml
+        kof-child:
+          values:
+            fromManagement:
+              collectors:
+                opentelemetry-kube-stack:
+                  defaultCRConfig:
+                    env:
+                      - name: PKI_PATH
+                        value: etc/kubernetes
+        ```
+
+2. Apply `kof-values.yaml` to the [Management Cluster](kof-install.md/#management-cluster):
 
 {%
     include-markdown "../../../includes/kof-install-includes.md"
@@ -180,9 +188,9 @@ For now, however, just for the sake of this demo, you can use the most straightf
       --from-env-file=cloudwatch-credentials
     ```
 
-4. Create the patch:
-    ```bash
-    cat <<EOF
+4. Merge this patch to the existing `kof-values.yaml`:
+
+    ```yaml
     kof-collectors:
       enabled: true
       values:
@@ -232,11 +240,29 @@ For now, however, just for the sake of this demo, you can use the most straightf
                   traces:
                     exporters:
                     - debug
-    EOF
     ```
 
-5. Add this patch to the existing `kof-values.yaml` file
-    and then apply `kof-values.yaml` to the [Management Cluster](kof-install.md/#management-cluster):
+    ??? note "If your management cluster is not [k0s](https://k0sproject.io/):"
+
+        KOF scrapes `etcd` metrics using cert files like
+        `/hostfs/${env:PKI_PATH}/pki/apiserver-etcd-client.crt`
+
+        If you have `PKI_PATH` other than `var/lib/k0s`,
+        e.g. when testing with [kind](https://kind.sigs.k8s.io/), merge this:
+
+        ```yaml
+        kof-collectors:
+          values:
+            opentelemetry-kube-stack:
+              defaultCRConfig:
+                env:
+                  - name: PKI_PATH
+                    value: etc/kubernetes
+        ```
+
+        Please take especial care merging the `env` list manually to avoid overwriting it.
+
+5. Apply `kof-values.yaml` to the [Management Cluster](kof-install.md/#management-cluster):
 
 {%
     include-markdown "../../../includes/kof-install-includes.md"
