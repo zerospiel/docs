@@ -301,6 +301,7 @@ nav:
       - Configuration: appendix/telemetry/configuration.md
     - Proxy configuration: appendix/proxy.md
     - KubeVirt Infrastructure Cluster Preparation: appendix/kubevirt-infra.md
+    - Verifying a default `StorageClass`: appendix/storageclass.md
   - Release Notes:
     - Overview: release-notes/index.md
     - v1.8.0: release-notes/release-notes-v1.8.0.md

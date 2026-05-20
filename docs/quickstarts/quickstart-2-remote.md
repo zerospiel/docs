@@ -4,7 +4,7 @@ In many cases, you will want {{{ docsVersionInfo.k0rdentName }}} (running on you
 
 The remote machines that will be part of the cluster must meet the following prerequisites:
 
-1.	Linux-based operating system; the remote hosts should meet the [k0s system requirements](https://docs.k0sproject.io/stable/system-requirements/)
+1.	Linux-based operating system; the remote hosts should meet the [k0s system requirements](https://docs.k0sproject.io/stable/system-requirements/). Note that Ubuntu 26.04 is not yet supported by Ubuntu 26.04.
 2.	SSH access enabled for the root user
 3.	Internet access
 4.	Connectivity between the management cluster and the remote hosts' networks
@@ -51,21 +51,9 @@ Before proceeding, make sure your management cluster meets the following require
     sudo reboot
     ```
 
-1. A [default storage class](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/) is configured on the management cluster to support Persistent Volumes.  For example:
+1. A [default storage class](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/) is configured on the management cluster to support Persistent Volumes.  Make sure the storage class is [configured and working properly](../appendix/storageclass.md).
 
-    ```bash
-    helm repo add openebs https://openebs.github.io/openebs
-    helm repo update
-
-    helm install openebs openebs/openebs \
-      --namespace openebs \
-      --create-namespace
-
-    kubectl patch storageclass openebs-hostpath \
-      -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'  
-    ```
-
-1. Make sure the key you will use to log in as root exists on the child machines.
+1. Make sure the key you will use to log in as root exists and has been configured on the child machines.
 
 2. If the API server will be exposed as a `LoadBalancer`, ensure the appropriate cloud provider is installed on the management cluster.
 
@@ -201,7 +189,7 @@ kcm-system   vsphere-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.da
 
 ## Create your ClusterDeployment
 
-To deploy a cluster, create a YAML file called `my-remote-clusterdeployment1.yaml`. We'll use this to create a `ClusterDeployment` object representing the deployed cluster. The `ClusterDeployment` identifies for {{{ docsVersionInfo.k0rdentName }}} the `ClusterTemplate` you want to use for cluster creation, the identity credential object you want to create it under, plus the machines' IP addresses (represented by the placeholder `MACHINE_0_ADDRESS` and `MACHINE_1_ADDRESS` below), the SSH port of the remote machines and the user to use when connecting to remote machines (`root`):
+To deploy a cluster, create a YAML file called `my-remote-clusterdeployment1.yaml`. We'll use this to create a `ClusterDeployment` object representing the deployed cluster. The `ClusterDeployment` identifies for {{{ docsVersionInfo.k0rdentName }}} the `ClusterTemplate` you want to use for cluster creation, the identity credential object you want to create it under, plus the machines' IP addresses (represented by the placeholder `MACHINE_0_ADDRESS` and `MACHINE_1_ADDRESS` below), the SSH port of the remote machines and the user to use when connecting to remote machines (`root`). Also, if necessary, specify the k0s version; at the time of this writing, v1.35.4 is required:
 
 > NOTE:
 > The user must have root permissions. 
@@ -220,9 +208,11 @@ spec:
   credential: remote-cred
   propagateCredentials: false
   config:
+    k0s:
+      version: v1.35.4+k0s.0
     k0smotron:
       service:
-        type: LoadBalancer
+        type: NodePort
     machines:
     - address: $MACHINE_0_ADDRESS
       user: root # The user must have root permissions 
