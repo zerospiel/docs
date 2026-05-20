@@ -8,5 +8,6 @@ things run smoothly.
 - [EKS](known-issues-eks.md)
 - [GCP](known-issues-gcp.md)
 - [KubeVirt](known-issues-kubevirt.md)
+- [Remote](known-issues-remote.md)
 - [Custom CA Certificates](known-issues-custom-ca.md)
 - [ClusterCtl Issues](known-issues-clusterctl.md)
