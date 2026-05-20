@@ -1,13 +1,13 @@
 # Helm Values Overrides
 
 This document describes all Helm values that are automatically configured when deploying a cluster or a provider.
-To effectively use these values, the ClusterTemplate's or ProviderTemplate's Helm chart must be designed to consume them.
+To effectively use these values, the `ClusterTemplate`'s or `ProviderTemplate`'s Helm chart must be designed to consume them.
 For complete examples of cluster and provider templates that consume these values, refer to the
 [templates](https://github.com/k0rdent/kcm/tree/main/templates) in the `k0rdent/kcm` repository.
 
 ## `global`
 
-These values are globally configured during KCM installation or in the Management object and are automatically passed
+These values are globally configured during KCM installation or in the `Management` object and are automatically passed
 to all cluster and provider values.
 
 Supported global configuration options (example of KCM values configuration):
@@ -55,7 +55,7 @@ for examples of how to use global values in cluster and provider templates.
 
 A reference to the cluster identity resource containing credentials used to access the infrastructure provider.
 
-Always set. Populated from the `Credential` object's `spec.identityRef` associated with the ClusterDeployment.
+Always set. Populated from the `Credential` object's `spec.identityRef` associated with the `ClusterDeployment`.
 
 | Path                         | Description                                     |
 |------------------------------|-------------------------------------------------|
@@ -106,7 +106,7 @@ spec:
 ## `clusterLabels`
 
 Set only if `clusterLabels` is **not** already defined in the user-provided `spec.config` values.
-Defaults to the ClusterDeployment object's own labels.
+Defaults to the `ClusterDeployment` object's own labels.
 
 | Path            | Description                                     |
 |-----------------|-------------------------------------------------|
@@ -138,7 +138,7 @@ metadata:
 
 See details in [Identity and Authorization Management](../admin/clusters/cluster-iam-setup.md).
 
-Set only when a `ClusterAuthentication` object is referenced in the ClusterDeployment spec and
+Set only when a `ClusterAuthentication` object is referenced in the `ClusterDeployment` spec and
 its `spec.authenticationConfiguration` is non-nil. The `auth.configWithAnon` field is additionally set to `true`
 only if anonymous authentication is explicitly configured.
 
