@@ -4,10 +4,10 @@ In many cases, you will want {{{ docsVersionInfo.k0rdentName }}} (running on you
 
 The remote machines that will be part of the cluster must meet the following prerequisites:
 
-1. A Linux-based operating system. All remote hosts must satisfy the [k0s system requirements](https://docs.k0sproject.io/stable/system-requirements/).
-2. SSH access must be enabled for the root user, and the SSH key must be correctly configured and authorized on all remote machines.
-3. Internet connectivity must be available on all remote machines.
-4. Network connectivity must exist between the management cluster and the remote hosts’ networks.
+1.	Linux-based operating system; the remote hosts should meet the [k0s system requirements](https://docs.k0sproject.io/stable/system-requirements/). Note that Ubuntu 26.04 is not yet supported by k0s.
+2.	SSH access enabled for the root user, with the SSH key be correctly configured and authorized on all remote machines.
+3.	Internet connectivity must be available on all remote machines.
+4.  Network connectivity must exist between the management cluster and the remote hosts’ networks.
 
 If you haven't yet created a management node and installed k0rdent, go back to [QuickStart 1 - Management node and cluster](quickstart-1-mgmt-node-and-cluster.md).
 
@@ -15,8 +15,9 @@ Note that if you have already done one of the other quickstarts, such as our AWS
 
 Before proceeding, make sure your management cluster meets the following requirements:
 
+1. A filesystem with [appropriate limits](../troubleshooting/known-issues-remote.md#control-plane-pods-are-in-crashloopbackoff-too-many-open-files-error) set.
 1. CSI provider installed and properly configured for persistent storage to support Persistent Volumes.
-2. A [default storage class](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/) is configured on the management cluster.
+2. A [default storage class](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/) is configured on the management cluster to support Persistent Volumes.  Make sure the storage class is [configured and working properly](../appendix/storageclass.md).
 2. If the API server will be exposed as a `LoadBalancer` (default), ensure the appropriate cloud provider is installed on the management cluster.
 
 ## Create a Secret object containing the private SSH key to access remote machines
@@ -157,7 +158,7 @@ kcm-system   vsphere-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.da
 
 ## Create your ClusterDeployment
 
-To deploy a cluster, create a YAML file called `my-remote-clusterdeployment1.yaml`. We'll use this to create a `ClusterDeployment` object representing the deployed cluster. The `ClusterDeployment` identifies for {{{ docsVersionInfo.k0rdentName }}} the `ClusterTemplate` you want to use for cluster creation, the identity credential object you want to create it under, plus the machines' IP addresses (represented by the placeholder `MACHINE_0_ADDRESS` and `MACHINE_1_ADDRESS` below), the SSH port of the remote machines and the user to use when connecting to remote machines (`root`):
+To deploy a cluster, create a YAML file called `my-remote-clusterdeployment1.yaml`. We'll use this to create a `ClusterDeployment` object representing the deployed cluster. The `ClusterDeployment` identifies for {{{ docsVersionInfo.k0rdentName }}} the `ClusterTemplate` you want to use for cluster creation, the identity credential object you want to create it under, plus the machines' IP addresses (represented by the placeholder `MACHINE_0_ADDRESS` and `MACHINE_1_ADDRESS` below), the SSH port of the remote machines and the user to use when connecting to remote machines (`root`). Also, if necessary, specify the k0s version; at the time of this writing, v1.35.4 is required:
 
 > NOTE:
 > The user must have root permissions. 
@@ -176,9 +177,11 @@ spec:
   credential: remote-cred
   propagateCredentials: false
   config:
+    k0s:
+      version: v1.35.4+k0s.0
     k0smotron:
       service:
-        type: LoadBalancer
+        type: NodePort
     machines:
     - address: $MACHINE_0_ADDRESS
       user: root # The user must have root permissions 
