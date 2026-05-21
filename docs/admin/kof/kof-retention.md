@@ -65,18 +65,19 @@ separate from the regular logs cluster, to allow a longer retention period (defa
 To change the retention period, storage class, or volume size, adjust the following in `kof-storage` values:
 
 ```yaml
-vlcluster_audit:
-  enabled: true
-  spec:
-    vlstorage:
-      retentionPeriod: "1y"
-      storage:
-        volumeClaimTemplate:
-          spec:
-            storageClassName: <EXAMPLE_STORAGE_CLASS>
-            resources:
-              requests:
-                storage: "100Gi"
+victoriametrics:
+  vlcluster_audit:
+    enabled: true
+    spec:
+      vlstorage:
+        retentionPeriod: "1y"
+        storage:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: <EXAMPLE_STORAGE_CLASS>
+              resources:
+                requests:
+                  storage: "100Gi"
 ```
 
 Details: [VLClusterSpec](https://docs.victoriametrics.com/operator/api/#vlclusterspec)
