@@ -2,7 +2,7 @@
 
 ## Steps to Debug KubeVirt Cluster Deployments
 
-1. Check the `ClusterDeployment` status condition on the management or regional cluster:
+1. Check the `ClusterDeployment` status condition on the management cluster:
 
     ```bash
     kubectl -n $CLUSTER_NAMESPACE get clusterdeployment.k0rdent.mirantis.com $CLUSTER_NAME -o=jsonpath='{.status.conditions[?(@.type=="Ready")]}' | jq
