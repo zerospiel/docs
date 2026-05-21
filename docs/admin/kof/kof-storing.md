@@ -120,7 +120,7 @@ To apply this option:
         ```
 
         To disable the audit logs cluster entirely, set `vlcluster_audit.enabled: false`
-        under `kof-mothership.values`.
+        under `kof-storage.values`.
 
         See details in the [KOF Retention and Replication](kof-retention.md) guide.
 
