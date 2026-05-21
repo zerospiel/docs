@@ -119,12 +119,10 @@ To update the diagram:
     kof-operator
     promxy
 
-  kof-collectors chart
-    opencost
-    opentelemetry-kube-stack
-
   kof-regional and kof-child
     MultiClusterServices
+
+  Optional kof-storage and kof-collectors charts
 
 Cloud 1..N
   Region 1..M
@@ -210,19 +208,13 @@ Cloud 1..N
     </div>
   </div>
   <div class="o">
-    kof-collectors chart
-    <div class="o">
-      opencost
-    </div>
-    <div class="o">
-      opentelemetry-kube-stack
-    </div>
-  </div>
-  <div class="o">
     kof-regional and kof-child
     <div class="o">
       MultiClusterServices
     </div>
+  </div>
+  <div class="o">
+    Optional kof-storage and kof-collectors charts
   </div>
 </div>
 <div class="o">
@@ -252,10 +244,10 @@ Cloud 1..N
           victoria-logs-cluster
         </div>
         <div class="o">
-          external-dns
+          victoria-traces-cluster
         </div>
         <div class="o">
-          victoria-traces-cluster
+          external-dns
         </div>
         <div class="o">
           dex
@@ -357,6 +349,7 @@ Cloud 1..N
 
 - [MultiClusterService](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-child/templates/child-multi-cluster-service.yaml)
   which configures and installs `kof-collectors` and other charts to child clusters
+  and [optionally](kof-storing.md) to the management cluster
 
 ### kof-storage
 
