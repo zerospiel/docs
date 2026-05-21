@@ -2,19 +2,7 @@
 
 Some operations, such as deploying a remote (SSH-based) cluster, require the management cluster to have a default `StorageClass`.  Follow these steps:
 
-1. If not already installed, install and configure a `StorageClass` provider. For example:
-
-    ```bash
-    helm repo add openebs https://openebs.github.io/openebs
-    helm repo update
-
-    helm install openebs openebs/openebs \
-      --namespace openebs \
-      --create-namespace
-
-    kubectl patch storageclass openebs-hostpath \
-      -p '{"metadata": {"annotations":{"storageclass.kubernetes.io/is-default-class":"true"}}}'  
-    ```
+1. If not already installed, install and configure a `StorageClass` provider of your choice. 
 
 2. Make sure you see the default setting:
 

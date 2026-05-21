@@ -1,15 +1,29 @@
 # KOF Retention and Replication
 
-KOF stores metrics in **VictoriaMetrics** and logs in **VictoriaLogs**. Configure retention and replication to balance cost, durability, and compliance.
+KOF stores metrics in **VictoriaMetrics**,
+logs in **VictoriaLogs**,
+and traces in **VictoriaTraces**.
 
-For example, consider these recommendations:
+## Recommendations
+
+Configure the storage class, space, retention, and replication
+to balance cost, durability, and compliance, for example:
 
 * **Management cluster:** short-term retention (1–30 days)
 * **Regional clusters:** long-term retention (30–365 days)
 * Increase **replicationFactor** where higher availability is required; this field enables you to determine how many copies are stored, usually on different nodes.
 
-Configure VictoriaMetrics and VictoriaLogs by adjusting the `charts/kof-storage/values.yaml` file
-to include the following parameters:
+Review the next guides to make **informed decision:**
+
+* [Storage Class Requirements for VictoriaMetrics Cluster](kof-storing.md#storage-class-requirements-for-victoriametrics-cluster)
+* [VictoriaMetrics Cluster Resizing and Scalability](https://docs.victoriametrics.com/victoriametrics/cluster-victoriametrics/#cluster-resizing-and-scalability)
+* [VictoriaMetrics Replication and Data Safety](https://docs.victoriametrics.com/victoriametrics/cluster-victoriametrics/#replication-and-data-safety)
+* [VictoriaLogs Cluster Replication](https://docs.victoriametrics.com/victorialogs/cluster/#replication) and [discussion](https://github.com/VictoriaMetrics/VictoriaLogs/issues/166#issuecomment-3043600409)
+* [VictoriaTraces Cluster HA](https://docs.victoriametrics.com/victoriatraces/cluster/#high-availability)
+
+## Examples of values
+
+### Metrics
 
 ```yaml
 victoriametrics:
@@ -21,14 +35,59 @@ victoriametrics:
         storage:
           volumeClaimTemplate:
             spec:
+              storageClassName: <EXAMPLE_STORAGE_CLASS>
               resources:
                 requests:
-                  storage: 100Gi
+                  storage: "100Gi"
+```
 
+Details: [VMClusterSpec](https://docs.victoriametrics.com/operator/api/#vmclusterspec)
+
+### Logs
+
+```yaml
 victoria-logs-cluster:
   vlstorage:
     extraArgs:
       retentionPeriod: "30d"
     persistentVolume:
+      storageClassName: <EXAMPLE_STORAGE_CLASS>
       size: "100Gi"
 ```
+
+Details: [Values of victoria-logs-cluster](https://github.com/VictoriaMetrics/helm-charts/blob/master/charts/victoria-logs-cluster/values.yaml)
+
+### Traces
+
+```yaml
+victoria-traces-cluster:
+  vtstorage:
+    extraArgs:
+      retentionPeriod: "30d"
+    persistentVolume:
+      storageClassName: <EXAMPLE_STORAGE_CLASS>
+      size: "100Gi"
+```
+
+Details: [Values of victoria-traces-cluster](https://github.com/VictoriaMetrics/helm-charts/blob/master/charts/victoria-traces-cluster/values.yaml)
+
+## Places to customize
+
+There are multiple places where the storage can be customized using these values.
+
+### All regional clusters at once
+
+Add these values to the `kof-values.yaml` file
+under the `kof-regional.values.storage` key
+as described in the step 5 of the [Management Cluster](kof-install.md#management-cluster) section.
+
+### Specific regional cluster
+
+Add these values to the regional `ClusterDeployment`
+as the `spec.config.clusterAnnotations."k0rdent.mirantis.com/kof-storage-values"`
+described in the step 10 of the [Regional Cluster](kof-install.md#regional-cluster) section.
+
+### Management to Management case
+
+If you selected to store metrics/logs/traces of the management cluster in the same management cluster,
+apply the details in the [From Management to Management](kof-storing.md#from-management-to-management) section.

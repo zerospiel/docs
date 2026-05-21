@@ -23,9 +23,9 @@ When deploying VictoriaMetrics Cluster (used by KOF for metrics storage), consid
 - **Required Space:** Storage requirements depend on your metrics volume, retention period, and replication factor. As a starting point, allocate at least 10–50 GiB per `vmstorage` pod for small clusters, and plan for growth based on actual ingestion rates and retention settings.
 - **Volume Binding Mode:** `WaitForFirstConsumer` is recommended for better pod scheduling and to ensure volumes are provisioned in the correct availability zone or node pool.
 
-For more details, see the [VictoriaMetrics Cluster documentation](https://docs.victoriametrics.com/victoriametrics/cluster-victoriametrics/#cluster-resizing-and-scalability).
-
-See also: [KOF Retention](./kof-retention.md) for details on configuring retention periods and replication factors for VictoriaMetrics and VictoriaLogs.
+See also [KOF Retention and Replication](kof-retention.md) guide
+and [From Management to Management](#from-management-to-management) option
+for the non-default storage class, space, retention, and replication details.
 
 ## From Child and Regional
 
@@ -36,66 +36,78 @@ No additional steps are required here.
 
 This option stores KOF data of the management cluster in the same management cluster.
 
-* VictoriaMetrics is provided by the `kof-mothership` chart, hence disabled in the `kof-storage` chart by default.
-* PromxyServerGroup, VictoriaLogs, and VictoriaTraces are provided by the `kof-storage` chart.
-
 To apply this option:
 
-1. Add this patch to the existing `kof-values.yaml`:
+1. Merge this patch to the existing `kof-values.yaml`:
+
     ```yaml
-    kof-storage:
-      enabled: true
-    kof-collectors:
-      enabled: true
+    kof-child:
       values:
-        kcm:
-          monitoring: true
-        opentelemetry-kube-stack:
-          clusterName: mothership
-          defaultCRConfig:
-            config:
-              processors:
-                resource/k8sclustername:
-                  attributes:
-                    - action: insert
-                      key: k8s.cluster.name
-                      value: mothership
-                    - action: insert
-                      key: k8s.cluster.namespace
-                      value: kcm-system
-              exporters:
-                prometheusremotewrite:
-                  external_labels:
-                    cluster: mothership
-                    clusterNamespace: kcm-system
+        fromManagement:
+          toManagementCluster:
+            enabled: true
     ```
 
-    ??? note "If you're using `kind` for Management cluster, merge this:"
+    ??? note "If your management cluster is not [k0s](https://k0sproject.io/):"
+
+        KOF scrapes `etcd` metrics using cert files like
+        `/hostfs/${env:PKI_PATH}/pki/apiserver-etcd-client.crt`
+
+        If you have `PKI_PATH` other than `var/lib/k0s`,
+        e.g. when testing with [kind](https://kind.sigs.k8s.io/), merge this:
 
         ```yaml
-        kof-collectors:
+        kof-child:
           values:
-            metrics-server:
-              enabled: true
-              args:
-                - "--kubelet-insecure-tls"
-            opentelemetry-kube-stack:
-              defaultCRConfig:
-                env:
-                  - name: PKI_PATH
-                    value: etc/kubernetes
+            fromManagement:
+              collectors:
+                opentelemetry-kube-stack:
+                  defaultCRConfig:
+                    env:
+                      - name: PKI_PATH
+                        value: etc/kubernetes
         ```
 
-    ??? note "If you want to use a non-default storage class, merge this:"
+    ??? note "If you want to use a non-default storage class, space, retention, replication:"
+
+        Adjust and merge this:
 
         ```yaml
-        kof-storage:
+        kof-mothership:
           values:
-            victoria-logs-cluster:
-              vlstorage:
-                persistentVolume:
-                  storageClassName: <EXAMPLE_STORAGE_CLASS>
+            victoriametrics:
+              vmcluster:
+                spec:
+                  retentionPeriod: "30d"
+                  replicationFactor: 2
+                  vmstorage:
+                    storage:
+                      volumeClaimTemplate:
+                        spec:
+                          storageClassName: <EXAMPLE_STORAGE_CLASS>
+                          resources:
+                            requests:
+                              storage: "100Gi"
+        kof-child:
+          values:
+            storage:
+              victoria-logs-cluster:
+                vlstorage:
+                  extraArgs:
+                    retentionPeriod: "30d"
+                  persistentVolume:
+                    storageClassName: <EXAMPLE_STORAGE_CLASS>
+                    size: "100Gi"
+              victoria-traces-cluster:
+                vtstorage:
+                  extraArgs:
+                    retentionPeriod: "30d"
+                  persistentVolume:
+                    storageClassName: <EXAMPLE_STORAGE_CLASS>
+                    size: "100Gi"
         ```
+
+        See details in the [KOF Retention and Replication](kof-retention.md) guide.
 
 2. Apply `kof-values.yaml` to the [Management Cluster](kof-install.md/#management-cluster):
 
@@ -109,312 +121,41 @@ To apply this option:
 
 This option stores KOF data of the management cluster in the regional cluster.
 
-It assumes that:
-
-* You did not enable Istio.
-* You have a regional cluster with the `REGIONAL_DOMAIN` configured [here](./kof-install.md#regional-cluster).
-
 To apply this option:
 
-1. Run in the management cluster:
-    ```bash
-    VMUSER_CREDS_NAME=$(
-      kubectl get secret -n kof \
-      | grep vmuser-creds-admin \
-      | cut -d ' ' -f 1
-    )
-    echo $VMUSER_CREDS_NAME
-    ```
+1. Merge this patch to the existing `kof-values.yaml`:
 
-2. Create the patch:
-    ```bash
-    cat <<EOF
-    kof-collectors:
-      enabled: true
+    ```yaml
+    kof-child:
       values:
-        kcm:
-          monitoring: true
-        opentelemetry-kube-stack:
-          clusterName: mothership
-          collectors:
-            daemon:
-              hostNetwork: true
-              observability:
-                metrics:
-                  disablePrometheusAnnotations: false
-                  enableMetrics: false
-              podAnnotations:
-                prometheus.io/ip4: \${env:OTEL_K8S_NODE_IP}
-              config:
-                receivers:
-                  prometheus:
-                    api_server:
-                      server_config:
-                        endpoint: \${env:OTEL_K8S_NODE_IP}:9090
-                  otlp:
-                    protocols:
-                      grpc:
-                        endpoint: 0.0.0.0:4317
-                      http:
-                        endpoint: 0.0.0.0:4318
-                service:
-                  extensions:
-                    - k8s_observer
-                    - file_storage/filelogreceiver
-                    - file_storage/filelogsyslogreceiver
-                    - file_storage/filelogk8sauditreceiver
-                    - file_storage/journaldreceiver
-                    - basicauth/metrics
-                    - basicauth/logs
-                    - basicauth/traces
-                  telemetry:
-                    metrics:
-                      readers:
-                        - pull:
-                            exporter:
-                              prometheus:
-                                host: \${env:OTEL_K8S_NODE_IP}
-                                port: 8888
-          defaultCRConfig:
-            env:
-              - name: PKI_PATH
-                value: var/lib/k0s
-              - name: KOF_VM_USER
-                valueFrom:
-                  secretKeyRef:
-                    key: username
-                    name: $VMUSER_CREDS_NAME
-              - name: KOF_VM_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    key: password
-                    name: $VMUSER_CREDS_NAME
-            config:
-              processors:
-                resource/k8sclustername:
-                  attributes:
-                    - action: insert
-                      key: k8s.cluster.name
-                      value: mothership
-                    - action: insert
-                      key: k8s.cluster.namespace
-                      value: kcm-system
-              extensions:
-                basicauth/metrics:
-                  client_auth:
-                    username: \${env:KOF_VM_USER}
-                    password: \${env:KOF_VM_PASSWORD}
-                basicauth/logs:
-                  client_auth:
-                    username: \${env:KOF_VM_USER}
-                    password: \${env:KOF_VM_PASSWORD}
-                basicauth/traces:
-                  client_auth:
-                    username: \${env:KOF_VM_USER}
-                    password: \${env:KOF_VM_PASSWORD}
-              exporters:
-                prometheusremotewrite:
-                  endpoint: https://vmauth.$REGIONAL_DOMAIN/vm/insert/0/prometheus/api/v1/write
-                  auth:
-                    authenticator: basicauth/metrics
-                  external_labels:
-                    cluster: mothership
-                    clusterNamespace: kcm-system
-                otlphttp/logs:
-                  logs_endpoint: https://vmauth.$REGIONAL_DOMAIN/vli/insert/opentelemetry/v1/logs
-                  auth:
-                    authenticator: basicauth/logs
-                otlphttp/traces:
-                  traces_endpoint: https://vmauth.$REGIONAL_DOMAIN/vti/insert/opentelemetry/v1/traces
-                  auth:
-                    authenticator: basicauth/traces
-              service:
-                extensions:
-                  - basicauth/metrics
-                  - basicauth/logs
-                  - basicauth/traces
-        opencost:
-          opencost:
-            prometheus:
-              existingSecretName: $VMUSER_CREDS_NAME
-              external:
-                url: https://vmauth.$REGIONAL_DOMAIN/vm/select/0/prometheus
-    EOF
+        fromManagement:
+          toRegionalCluster:
+            name: $REGIONAL_CLUSTER_NAME
     ```
 
-    ??? note "If you're using `kind` for Management cluster, merge this:"
+    Make sure to replace `$REGIONAL_CLUSTER_NAME` with its value configured [here](./kof-install.md#regional-cluster).
+
+    ??? note "If your management cluster is not [k0s](https://k0sproject.io/):"
+
+        KOF scrapes `etcd` metrics using cert files like
+        `/hostfs/${env:PKI_PATH}/pki/apiserver-etcd-client.crt`
+
+        If you have `PKI_PATH` other than `var/lib/k0s`,
+        e.g. when testing with [kind](https://kind.sigs.k8s.io/), merge this:
 
         ```yaml
-        kof-collectors:
+        kof-child:
           values:
-            metrics-server:
-              enabled: true
-              args:
-                - "--kubelet-insecure-tls"
-            opentelemetry-kube-stack:
-              defaultCRConfig:
-                env:
-                  - name: PKI_PATH
-                    value: etc/kubernetes
+            fromManagement:
+              collectors:
+                opentelemetry-kube-stack:
+                  defaultCRConfig:
+                    env:
+                      - name: PKI_PATH
+                        value: etc/kubernetes
         ```
 
-        Please merge to the existing `env` list manually to avoid overwrite.
-
-    ??? note "If you create this file directly:"
-
-        * Replace `\$` with `$`,
-        * `$VMUSER_CREDS_NAME` with the value from step 1,
-        * `$REGIONAL_DOMAIN` with the value from [Installing KOF - Regional Cluster](kof-install.md/#regional-cluster).
-
-2. Add this patch to the existing `kof-values.yaml` file
-    and then apply `kof-values.yaml` to the [Management Cluster](kof-install.md/#management-cluster):
-
-{%
-    include-markdown "../../../includes/kof-install-includes.md"
-    start="<!--install-kof-start-->"
-    end="<!--install-kof-end-->"
-%}
-
-## From Management to Regional with Istio
-
-This option stores KOF data of the management cluster in the regional cluster using Istio.
-
-It assumes that:
-
-* You have Istio enabled.
-* You have a regional cluster with the `REGIONAL_CLUSTER_NAME` configured [here](./kof-install.md#regional-cluster).
-
-To apply this option:
-
-1. Run in the management cluster:
-    ```bash
-    VMUSER_CREDS_NAME=$(
-      kubectl get secret -n kof \
-      | grep vmuser-creds-admin \
-      | cut -d ' ' -f 1
-    )
-    echo $VMUSER_CREDS_NAME
-    ```
-
-2. Create the patch:
-    ```bash
-    cat <<EOF
-    kof-collectors:
-      enabled: true
-      values:
-        kcm:
-          monitoring: true
-        opentelemetry-kube-stack:
-          clusterName: mothership
-          collectors:
-            controller-k0s:
-              enabled: false
-            daemon:
-              hostNetwork: false
-              config:
-                service:
-                  extensions:
-                    - k8s_observer
-                    - file_storage/filelogreceiver
-                    - file_storage/filelogsyslogreceiver
-                    - file_storage/filelogk8sauditreceiver
-                    - file_storage/journaldreceiver
-                    - basicauth/metrics
-                    - basicauth/logs
-                    - basicauth/traces
-          defaultCRConfig:
-            env:
-              - name: PKI_PATH
-                value: var/lib/k0s
-              - name: KOF_VM_USER
-                valueFrom:
-                  secretKeyRef:
-                    key: username
-                    name: $VMUSER_CREDS_NAME
-              - name: KOF_VM_PASSWORD
-                valueFrom:
-                  secretKeyRef:
-                    key: password
-                    name: $VMUSER_CREDS_NAME
-            config:
-              processors:
-                resource/k8sclustername:
-                  attributes:
-                    - action: insert
-                      key: k8s.cluster.name
-                      value: mothership
-                    - action: insert
-                      key: k8s.cluster.namespace
-                      value: kcm-system
-              extensions:
-                basicauth/logs:
-                  client_auth:
-                    username: \${env:KOF_VM_USER}
-                    password: \${env:KOF_VM_PASSWORD}
-                basicauth/metrics:
-                  client_auth:
-                    username: \${env:KOF_VM_USER}
-                    password: \${env:KOF_VM_PASSWORD}
-                basicauth/traces:
-                  client_auth:
-                    username: \${env:KOF_VM_USER}
-                    password: \${env:KOF_VM_PASSWORD}
-              service:
-                extensions:
-                - basicauth/logs
-                - basicauth/metrics
-                - basicauth/traces
-              exporters:
-                prometheusremotewrite:
-                  endpoint: http://$REGIONAL_CLUSTER_NAME-vmauth:8427/vm/insert/0/prometheus/api/v1/write
-                  auth:
-                    authenticator: basicauth/metrics
-                  external_labels:
-                    cluster: mothership
-                    clusterNamespace: kcm-system
-                otlphttp/logs:
-                  logs_endpoint: http://$REGIONAL_CLUSTER_NAME-vmauth:8427/vli/insert/opentelemetry/v1/logs
-                  auth:
-                    authenticator: basicauth/logs
-                otlphttp/traces:
-                  traces_endpoint: http://$REGIONAL_CLUSTER_NAME-vmauth:8427/vti/insert/opentelemetry/v1/traces
-                  auth:
-                    authenticator: basicauth/traces
-        opencost:
-          opencost:
-            prometheus:
-              existingSecretName: $VMUSER_CREDS_NAME
-              external:
-                url: http://$REGIONAL_CLUSTER_NAME-vmauth:8427/vm/select/0/prometheus
-    EOF
-    ```
-
-    ??? note "If you're using `kind` for Management cluster, merge this:"
-
-        ```yaml
-        kof-collectors:
-          values:
-            metrics-server:
-              enabled: true
-              args:
-                - "--kubelet-insecure-tls"
-            opentelemetry-kube-stack:
-              defaultCRConfig:
-                env:
-                  - name: PKI_PATH
-                    value: etc/kubernetes
-        ```
-
-        Please merge to the existing `env` list manually to avoid overwrite.
-
-    ??? note "If you create this file directly:"
-
-        * Replace `\$` with `$`,
-        * `$VMUSER_CREDS_NAME` with the value from step 1,
-        * `$REGIONAL_CLUSTER_NAME` with the value from [Installing KOF - Regional Cluster](kof-install.md/#regional-cluster).
-
-2. Add this patch to the existing `kof-values.yaml` file
-    and then apply `kof-values.yaml` to the [Management Cluster](kof-install.md/#management-cluster):
+2. Apply `kof-values.yaml` to the [Management Cluster](kof-install.md/#management-cluster):
 
 {%
     include-markdown "../../../includes/kof-install-includes.md"
@@ -447,9 +188,9 @@ For now, however, just for the sake of this demo, you can use the most straightf
       --from-env-file=cloudwatch-credentials
     ```
 
-4. Create the patch:
-    ```bash
-    cat <<EOF
+4. Merge this patch to the existing `kof-values.yaml`:
+
+    ```yaml
     kof-collectors:
       enabled: true
       values:
@@ -499,11 +240,29 @@ For now, however, just for the sake of this demo, you can use the most straightf
                   traces:
                     exporters:
                     - debug
-    EOF
     ```
 
-5. Add this patch to the existing `kof-values.yaml` file
-    and then apply `kof-values.yaml` to the [Management Cluster](kof-install.md/#management-cluster):
+    ??? note "If your management cluster is not [k0s](https://k0sproject.io/):"
+
+        KOF scrapes `etcd` metrics using cert files like
+        `/hostfs/${env:PKI_PATH}/pki/apiserver-etcd-client.crt`
+
+        If you have `PKI_PATH` other than `var/lib/k0s`,
+        e.g. when testing with [kind](https://kind.sigs.k8s.io/), merge this:
+
+        ```yaml
+        kof-collectors:
+          values:
+            opentelemetry-kube-stack:
+              defaultCRConfig:
+                env:
+                  - name: PKI_PATH
+                    value: etc/kubernetes
+        ```
+
+        Please take especial care merging the `env` list manually to avoid overwriting it.
+
+5. Apply `kof-values.yaml` to the [Management Cluster](kof-install.md/#management-cluster):
 
 {%
     include-markdown "../../../includes/kof-install-includes.md"

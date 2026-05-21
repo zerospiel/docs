@@ -5,10 +5,16 @@
 To create a cluster deployment, you must provide a set of parameters to the `ClusterDeployment` object.
 The full list of parameters is defined in the corresponding Helm chart for the Cluster Template you use. For
 built‑in KubeVirt Cluster Templates, refer to the
-[Cluster Templates](https://github.com/k0rdent/kcm/tree/v{{{ extra.docsVersionInfo.k0rdentDotVersion }}}/templates/cluster)
+[Cluster Templates](<https://github.com/k0rdent/kcm/tree/v{{{ extra.docsVersionInfo.k0rdentDotVersion }}}/templates/cluster>)
 section of the `k0rdent/kcm` repository.
 
 The KubeVirt API is documented in the [KubeVirt API Reference](https://kubevirt.io/api-reference/).
+
+### Etcd encryption at rest for hosted and standalone templates
+
+{%
+  include-markdown "../../../includes/template-encryption-at-rest.md"
+%}
 
 ### Data Volumes
 

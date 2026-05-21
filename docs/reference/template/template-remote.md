@@ -32,6 +32,12 @@ To deploy a cluster using {{{ docsVersionInfo.k0rdentName}}} on any SSH accessib
 * `k0smotron.service.apiPort` (number): This parameter defines the port for accessing the Kubernetes API server. Example: `30443`.
 * `k0smotron.service.konnectivityPort` (number): This parameter indicates the port for the Konnectivity service. Example: `30132`.
 
+### Etcd encryption at rest for remote template
+
+{%
+    include-markdown "../../../includes/template-encryption-at-rest.md"
+%}
+
 ### K0s Parameters
 
 * `k0s.version` (string): Specifies the version of the k0s Kubernetes distribution. Example: `"v1.32.2+k0s.0"`.

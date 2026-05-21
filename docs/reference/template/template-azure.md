@@ -97,3 +97,9 @@ By default, the latest official CAPZ Ubuntu based image is used.
 * `k0smotron.controllerPlaneFlags` <sup>only hosted</sup> (array of strings): The `controllerPlaneFlags` parameter enables you to configure additional flags for the k0s control plane
    and to override existing flags. The default flags are kept unless they are explicitly overriden. Flags with arguments must be specified as a single
    string, such as `--some-flag=argument`.
+
+## Etcd encryption at rest for hosted and standalone templates
+
+{%
+  include-markdown "../../../includes/template-encryption-at-rest.md"
+%}

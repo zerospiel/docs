@@ -210,6 +210,13 @@ When this object is applied, Flux installs the chart, CAPI providers reconcile t
 
 ## Customizing Templates
 
+> WARNING:
+> k0rdent automatically overrides some cluster and provider values depending on a global configuration or
+> `ClusterDeployment` spec parameters. For example, all clusters are automatically configured with the reference
+> to the cluster identity resource containing infrastructure credential (`clusterIdentity` section).
+> See [Helm Values Overrides](./helm-values-overrides.md) for details on which values are overridden and how to work
+> with them.
+
 Customization is usually as simple as editing `values.yaml`. The key is to understand which variables are exposed. You can determine this by inspecting the `templates/` directory and seeing where `.Values` are used. For example, if a manifest contains:
 
 ```yaml

@@ -68,6 +68,12 @@ govc vm.info -t '*'
    and to override existing flags. The default flags are kept unless they are explicitly overriden. Flags with arguments must be specified as a single
    string, such as `--some-flag=argument`.
 
+### Etcd encryption at rest for hosted and standalone templates
+
+{%
+  include-markdown "../../../includes/template-encryption-at-rest.md"
+%}
+
 ## Example of a ClusterDeployment CR
 
 With all above parameters provided your `ClusterDeployment` can look like this:

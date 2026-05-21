@@ -49,7 +49,7 @@ Before beginning KOF installation, you should have the following components in p
       This is the only option which does not need access to create external DNS records
       for service endpoints such as `kof.example.com`.
 
-For information on long-term storage planning, review the [KOF Retention](./kof-retention.md) page, which covers retention and replication strategies.
+For information on long-term storage planning, review the [KOF Retention and Replication](kof-retention.md) guide.
 
 {%
     include-markdown "../../../includes/kof-install-includes.md"
@@ -278,6 +278,20 @@ and apply this example, or use it as a reference:
     of the `kof` umbrella chart, and more detailed default values of other [charts](https://github.com/k0rdent/kof/tree/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts),
     to customize your `kof-values.yaml` file where needed, for example:
 
+    ??? note "If your management cluster does not have [metrics-server](https://kubernetes-sigs.github.io/metrics-server/):"
+
+        E.g. [k0s](https://k0sproject.io/) provides it,
+        [kind](https://kind.sigs.k8s.io/) does not, but you can install it:
+
+        ```yaml
+        kof-mothership:
+          values:
+            metrics-server:
+              enabled: true
+              args:
+                - --kubelet-insecure-tls
+        ```
+
     ??? note "If your regional clusters already have `cert-manager` and `envoy-gateway`, disable them in KOF:"
 
         ```yaml
@@ -301,6 +315,8 @@ and apply this example, or use it as a reference:
         For example, if all your regional clusters will use OpenStack,
         you may set the OpenStack-specific values described in step 10 of the [Regional Cluster](#regional-cluster) section
         under the `storage:` key here.
+
+        See also the [KOF Retention and Replication](kof-retention.md) guide.
 
     ??? note "To customize collectors for all child clusters at once now:"
 
@@ -330,11 +346,11 @@ and apply this example, or use it as a reference:
 8. Install the KOF umbrella chart, which orchestrates the installation of
     operators, mothership, and shared config for all regional and child clusters:
 
-{%
-    include-markdown "../../../includes/kof-install-includes.md"
-    start="<!--install-kof-start-->"
-    end="<!--install-kof-end-->"
-%}
+    {%
+        include-markdown "../../../includes/kof-install-includes.md"
+        start="<!--install-kof-start-->"
+        end="<!--install-kof-end-->"
+    %}
 
     The chart uses FluxCD to manage sequential deployment of all KOF components.
     
@@ -637,7 +653,7 @@ apply this example for AWS, or use it as a reference:
     add them to the `regional-cluster.yaml` file in the `.spec.config.clusterAnnotations`.
     Examples:
 
-    ??? note "VictoriaLogs replicaCount"
+    ??? note "VictoriaLogs vlinsert replicaCount"
 
         ```yaml
         k0rdent.mirantis.com/kof-storage-values: |
@@ -645,6 +661,8 @@ apply this example for AWS, or use it as a reference:
             vlinsert:
               replicaCount: 2
         ```
+
+        See also the [KOF Retention and Replication](kof-retention.md) guide.
 
     ??? note "OpenStack extra requirement for DNS auto-config"
 

@@ -313,21 +313,29 @@ data:
   configmap.yaml: |
     {{- $cluster := .InfrastructureProvider -}}
     {{- $identity := (getResource "InfrastructureProviderIdentity") -}}
+
     {{- $clouds := fromYaml (index $identity "data" "clouds.yaml" | b64dec) -}}
     {{- if not $clouds }}
       {{ fail "failed to decode clouds.yaml" }}
     {{ end -}}
+
     {{- $openstack := index $clouds "clouds" "openstack" -}}
+
     {{- if not (hasKey $openstack "auth") }}
       {{ fail "auth key not found in openstack config" }}
     {{- end }}
     {{- $auth := index $openstack "auth" -}}
+
     {{- $auth_url := index $auth "auth_url" -}}
     {{- $app_cred_id := index $auth "application_credential_id" -}}
     {{- $app_cred_name := index $auth "application_credential_name" -}}
     {{- $app_cred_secret := index $auth "application_credential_secret" -}}
+
     {{- $network_id := $cluster.status.externalNetwork.id -}}
     {{- $network_name := $cluster.status.externalNetwork.name -}}
+
+    {{- $verify := index $openstack "verify" -}}
+    {{- $ca_cert := index $identity "data" "cacert" -}}
     ---
     apiVersion: v1
     kind: Secret
@@ -339,28 +347,53 @@ data:
       cloud.conf: |
         [Global]
         auth-url="{{ $auth_url }}"
+
         {{- if $app_cred_id }}
         application-credential-id="{{ $app_cred_id }}"
         {{- end }}
+
         {{- if $app_cred_name }}
         application-credential-name="{{ $app_cred_name }}"
         {{- end }}
+
         {{- if $app_cred_secret }}
         application-credential-secret="{{ $app_cred_secret }}"
         {{- end }}
+
         {{- if and (not $app_cred_id) (not $app_cred_secret) }}
         username="{{ index $openstack "username" }}"
         password="{{ index $openstack "password" }}"
         {{- end }}
         region="{{ index $openstack "region_name" }}"
+
+        {{- if or (eq $verify false) (eq (lower (printf "%v" $verify)) "false") }}
+        tls-insecure=true
+        {{- end }}
+
+        {{- if $ca_cert }}
+        ca-file=/etc/cacert/ca.crt
+        {{- end }}
+
         [LoadBalancer]
         {{- if $network_id }}
         floating-network-id="{{ $network_id }}"
         {{- end }}
+
         [Networking]
         {{- if $network_name }}
         public-network-name="{{ $network_name }}"
         {{- end }}
+    {{- if $ca_cert }}
+    ---
+    apiVersion: v1
+    kind: Secret
+    metadata:
+      name: openstack-ca-cert
+      namespace: kube-system
+    type: Opaque
+    data:
+      ca.crt: "{{ $ca_cert }}"
+    {{- end }}
 ```
 
 Apply the YAML to your cluster:
@@ -537,9 +570,9 @@ Now that you've finished the {{{ docsVersionInfo.k0rdentName }}} QuickStart, we 
 
 Check out the [Administrator Guide](../admin/index.md) ...
 
-* For a more detailed view of {{{ docsVersionInfo.k0rdentName }}} setup for production
-* For details about setting up {{{ docsVersionInfo.k0rdentName }}} to manage clusters on VMware
-* For details about using {{{ docsVersionInfo.k0rdentName }}} with cloud Kubernetes distros such as AWS EKS, Azure AKS, and Google Kubernetes Engine
+- For a more detailed view of {{{ docsVersionInfo.k0rdentName }}} setup for production
+- For details about setting up {{{ docsVersionInfo.k0rdentName }}} to manage clusters on VMware
+- For details about using {{{ docsVersionInfo.k0rdentName }}} with cloud Kubernetes distros such as AWS EKS, Azure AKS, and Google Kubernetes Engine
 
 <!--
 Or check out the [Demos Repository](https://github.com/k0rdent/demos) for fast, makefile-driven demos of {{{ docsVersionInfo.k0rdentName }}}'s key features.

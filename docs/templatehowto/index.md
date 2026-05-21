@@ -33,3 +33,4 @@ In {{{ docsVersionInfo.k0rdentName }}}, templates are not just convenience wrapp
 
 - [The Templating System – Common Threads](the-templating-system-common-threads.md)
 - [Creating and Modifying Templates](modifying-clusterTemplates.md)
+- [Helm Values Overrides](helm-values-overrides.md)

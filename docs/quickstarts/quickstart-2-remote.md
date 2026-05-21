@@ -4,10 +4,10 @@ In many cases, you will want {{{ docsVersionInfo.k0rdentName }}} (running on you
 
 The remote machines that will be part of the cluster must meet the following prerequisites:
 
-1.	Linux-based operating system; the remote hosts should meet the [k0s system requirements](https://docs.k0sproject.io/stable/system-requirements/). Note that Ubuntu 26.04 is not yet supported by Ubuntu 26.04.
-2.	SSH access enabled for the root user
-3.	Internet access
-4.	Connectivity between the management cluster and the remote hosts' networks
+1.	Linux-based operating system; the remote hosts should meet the [k0s system requirements](https://docs.k0sproject.io/stable/system-requirements/). Note that Ubuntu 26.04 is not yet supported by k0s.
+2.	SSH access enabled for the root user, with the SSH key be correctly configured and authorized on all remote machines.
+3.	Internet connectivity must be available on all remote machines.
+4.  Network connectivity must exist between the management cluster and the remote hosts’ networks.
 
 If you haven't yet created a management node and installed k0rdent, go back to [QuickStart 1 - Management node and cluster](quickstart-1-mgmt-node-and-cluster.md).
 
@@ -15,51 +15,20 @@ Note that if you have already done one of the other quickstarts, such as our AWS
 
 Before proceeding, make sure your management cluster meets the following requirements:
 
-1. Increase filesystem limits by adding the following to `/etc/sysctl.conf`:
-
-    ```bash
-    fs.inotify.max_user_instances=8192
-    fs.inotify.max_user_watches=524288
-    ```
-
-    Then set `systemd` limits:
-
-    ```bash
-    sudo tee -a /etc/systemd/system.conf <<EOF
-    DefaultLimitNOFILE=1048576
-    EOF
-
-    sudo tee -a /etc/systemd/user.conf <<EOF
-    DefaultLimitNOFILE=1048576
-    EOF
-    ```
-
-    Next set the OS limits:
-
-    ```bash
-    sudo tee -a /etc/security/limits.conf <<EOF
-    * soft nofile 1048576
-    * hard nofile 1048576
-    EOF
-    ```
-
-    Finally, apply and reboot:
-
-    ```bash
-    sudo systemctl daemon-reexec
-    sudo systemctl daemon-reload
-    sudo reboot
-    ```
-
-1. A [default storage class](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/) is configured on the management cluster to support Persistent Volumes.  Make sure the storage class is [configured and working properly](../appendix/storageclass.md).
-
-1. Make sure the key you will use to log in as root exists and has been configured on the child machines.
-
-2. If the API server will be exposed as a `LoadBalancer`, ensure the appropriate cloud provider is installed on the management cluster.
+1. A filesystem with [appropriate limits](../troubleshooting/known-issues-remote.md#control-plane-pods-are-in-crashloopbackoff-too-many-open-files-error) set.
+1. CSI provider installed and properly configured for persistent storage to support Persistent Volumes.
+2. A [default storage class](https://kubernetes.io/docs/tasks/administer-cluster/change-default-storage-class/) is configured on the management cluster to support Persistent Volumes.  Make sure the storage class is [configured and working properly](../appendix/storageclass.md).
+2. If the API server will be exposed as a `LoadBalancer` (default), ensure the appropriate cloud provider is installed on the management cluster.
 
 ## Create a Secret object containing the private SSH key to access remote machines
 
-Create a `Secret` object to securely store the private SSH key, under the key `value`, for accessing all remote machines that will be part of the cluster. Start by setting the following environment variables, for example by adding them to an `.env` file and sourcing it. (Make sure to either update the `KEY_PATH` to point to the keyfile or enter the directly under `PRIVATE_SSH-KEY_B64`.)
+Create a `Secret` object to securely store the private SSH key, under the key `value`, for accessing all remote
+machines that will be part of the cluster. Start by setting the following environment variables, for example by
+adding them to an `.env` file and sourcing it. (Make sure to either update the `KEY_PATH` to point to the keyfile or
+enter the directly under `PRIVATE_SSH-KEY_B64`).
+
+> NOTE:
+> The SSH key must be configured and authorized on all remote machines that will be part of the cluster.
 
 ```bash
 # Setup Environment
@@ -293,6 +262,11 @@ kubectl delete ClusterDeployment my-remote-clusterdeployment1 -n kcm-system
 ```console { .no-copy }
 clusterdeployment.k0rdent.mirantis.com "my-remote-clusterdeployment1" deleted
 ```
+
+## Troubleshooting
+
+If you encounter any issues during the deployment process, check out the [Troubleshooting guide](../troubleshooting/known-issues-remote.md)
+for steps to debug and known issues related to remote cluster deployments.
 
 ## Next Steps
 
