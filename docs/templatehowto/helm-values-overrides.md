@@ -7,32 +7,25 @@ For complete examples of cluster and provider templates that consume these value
 
 ## `global`
 
-These values are globally configured during KCM installation or in the `Management` object and are automatically passed
-to all cluster and provider values.
+k0rdent supports several global configurations options that manages global values for cluster and provider templates:
 
-Supported global configuration options (example of KCM values configuration):
+1. [Global Registry Configuration](../appendix/appendix-extend-mgmt.md#configuring-a-custom-oci-registry-for-kcm-components)
+1. [Custom k0s URL Configuration](../appendix/appendix-extend-mgmt.md#configuring-a-global-k0s-url)
+1. [Proxy Configuration](../appendix/proxy.md)
+1. [Configuring Automatic Provider Reload Annotations](../appendix/appendix-extend-mgmt.md#configuring-automatic-provider-reload-annotations)
 
-```yaml
-controller:
-  globalRegistry: my-registry.example.com # Global registry URL
-  globalK0sURL: https://my-k0s-url.example.com # Global k0s binary download URL
-  k0sURLCertSecret: my-k0s-url-cert-secret # Name of the Secret containing the k0s URL TLS certificate
-  registryCredsSecret: my-registry-creds-secret # Name of the Secret containing registry pull credentials
-  registryCertSecret: my-registry-cert-secret # Name of a Secret containing the registry root CA with a ca.crt key
-  imagePullSecret: my-image-pull-secret # Name of the Secret containing credentials to pull images from private registries, see [Pull an Image from a Private Registry](https://kubernetes.io/docs/tasks/configure-pod-container/pull-image-private-registry/)
-proxy:
-  secretName: my-proxy-secret # Name of the Secret with proxy settings data, see [Proxy Configuration Support](https://docs.k0rdent.io/latest/appendix/proxy/)
-enableProvidersReload: true # Enable automatic reload-triggering patches for CAPI provider Deployments, see [Configuring Automatic Provider Reload Annotations](https://docs.k0rdent.io/latest/appendix/appendix-extend-mgmt/?h=#configuring-automatic-provider-reload-annotations)
-```
+When configured, the following global values are automatically injected into all cluster and provider templates.
+These values can be used to configure the Helm charts of the templates and ensure consistent configuration across
+all clusters and providers.
 
 Provider values overrides:
 
-| Path                            | Description                                                               |
-|---------------------------------|---------------------------------------------------------------------------|
-| `global.registry`               | Global registry URL                                                       |
+| Path                            | Description                                                                |
+|---------------------------------|----------------------------------------------------------------------------|
+| `global.registry`               | Global registry URL                                                        |
 | `global.imagePullSecrets`       | Global array of image pull secrets to pull images from private registries  |
-| `global.proxy`                  | Global proxy configuration                                                |
-| `global.enableProvidersReload`  | Global boolean flag to enable automatic providers reload                  |
+| `global.proxy`                  | Global proxy configuration                                                 |
+| `global.enableProvidersReload`  | Global boolean flag to enable automatic providers reload                   |
 
 Cluster values overrides:
 
