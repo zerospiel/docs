@@ -121,7 +121,11 @@ Refer to "Service Dependencies" in [Deploy beach-head Services using Cluster Dep
 
 ### Services Priority and Conflict
 
-The `.spec.serviceSpec.priority` field specifies the priority for the services managed by a ClusterDeployment or MultiClusterService object.
+> WARNING:
+> `.spec.serviceSpec.priority` is **deprecated**. Use `.spec.serviceSpec.provider.config.priority` instead.
+> See [Provider Configuration](servicetemplate-parameters.md#provider-configuration) for details.
+
+The priority for the services managed by a ClusterDeployment or MultiClusterService is set via `.spec.serviceSpec.provider.config.priority` (or the deprecated `.spec.serviceSpec.priority`).
 
 Considering the example above:
 
@@ -131,7 +135,7 @@ Considering the example above:
    This scenario presents a conflict on both the clusters as the MultiClusterService is attempting to deploy v4.11.3 of ingress-nginx
    on both whereas the ClusterDeployment for each is attempting to deploy v4.11.0 of ingress-nginx.
 
-This is where `.spec.serviceSpec.priority` can be used to specify who gets the priority. Higher number means higer priority and vice versa. In this example:
+This is where priority can be used to specify who gets the priority. Higher number means higher priority and vice versa. In this example:
 
 1. MultiClusterService "global-ingress" will take precedence over ClusterDeployment "dev-cluster-1" and ingress-nginx (v4.11.3) defined in MultiClusterService object will be deployed on the cluster.
 2. ClusterDeployment "dev-cluster-2" will take precedence over MultiClusterService "global-ingress" and ingress-nginx (v4.11.0) defined in ClusterDeployment object will be deployed on the cluster.
@@ -189,6 +193,31 @@ spec:
 ```
 
 In this example, for all matching clusters, `ingress-nginx` and `postgres-operators` defined by `mcs2` will not be deployed until `cert-manager` defined by `mcs1` has been successfully deployed.
+
+### Keeping Services on Selector Mismatch
+
+By default, when a cluster's labels no longer match a `MultiClusterService`'s `clusterSelector` (or the selector is cleared), the services previously deployed on that cluster by this MCS are removed.
+
+Setting `.spec.keepServicesOnSelectorMismatch: true` preserves those services on clusters that fall out of the selector. This is useful for per-cluster opt-in rollouts: you can remove a cluster from the selector without tearing down its services, allowing manual control over which clusters adopt new service versions.
+
+```yaml
+apiVersion: k0rdent.mirantis.com/v1beta1
+kind: MultiClusterService
+metadata:
+  name: global-ingress
+spec:
+  clusterSelector:
+    matchLabels:
+      cluster-deployment/tier: dev
+  keepServicesOnSelectorMismatch: true
+  serviceSpec:
+    services:
+    - name: ingress-nginx
+      namespace: ingress-nginx
+      template: ingress-nginx-4-11-3
+```
+
+Defaults to `false`.
 
 ## Checking Status
 
@@ -248,11 +277,49 @@ status:
   observedGeneration: 2
   servicesUpgradePaths:
     - availableUpgrades:
-        - upgradePaths:
-            - ingress-nginx-4-11-3
+        - versions:
+            - name: ingress-nginx-4-12-0
+              version: 4.12.0
       name: ingress-nginx
       namespace: ingress-nginx
       template: ingress-nginx-4-11-3
+```
+
+## Matching Clusters Status
+
+The `.status.matchingClusters[]` field lists all clusters currently matched by the `MultiClusterService` selector, along with their deployment state.
+
+Each entry contains:
+
+| Field                  | Type      | Description                                                                 |
+|------------------------|-----------|-----------------------------------------------------------------------------|
+| `name`                 | string    | Name of the matched ClusterDeployment                                       |
+| `namespace`            | string    | Namespace of the matched ClusterDeployment                                  |
+| `kind`                 | string    | Kind of the referenced object (typically `ClusterDeployment`)               |
+| `apiVersion`           | string    | API version of the referenced object                                        |
+| `regional`             | bool      | Whether the cluster is a regional cluster (default: `false`)                |
+| `deployed`             | bool      | Whether all services have been successfully deployed on this cluster         |
+| `lastTransitionTime`   | timestamp | When the `deployed` state last changed                                      |
+
+Example:
+
+```yaml
+status:
+  matchingClusters:
+    - apiVersion: k0rdent.mirantis.com/v1beta1
+      kind: ClusterDeployment
+      name: dev-cluster-1
+      namespace: kcm-system
+      regional: false
+      deployed: true
+      lastTransitionTime: "2025-11-07T23:28:44Z"
+    - apiVersion: k0rdent.mirantis.com/v1beta1
+      kind: ClusterDeployment
+      name: dev-cluster-2
+      namespace: kcm-system
+      regional: false
+      deployed: false
+      lastTransitionTime: "2025-11-07T23:25:10Z"
 ```
 
 ## Parameter List

@@ -185,16 +185,28 @@ Available options:
 - `dependencyUpdate` (bool): Update chart dependencies if missing before installation
 - `wait` (bool): Wait until all resources are in ready state before marking release as successful
 - `waitForJobs` (bool): If set and `wait` is enabled, will wait until all Jobs have completed
-- `createNamespace` (bool): Create the release namespace if it doesn't exist
 - `skipCRDs` (bool): Skip installation of CRDs during install/upgrade operations
 - `atomic` (bool): If set, the installation process rolls back on failure (automatically sets `wait: true`)
 - `disableHooks` (bool): Prevent hooks from running during install/upgrade/uninstall
 - `disableOpenAPIValidation` (bool): Skip validation of rendered templates against Kubernetes OpenAPI Schema
 - `timeout` (duration): Time to wait for any individual Kubernetes operation (e.g., "5m", "300s")
 - `skipSchemaValidation` (bool): Disable JSON schema validation
-- `replace` (bool): Replace an older release with this one if it exists
 - `labels` (map[string]string): Labels that would be added to release metadata
 - `description` (string): Description of the Helm operation
+- `installOptions` (object): Options specific to helm install. See [Install Options](#install-options) below.
+
+> **Deprecated fields** (still accepted but prefer `installOptions.*`):
+> - `createNamespace` (bool) — use `installOptions.createNamespace` instead
+> - `replace` (bool) — use `installOptions.replace` instead
+
+#### Install Options
+
+`helmOptions.installOptions` controls helm install-specific behavior. All fields default to `false` when unset.
+
+- `createNamespace` (bool): Create the release namespace if it doesn't exist. Defaults to `true`.
+- `replace` (bool): Replace an older release with this one if it exists. Defaults to `true`.
+- `disableHooks` (bool): Prevent hooks from running during install (overrides the top-level `disableHooks` for installs only). Defaults to `false`.
+- `takeOwnership` (bool): Ignore helm annotations and take ownership of existing resources. Defaults to `false`.
 
 Example:
 ```yaml
@@ -204,10 +216,11 @@ spec:
     waitForJobs: true
     timeout: 10m
     atomic: true
-    createNamespace: true
     labels:
       environment: production
       team: platform
+    installOptions:
+      createNamespace: true
 ```
 
 > NOTE:
@@ -358,6 +371,16 @@ Common validation errors:
 - Kubernetes version constraint parsing errors
 
 ### Creating Kustomization-based ServiceTemplate
+
+#### Deployment Type
+
+The `deploymentType` field (enum: `Local` or `Remote`, default: `Remote`) controls where resources are applied:
+
+- **`Remote`**: The management cluster pushes resources to the target workload cluster. This is the standard mode.
+- **`Local`**: The workload cluster itself pulls and applies the resources. Use this when the management cluster does not have direct API access to the workload cluster.
+
+> NOTE:
+> The `deploymentType` field is **ignored** when `resources` is used as part of a Helm chart configuration (i.e., when `.spec.resources` is combined with `.spec.helm`). It only applies to standalone `kustomize` and `resources` templates.
 
 Define the source of the Kustomization that defines the service. If the source object is one of Flux source - `GitRepository`, `Bucket` or `OCIRepository` - it must
 have the label `k0rdent.mirantis.com/managed: "true"`.

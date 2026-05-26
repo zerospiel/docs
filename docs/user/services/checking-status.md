@@ -102,9 +102,11 @@ status:
       namespace: ingress-nginx
       template: ingress-nginx-4-11-3
       availableUpgrades:
-        - upgradePaths:
-            - ingress-nginx-4-11-5
-            - ingress-nginx-4-12-0
+        - versions:
+            - name: ingress-nginx-4-11-5
+              version: 4.11.5
+            - name: ingress-nginx-4-12-0
+              version: 4.12.0
 ```
 
 This shows which ServiceTemplates the current service can be upgraded to. See [Service Upgrade](service-upgrade.md) for more details.
@@ -169,8 +171,9 @@ status:
   observedGeneration: 2
   servicesUpgradePaths:
     - availableUpgrades:
-        - upgradePaths:
-            - external-secrets-7vpwh
+        - versions:
+            - name: external-secrets-8abcd
+              version: 0.11.0
       name: managed-eso
       namespace: global
       template: external-secrets-7vpwh

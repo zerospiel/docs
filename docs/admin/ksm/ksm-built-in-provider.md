@@ -90,7 +90,7 @@ spec:
       # - DryRun means no change will be propagated to any matching cluster. A report
       # instead will be generated summarizing what would happen in any matching cluster
       # because of the changes made to ClusterProfile while in DryRun mode.
-      syncMode: OnTime | Continuous | ContinuousWithDriftDetection | DryRun
+      syncMode: OneTime | Continuous | ContinuousWithDriftDetection | DryRun
       # By default (when "continueOnError" is unset or set to false), Sveltos stops deployment after
       # encountering the first error.
       # If set to true, Sveltos will attempt to deploy remaining resources in the ClusterProfile even
