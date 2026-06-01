@@ -8,6 +8,8 @@ Follow these steps to install and prepare a [k0s kubernetes](https://k0sproject.
 
     To make things simple this guide uses [k0s](https://github.com/k0sproject/k0s/), a small, convenient, and fully-functional distribution. For more granular instructions, including those for creating a cluster accessible from a different server, see the [k0s multi-node instructions](mgmt-create-k0s-multi.md):
 
+    For details on how to enable audit logging on the management cluster, see [enabling audit logging](enabling-audit.md).
+
     ```bash
     curl --proto '=https' --tlsv1.2 -sSf https://get.k0s.sh | sudo sh
     sudo k0s install controller --enable-worker --no-taints
