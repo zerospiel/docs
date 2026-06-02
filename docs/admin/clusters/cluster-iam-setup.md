@@ -24,8 +24,6 @@ metadata:
   namespace: my-namespace
 spec:
   authenticationConfiguration:
-    apiVersion: apiserver.config.k8s.io/v1beta1
-    kind: AuthenticationConfiguration
     jwt:
       - issuer:
           url: https://dex.example.com:5556
@@ -53,7 +51,7 @@ This configuration authenticates users based on email addresses and propagates g
 
 * **`spec.authenticationConfiguration`**
 
-  Contains the full `AuthenticationConfiguration` object consumed by the Kubernetes API server. For all supported options, see the official Kubernetes documentation:
+  Contains the spec of the `AuthenticationConfiguration` object consumed by the Kubernetes API server. For all supported options, see the official Kubernetes documentation:
   [Authentication configuration from a file](https://kubernetes.io/docs/reference/access-authn-authz/authentication/#using-authentication-configuration).
 
 * **`spec.caSecret`**
