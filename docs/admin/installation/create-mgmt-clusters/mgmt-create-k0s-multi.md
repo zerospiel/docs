@@ -49,6 +49,8 @@ Follow these steps to install and prepare a multinode [k0s kubernetes](https://k
 
     You can also make other configuration changes. For more information see the [k0s documentation](https://docs.k0sproject.io/stable/configuration/).
 
+    For details on how to enable audit logging on the management cluster, see [enabling audit logging](enabling-audit.md).
+
 4. Install the controller:
 
     ```bash

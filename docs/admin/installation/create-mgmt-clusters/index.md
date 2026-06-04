@@ -10,4 +10,5 @@ In a production environment, you will always want to ensure that your management
 - [Create a single node k0s cluster](./mgmt-create-k0s-single.md)
 - [Create a multi-node k0s cluster](./mgmt-create-k0s-multi.md)
 - [Create a multinode EKS cluster](./mgmt-create-eks-multi.md)
-  
+
+For information on enabling audit logging, refer to [Enable Audit Logging on a Management Cluster](enabling-audit.md).
