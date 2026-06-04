@@ -103,7 +103,9 @@ is running k0s, do the following on your control plane nodes:
     sudo sysctl -p --system
     ```
 
-1. Restart the control plane pods:
+1. If you have already started a child cluster, restart the `ClusterDeployment`'s control plane pods. Run the following command using
+the kubeconfig for the management cluster (or the regional cluster if the cluster was deployed in a region).
+Replace `$CLUSTER_NAMESPACE` and `$CLUSTER_NAME` with the namespace and name of your `ClusterDeployment`:
 
     ```bash
     kubectl -n $CLUSTER_NAMESPACE delete pods -l cluster.x-k8s.io/cluster-name=$CLUSTER_NAME -l app.kubernetes.io/component=control-plane
