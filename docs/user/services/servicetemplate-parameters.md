@@ -25,8 +25,10 @@ Here is an idea of the parameters involved.
 | `.spec.serviceSpec.provider.selfManagement`    | `true`                                                      | Deploy services to the management cluster itself (for MultiClusterService only)                 |
 | `.spec.serviceSpec.services[].template`        | `kyverno-3-2-6`                                             | Name of the `ServiceTemplate` object located in the same namespace                              |
 | `.spec.serviceSpec.services[].templateChain`   | `kyverno-chain`                                             | Name of the `ServiceTemplateChain` for upgrade/rollback paths (optional)                        |
+| `.spec.serviceSpec.services[].version`         | `3.2.6`                                                     | Desired version of the service template when using `templateChain` (optional)                   |
 | `.spec.serviceSpec.services[].name`            | `my-kyverno-release`                                        | Release name for the beach-head service                                                         |
 | `.spec.serviceSpec.services[].namespace`       | `my-kyverno-namespace`                                      | Release namespace for the beach-head service (default: `.spec.services[].name`)                 |
+| `.spec.serviceSpec.services[].helmAction`      | `Install`                                                   | Action to perform on the Helm chart: `Install` (default) or `Uninstall`                         |
 | `.spec.serviceSpec.services[].values`          | `replicas: 3`                                               | Helm values to be used with the template while deploying the beach-head services                |
 | `.spec.serviceSpec.services[].valuesFrom[]`    | See [ValuesFrom Structure](#valuesfrom-structure) below     | Array of references to ConfigMaps or Secrets containing helm values                             |
 | `.spec.serviceSpec.services[].helmOptions`     | See [HelmOptions Structure](#helmoptions-structure) below   | Per-service Helm options that override template-level helmOptions                               |
@@ -82,8 +84,11 @@ services:
       wait: true
       waitForJobs: true
       timeout: 15m
-      createNamespace: true
+      installOptions:
+        createNamespace: true
 ```
+
+> **Note:** `helmOptions.createNamespace` and `helmOptions.replace` are deprecated. Use `helmOptions.installOptions.createNamespace` and `helmOptions.installOptions.replace` instead.
 
 ### Service Dependencies
 
