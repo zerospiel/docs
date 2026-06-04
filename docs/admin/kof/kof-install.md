@@ -646,7 +646,7 @@ apply this example for AWS, or use it as a reference:
         k0rdent.mirantis.com/kof-http-config: '{"dial_timeout": "10s", "tls_config": {"insecure_skip_verify": true}}'
         ```
 
-10. `MultiClusterService` named [kof-regional-cluster](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-regional/templates/regional-multi-cluster-service.yaml) configure and install `cert-manager`, `ingress-nginx`, `kof-operators`, `kof-storage`, and `kof-collectors` charts automatically.
+10. `MultiClusterService` named [kof-regional-cluster](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-regional/templates/regional-multi-cluster-service.yaml) configure and install `cert-manager`, `envoy-gateway` or `ingress-nginx`, `kof-operators`, `victoria-metrics-operator`, `kof-storage`, and `kof-collectors` charts automatically.
 
     To pass any custom [values](https://github.com/k0rdent/kof/blob/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts/kof-storage/values.yaml)
     to the `kof-storage` chart or its subcharts, such as [victoria-logs-cluster](https://docs.victoriametrics.com/helm/victorialogs-cluster/#parameters),
