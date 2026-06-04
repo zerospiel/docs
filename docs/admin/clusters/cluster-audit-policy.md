@@ -277,6 +277,9 @@ the control plane resources (`K0smotronControlPlane` or `K0sControlPlane`) must:
 
 > WARNING:
 > Updating `spec.auditPolicy` changes the configuration hash and triggers a rolling recreation of control plane machines.
+> For clusters that were initially deployed with a single control plane node, this operation may cause the cluster to
+> lose etcd quorum during the rollout, potentially resulting in a cluster outage.
+> For mitigation steps and additional details, see [Cluster Control Plane Rollout](update-cluster.md#control-plane-machines-rollout).
 
 Additionally, you can configure the Kubernetes API server audit log backend using the following API server parameters:
 `audit-log-path`, `audit-log-maxage`, `audit-log-maxbackup`, `audit-log-maxsize`.

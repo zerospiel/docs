@@ -66,3 +66,20 @@ Similarly, the `AccessManagement` object must have properly configured `spec.acc
       ## Scaling a Cluster 
       ## Upgrading a Single Standalone Cluster 
       -->
+
+# Control Plane Machines Rollout
+
+Certain cluster configuration changes trigger an automatic rollout of control plane machines. For example, updating the
+[ClusterAuditPolicy](cluster-audit-policy.md) or [ClusterAuthentication](cluster-iam-setup.md) reference in the
+`ClusterDeployment` spec initiates a control plane rollout.
+
+There is a known issue that can affect clusters initially deployed with a single control plane node. During
+the rollout, `etcd` may become unavailable if the cluster temporarily loses quorum. This can occur when
+the departing control plane node is removed before quorum is safely maintained, preventing the cluster from scaling
+below the quorum threshold (for example, from two control plane nodes to one).
+
+To avoid this issue, {{ docsVersionInfo.k0rdentName }} recommends scaling the control plane to at least three nodes
+before applying any configuration changes that trigger a rollout. Once the rollout has completed successfully, you
+can scale the control plane back down if desired.
+
+This issue is expected to be resolved in future k0s releases.
