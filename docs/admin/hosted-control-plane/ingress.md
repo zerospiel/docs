@@ -48,6 +48,7 @@ spec:
         type: ClusterIP
     ingress:
       enabled: true
+      deploy: true
       className: "haproxy"
       apiHost: api.test-cluster.example.com
       konnectivityHost: konnectivity.test-cluster.example.com
@@ -89,7 +90,7 @@ metadata:
 spec:
   {{- if and .Values.ingress.enabled .Values.ingress.apiHost .Values.ingress.konnectivityHost }}
   ingress:
-    deploy: true
+    deploy: {{ .Values.ingress.deploy }}
     className: {{ .Values.ingress.className }}
     {{- with .Values.ingress.annotations }}
     annotations:
@@ -107,6 +108,7 @@ spec:
 ```yaml
 ingress:
   enabled: false
+  deploy: true
   className: "haproxy"
   apiHost: ""
   konnectivityHost: ""
@@ -137,6 +139,7 @@ spec:
   config:
     ingress:
       enabled: true
+      deploy: true
       className: "haproxy"
       apiHost: api.test-cluster.172.96.1.2.nip.io
       konnectivityHost: konnectivity.test-cluster.172.96.1.2.nip.io
