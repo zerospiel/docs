@@ -4,35 +4,21 @@
 
 KOF may be installed using different options:
 
-```mermaid
-flowchart TD
-    S((Start))
-    S --> AWS[AWS]
-    S --> AZ[Azure]
-    S --> OS[OpenStack<br>and others]
-    AWS -.-> AG[<b>Aig Gap</b>]
-    AZ -.-> AG
-    OS --> AG
-    AWS --> NAG[No Air Gap]
-    AZ --> NAG
-    OS --> NAG
-    AG --> I[<b>Istio</b>]
-    AG --> MD[Manual DNS]
-    AG -.-> AD[Auto DNS]
-    NAG --> I
-    NAG --> MD
-    NAG --> AD
-    I --> R[KOF Regional:<br><br>own ClusterDeployment<br>or shared with KCM Region<br>or with Management<br>or just ConfigMap]
-    MD --> R
-    AD --> R
-    R --> M2[Store KOF data<br>from Management...]
-    M2 --> M2M[<b>...to Management</b>]
-    M2 --> M2R[...to Regional<br>with Istio<br>or without]
-    M2 --> M2TP[...to Third-party]
-```
+| Aspect | Options | | | |
+| --- | --- | --- | ---  |--- |
+| **Cloud** | AWS | Azure | OpenStack and others | |
+| **Air Gap** | Enabled | Disabled | | |
+| **[Multi-tenancy](kof-multi-tenancy.md)** with SSO and ACL | Enabled | Disabled | | |
+| **[Grafana](kof-grafana.md)** integration | Enabled | Disabled |
+| **Connect clusters** | [Istio](#istio) | [Auto DNS](#dns-auto-config) | [Manual DNS](kof-verification.md#manual-dns-config) | |
+| **KOF Regional** | [its own ClusterDeployment](#regional-cluster) | shared with [KCM Region](kof-kcm-region.md) | shared with Management ([Regionless](kof-storing.md#regionless)) | just a ConfigMap |
+| Store KOF data **from Management to** | [Management](kof-storing.md#from-management-to-management) | [Regional](kof-storing.md#from-management-to-regional) | [Third-party](#kof-storing.md#from-management-to-third-party) | None |
 
-Opinionated default installation we plan to simplify in the next release
-is shown in **bold** style.
+Each aspect is independent of the others with the only exception:
+the regionless setup always stores KOF data from all clusters (including the management cluster)
+to the management cluster.
+
+It's better to select the right option for each aspect from the start.
 
 ## Prerequisites
 
@@ -146,7 +132,10 @@ If you've selected to skip both [DNS auto-config](#dns-auto-config) now and [Man
         kubectl label namespace kof istio-injection=enabled
         ```
 
-    3. Install the `k0rdent/istio` charts to the management cluster:
+    3. If you want to enable the [Regionless](kof-storing.md#regionless) setup with Istio,
+        add few `--set` lines from that section to the step 4 below.
+
+    4. Install the `k0rdent/istio` charts to the management cluster:
 
     {%
         include-markdown "../../../includes/kof-install-includes.md"
@@ -278,6 +267,18 @@ and apply this example, or use it as a reference:
     of the `kof` umbrella chart, and more detailed default values of other [charts](https://github.com/k0rdent/kof/tree/v{{{ extra.docsVersionInfo.kofVersions.kofDotVersion }}}/charts),
     to customize your `kof-values.yaml` file where needed, for example:
 
+    ??? note "To enable the Regionless setup:"
+
+        Append the values from the [Regionless](kof-storing.md#regionless) section now.
+
+    ??? note "Self-signed / insecure TLS:"
+
+        ```yaml
+        tls:
+          selfSigned: true
+          insecureSkipVerify: true
+        ```
+
     ??? note "If your management cluster does not have [metrics-server](https://kubernetes-sigs.github.io/metrics-server/):"
 
         E.g. [k0s](https://k0sproject.io/) provides it,
@@ -373,8 +374,12 @@ and apply this example, or use it as a reference:
 
 ## Regional Cluster
 
+If you have not applied the [Regionless](kof-storing.md#regionless) setup option,
+you need one or more regional clusters.
+
 > NOTE:
-> To use the new [KCM Regional Clusters](../regional-clusters/index.md) with KOF, please apply the [KCM Region With KOF](kof-kcm-region.md) guide on top of the steps below.
+> To use the similarly named [KCM Regional Clusters](../regional-clusters/index.md) with KOF,
+> please apply the [KCM Region With KOF](kof-kcm-region.md) guide on top of the steps below.
 
 To install KOF on the regional cluster,
 apply this example for AWS, or use it as a reference:
@@ -547,16 +552,21 @@ apply this example for AWS, or use it as a reference:
 
     ??? note "Istio"
 
-        * Add these lines:
+        * Add these labels:
           ```yaml
-          k0rdent.mirantis.com/istio-role: member
-          k0rdent.mirantis.com/istio-gateway: "true"
+          metadata:
+            labels:
+              k0rdent.mirantis.com/istio-role: member
+              k0rdent.mirantis.com/istio-gateway: "true"
           ```
 
-        * Delete these lines:
+        * Delete these clusterAnnotations:
           ```yaml
-          k0rdent.mirantis.com/kof-regional-domain: $REGIONAL_DOMAIN
-          k0rdent.mirantis.com/kof-cert-email: $ADMIN_EMAIL
+          spec:
+            config:
+              clusterAnnotations:
+                k0rdent.mirantis.com/kof-regional-domain: $REGIONAL_DOMAIN
+                k0rdent.mirantis.com/kof-cert-email: $ADMIN_EMAIL
           ```
 
 6. This `ClusterDeployment` uses propagation of its `.metadata.labels`
@@ -636,8 +646,7 @@ apply this example for AWS, or use it as a reference:
 
     Note that a similar `ConfigMap` is generated automatically from a regional `ClusterDeployment` too.
 
-9. If you need a custom http client configuration for `PromxyServerGroup`
-    and `GrafanaDatasource` (if [enabled](kof-grafana.md)),
+9. If you need a custom http client configuration for `PromxyServerGroup`,
     add it to the `regional-cluster.yaml` file in the `.metadata.annotations`:
 
     ??? note "Custom http client configuration"
@@ -834,10 +843,12 @@ apply this example for AWS, or use it as a reference:
 
     ??? note "Istio"
 
-        Add this line:
+        Add this label:
 
         ```yaml
-        k0rdent.mirantis.com/istio-role: member
+        metadata:
+          labels:
+            k0rdent.mirantis.com/istio-role: member
         ```
 
         There is no need to create a gateway in the child cluster

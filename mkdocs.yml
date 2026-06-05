@@ -381,7 +381,7 @@ extra:
     k0rdentDigestDate: Tue Apr 28 12:54:32 2026
     k0rdentTagList: https://github.com/k0rdent/kcm/tags
     kofVersions:
-      kofDotVersion: 1.9.0
+      kofDotVersion: 1.10.0
       kofOciRegistryBase: oci://ghcr.io/k0rdent/kof
       kofOciRegistryBaseIstio: oci://ghcr.io/k0rdent/istio
     providerVersions:
