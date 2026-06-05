@@ -3,7 +3,7 @@
 
 ## Upgrade to v1.10.0
 
-KOF v1.9.0 introduces:
+KOF v1.10.0 introduces:
 
 * [Regionless](../docs/admin/kof/kof-storing.md#regionless) setup option.
     There are no regional clusters in this case.

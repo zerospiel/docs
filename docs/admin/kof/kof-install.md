@@ -12,7 +12,7 @@ KOF may be installed using different options:
 | **[Grafana](kof-grafana.md)** integration | Enabled | Disabled |
 | **Connect clusters** | [Istio](#istio) | [Auto DNS](#dns-auto-config) | [Manual DNS](kof-verification.md#manual-dns-config) | |
 | **KOF Regional** | [its own ClusterDeployment](#regional-cluster) | shared with [KCM Region](kof-kcm-region.md) | shared with Management ([Regionless](kof-storing.md#regionless)) | just a ConfigMap |
-| Store KOF data **from Management to** | [Management](kof-storing.md#from-management-to-management) | [Regional](kof-storing.md#from-management-to-regional) | [Third-party](#kof-storing.md#from-management-to-third-party) | None |
+| Store KOF data **from Management to** | [Management](kof-storing.md#from-management-to-management) | [Regional](kof-storing.md#from-management-to-regional) | [Third-party](kof-storing.md#from-management-to-third-party) | None |
 
 Each aspect is independent of the others with the only exception:
 the regionless setup always stores KOF data from all clusters (including the management cluster)
