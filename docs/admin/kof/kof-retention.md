@@ -32,6 +32,10 @@ victoriametrics:
       retentionPeriod: "30d"
       replicationFactor: 2
       vmstorage:
+        resources:
+          limits:
+            cpu: "8"
+            memory: 8000Mi
         storage:
           volumeClaimTemplate:
             spec:
@@ -132,7 +136,10 @@ Add these values to the regional `ClusterDeployment`
 as the `spec.config.clusterAnnotations."k0rdent.mirantis.com/kof-storage-values"`
 described in the step 10 of the [Regional Cluster](kof-install.md#regional-cluster) section.
 
+### Regionless setup
+
+Add these values to the placeholders in the [Regionless](kof-storing.md#regionless) section.
+
 ### Management to Management case
 
-If you selected to store metrics/logs/traces of the management cluster in the same management cluster,
-apply the details in the [From Management to Management](kof-storing.md#from-management-to-management) section.
+Add these values to the placeholders in the [From Management to Management](kof-storing.md#from-management-to-management) section.

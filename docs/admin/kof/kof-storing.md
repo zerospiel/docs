@@ -6,7 +6,8 @@ KOF data (metrics, logs, traces) can be collected from each cluster and stored i
 
 ```mermaid
 sequenceDiagram
-    Child cluster->>Regional cluster: KOF data of the<br>child cluster<br>is stored in the<br>regional cluster.
+    Child cluster->>Regional cluster: KOF data of the<br>child cluster<br>is stored in the<br>regional cluster...
+    Child cluster->>Management cluster: ...unless the Regionless setup is used.
     Regional cluster->>Regional cluster: KOF data of the<br>regional cluster<br>is stored in the same<br>regional cluster.
     Management cluster->>Management cluster: KOF data of the<br>management cluster<br>can be stored in:<br><br>the same management cluster,
     Management cluster->>Regional cluster: the regional cluster,
@@ -27,6 +28,102 @@ See also [KOF Retention and Replication](kof-retention.md) guide
 and [From Management to Management](#from-management-to-management) option
 for the non-default storage class, space, retention, and replication details.
 
+## Regionless
+
+In the regionless setup there are no regional clusters.
+All child clusters and the management cluster send their metrics/logs/traces
+to the management cluster for storage.
+
+> WARNING:
+> If you already have regional clusters, applying this option unprovisions them,
+> which may result in data loss.
+> Create backups as described in the [Data Backup](kof-upgrade.md#data-backup) section
+> for all regional clusters.
+
+To apply this option:
+
+1. Merge this patch to the existing `kof-values.yaml`:
+
+    ```yaml
+    regionless:
+      enabled: true
+    ```
+
+    ??? note "If you have applied the [Istio](kof-install.md#istio) section:"
+
+        To allow child clusters to communicate with the management cluster,
+        use the following values during the Istio installation or upgrade:
+
+        ```
+        --set managementCluster.includeInMesh=true \
+        --set managementCluster.apiServer="https://EXAMPLE-control-plane:6443" \
+        --set-json 'gateway.resource.spec.servers[0]={"port":{"number":15443,"name":"tls","protocol":"TLS"},"tls":{"mode":"AUTO_PASSTHROUGH"},"hosts":["mothership-vmauth.kof.svc.cluster.local"]}'
+        ```
+
+        * With `managementCluster.includeInMesh` the management cluster itself is enrolled as a mesh member.
+            This will bootstrap Istio resources (remote secret, CA certificate, and east-west gateway)
+            for the management cluster in addition to the child clusters.
+        * The `managementCluster.apiServer` should be the externally accessible URL
+            of the management cluster Kubernetes API server.
+            This value is required when `includeInMesh` is set to `true`,
+            so that Istiod on child clusters can reach the management cluster API server.
+            Without this value, child clusters will not be able to access the management cluster.
+        * Note the `mothership-vmauth` instead of `{clusterName}-vmauth` in the `--set-json` line.
+            It is aligned with the default `regionless.clusterName=mothership` value.
+
+        > WARNING:
+        > By default, this creates an Istio Gateway resource that allows child clusters
+        > to access **any service** of the management cluster.
+        > You can use `gateway.resource` to customize the resource for your needs
+        > and restrict access only to the services you require.
+
+    ??? note "If you have not applied the Istio:"
+
+        Merge to `kof-values.yaml`:
+
+        ```yaml
+        regionless:
+          domain: mothership.kof.example.com
+        ```
+
+        Use your own domain. Child clusters will send KOF data to `https://vmauth.{domain}`.
+
+    ??? note "If you need self-signed / insecure TLS:"
+
+        Merge to `kof-values.yaml`:
+
+        ```yaml
+        tls:
+          selfSigned: true
+          insecureSkipVerify: true
+        ```
+
+    ??? note "If you want to use a non-default storage class, space, retention, replication:"
+
+        Adjust and merge this:
+
+        ```yaml
+        kof-regional:
+          values:
+            storage:
+              victoriametrics:
+                # ...
+              victoria-logs-cluster:
+                # ...
+              victoria-traces-cluster:
+                # ...
+        ```
+
+        See details in the [KOF Retention and Replication](kof-retention.md) guide.
+
+2. Apply `kof-values.yaml` to the [Management Cluster](kof-install.md/#management-cluster):
+
+{%
+    include-markdown "../../../includes/kof-install-includes.md"
+    start="<!--install-kof-start-->"
+    end="<!--install-kof-end-->"
+%}
+
 ## From Child and Regional
 
 KOF data collected from the child and regional clusters is routed out-of-the box.
@@ -36,7 +133,9 @@ No additional steps are required here.
 
 This option stores KOF data of the management cluster in the same management cluster.
 
-To apply this option:
+If you're using the [Regionless](#regionless) setup, no additional steps are needed.
+
+Otherwise, to apply this option:
 
 1. Merge this patch to the existing `kof-values.yaml`:
 
@@ -76,28 +175,12 @@ To apply this option:
         kof-mothership:
           values:
             victoriametrics:
-              vmcluster:
-                spec:
-                  retentionPeriod: "30d"
-                  replicationFactor: 2
-                  vmstorage:
-                    storage:
-                      volumeClaimTemplate:
-                        spec:
-                          storageClassName: <EXAMPLE_STORAGE_CLASS>
-                          resources:
-                            requests:
-                              storage: "100Gi"
+              # ...
         kof-child:
           values:
             storage:
               victoria-logs-cluster:
-                vlstorage:
-                  extraArgs:
-                    retentionPeriod: "30d"
-                  persistentVolume:
-                    storageClassName: <EXAMPLE_STORAGE_CLASS>
-                    size: "100Gi"
+                # ...
               victoria-traces-cluster:
                 vtstorage:
                   extraArgs:
