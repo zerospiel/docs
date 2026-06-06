@@ -182,8 +182,28 @@ Otherwise, to apply this option:
               victoria-logs-cluster:
                 # ...
               victoria-traces-cluster:
-                # ...
+                vtstorage:
+                  extraArgs:
+                    retentionPeriod: "30d"
+                  persistentVolume:
+                    storageClassName: <EXAMPLE_STORAGE_CLASS>
+                    size: "100Gi"
+              victoriametrics:
+                vlcluster_audit:
+                  spec:
+                    vlstorage:
+                      retentionPeriod: "1y"
+                      storage:
+                        volumeClaimTemplate:
+                          spec:
+                            storageClassName: <EXAMPLE_STORAGE_CLASS>
+                            resources:
+                              requests:
+                                storage: "100Gi"
         ```
+
+        To disable the audit logs cluster entirely, set `vlcluster_audit.enabled: false`
+        under `kof-storage.values`.
 
         See details in the [KOF Retention and Replication](kof-retention.md) guide.
 

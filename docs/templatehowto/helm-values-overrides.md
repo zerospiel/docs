@@ -151,7 +151,7 @@ only if anonymous authentication is explicitly configured.
 auth:
   configSecret:
     name: my-clusterdeployment-auth-config
-    key: auth-config.yaml
+    key: config
     hash: 1234567890abcdef
   configWithAnon: true
 ```
@@ -181,6 +181,70 @@ spec:
         api:
           extraArgs:
             {{- if .Values.auth.configSecret.name }}
-            authentication-config: {{ include "authentication-config.fullpath" . }}
+            {{- if .Values.auth.configSecret.hash }}
+            authentication-config: "/var/lib/k0s/auth/config-{{ .Values.auth.configSecret.hash }}.yaml"
+            {{- else }}
+            authentication-config: /var/lib/k0s/auth/config.yaml
+            {{- end }}
+            {{- end }}
+```
+
+---
+
+## `audit`
+
+See details in [Enabling Audit Logging](../admin/clusters/cluster-audit-policy.md).
+
+Set only when a `ClusterAuditPolicy` object is referenced in the `ClusterDeployment` `spec.auditPolicy`.
+
+
+| Path                     | Description                                                                                              |
+|--------------------------|----------------------------------------------------------------------------------------------------------|
+| `audit.policyRef.name`   | Name of the automatically generated ConfigMap with audit policy configuration (`<cd-name>-audit-policy`) |
+| `audit.policyRef.key`    | Key within the ConfigMap containing the audit policy config                                              |
+| `audit.policyRef.hash`   | Hash of the audit policy content (for change detection)                                                  |
+
+#### Example
+
+##### Values
+
+```yaml
+audit:
+  policyRef:
+    name: my-clusterdeployment-audit-policy
+    key: policy
+    hash: 1234567890abcdef
+```
+
+##### Usage
+
+```yaml
+apiVersion: controlplane.cluster.x-k8s.io/v1beta1
+kind: K0sControlPlane
+spec:
+  k0sConfigSpec:
+    {{- if .Values.audit.policyRef.name }}
+    files:
+      - contentFrom:
+          configMapRef:
+            name: {{ .Values.audit.policyRef.name  | quote }}
+            key: {{ default "policy" .Values.audit.policyRef.key  | quote }}
+        permissions: "0644"
+        {{- if .Values.audit.policyRef.hash }}
+        path: /var/lib/k0s/audit/policy-{{ .Values.audit.policyRef.hash }}.yaml
+        {{- else }}
+        path: /var/lib/k0s/audit/policy.yaml
+        {{- end }}
+    {{- end }}
+    k0s:
+      spec:
+        api:
+          extraArgs:
+            {{- if .Values.audit.policyRef.name }}
+            {{- if .Values.audit.policyRef.hash }}
+            audit-policy-file: "/var/lib/k0s/audit/policy-{{ .Values.audit.policyRef.hash }}.yaml"
+            {{- else }}
+            audit-policy-file: "/var/lib/k0s/audit/policy.yaml"
+            {{- end }}
             {{- end }}
 ```

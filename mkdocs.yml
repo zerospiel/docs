@@ -201,6 +201,7 @@ nav:
       - Upgrade to v1.6.0: admin/upgrade/upgrade-to-1-6-0.md
       - Upgrade to v1.7.0: admin/upgrade/upgrade-to-1-7-0.md
       - Upgrade to v1.8.0: admin/upgrade/upgrade-to-1-8-0.md
+      - Upgrade to v1.10.0: admin/upgrade/upgrade-to-1-10-0.md
     - Access Management:
       - Overview: admin/access/index.md
       - k0rdent Credentials Management:
@@ -309,6 +310,7 @@ nav:
   - Release Notes:
     - Overview: release-notes/index.md
     - v1.9.0: release-notes/release-notes-v1.9.0.md
+    - v1.10.0: release-notes/release-notes-v1.10.0.md
   - Contributing:
     - Overview: contrib/index.md
     - k0rdent documentation contributor's guide: contrib/k0rdent-documentation-contributors-guide.md
