@@ -114,6 +114,9 @@ If you are creating custom `ClusterTemplates`, you must explicitly reference the
 
 > WARNING:
 > Updating `spec.clusterAuth` changes the configuration hash and triggers a rolling recreation of control plane machines.
+> For clusters that were initially deployed with a single control plane node, this operation may cause the cluster to
+> lose etcd quorum during the rollout, potentially resulting in a cluster outage.
+> For mitigation steps and additional details, see [Cluster Control Plane Rollout](update-cluster.md#control-plane-machines-rollout).
 
 ### Example: `K0smotronControlPlane` Authentication Configuration
 
