@@ -57,6 +57,51 @@ victoria-logs-cluster:
 
 Details: [Values of victoria-logs-cluster](https://github.com/VictoriaMetrics/helm-charts/blob/master/charts/victoria-logs-cluster/values.yaml)
 
+### Audit Logs
+
+KOF collects Kubernetes audit logs by default and stores them in a dedicated VictoriaLogs cluster (`vlcluster_audit`),
+separate from the regular logs cluster, to allow a longer retention period (default: `1y`).
+
+To change the retention period, storage class, or volume size, adjust the following in `kof-storage` values:
+
+```yaml
+victoriametrics:
+  vlcluster_audit:
+    enabled: true
+    spec:
+      vlstorage:
+        retentionPeriod: "1y"
+        storage:
+          volumeClaimTemplate:
+            spec:
+              storageClassName: <EXAMPLE_STORAGE_CLASS>
+              resources:
+                requests:
+                  storage: "100Gi"
+```
+
+Details: [VLClusterSpec](https://docs.victoriametrics.com/operator/api/#vlclusterspec)
+
+To disable audit log **storage**, set `vlcluster_audit.enabled: false` in `kof-storage` values.
+
+To disable audit log **collection**, update the `kof-collectors` values to remove the `filelog/k8s_audit`
+receiver from the daemon collector pipeline:
+
+```yaml
+opentelemetry-kube-stack:
+  collectors:
+    daemon:
+      config:
+        service:
+          pipelines:
+            logs:
+              receivers:
+                - otlp
+                - receiver_creator
+                - filelog/syslog
+                - journald
+```
+
 ### Traces
 
 ```yaml
