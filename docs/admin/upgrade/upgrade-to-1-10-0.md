@@ -25,7 +25,7 @@ spec:
 For standalone clusters:
 
 > WARNING: The `--ignore-pre-flight-checks` flag is currently not supported for control plane nodes in
-> standalone clusters with k0s `v1.35.4+k0s.0`. See [Limitations](#limitations) for more details.
+> standalone clusters with k0s `v1.35.4+k0s.0`. 
 > Related issue: [--ignore-pre-flight-checks flag NOT exposed in the k0s <role> install commands](https://github.com/k0sproject/k0s/issues/7717).
 > This limitation is expected to be addressed in a future k0s release.
 

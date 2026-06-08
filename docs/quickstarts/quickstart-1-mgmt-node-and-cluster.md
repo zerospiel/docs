@@ -128,21 +128,34 @@ You should see something like:
 
 ```console { .no-copy }
 NAME                                                           READY   STATUS
-azureserviceoperator-controller-manager-86d566cdbc-rqkt9       1/1     Running
-capa-controller-manager-7cd699df45-28hth                       1/1     Running
-capi-controller-manager-6bc5fc5f88-hd8pv                       1/1     Running
-capv-controller-manager-bb5ff9bd5-7dsr9                        1/1     Running
-capz-controller-manager-5dd988768-qjdbl                        1/1     Running
-helm-controller-76f675f6b7-4d47l                               1/1     Running
-kcm-cert-manager-7c8bd964b4-nhxnq                              1/1     Running
-kcm-cert-manager-cainjector-56476c46f9-xvqhh                   1/1     Running
-kcm-cert-manager-webhook-69d7fccf68-s46w8                      1/1     Running
-kcm-cluster-api-operator-79459d8575-2s9jc                      1/1     Running
-kcm-controller-manager-64869d9f9d-zktgw                        1/1     Running
-k0smotron-controller-manager-bootstrap-6c5f6c7884-d2fqs        2/2     Running
-k0smotron-controller-manager-control-plane-857b8bffd4-zxkx2    2/2     Running
-k0smotron-controller-manager-infrastructure-7f77f55675-tv8vb   2/2     Running
-source-controller-5f648d6f5d-7mhz5                             1/1     Running
+NAME                                                           READY   STATUS    RESTARTS   AGE
+azureserviceoperator-controller-manager-db4c875d7-f68vz        1/1     Running   0          6h41m
+azureserviceoperator-controller-manager-db4c875d7-nzvmc        1/1     Running   0          6h41m
+capa-controller-manager-d68956949-88tqk                        1/1     Running   0          6h41m
+capd-controller-manager-84c76c4ddc-xvhnx                       1/1     Running   0          6h41m
+capg-controller-manager-578d48979c-6x85x                       1/1     Running   0          6h41m
+capi-controller-manager-9577f8854-5d2pz                        1/1     Running   0          6h42m
+capi-ipam-in-cluster-controller-manager-56c7bd877c-76dpp       1/1     Running   0          6h41m
+capi-ipam-infoblox-controller-manager-548877ddb5-wjtkg         1/1     Running   0          6h41m
+capk-controller-manager-7699d4479b-ncwpx                       1/1     Running   0          6h41m
+capo-controller-manager-6875d8fc54-rfcg5                       1/1     Running   0          6h40m
+capv-controller-manager-fd97b7d55-ncr64                        1/1     Running   0          6h41m
+capz-controller-manager-f698659cf-2mn9q                        1/1     Running   0          6h41m
+helm-controller-5466948d9f-5sr6m                               1/1     Running   0          6h45m
+k0smotron-controller-manager-bootstrap-5686664764-r7p5l        1/1     Running   0          6h42m
+k0smotron-controller-manager-control-plane-6456dfd98-jqm7j     1/1     Running   0          6h41m
+k0smotron-controller-manager-infrastructure-8479cbc858-wlxrc   1/1     Running   0          6h41m
+kcm-cert-manager-76c7bcbcff-6ln5x                              1/1     Running   0          6h45m
+kcm-cert-manager-cainjector-66c48469bb-jhvv4                   1/1     Running   0          6h45m
+kcm-cert-manager-webhook-f6587877f-4ndk9                       1/1     Running   0          6h45m
+kcm-cluster-api-operator-647d865b8c-2js6l                      1/1     Running   0          6h42m
+kcm-controller-manager-7d795bc8f-kmzw8                         1/1     Running   0          6h42m
+kcm-rbac-manager-7579db64d9-42p27                              1/1     Running   0          6h45m
+kcm-regional-telemetry-57fb8c6f8f-fljqp                        1/1     Running   0          6h45m
+kcm-reloader-fc9cbb8cf-mjpb5                                   1/1     Running   0          6h45m
+orc-controller-manager-6fb5b76975-jvlx6                        1/1     Running   0          6h42m
+source-controller-597784bdbb-zk62n                             1/1     Running   0          6h45m
+velero-5c95c499cf-wx2c8                                        1/1     Running   0          6h45m
 ```
 
 Pods reported in states other than Running should become ready momentarily.
@@ -158,16 +171,17 @@ kubectl get pods -n projectsveltos   # check pods in the projectsveltos namespac
 You should see something like:
 
 ```console { .no-copy }
-NAME                                     READY   STATUS    RESTARTS   AGE
-access-manager-cd49cffc9-c4q97           1/1     Running   0          16m
-addon-controller-64c7f69796-whw25        1/1     Running   0          16m
-classifier-manager-574c9d794d-j8852      1/1     Running   0          16m
-conversion-webhook-5d78b6c648-p6pxd      1/1     Running   0          16m
-event-manager-6df545b4d7-mbjh5           1/1     Running   0          16m
-hc-manager-7b749c57d-5phkb               1/1     Running   0          16m
-sc-manager-f5797c4f8-ptmvh               1/1     Running   0          16m
-shard-controller-767975966-v5qqn         1/1     Running   0          16m
-sveltos-agent-manager-56bbf5fb94-9lskd   1/1     Running   0          15m
+NAME                                      READY   STATUS    RESTARTS   AGE
+access-manager-84d4d7747d-c8hqk           1/1     Running   0          6h42m
+addon-controller-54b9c4f974-vfsg6         1/1     Running   0          6h41m
+classifier-manager-6556b9d7c7-5gk7f       1/1     Running   0          6h42m
+event-manager-5548b4f698-dz9h2            1/1     Running   0          6h42m
+hc-manager-7bd8cff8c-mf6fr                1/1     Running   0          6h42m
+mcp-server-554f4799b9-f8hgh               1/1     Running   0          6h42m
+sc-manager-567cc8f5d7-kgj95               1/1     Running   0          6h42m
+shard-controller-7bcb99dbf7-qwd7r         1/1     Running   0          6h42m
+sveltos-agent-manager-6c68cf498c-t4xl6    1/1     Running   0          6h41m
+techsupport-controller-7b5bd7d4c7-gsv5k   1/1     Running   0          6h42m
 ```
 
 If you have fewer pods than shown above, just wait 5 minutes or so for all the pods to reconcile and start running.
@@ -196,19 +210,19 @@ You should see output similar to:
 
 ```console { .no-copy }
 NAME                                   VALID
-cluster-api-{{{ extra.docsVersionInfo.providerVersions.dashVersions.clusterApi }}}                                 true
-cluster-api-provider-aws-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderAws }}}                    true
-cluster-api-provider-azure-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderAzure }}}                  true
-cluster-api-provider-docker-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderDocker }}}                 true
-cluster-api-provider-gcp-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderGcp }}}                    true
-cluster-api-provider-infoblox-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderInfoblox }}}               true
-cluster-api-provider-ipam-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderIpam }}}                   true
-cluster-api-provider-k0sproject-k0smotron-{{{ docsVersionInfo.providerVersions.dashVersions.k0smotron }}}   true
-cluster-api-provider-openstack-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderOpenstack }}}              true
-cluster-api-provider-vsphere-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderVsphere }}}                true
-k0smotron-{{{ docsVersionInfo.providerVersions.dashVersions.k0smotron }}}                                   true
+cluster-api-{{{ extra.docsVersionInfo.providerVersions.dashVersions.clusterApi }}}                                true
+cluster-api-provider-aws-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderAws }}}                   true
+cluster-api-provider-azure-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderAzure }}}                 true
+cluster-api-provider-docker-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderDocker }}}                true
+cluster-api-provider-gcp-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderGcp }}}                   true
+cluster-api-provider-infoblox-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderInfoblox }}}              true
+cluster-api-provider-ipam-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderIpam }}}                  true
+cluster-api-provider-k0sproject-k0smotron-{{{ docsVersionInfo.providerVersions.dashVersions.k0smotron }}}  true
+cluster-api-provider-openstack-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderOpenstack }}}             true
+cluster-api-provider-vsphere-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderVsphere }}}               true
 kcm-{{{ docsVersionInfo.k0rdentVersion }}}                                         true
-projectsveltos-{{{ docsVersionInfo.providerVersions.dashVersions.sveltosProvider }}}                             true
+kcm-regional-{{{ docsVersionInfo.providerVersions.dashVersions.regional }}}                               true
+projectsveltos-{{{ docsVersionInfo.providerVersions.dashVersions.sveltosProvider }}}                              true
 ```
 
 ## Verify that KCM ClusterTemplate objects are available
@@ -222,18 +236,19 @@ kubectl get clustertemplate -n kcm-system   # list clustertemplate objects in th
 You should see output similar to:
 
 ```console { .no-copy }
-NAME                            VALID
-adopted-cluster-{{{ extra.docsVersionInfo.providerVersions.dashVersions.adoptedCluster }}}           true
+NAME                             VALID
+adopted-cluster-{{{ docsVersionInfo.providerVersions.dashVersions.adoptedCluster }}}            true
 aws-eks-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsEksCluster }}}                   true
 aws-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsHostedCpCluster }}}             true
 aws-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsStandaloneCpCluster }}}         true
-azure-aks-{{{ extra.docsVersionInfo.providerVersions.dashVersions.azureAksCluster }}}                 true
+azure-aks-{{{ extra.docsVersionInfo.providerVersions.dashVersions.azureAksCluster }}}                  true
 azure-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.azureHostedCpCluster }}}           true
 azure-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.azureStandaloneCpCluster }}}       true
-docker-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.dockerHostedCpCluster }}}          true
-gcp-gke-{{{ extra.docsVersionInfo.providerVersions.dashVersions.gcpGkeCluster }}}                   true
-gcp-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.gcpHostedCpCluster }}}             true
-gcp-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.gcpStandaloneCpCluster }}}         true
+docker-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.azureHostedCpCluster }}}          true
+gcp-gke-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsEksCluster }}}                   true
+gcp-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsHostedCpCluster }}}             true
+gcp-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsStandaloneCpCluster }}}         true
+openstack-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.openstackStandaloneCpCluster }}}       true
 openstack-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.openstackStandaloneCpCluster }}}   true
 remote-cluster-{{{ extra.docsVersionInfo.providerVersions.dashVersions.remoteCluster }}}            true
 vsphere-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.vsphereHostedCpCluster }}}         true

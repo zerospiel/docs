@@ -10,6 +10,8 @@ Resource Types:
 
 - [AccessManagement](#accessmanagement)
 
+- [ClusterAuditPolicy](#clusterauditpolicy)
+
 - [ClusterAuthentication](#clusterauthentication)
 
 - [ClusterDataSource](#clusterdatasource)
@@ -573,6 +575,291 @@ merge patch.<br/>
       </tr></tbody>
 </table>
 
+## ClusterAuditPolicy
+<sup><sup>[↩ Parent](#k0rdentmirantiscomv1beta1 )</sup></sup>
+
+
+
+
+
+
+ClusterAuditPolicy is the Schema for the clusterauditpolicies API
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Required</th>
+        </tr>
+    </thead>
+    <tbody><tr>
+      <td><b>apiVersion</b></td>
+      <td>string</td>
+      <td>k0rdent.mirantis.com/v1beta1</td>
+      <td>true</td>
+      </tr>
+      <tr>
+      <td><b>kind</b></td>
+      <td>string</td>
+      <td>ClusterAuditPolicy</td>
+      <td>true</td>
+      </tr>
+      <tr>
+      <td><b><a href="https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.27/#objectmeta-v1-meta">metadata</a></b></td>
+      <td>object</td>
+      <td>Refer to the Kubernetes API documentation for the fields of the `metadata` field.</td>
+      <td>true</td>
+      </tr><tr>
+        <td><b><a href="#clusterauditpolicyspec">spec</a></b></td>
+        <td>object</td>
+        <td>
+          ClusterAuditPolicySpec defines the desired state of ClusterAuditPolicy<br/>
+          <br/>
+            <i>Validations</i>:<li>self == oldSelf: Spec is immutable</li>
+        </td>
+        <td>true</td>
+      </tr></tbody>
+</table>
+
+
+### ClusterAuditPolicy.spec
+<sup><sup>[↩ Parent](#clusterauditpolicy)</sup></sup>
+
+
+
+ClusterAuditPolicySpec defines the desired state of ClusterAuditPolicy
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Required</th>
+        </tr>
+    </thead>
+    <tbody><tr>
+        <td><b><a href="#clusterauditpolicyspecpolicy">policy</a></b></td>
+        <td>object</td>
+        <td>
+          Policy contains the full content of a kubernetes [Policy] object used to configure auditing.<br/>
+        </td>
+        <td>true</td>
+      </tr></tbody>
+</table>
+
+
+### ClusterAuditPolicy.spec.policy
+<sup><sup>[↩ Parent](#clusterauditpolicyspec)</sup></sup>
+
+
+
+Policy contains the full content of a kubernetes [Policy] object used to configure auditing.
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Required</th>
+        </tr>
+    </thead>
+    <tbody><tr>
+        <td><b><a href="#clusterauditpolicyspecpolicyrulesindex">rules</a></b></td>
+        <td>[]object</td>
+        <td>
+          Rules specify the audit Level a request should be recorded at.
+A request may match multiple rules, in which case the FIRST matching rule is used.
+The default audit level is None, but can be overridden by a catch-all rule at the end of the list.
+PolicyRules are strictly ordered.<br/>
+        </td>
+        <td>true</td>
+      </tr><tr>
+        <td><b>omitManagedFields</b></td>
+        <td>boolean</td>
+        <td>
+          OmitManagedFields indicates whether to omit the managed fields of the request
+and response bodies from being written to the API audit log.
+This is used as a global default - a value of 'true' will omit the managed fileds,
+otherwise the managed fields will be included in the API audit log.
+Note that this can also be specified per rule in which case the value specified
+in a rule will override the global default.<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>omitStages</b></td>
+        <td>[]string</td>
+        <td>
+          OmitStages is a list of stages for which no events are created. Note that this can also
+be specified per rule in which case the union of both are omitted.<br/>
+        </td>
+        <td>false</td>
+      </tr></tbody>
+</table>
+
+
+### ClusterAuditPolicy.spec.policy.rules[index]
+<sup><sup>[↩ Parent](#clusterauditpolicyspecpolicy)</sup></sup>
+
+
+
+PolicyRule maps requests based off metadata to an audit Level.
+Requests must match the rules of every field (an intersection of rules).
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Required</th>
+        </tr>
+    </thead>
+    <tbody><tr>
+        <td><b>level</b></td>
+        <td>string</td>
+        <td>
+          The Level that requests matching this rule are recorded at.<br/>
+        </td>
+        <td>true</td>
+      </tr><tr>
+        <td><b>namespaces</b></td>
+        <td>[]string</td>
+        <td>
+          Namespaces that this rule matches.
+The empty string "" matches non-namespaced resources.
+An empty list implies every namespace.<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>nonResourceURLs</b></td>
+        <td>[]string</td>
+        <td>
+          NonResourceURLs is a set of URL paths that should be audited.
+`*`s are allowed, but only as the full, final step in the path.
+Examples:
+- `/metrics` - Log requests for apiserver metrics
+- `/healthz*` - Log all health checks<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>omitManagedFields</b></td>
+        <td>boolean</td>
+        <td>
+          OmitManagedFields indicates whether to omit the managed fields of the request
+and response bodies from being written to the API audit log.
+- a value of 'true' will drop the managed fields from the API audit log
+- a value of 'false' indicates that the managed fileds should be included
+  in the API audit log
+Note that the value, if specified, in this rule will override the global default
+If a value is not specified then the global default specified in
+Policy.OmitManagedFields will stand.<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>omitStages</b></td>
+        <td>[]string</td>
+        <td>
+          OmitStages is a list of stages for which no events are created. Note that this can also
+be specified policy wide in which case the union of both are omitted.
+An empty list means no restrictions will apply.<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b><a href="#clusterauditpolicyspecpolicyrulesindexresourcesindex">resources</a></b></td>
+        <td>[]object</td>
+        <td>
+          Resources that this rule matches. An empty list implies all kinds in all API groups.<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>userGroups</b></td>
+        <td>[]string</td>
+        <td>
+          The user groups this rule applies to. A user is considered matching
+if it is a member of any of the UserGroups.
+An empty list implies every user group.<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>users</b></td>
+        <td>[]string</td>
+        <td>
+          The users (by authenticated user name) this rule applies to.
+An empty list implies every user.<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>verbs</b></td>
+        <td>[]string</td>
+        <td>
+          The verbs that match this rule.
+An empty list implies every verb.<br/>
+        </td>
+        <td>false</td>
+      </tr></tbody>
+</table>
+
+
+### ClusterAuditPolicy.spec.policy.rules[index].resources[index]
+<sup><sup>[↩ Parent](#clusterauditpolicyspecpolicyrulesindex)</sup></sup>
+
+
+
+GroupResources represents resource kinds in an API group.
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Required</th>
+        </tr>
+    </thead>
+    <tbody><tr>
+        <td><b>group</b></td>
+        <td>string</td>
+        <td>
+          Group is the name of the API group that contains the resources.
+The empty string represents the core API group.
+`*` matches all groups<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>resourceNames</b></td>
+        <td>[]string</td>
+        <td>
+          ResourceNames is a list of resource instance names that the policy matches.
+Using this field requires Resources to be specified.
+An empty list implies that every instance of the resource is matched.<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>resources</b></td>
+        <td>[]string</td>
+        <td>
+          Resources is a list of resources this rule applies to.
+
+For example:
+- `pods` matches pods.
+- `pods/log` matches the log subresource of pods.
+- `*` matches all resources and their subresources.
+- `pods/*` matches all subresources of pods.
+- `*/scale` matches all scale subresources.
+
+If wildcard is present, the validation rule will ensure resources do not
+overlap with each other.
+
+An empty list implies all resources and subresources in this API groups apply.<br/>
+        </td>
+        <td>false</td>
+      </tr></tbody>
+</table>
+
 ## ClusterAuthentication
 <sup><sup>[↩ Parent](#k0rdentmirantiscomv1beta1 )</sup></sup>
 
@@ -707,27 +994,6 @@ The minimum valid JWT payload must contain the following claims:
         <td>object</td>
         <td>
           If present --anonymous-auth must not be set<br/>
-        </td>
-        <td>false</td>
-      </tr><tr>
-        <td><b>apiVersion</b></td>
-        <td>string</td>
-        <td>
-          APIVersion defines the versioned schema of this representation of an object.
-Servers should convert recognized schemas to the latest internal value, and
-may reject unrecognized values.
-More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#resources<br/>
-        </td>
-        <td>false</td>
-      </tr><tr>
-        <td><b>kind</b></td>
-        <td>string</td>
-        <td>
-          Kind is a string value representing the REST resource this object represents.
-Servers may infer this from the endpoint the client submits requests to.
-Cannot be updated.
-In CamelCase.
-More info: https://git.k8s.io/community/contributors/devel/sig-architecture/api-conventions.md#types-kinds<br/>
         </td>
         <td>false</td>
       </tr></tbody>
@@ -1660,6 +1926,14 @@ ClusterDeploymentSpec defines the desired state of ClusterDeployment
         </td>
         <td>true</td>
       </tr><tr>
+        <td><b>auditPolicy</b></td>
+        <td>string</td>
+        <td>
+          AuditPolicy is the name reference to the related [ClusterAuditPolicy] object located in the same namespace
+containing audit policy configuration.<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
         <td><b>cleanupOnDeletion</b></td>
         <td>boolean</td>
         <td>
@@ -2334,25 +2608,6 @@ https://github.com/kubernetes/community/blob/master/contributors/design-proposal
         </tr>
     </thead>
     <tbody><tr>
-        <td><b>kind</b></td>
-        <td>enum</td>
-        <td>
-          Kind of the resource. Supported kinds are:
-- ConfigMap/Secret
-- flux GitRepository;OCIRepository;Bucket<br/>
-          <br/>
-            <i>Enum</i>: GitRepository, OCIRepository, Bucket, ConfigMap, Secret<br/>
-        </td>
-        <td>true</td>
-      </tr><tr>
-        <td><b>name</b></td>
-        <td>string</td>
-        <td>
-          Name of the referenced resource.
-Name can be expressed as a template and instantiate using any cluster field.<br/>
-        </td>
-        <td>true</td>
-      </tr><tr>
         <td><b>deploymentType</b></td>
         <td>enum</td>
         <td>
@@ -2364,6 +2619,27 @@ into the management cluster (local) or the managed cluster (remote)<br/>
         </td>
         <td>false</td>
       </tr><tr>
+        <td><b>kind</b></td>
+        <td>enum</td>
+        <td>
+          Kind of the resource. Supported kinds are:
+- ConfigMap/Secret
+- flux GitRepository;OCIRepository;Bucket
+Required when RemoteURL is not set.<br/>
+          <br/>
+            <i>Enum</i>: GitRepository, OCIRepository, Bucket, ConfigMap, Secret<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>name</b></td>
+        <td>string</td>
+        <td>
+          Name of the referenced resource.
+Name can be expressed as a template and instantiate using any cluster field.
+Required when RemoteURL is not set.<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
         <td><b>namespace</b></td>
         <td>string</td>
         <td>
@@ -2371,7 +2647,8 @@ into the management cluster (local) or the managed cluster (remote)<br/>
 For ClusterProfile namespace can be left empty. In such a case, namespace will
 be implicit set to cluster's namespace.
 For Profile namespace must be left empty. Profile namespace will be used.
-Namespace can be expressed as a template and instantiate using any cluster field.<br/>
+Namespace can be expressed as a template and instantiate using any cluster field.
+Not used when RemoteURL is set.<br/>
         </td>
         <td>false</td>
       </tr><tr>
@@ -2392,6 +2669,141 @@ and Sveltos will continue processing other PolicyRefs.<br/>
           Path to the directory containing the YAML files.
 Defaults to 'None', which translates to the root path of the SourceRef.
 Used only for GitRepository;OCIRepository;Bucket<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b><a href="#clusterdeploymentspecservicespecpolicyrefsindexremoteurl">remoteURL</a></b></td>
+        <td>object</td>
+        <td>
+          RemoteURL configures fetching content from an HTTP/HTTPS endpoint.
+When set, Kind/Name/Namespace must be omitted.<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>skipNamespaceCreation</b></td>
+        <td>boolean</td>
+        <td>
+          SkipNamespaceCreation indicates whether Sveltos should skip creating the namespace
+for namespaced resources defined in this PolicyRef.
+This field is ignored for cluster-scoped resources.
+By default, Sveltos attempts to get or create the target namespace if it does not exist.
+Setting this to true avoids those calls, which is necessary when Sveltos lacks
+permissions to manage namespaces at the cluster level.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>tier</b></td>
+        <td>integer</td>
+        <td>
+          Tier controls the order of deployment for resources coming from different PolicyRefs
+within the same ClusterProfile or Profile.
+When two PolicyRefs attempt to deploy the same resource, the PolicyRef with the lowest
+Tier value takes priority and deploys/updates the resource.
+This priority mechanism is only checked after the parent ClusterProfile has won
+the primary conflict resolution against other ClusterProfiles.
+Higher Tier values represent lower priority. The default Tier value is 100.<br/>
+          <br/>
+            <i>Format</i>: int32<br/>
+            <i>Default</i>: 100<br/>
+            <i>Minimum</i>: 1<br/>
+        </td>
+        <td>false</td>
+      </tr></tbody>
+</table>
+
+
+### ClusterDeployment.spec.serviceSpec.policyRefs[index].remoteURL
+<sup><sup>[↩ Parent](#clusterdeploymentspecservicespecpolicyrefsindex)</sup></sup>
+
+
+
+RemoteURL configures fetching content from an HTTP/HTTPS endpoint.
+When set, Kind/Name/Namespace must be omitted.
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Required</th>
+        </tr>
+    </thead>
+    <tbody><tr>
+        <td><b>url</b></td>
+        <td>string</td>
+        <td>
+          URL is an HTTP/HTTPS endpoint serving raw YAML/JSON/KYAML content.
+Sveltos fetches the content on every reconciliation and redeploys if the
+content hash has changed.<br/>
+        </td>
+        <td>true</td>
+      </tr><tr>
+        <td><b>interval</b></td>
+        <td>string</td>
+        <td>
+          Interval defines how often Sveltos re-fetches the URL to detect changes.
+Defaults to 5 minutes.<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b><a href="#clusterdeploymentspecservicespecpolicyrefsindexremoteurlsecretref">secretRef</a></b></td>
+        <td>object</td>
+        <td>
+          SecretRef references a Secret in the management cluster containing optional
+credentials for fetching the URL. Supported Secret keys:
+  "token"              — Bearer token (Authorization: Bearer <token>)
+  "username"+"password" — HTTP Basic Auth
+  "caFile"             — PEM-encoded CA certificate for TLS verification<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>template</b></td>
+        <td>boolean</td>
+        <td>
+          Template indicates that the content served at URL is a Go template that
+must be instantiated using cluster fields and templateResourceRefs values
+before deployment. Equivalent to the projectsveltos.io/template annotation
+on a ConfigMap or Secret.<br/>
+        </td>
+        <td>false</td>
+      </tr></tbody>
+</table>
+
+
+### ClusterDeployment.spec.serviceSpec.policyRefs[index].remoteURL.secretRef
+<sup><sup>[↩ Parent](#clusterdeploymentspecservicespecpolicyrefsindexremoteurl)</sup></sup>
+
+
+
+SecretRef references a Secret in the management cluster containing optional
+credentials for fetching the URL. Supported Secret keys:
+  "token"              — Bearer token (Authorization: Bearer <token>)
+  "username"+"password" — HTTP Basic Auth
+  "caFile"             — PEM-encoded CA certificate for TLS verification
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Required</th>
+        </tr>
+    </thead>
+    <tbody><tr>
+        <td><b>name</b></td>
+        <td>string</td>
+        <td>
+          Name of the referent.
+This field is effectively required, but due to backwards compatibility is
+allowed to be empty. Instances of this type with an empty value here are
+almost certainly wrong.
+More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names<br/>
+          <br/>
+            <i>Default</i>: <br/>
         </td>
         <td>false</td>
       </tr></tbody>
@@ -2484,6 +2896,15 @@ Service represents a Service to be deployed.
         <td>boolean</td>
         <td>
           Disable can be set to disable handling of this service.<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>helmAction</b></td>
+        <td>enum</td>
+        <td>
+          HelmChartAction specifies action on an helm chart<br/>
+          <br/>
+            <i>Enum</i>: Install, Uninstall<br/>
         </td>
         <td>false</td>
       </tr><tr>
@@ -2599,7 +3020,7 @@ The --wait flag will be set automatically if --atomic is used<br/>
         <td><b>createNamespace</b></td>
         <td>boolean</td>
         <td>
-          <br/>
+          Deprecated: use .installOptions.createNamespace instead.<br/>
         </td>
         <td>false</td>
       </tr><tr>
@@ -2638,6 +3059,13 @@ The --wait flag will be set automatically if --atomic is used<br/>
         </td>
         <td>false</td>
       </tr><tr>
+        <td><b><a href="#clusterdeploymentspecservicespecservicesindexhelmoptionsinstalloptions">installOptions</a></b></td>
+        <td>object</td>
+        <td>
+          InstallOptions are options specific to helm install<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
         <td><b>labels</b></td>
         <td>map[string]string</td>
         <td>
@@ -2648,7 +3076,7 @@ The --wait flag will be set automatically if --atomic is used<br/>
         <td><b>replace</b></td>
         <td>boolean</td>
         <td>
-          Replaces if set indicates to replace an older release with this one<br/>
+          Deprecated: use .installOptions.replace instead.<br/>
         </td>
         <td>false</td>
       </tr><tr>
@@ -2674,6 +3102,20 @@ By default, CRDs are installed if not already present.<br/>
         </td>
         <td>false</td>
       </tr><tr>
+        <td><b><a href="#clusterdeploymentspecservicespecservicesindexhelmoptionsuninstalloptions">uninstallOptions</a></b></td>
+        <td>object</td>
+        <td>
+          UninstallOptions are options specific to helm uninstall<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b><a href="#clusterdeploymentspecservicespecservicesindexhelmoptionsupgradeoptions">upgradeOptions</a></b></td>
+        <td>object</td>
+        <td>
+          UpgradeOptions are options specific to helm upgrade<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
         <td><b>wait</b></td>
         <td>boolean</td>
         <td>
@@ -2687,6 +3129,249 @@ are in a ready state before marking the release as successful. It will wait for 
         <td>
           if set and --wait enabled, will wait until all Jobs have been completed before marking the release as successful.
 It will wait for as long as --timeout<br/>
+        </td>
+        <td>false</td>
+      </tr></tbody>
+</table>
+
+
+### ClusterDeployment.spec.serviceSpec.services[index].helmOptions.installOptions
+<sup><sup>[↩ Parent](#clusterdeploymentspecservicespecservicesindexhelmoptions)</sup></sup>
+
+
+
+InstallOptions are options specific to helm install
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Required</th>
+        </tr>
+    </thead>
+    <tbody><tr>
+        <td><b>createNamespace</b></td>
+        <td>boolean</td>
+        <td>
+          Create the release namespace if not present. Defaults to true<br/>
+          <br/>
+            <i>Default</i>: true<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>disableHooks</b></td>
+        <td>boolean</td>
+        <td>
+          prevent hooks from running during install. If set to true, overrides
+DisableHooks in HelmOptions. Use this one when you want to selective
+disable hooks on install
+Default to false<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>replace</b></td>
+        <td>boolean</td>
+        <td>
+          Replaces if set indicates to replace an older release with this one<br/>
+          <br/>
+            <i>Default</i>: true<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>takeOwnership</b></td>
+        <td>boolean</td>
+        <td>
+          if set, install will ignore the check for helm annotations
+and take ownership of the existing resources<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr></tbody>
+</table>
+
+
+### ClusterDeployment.spec.serviceSpec.services[index].helmOptions.uninstallOptions
+<sup><sup>[↩ Parent](#clusterdeploymentspecservicespecservicesindexhelmoptions)</sup></sup>
+
+
+
+UninstallOptions are options specific to helm uninstall
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Required</th>
+        </tr>
+    </thead>
+    <tbody><tr>
+        <td><b>deletionPropagation</b></td>
+        <td>enum</td>
+        <td>
+          DeletionPropagation<br/>
+          <br/>
+            <i>Enum</i>: orphan, foreground, background<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>disableHooks</b></td>
+        <td>boolean</td>
+        <td>
+          prevent hooks from running during install. If set to true, overrides
+DisableHooks in HelmOptions. Use this one when you want to selective
+disable hooks on uninstall
+Default to false<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>keepHistory</b></td>
+        <td>boolean</td>
+        <td>
+          When uninstall a chart with this flag, Helm removes the resources associated with the chart,
+but it keeps the release information. This allows to see details about the uninstalled release
+using the helm history command.<br/>
+        </td>
+        <td>false</td>
+      </tr></tbody>
+</table>
+
+
+### ClusterDeployment.spec.serviceSpec.services[index].helmOptions.upgradeOptions
+<sup><sup>[↩ Parent](#clusterdeploymentspecservicespecservicesindexhelmoptions)</sup></sup>
+
+
+
+UpgradeOptions are options specific to helm upgrade
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Required</th>
+        </tr>
+    </thead>
+    <tbody><tr>
+        <td><b>cleanupOnFail</b></td>
+        <td>boolean</td>
+        <td>
+          CleanupOnFail will, if true, cause the upgrade to delete newly-created resources on a failed update.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>disableHooks</b></td>
+        <td>boolean</td>
+        <td>
+          prevent hooks from running during install. If set to true, overrides
+DisableHooks in HelmOptions. Use this one when you want to selective
+disable hooks on upgrade
+Default to false<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>force</b></td>
+        <td>boolean</td>
+        <td>
+          Force will, if set to `true`, ignore certain warnings and perform the upgrade anyway.
+This should be used with caution.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>maxHistory</b></td>
+        <td>integer</td>
+        <td>
+          MaxHistory limits the maximum number of revisions saved per release
+Default to 2<br/>
+          <br/>
+            <i>Default</i>: 2<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>recreate</b></td>
+        <td>boolean</td>
+        <td>
+          Recreate will (if true) recreate pods after a rollback.
+
+Deprecated: This field is no longer supported<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>resetThenReuseValues</b></td>
+        <td>boolean</td>
+        <td>
+          ResetThenReuseValues will reset the values to the chart's built-ins then merge with user's last supplied values.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>resetValues</b></td>
+        <td>boolean</td>
+        <td>
+          ResetValues will reset the values to the chart's built-ins rather than merging with existing.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>reuseValues</b></td>
+        <td>boolean</td>
+        <td>
+          ReuseValues copies values from the current release to a new release if the
+new release does not have any values. If the request already has values,
+or if there are no values in the current release, this does nothing.
+This is skipped if the ResetValues flag is set, in which case the
+request values are not altered.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>subNotes</b></td>
+        <td>boolean</td>
+        <td>
+          SubNotes determines whether sub-notes are rendered in the chart.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>takeOwnership</b></td>
+        <td>boolean</td>
+        <td>
+          if set, upgrade will ignore the check for helm annotations
+and take ownership of the existing resources<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>upgradeCRDs</b></td>
+        <td>boolean</td>
+        <td>
+          UpgradeCRDs upgrade CRDs from the Helm Chart's crds directory
+By default, CRDs are not applied during Helm upgrade action by Helm
+https://helm.sh/docs/chart_best_practices/custom_resource_definitions/<br/>
+          <br/>
+            <i>Default</i>: false<br/>
         </td>
         <td>false</td>
       </tr></tbody>
@@ -2766,6 +3451,17 @@ Name and namespace can be expressed as a template and instantiate using any clus
         </td>
         <td>true</td>
       </tr><tr>
+        <td><b>ignoreStatusChanges</b></td>
+        <td>boolean</td>
+        <td>
+          IgnoreStatusChanges indicates whether changes to the status of the referenced
+resource should be ignored. If set to true, only changes to the spec or
+metadata (generation change) will trigger a reconciliation.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
         <td><b>optional</b></td>
         <td>boolean</td>
         <td>
@@ -2774,6 +3470,17 @@ If set to true and the resource is not found, the error will be ignored,
 and Sveltos will continue processing other TemplateResourceRefs.<br/>
           <br/>
             <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>watchFields</b></td>
+        <td>[]string</td>
+        <td>
+          WatchFields is an optional list of dot-separated field paths to include
+when computing the hash for this resource (e.g. "status.readyReplicas",
+"metadata.labels"). When non-empty, only the listed fields are hashed and
+IgnoreStatusChanges is ignored. Use this when you need to react to a
+specific field without being sensitive to every other change on the object.<br/>
         </td>
         <td>false</td>
       </tr></tbody>
@@ -3060,7 +3767,7 @@ ServiceState is the state of a Service
         <td>
           State is the state of the Service<br/>
           <br/>
-            <i>Enum</i>: Deployed, Provisioning, Failed, Pending, Deleting<br/>
+            <i>Enum</i>: Deployed, Provisioning, Failed, Pending, Deleting, Deleted<br/>
         </td>
         <td>true</td>
       </tr><tr>
@@ -3292,7 +3999,7 @@ AvailableUpgrade is the definition of the available upgrade for the Template
         <td>
           Version is the version of the Template to which the upgrade is available.<br/>
         </td>
-        <td>true</td>
+        <td>false</td>
       </tr></tbody>
 </table>
 
@@ -3991,7 +4698,7 @@ AvailableUpgrade is the definition of the available upgrade for the Template
         <td>
           Version is the version of the Template to which the upgrade is available.<br/>
         </td>
-        <td>true</td>
+        <td>false</td>
       </tr></tbody>
 </table>
 
@@ -4180,6 +4887,8 @@ Helm chart representing the template.<br/>
         <td>object</td>
         <td>
           ChartSpec defines the desired state of the HelmChart to be created by the controller<br/>
+          <br/>
+            <i>Validations</i>:<li>!has(self.verify) || self.sourceRef.kind == 'HelmRepository': spec.verify is only supported when spec.sourceRef.kind is 'HelmRepository'</li>
         </td>
         <td>false</td>
       </tr></tbody>
@@ -4266,17 +4975,17 @@ when ResourceSpec is used as part of Helm chart configuration.<br/>
         </td>
         <td>true</td>
       </tr><tr>
-        <td><b>path</b></td>
-        <td>string</td>
-        <td>
-          Path to the directory containing the resource manifest.<br/>
-        </td>
-        <td>true</td>
-      </tr><tr>
         <td><b><a href="#clustertemplatespechelmchartsourcelocalsourceref">localSourceRef</a></b></td>
         <td>object</td>
         <td>
           LocalSourceRef is the local source of the kustomize manifest.<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>path</b></td>
+        <td>string</td>
+        <td>
+          Path to the directory containing the resource manifest.<br/>
         </td>
         <td>false</td>
       </tr><tr>
@@ -5998,7 +6707,10 @@ required to be supported by the provider.
         <td><b>schemaConfigMapName</b></td>
         <td>string</td>
         <td>
-          SchemaConfigMapName specifies the name of the ConfigMap that contains the JSON Schema definition for Helm Chart validation.<br/>
+          SchemaConfigMapName specifies the name of the ConfigMap that contains the JSON Schema definition for Helm Chart validation.
+
+The ConfigMap's namespace is either in the system namespace for [ProviderTemplate]
+or is inherited from either a [ClusterTemplate] or a [ServiceTemplate].<br/>
         </td>
         <td>false</td>
       </tr><tr>
@@ -6909,7 +7621,7 @@ file in object storage.<br/>
         <td>
           Phase is the current state of the Backup.<br/>
           <br/>
-            <i>Enum</i>: New, FailedValidation, InProgress, WaitingForPluginOperations, WaitingForPluginOperationsPartiallyFailed, Finalizing, FinalizingPartiallyFailed, Completed, PartiallyFailed, Failed, Deleting<br/>
+            <i>Enum</i>: New, Queued, ReadyToStart, FailedValidation, InProgress, WaitingForPluginOperations, WaitingForPluginOperationsPartiallyFailed, Finalizing, FinalizingPartiallyFailed, Completed, PartiallyFailed, Failed, Deleting<br/>
         </td>
         <td>false</td>
       </tr><tr>
@@ -6919,6 +7631,14 @@ file in object storage.<br/>
           Progress contains information about the backup's execution progress. Note
 that this information is best-effort only -- if Velero fails to update it
 during a backup for any reason, it may be inaccurate/stale.<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>queuePosition</b></td>
+        <td>integer</td>
+        <td>
+          QueuePosition is the position of the backup in the queue.
+Only relevant when Phase is "Queued"<br/>
         </td>
         <td>false</td>
       </tr><tr>
@@ -7235,7 +7955,7 @@ file in object storage.<br/>
         <td>
           Phase is the current state of the Backup.<br/>
           <br/>
-            <i>Enum</i>: New, FailedValidation, InProgress, WaitingForPluginOperations, WaitingForPluginOperationsPartiallyFailed, Finalizing, FinalizingPartiallyFailed, Completed, PartiallyFailed, Failed, Deleting<br/>
+            <i>Enum</i>: New, Queued, ReadyToStart, FailedValidation, InProgress, WaitingForPluginOperations, WaitingForPluginOperationsPartiallyFailed, Finalizing, FinalizingPartiallyFailed, Completed, PartiallyFailed, Failed, Deleting<br/>
         </td>
         <td>false</td>
       </tr><tr>
@@ -7245,6 +7965,14 @@ file in object storage.<br/>
           Progress contains information about the backup's execution progress. Note
 that this information is best-effort only -- if Velero fails to update it
 during a backup for any reason, it may be inaccurate/stale.<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>queuePosition</b></td>
+        <td>integer</td>
+        <td>
+          QueuePosition is the position of the backup in the queue.
+Only relevant when Phase is "Queued"<br/>
         </td>
         <td>false</td>
       </tr><tr>
@@ -7913,6 +8641,20 @@ MultiClusterServiceSpec defines the desired state of MultiClusterService
         </td>
         <td>false</td>
       </tr><tr>
+        <td><b>keepServicesOnSelectorMismatch</b></td>
+        <td>boolean</td>
+        <td>
+          KeepServicesOnSelectorMismatch indicates whether ServiceSets owned by
+this MultiClusterService should be preserved on clusters whose labels
+no longer match ClusterSelector, including the case where
+ClusterSelector is cleared. When true, services already deployed on
+such clusters keep running, enabling per-cluster opt-in rollouts driven
+by selector changes.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
         <td><b><a href="#multiclusterservicespecservicespec">serviceSpec</a></b></td>
         <td>object</td>
         <td>
@@ -8355,25 +9097,6 @@ https://github.com/kubernetes/community/blob/master/contributors/design-proposal
         </tr>
     </thead>
     <tbody><tr>
-        <td><b>kind</b></td>
-        <td>enum</td>
-        <td>
-          Kind of the resource. Supported kinds are:
-- ConfigMap/Secret
-- flux GitRepository;OCIRepository;Bucket<br/>
-          <br/>
-            <i>Enum</i>: GitRepository, OCIRepository, Bucket, ConfigMap, Secret<br/>
-        </td>
-        <td>true</td>
-      </tr><tr>
-        <td><b>name</b></td>
-        <td>string</td>
-        <td>
-          Name of the referenced resource.
-Name can be expressed as a template and instantiate using any cluster field.<br/>
-        </td>
-        <td>true</td>
-      </tr><tr>
         <td><b>deploymentType</b></td>
         <td>enum</td>
         <td>
@@ -8385,6 +9108,27 @@ into the management cluster (local) or the managed cluster (remote)<br/>
         </td>
         <td>false</td>
       </tr><tr>
+        <td><b>kind</b></td>
+        <td>enum</td>
+        <td>
+          Kind of the resource. Supported kinds are:
+- ConfigMap/Secret
+- flux GitRepository;OCIRepository;Bucket
+Required when RemoteURL is not set.<br/>
+          <br/>
+            <i>Enum</i>: GitRepository, OCIRepository, Bucket, ConfigMap, Secret<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>name</b></td>
+        <td>string</td>
+        <td>
+          Name of the referenced resource.
+Name can be expressed as a template and instantiate using any cluster field.
+Required when RemoteURL is not set.<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
         <td><b>namespace</b></td>
         <td>string</td>
         <td>
@@ -8392,7 +9136,8 @@ into the management cluster (local) or the managed cluster (remote)<br/>
 For ClusterProfile namespace can be left empty. In such a case, namespace will
 be implicit set to cluster's namespace.
 For Profile namespace must be left empty. Profile namespace will be used.
-Namespace can be expressed as a template and instantiate using any cluster field.<br/>
+Namespace can be expressed as a template and instantiate using any cluster field.
+Not used when RemoteURL is set.<br/>
         </td>
         <td>false</td>
       </tr><tr>
@@ -8413,6 +9158,141 @@ and Sveltos will continue processing other PolicyRefs.<br/>
           Path to the directory containing the YAML files.
 Defaults to 'None', which translates to the root path of the SourceRef.
 Used only for GitRepository;OCIRepository;Bucket<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b><a href="#multiclusterservicespecservicespecpolicyrefsindexremoteurl">remoteURL</a></b></td>
+        <td>object</td>
+        <td>
+          RemoteURL configures fetching content from an HTTP/HTTPS endpoint.
+When set, Kind/Name/Namespace must be omitted.<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>skipNamespaceCreation</b></td>
+        <td>boolean</td>
+        <td>
+          SkipNamespaceCreation indicates whether Sveltos should skip creating the namespace
+for namespaced resources defined in this PolicyRef.
+This field is ignored for cluster-scoped resources.
+By default, Sveltos attempts to get or create the target namespace if it does not exist.
+Setting this to true avoids those calls, which is necessary when Sveltos lacks
+permissions to manage namespaces at the cluster level.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>tier</b></td>
+        <td>integer</td>
+        <td>
+          Tier controls the order of deployment for resources coming from different PolicyRefs
+within the same ClusterProfile or Profile.
+When two PolicyRefs attempt to deploy the same resource, the PolicyRef with the lowest
+Tier value takes priority and deploys/updates the resource.
+This priority mechanism is only checked after the parent ClusterProfile has won
+the primary conflict resolution against other ClusterProfiles.
+Higher Tier values represent lower priority. The default Tier value is 100.<br/>
+          <br/>
+            <i>Format</i>: int32<br/>
+            <i>Default</i>: 100<br/>
+            <i>Minimum</i>: 1<br/>
+        </td>
+        <td>false</td>
+      </tr></tbody>
+</table>
+
+
+### MultiClusterService.spec.serviceSpec.policyRefs[index].remoteURL
+<sup><sup>[↩ Parent](#multiclusterservicespecservicespecpolicyrefsindex)</sup></sup>
+
+
+
+RemoteURL configures fetching content from an HTTP/HTTPS endpoint.
+When set, Kind/Name/Namespace must be omitted.
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Required</th>
+        </tr>
+    </thead>
+    <tbody><tr>
+        <td><b>url</b></td>
+        <td>string</td>
+        <td>
+          URL is an HTTP/HTTPS endpoint serving raw YAML/JSON/KYAML content.
+Sveltos fetches the content on every reconciliation and redeploys if the
+content hash has changed.<br/>
+        </td>
+        <td>true</td>
+      </tr><tr>
+        <td><b>interval</b></td>
+        <td>string</td>
+        <td>
+          Interval defines how often Sveltos re-fetches the URL to detect changes.
+Defaults to 5 minutes.<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b><a href="#multiclusterservicespecservicespecpolicyrefsindexremoteurlsecretref">secretRef</a></b></td>
+        <td>object</td>
+        <td>
+          SecretRef references a Secret in the management cluster containing optional
+credentials for fetching the URL. Supported Secret keys:
+  "token"              — Bearer token (Authorization: Bearer <token>)
+  "username"+"password" — HTTP Basic Auth
+  "caFile"             — PEM-encoded CA certificate for TLS verification<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>template</b></td>
+        <td>boolean</td>
+        <td>
+          Template indicates that the content served at URL is a Go template that
+must be instantiated using cluster fields and templateResourceRefs values
+before deployment. Equivalent to the projectsveltos.io/template annotation
+on a ConfigMap or Secret.<br/>
+        </td>
+        <td>false</td>
+      </tr></tbody>
+</table>
+
+
+### MultiClusterService.spec.serviceSpec.policyRefs[index].remoteURL.secretRef
+<sup><sup>[↩ Parent](#multiclusterservicespecservicespecpolicyrefsindexremoteurl)</sup></sup>
+
+
+
+SecretRef references a Secret in the management cluster containing optional
+credentials for fetching the URL. Supported Secret keys:
+  "token"              — Bearer token (Authorization: Bearer <token>)
+  "username"+"password" — HTTP Basic Auth
+  "caFile"             — PEM-encoded CA certificate for TLS verification
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Required</th>
+        </tr>
+    </thead>
+    <tbody><tr>
+        <td><b>name</b></td>
+        <td>string</td>
+        <td>
+          Name of the referent.
+This field is effectively required, but due to backwards compatibility is
+allowed to be empty. Instances of this type with an empty value here are
+almost certainly wrong.
+More info: https://kubernetes.io/docs/concepts/overview/working-with-objects/names/#names<br/>
+          <br/>
+            <i>Default</i>: <br/>
         </td>
         <td>false</td>
       </tr></tbody>
@@ -8505,6 +9385,15 @@ Service represents a Service to be deployed.
         <td>boolean</td>
         <td>
           Disable can be set to disable handling of this service.<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>helmAction</b></td>
+        <td>enum</td>
+        <td>
+          HelmChartAction specifies action on an helm chart<br/>
+          <br/>
+            <i>Enum</i>: Install, Uninstall<br/>
         </td>
         <td>false</td>
       </tr><tr>
@@ -8620,7 +9509,7 @@ The --wait flag will be set automatically if --atomic is used<br/>
         <td><b>createNamespace</b></td>
         <td>boolean</td>
         <td>
-          <br/>
+          Deprecated: use .installOptions.createNamespace instead.<br/>
         </td>
         <td>false</td>
       </tr><tr>
@@ -8659,6 +9548,13 @@ The --wait flag will be set automatically if --atomic is used<br/>
         </td>
         <td>false</td>
       </tr><tr>
+        <td><b><a href="#multiclusterservicespecservicespecservicesindexhelmoptionsinstalloptions">installOptions</a></b></td>
+        <td>object</td>
+        <td>
+          InstallOptions are options specific to helm install<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
         <td><b>labels</b></td>
         <td>map[string]string</td>
         <td>
@@ -8669,7 +9565,7 @@ The --wait flag will be set automatically if --atomic is used<br/>
         <td><b>replace</b></td>
         <td>boolean</td>
         <td>
-          Replaces if set indicates to replace an older release with this one<br/>
+          Deprecated: use .installOptions.replace instead.<br/>
         </td>
         <td>false</td>
       </tr><tr>
@@ -8695,6 +9591,20 @@ By default, CRDs are installed if not already present.<br/>
         </td>
         <td>false</td>
       </tr><tr>
+        <td><b><a href="#multiclusterservicespecservicespecservicesindexhelmoptionsuninstalloptions">uninstallOptions</a></b></td>
+        <td>object</td>
+        <td>
+          UninstallOptions are options specific to helm uninstall<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b><a href="#multiclusterservicespecservicespecservicesindexhelmoptionsupgradeoptions">upgradeOptions</a></b></td>
+        <td>object</td>
+        <td>
+          UpgradeOptions are options specific to helm upgrade<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
         <td><b>wait</b></td>
         <td>boolean</td>
         <td>
@@ -8708,6 +9618,249 @@ are in a ready state before marking the release as successful. It will wait for 
         <td>
           if set and --wait enabled, will wait until all Jobs have been completed before marking the release as successful.
 It will wait for as long as --timeout<br/>
+        </td>
+        <td>false</td>
+      </tr></tbody>
+</table>
+
+
+### MultiClusterService.spec.serviceSpec.services[index].helmOptions.installOptions
+<sup><sup>[↩ Parent](#multiclusterservicespecservicespecservicesindexhelmoptions)</sup></sup>
+
+
+
+InstallOptions are options specific to helm install
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Required</th>
+        </tr>
+    </thead>
+    <tbody><tr>
+        <td><b>createNamespace</b></td>
+        <td>boolean</td>
+        <td>
+          Create the release namespace if not present. Defaults to true<br/>
+          <br/>
+            <i>Default</i>: true<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>disableHooks</b></td>
+        <td>boolean</td>
+        <td>
+          prevent hooks from running during install. If set to true, overrides
+DisableHooks in HelmOptions. Use this one when you want to selective
+disable hooks on install
+Default to false<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>replace</b></td>
+        <td>boolean</td>
+        <td>
+          Replaces if set indicates to replace an older release with this one<br/>
+          <br/>
+            <i>Default</i>: true<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>takeOwnership</b></td>
+        <td>boolean</td>
+        <td>
+          if set, install will ignore the check for helm annotations
+and take ownership of the existing resources<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr></tbody>
+</table>
+
+
+### MultiClusterService.spec.serviceSpec.services[index].helmOptions.uninstallOptions
+<sup><sup>[↩ Parent](#multiclusterservicespecservicespecservicesindexhelmoptions)</sup></sup>
+
+
+
+UninstallOptions are options specific to helm uninstall
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Required</th>
+        </tr>
+    </thead>
+    <tbody><tr>
+        <td><b>deletionPropagation</b></td>
+        <td>enum</td>
+        <td>
+          DeletionPropagation<br/>
+          <br/>
+            <i>Enum</i>: orphan, foreground, background<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>disableHooks</b></td>
+        <td>boolean</td>
+        <td>
+          prevent hooks from running during install. If set to true, overrides
+DisableHooks in HelmOptions. Use this one when you want to selective
+disable hooks on uninstall
+Default to false<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>keepHistory</b></td>
+        <td>boolean</td>
+        <td>
+          When uninstall a chart with this flag, Helm removes the resources associated with the chart,
+but it keeps the release information. This allows to see details about the uninstalled release
+using the helm history command.<br/>
+        </td>
+        <td>false</td>
+      </tr></tbody>
+</table>
+
+
+### MultiClusterService.spec.serviceSpec.services[index].helmOptions.upgradeOptions
+<sup><sup>[↩ Parent](#multiclusterservicespecservicespecservicesindexhelmoptions)</sup></sup>
+
+
+
+UpgradeOptions are options specific to helm upgrade
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Required</th>
+        </tr>
+    </thead>
+    <tbody><tr>
+        <td><b>cleanupOnFail</b></td>
+        <td>boolean</td>
+        <td>
+          CleanupOnFail will, if true, cause the upgrade to delete newly-created resources on a failed update.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>disableHooks</b></td>
+        <td>boolean</td>
+        <td>
+          prevent hooks from running during install. If set to true, overrides
+DisableHooks in HelmOptions. Use this one when you want to selective
+disable hooks on upgrade
+Default to false<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>force</b></td>
+        <td>boolean</td>
+        <td>
+          Force will, if set to `true`, ignore certain warnings and perform the upgrade anyway.
+This should be used with caution.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>maxHistory</b></td>
+        <td>integer</td>
+        <td>
+          MaxHistory limits the maximum number of revisions saved per release
+Default to 2<br/>
+          <br/>
+            <i>Default</i>: 2<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>recreate</b></td>
+        <td>boolean</td>
+        <td>
+          Recreate will (if true) recreate pods after a rollback.
+
+Deprecated: This field is no longer supported<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>resetThenReuseValues</b></td>
+        <td>boolean</td>
+        <td>
+          ResetThenReuseValues will reset the values to the chart's built-ins then merge with user's last supplied values.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>resetValues</b></td>
+        <td>boolean</td>
+        <td>
+          ResetValues will reset the values to the chart's built-ins rather than merging with existing.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>reuseValues</b></td>
+        <td>boolean</td>
+        <td>
+          ReuseValues copies values from the current release to a new release if the
+new release does not have any values. If the request already has values,
+or if there are no values in the current release, this does nothing.
+This is skipped if the ResetValues flag is set, in which case the
+request values are not altered.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>subNotes</b></td>
+        <td>boolean</td>
+        <td>
+          SubNotes determines whether sub-notes are rendered in the chart.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>takeOwnership</b></td>
+        <td>boolean</td>
+        <td>
+          if set, upgrade will ignore the check for helm annotations
+and take ownership of the existing resources<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>upgradeCRDs</b></td>
+        <td>boolean</td>
+        <td>
+          UpgradeCRDs upgrade CRDs from the Helm Chart's crds directory
+By default, CRDs are not applied during Helm upgrade action by Helm
+https://helm.sh/docs/chart_best_practices/custom_resource_definitions/<br/>
+          <br/>
+            <i>Default</i>: false<br/>
         </td>
         <td>false</td>
       </tr></tbody>
@@ -8787,6 +9940,17 @@ Name and namespace can be expressed as a template and instantiate using any clus
         </td>
         <td>true</td>
       </tr><tr>
+        <td><b>ignoreStatusChanges</b></td>
+        <td>boolean</td>
+        <td>
+          IgnoreStatusChanges indicates whether changes to the status of the referenced
+resource should be ignored. If set to true, only changes to the spec or
+metadata (generation change) will trigger a reconciliation.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
         <td><b>optional</b></td>
         <td>boolean</td>
         <td>
@@ -8795,6 +9959,17 @@ If set to true and the resource is not found, the error will be ignored,
 and Sveltos will continue processing other TemplateResourceRefs.<br/>
           <br/>
             <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>watchFields</b></td>
+        <td>[]string</td>
+        <td>
+          WatchFields is an optional list of dot-separated field paths to include
+when computing the hash for this resource (e.g. "status.readyReplicas",
+"metadata.labels"). When non-empty, only the listed fields are hashed and
+IgnoreStatusChanges is ignored. Use this when you need to react to a
+specific field without being sensitive to every other change on the object.<br/>
         </td>
         <td>false</td>
       </tr></tbody>
@@ -9171,7 +10346,7 @@ ServiceState is the state of a Service
         <td>
           State is the state of the Service<br/>
           <br/>
-            <i>Enum</i>: Deployed, Provisioning, Failed, Pending, Deleting<br/>
+            <i>Enum</i>: Deployed, Provisioning, Failed, Pending, Deleting, Deleted<br/>
         </td>
         <td>true</td>
       </tr><tr>
@@ -9403,7 +10578,7 @@ AvailableUpgrade is the definition of the available upgrade for the Template
         <td>
           Version is the version of the Template to which the upgrade is available.<br/>
         </td>
-        <td>true</td>
+        <td>false</td>
       </tr></tbody>
 </table>
 
@@ -9550,6 +10725,8 @@ Helm chart representing the template.<br/>
         <td>object</td>
         <td>
           ChartSpec defines the desired state of the HelmChart to be created by the controller<br/>
+          <br/>
+            <i>Validations</i>:<li>!has(self.verify) || self.sourceRef.kind == 'HelmRepository': spec.verify is only supported when spec.sourceRef.kind is 'HelmRepository'</li>
         </td>
         <td>false</td>
       </tr></tbody>
@@ -9636,17 +10813,17 @@ when ResourceSpec is used as part of Helm chart configuration.<br/>
         </td>
         <td>true</td>
       </tr><tr>
-        <td><b>path</b></td>
-        <td>string</td>
-        <td>
-          Path to the directory containing the resource manifest.<br/>
-        </td>
-        <td>true</td>
-      </tr><tr>
         <td><b><a href="#providertemplatespechelmchartsourcelocalsourceref">localSourceRef</a></b></td>
         <td>object</td>
         <td>
           LocalSourceRef is the local source of the kustomize manifest.<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>path</b></td>
+        <td>string</td>
+        <td>
+          Path to the directory containing the resource manifest.<br/>
         </td>
         <td>false</td>
       </tr><tr>
@@ -11361,7 +12538,10 @@ that can be used when creating ClusterDeployment objects.<br/>
         <td><b>schemaConfigMapName</b></td>
         <td>string</td>
         <td>
-          SchemaConfigMapName specifies the name of the ConfigMap that contains the JSON Schema definition for Helm Chart validation.<br/>
+          SchemaConfigMapName specifies the name of the ConfigMap that contains the JSON Schema definition for Helm Chart validation.
+
+The ConfigMap's namespace is either in the system namespace for [ProviderTemplate]
+or is inherited from either a [ClusterTemplate] or a [ServiceTemplate].<br/>
         </td>
         <td>false</td>
       </tr><tr>
@@ -12477,6 +13657,15 @@ is backed by Helm chart, then the namespace is the namespace where the Helm rele
         </td>
         <td>true</td>
       </tr><tr>
+        <td><b>helmAction</b></td>
+        <td>enum</td>
+        <td>
+          HelmChartAction specifies action on an helm chart<br/>
+          <br/>
+            <i>Enum</i>: Install, Uninstall<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
         <td><b><a href="#servicesetspecservicesindexhelmoptions">helmOptions</a></b></td>
         <td>object</td>
         <td>
@@ -12536,7 +13725,7 @@ The --wait flag will be set automatically if --atomic is used<br/>
         <td><b>createNamespace</b></td>
         <td>boolean</td>
         <td>
-          <br/>
+          Deprecated: use .installOptions.createNamespace instead.<br/>
         </td>
         <td>false</td>
       </tr><tr>
@@ -12575,6 +13764,13 @@ The --wait flag will be set automatically if --atomic is used<br/>
         </td>
         <td>false</td>
       </tr><tr>
+        <td><b><a href="#servicesetspecservicesindexhelmoptionsinstalloptions">installOptions</a></b></td>
+        <td>object</td>
+        <td>
+          InstallOptions are options specific to helm install<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
         <td><b>labels</b></td>
         <td>map[string]string</td>
         <td>
@@ -12585,7 +13781,7 @@ The --wait flag will be set automatically if --atomic is used<br/>
         <td><b>replace</b></td>
         <td>boolean</td>
         <td>
-          Replaces if set indicates to replace an older release with this one<br/>
+          Deprecated: use .installOptions.replace instead.<br/>
         </td>
         <td>false</td>
       </tr><tr>
@@ -12611,6 +13807,20 @@ By default, CRDs are installed if not already present.<br/>
         </td>
         <td>false</td>
       </tr><tr>
+        <td><b><a href="#servicesetspecservicesindexhelmoptionsuninstalloptions">uninstallOptions</a></b></td>
+        <td>object</td>
+        <td>
+          UninstallOptions are options specific to helm uninstall<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b><a href="#servicesetspecservicesindexhelmoptionsupgradeoptions">upgradeOptions</a></b></td>
+        <td>object</td>
+        <td>
+          UpgradeOptions are options specific to helm upgrade<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
         <td><b>wait</b></td>
         <td>boolean</td>
         <td>
@@ -12624,6 +13834,249 @@ are in a ready state before marking the release as successful. It will wait for 
         <td>
           if set and --wait enabled, will wait until all Jobs have been completed before marking the release as successful.
 It will wait for as long as --timeout<br/>
+        </td>
+        <td>false</td>
+      </tr></tbody>
+</table>
+
+
+### ServiceSet.spec.services[index].helmOptions.installOptions
+<sup><sup>[↩ Parent](#servicesetspecservicesindexhelmoptions)</sup></sup>
+
+
+
+InstallOptions are options specific to helm install
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Required</th>
+        </tr>
+    </thead>
+    <tbody><tr>
+        <td><b>createNamespace</b></td>
+        <td>boolean</td>
+        <td>
+          Create the release namespace if not present. Defaults to true<br/>
+          <br/>
+            <i>Default</i>: true<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>disableHooks</b></td>
+        <td>boolean</td>
+        <td>
+          prevent hooks from running during install. If set to true, overrides
+DisableHooks in HelmOptions. Use this one when you want to selective
+disable hooks on install
+Default to false<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>replace</b></td>
+        <td>boolean</td>
+        <td>
+          Replaces if set indicates to replace an older release with this one<br/>
+          <br/>
+            <i>Default</i>: true<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>takeOwnership</b></td>
+        <td>boolean</td>
+        <td>
+          if set, install will ignore the check for helm annotations
+and take ownership of the existing resources<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr></tbody>
+</table>
+
+
+### ServiceSet.spec.services[index].helmOptions.uninstallOptions
+<sup><sup>[↩ Parent](#servicesetspecservicesindexhelmoptions)</sup></sup>
+
+
+
+UninstallOptions are options specific to helm uninstall
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Required</th>
+        </tr>
+    </thead>
+    <tbody><tr>
+        <td><b>deletionPropagation</b></td>
+        <td>enum</td>
+        <td>
+          DeletionPropagation<br/>
+          <br/>
+            <i>Enum</i>: orphan, foreground, background<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>disableHooks</b></td>
+        <td>boolean</td>
+        <td>
+          prevent hooks from running during install. If set to true, overrides
+DisableHooks in HelmOptions. Use this one when you want to selective
+disable hooks on uninstall
+Default to false<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>keepHistory</b></td>
+        <td>boolean</td>
+        <td>
+          When uninstall a chart with this flag, Helm removes the resources associated with the chart,
+but it keeps the release information. This allows to see details about the uninstalled release
+using the helm history command.<br/>
+        </td>
+        <td>false</td>
+      </tr></tbody>
+</table>
+
+
+### ServiceSet.spec.services[index].helmOptions.upgradeOptions
+<sup><sup>[↩ Parent](#servicesetspecservicesindexhelmoptions)</sup></sup>
+
+
+
+UpgradeOptions are options specific to helm upgrade
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Required</th>
+        </tr>
+    </thead>
+    <tbody><tr>
+        <td><b>cleanupOnFail</b></td>
+        <td>boolean</td>
+        <td>
+          CleanupOnFail will, if true, cause the upgrade to delete newly-created resources on a failed update.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>disableHooks</b></td>
+        <td>boolean</td>
+        <td>
+          prevent hooks from running during install. If set to true, overrides
+DisableHooks in HelmOptions. Use this one when you want to selective
+disable hooks on upgrade
+Default to false<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>force</b></td>
+        <td>boolean</td>
+        <td>
+          Force will, if set to `true`, ignore certain warnings and perform the upgrade anyway.
+This should be used with caution.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>maxHistory</b></td>
+        <td>integer</td>
+        <td>
+          MaxHistory limits the maximum number of revisions saved per release
+Default to 2<br/>
+          <br/>
+            <i>Default</i>: 2<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>recreate</b></td>
+        <td>boolean</td>
+        <td>
+          Recreate will (if true) recreate pods after a rollback.
+
+Deprecated: This field is no longer supported<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>resetThenReuseValues</b></td>
+        <td>boolean</td>
+        <td>
+          ResetThenReuseValues will reset the values to the chart's built-ins then merge with user's last supplied values.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>resetValues</b></td>
+        <td>boolean</td>
+        <td>
+          ResetValues will reset the values to the chart's built-ins rather than merging with existing.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>reuseValues</b></td>
+        <td>boolean</td>
+        <td>
+          ReuseValues copies values from the current release to a new release if the
+new release does not have any values. If the request already has values,
+or if there are no values in the current release, this does nothing.
+This is skipped if the ResetValues flag is set, in which case the
+request values are not altered.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>subNotes</b></td>
+        <td>boolean</td>
+        <td>
+          SubNotes determines whether sub-notes are rendered in the chart.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>takeOwnership</b></td>
+        <td>boolean</td>
+        <td>
+          if set, upgrade will ignore the check for helm annotations
+and take ownership of the existing resources<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>upgradeCRDs</b></td>
+        <td>boolean</td>
+        <td>
+          UpgradeCRDs upgrade CRDs from the Helm Chart's crds directory
+By default, CRDs are not applied during Helm upgrade action by Helm
+https://helm.sh/docs/chart_best_practices/custom_resource_definitions/<br/>
+          <br/>
+            <i>Default</i>: false<br/>
         </td>
         <td>false</td>
       </tr></tbody>
@@ -12687,7 +14140,7 @@ ServiceSetStatus defines the observed state of ServiceSet
         <td><b>deployed</b></td>
         <td>boolean</td>
         <td>
-          Deployed is true if the ServiceSet has been deployed<br/>
+          Deployed indicates whether all services were successfully deployed<br/>
           <br/>
             <i>Default</i>: false<br/>
         </td>
@@ -12960,7 +14413,7 @@ ServiceState is the state of a Service
         <td>
           State is the state of the Service<br/>
           <br/>
-            <i>Enum</i>: Deployed, Provisioning, Failed, Pending, Deleting<br/>
+            <i>Enum</i>: Deployed, Provisioning, Failed, Pending, Deleting, Deleted<br/>
         </td>
         <td>true</td>
       </tr><tr>
@@ -13226,7 +14679,7 @@ AvailableUpgrade is the definition of the available upgrade for the Template
         <td>
           Version is the version of the Template to which the upgrade is available.<br/>
         </td>
-        <td>true</td>
+        <td>false</td>
       </tr></tbody>
 </table>
 
@@ -13427,6 +14880,8 @@ Helm chart representing the template.<br/>
         <td>object</td>
         <td>
           ChartSpec defines the desired state of the HelmChart to be created by the controller<br/>
+          <br/>
+            <i>Validations</i>:<li>!has(self.verify) || self.sourceRef.kind == 'HelmRepository': spec.verify is only supported when spec.sourceRef.kind is 'HelmRepository'</li>
         </td>
         <td>false</td>
       </tr></tbody>
@@ -13513,17 +14968,17 @@ when ResourceSpec is used as part of Helm chart configuration.<br/>
         </td>
         <td>true</td>
       </tr><tr>
-        <td><b>path</b></td>
-        <td>string</td>
-        <td>
-          Path to the directory containing the resource manifest.<br/>
-        </td>
-        <td>true</td>
-      </tr><tr>
         <td><b><a href="#servicetemplatespechelmchartsourcelocalsourceref">localSourceRef</a></b></td>
         <td>object</td>
         <td>
           LocalSourceRef is the local source of the kustomize manifest.<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>path</b></td>
+        <td>string</td>
+        <td>
+          Path to the directory containing the resource manifest.<br/>
         </td>
         <td>false</td>
       </tr><tr>
@@ -15181,7 +16636,7 @@ The --wait flag will be set automatically if --atomic is used<br/>
         <td><b>createNamespace</b></td>
         <td>boolean</td>
         <td>
-          <br/>
+          Deprecated: use .installOptions.createNamespace instead.<br/>
         </td>
         <td>false</td>
       </tr><tr>
@@ -15220,6 +16675,13 @@ The --wait flag will be set automatically if --atomic is used<br/>
         </td>
         <td>false</td>
       </tr><tr>
+        <td><b><a href="#servicetemplatespechelmoptionsinstalloptions">installOptions</a></b></td>
+        <td>object</td>
+        <td>
+          InstallOptions are options specific to helm install<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
         <td><b>labels</b></td>
         <td>map[string]string</td>
         <td>
@@ -15230,7 +16692,7 @@ The --wait flag will be set automatically if --atomic is used<br/>
         <td><b>replace</b></td>
         <td>boolean</td>
         <td>
-          Replaces if set indicates to replace an older release with this one<br/>
+          Deprecated: use .installOptions.replace instead.<br/>
         </td>
         <td>false</td>
       </tr><tr>
@@ -15256,6 +16718,20 @@ By default, CRDs are installed if not already present.<br/>
         </td>
         <td>false</td>
       </tr><tr>
+        <td><b><a href="#servicetemplatespechelmoptionsuninstalloptions">uninstallOptions</a></b></td>
+        <td>object</td>
+        <td>
+          UninstallOptions are options specific to helm uninstall<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b><a href="#servicetemplatespechelmoptionsupgradeoptions">upgradeOptions</a></b></td>
+        <td>object</td>
+        <td>
+          UpgradeOptions are options specific to helm upgrade<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
         <td><b>wait</b></td>
         <td>boolean</td>
         <td>
@@ -15269,6 +16745,249 @@ are in a ready state before marking the release as successful. It will wait for 
         <td>
           if set and --wait enabled, will wait until all Jobs have been completed before marking the release as successful.
 It will wait for as long as --timeout<br/>
+        </td>
+        <td>false</td>
+      </tr></tbody>
+</table>
+
+
+### ServiceTemplate.spec.helmOptions.installOptions
+<sup><sup>[↩ Parent](#servicetemplatespechelmoptions)</sup></sup>
+
+
+
+InstallOptions are options specific to helm install
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Required</th>
+        </tr>
+    </thead>
+    <tbody><tr>
+        <td><b>createNamespace</b></td>
+        <td>boolean</td>
+        <td>
+          Create the release namespace if not present. Defaults to true<br/>
+          <br/>
+            <i>Default</i>: true<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>disableHooks</b></td>
+        <td>boolean</td>
+        <td>
+          prevent hooks from running during install. If set to true, overrides
+DisableHooks in HelmOptions. Use this one when you want to selective
+disable hooks on install
+Default to false<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>replace</b></td>
+        <td>boolean</td>
+        <td>
+          Replaces if set indicates to replace an older release with this one<br/>
+          <br/>
+            <i>Default</i>: true<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>takeOwnership</b></td>
+        <td>boolean</td>
+        <td>
+          if set, install will ignore the check for helm annotations
+and take ownership of the existing resources<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr></tbody>
+</table>
+
+
+### ServiceTemplate.spec.helmOptions.uninstallOptions
+<sup><sup>[↩ Parent](#servicetemplatespechelmoptions)</sup></sup>
+
+
+
+UninstallOptions are options specific to helm uninstall
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Required</th>
+        </tr>
+    </thead>
+    <tbody><tr>
+        <td><b>deletionPropagation</b></td>
+        <td>enum</td>
+        <td>
+          DeletionPropagation<br/>
+          <br/>
+            <i>Enum</i>: orphan, foreground, background<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>disableHooks</b></td>
+        <td>boolean</td>
+        <td>
+          prevent hooks from running during install. If set to true, overrides
+DisableHooks in HelmOptions. Use this one when you want to selective
+disable hooks on uninstall
+Default to false<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>keepHistory</b></td>
+        <td>boolean</td>
+        <td>
+          When uninstall a chart with this flag, Helm removes the resources associated with the chart,
+but it keeps the release information. This allows to see details about the uninstalled release
+using the helm history command.<br/>
+        </td>
+        <td>false</td>
+      </tr></tbody>
+</table>
+
+
+### ServiceTemplate.spec.helmOptions.upgradeOptions
+<sup><sup>[↩ Parent](#servicetemplatespechelmoptions)</sup></sup>
+
+
+
+UpgradeOptions are options specific to helm upgrade
+
+<table>
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Description</th>
+            <th>Required</th>
+        </tr>
+    </thead>
+    <tbody><tr>
+        <td><b>cleanupOnFail</b></td>
+        <td>boolean</td>
+        <td>
+          CleanupOnFail will, if true, cause the upgrade to delete newly-created resources on a failed update.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>disableHooks</b></td>
+        <td>boolean</td>
+        <td>
+          prevent hooks from running during install. If set to true, overrides
+DisableHooks in HelmOptions. Use this one when you want to selective
+disable hooks on upgrade
+Default to false<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>force</b></td>
+        <td>boolean</td>
+        <td>
+          Force will, if set to `true`, ignore certain warnings and perform the upgrade anyway.
+This should be used with caution.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>maxHistory</b></td>
+        <td>integer</td>
+        <td>
+          MaxHistory limits the maximum number of revisions saved per release
+Default to 2<br/>
+          <br/>
+            <i>Default</i>: 2<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>recreate</b></td>
+        <td>boolean</td>
+        <td>
+          Recreate will (if true) recreate pods after a rollback.
+
+Deprecated: This field is no longer supported<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>resetThenReuseValues</b></td>
+        <td>boolean</td>
+        <td>
+          ResetThenReuseValues will reset the values to the chart's built-ins then merge with user's last supplied values.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>resetValues</b></td>
+        <td>boolean</td>
+        <td>
+          ResetValues will reset the values to the chart's built-ins rather than merging with existing.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>reuseValues</b></td>
+        <td>boolean</td>
+        <td>
+          ReuseValues copies values from the current release to a new release if the
+new release does not have any values. If the request already has values,
+or if there are no values in the current release, this does nothing.
+This is skipped if the ResetValues flag is set, in which case the
+request values are not altered.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>subNotes</b></td>
+        <td>boolean</td>
+        <td>
+          SubNotes determines whether sub-notes are rendered in the chart.<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>takeOwnership</b></td>
+        <td>boolean</td>
+        <td>
+          if set, upgrade will ignore the check for helm annotations
+and take ownership of the existing resources<br/>
+          <br/>
+            <i>Default</i>: false<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>upgradeCRDs</b></td>
+        <td>boolean</td>
+        <td>
+          UpgradeCRDs upgrade CRDs from the Helm Chart's crds directory
+By default, CRDs are not applied during Helm upgrade action by Helm
+https://helm.sh/docs/chart_best_practices/custom_resource_definitions/<br/>
+          <br/>
+            <i>Default</i>: false<br/>
         </td>
         <td>false</td>
       </tr></tbody>
@@ -15303,17 +17022,17 @@ when ResourceSpec is used as part of Helm chart configuration.<br/>
         </td>
         <td>true</td>
       </tr><tr>
-        <td><b>path</b></td>
-        <td>string</td>
-        <td>
-          Path to the directory containing the resource manifest.<br/>
-        </td>
-        <td>true</td>
-      </tr><tr>
         <td><b><a href="#servicetemplatespeckustomizelocalsourceref">localSourceRef</a></b></td>
         <td>object</td>
         <td>
           LocalSourceRef is the local source of the kustomize manifest.<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>path</b></td>
+        <td>string</td>
+        <td>
+          Path to the directory containing the resource manifest.<br/>
         </td>
         <td>false</td>
       </tr><tr>
@@ -16703,17 +18422,17 @@ when ResourceSpec is used as part of Helm chart configuration.<br/>
         </td>
         <td>true</td>
       </tr><tr>
-        <td><b>path</b></td>
-        <td>string</td>
-        <td>
-          Path to the directory containing the resource manifest.<br/>
-        </td>
-        <td>true</td>
-      </tr><tr>
         <td><b><a href="#servicetemplatespecresourceslocalsourceref">localSourceRef</a></b></td>
         <td>object</td>
         <td>
           LocalSourceRef is the local source of the kustomize manifest.<br/>
+        </td>
+        <td>false</td>
+      </tr><tr>
+        <td><b>path</b></td>
+        <td>string</td>
+        <td>
+          Path to the directory containing the resource manifest.<br/>
         </td>
         <td>false</td>
       </tr><tr>
@@ -18148,7 +19867,10 @@ that can be used when creating ClusterDeployment objects.<br/>
         <td><b>schemaConfigMapName</b></td>
         <td>string</td>
         <td>
-          SchemaConfigMapName specifies the name of the ConfigMap that contains the JSON Schema definition for Helm Chart validation.<br/>
+          SchemaConfigMapName specifies the name of the ConfigMap that contains the JSON Schema definition for Helm Chart validation.
+
+The ConfigMap's namespace is either in the system namespace for [ProviderTemplate]
+or is inherited from either a [ClusterTemplate] or a [ServiceTemplate].<br/>
         </td>
         <td>false</td>
       </tr><tr>
