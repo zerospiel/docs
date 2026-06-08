@@ -55,18 +55,17 @@ kubectl get pods -n projectsveltos
 ```
 
 ```console { .no-copy }
-NAME                                       READY   STATUS    RESTARTS   AGE
-access-manager-c7fcff5-h86f9               1/1     Running   0          20h
-addon-controller-69b4bc995-bn7nl           1/1     Running   0          20h
-classifier-manager-6b4bf7ccd7-g74n6        1/1     Running   0          20h
-drift-detection-manager-64cbb969d6-lqh5x   1/1     Running   0          20h
-event-manager-88dd9795b-dmrwq              1/1     Running   0          20h
-hc-manager-5d69454f9c-2pmdr                1/1     Running   0          20h
-mcp-server-575979f9dd-pjgmx                1/1     Running   0          20h
-sc-manager-8b59fb5c4-v9bl8                 1/1     Running   0          20h
-shard-controller-f4cf55db6-78pjn           1/1     Running   0          20h
-sveltos-agent-manager-75c9b8dc45-5mvdp     1/1     Running   0          20h
-techsupport-controller-6589c84864-vfzhl    1/1     Running   0          20h
+NAME                                      READY   STATUS    RESTARTS   AGE
+access-manager-84d4d7747d-c8hqk           1/1     Running   0          6h31m
+addon-controller-54b9c4f974-vfsg6         1/1     Running   0          6h30m
+classifier-manager-6556b9d7c7-5gk7f       1/1     Running   0          6h31m
+event-manager-5548b4f698-dz9h2            1/1     Running   0          6h31m
+hc-manager-7bd8cff8c-mf6fr                1/1     Running   0          6h31m
+mcp-server-554f4799b9-f8hgh               1/1     Running   0          6h31m
+sc-manager-567cc8f5d7-kgj95               1/1     Running   0          6h31m
+shard-controller-7bcb99dbf7-qwd7r         1/1     Running   0          6h31m
+sveltos-agent-manager-6c68cf498c-t4xl6    1/1     Running   0          6h30m
+techsupport-controller-7b5bd7d4c7-gsv5k   1/1     Running   0          6h31m
 ```
 
 ```bash
@@ -74,7 +73,7 @@ kubectl get pods -n projectsveltos --no-headers | wc -l
 ```
 
 ```console { .no-copy }
-11
+10
 ```
 
 If any of these pods are missing, simply give {{{ docsVersionInfo.k0rdentName }}} more time. If there's a problem, you'll see pods crashing and restarting, and you can see what's happening by describing the pod, as in:
@@ -94,18 +93,18 @@ kubectl get providertemplate -n kcm-system
 ```
 ```console { .no-copy }
 NAME                                   VALID
-cluster-api-{{{ extra.docsVersionInfo.providerVersions.dashVersions.clusterApi }}}                                 true
+cluster-api-{{{ extra.docsVersionInfo.providerVersions.dashVersions.clusterApi }}}                                true
 cluster-api-provider-aws-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderAws }}}                   true
 cluster-api-provider-azure-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderAzure }}}                 true
 cluster-api-provider-docker-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderDocker }}}                true
 cluster-api-provider-gcp-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderGcp }}}                   true
-cluster-api-provider-infoblox-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderInfoblox }}}               true
-cluster-api-provider-ipam-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderIpam }}}                   true
+cluster-api-provider-infoblox-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderInfoblox }}}              true
+cluster-api-provider-ipam-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderIpam }}}                  true
 cluster-api-provider-k0sproject-k0smotron-{{{ docsVersionInfo.providerVersions.dashVersions.k0smotron }}}  true
 cluster-api-provider-openstack-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderOpenstack }}}             true
 cluster-api-provider-vsphere-{{{ docsVersionInfo.providerVersions.dashVersions.clusterApiProviderVsphere }}}               true
 kcm-{{{ docsVersionInfo.k0rdentVersion }}}                                         true
-kcm-regional-{{{ docsVersionInfo.providerVersions.dashVersions.regional }}}                                true
+kcm-regional-{{{ docsVersionInfo.providerVersions.dashVersions.regional }}}                               true
 projectsveltos-{{{ docsVersionInfo.providerVersions.dashVersions.sveltosProvider }}}                              true
 ```
 
@@ -119,14 +118,14 @@ kubectl get clustertemplate -n kcm-system
 ```console { .no-copy }
 NAME                             VALID
 adopted-cluster-{{{ docsVersionInfo.providerVersions.dashVersions.adoptedCluster }}}            true
-aws-eks-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsEksCluster }}}                    true
+aws-eks-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsEksCluster }}}                   true
 aws-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsHostedCpCluster }}}             true
 aws-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsStandaloneCpCluster }}}         true
 azure-aks-{{{ extra.docsVersionInfo.providerVersions.dashVersions.azureAksCluster }}}                  true
 azure-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.azureHostedCpCluster }}}           true
 azure-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.azureStandaloneCpCluster }}}       true
 docker-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.azureHostedCpCluster }}}          true
-gcp-gke-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsEksCluster }}}                    true
+gcp-gke-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsEksCluster }}}                   true
 gcp-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsHostedCpCluster }}}             true
 gcp-standalone-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.awsStandaloneCpCluster }}}         true
 openstack-hosted-cp-{{{ extra.docsVersionInfo.providerVersions.dashVersions.openstackStandaloneCpCluster }}}       true

@@ -123,7 +123,6 @@ Refer to "Service Dependencies" in [Deploy beach-head Services using Cluster Dep
 
 > WARNING:
 > `.spec.serviceSpec.priority` is **deprecated**. Use `.spec.serviceSpec.provider.config.priority` instead.
-> See [Provider Configuration](servicetemplate-parameters.md#provider-configuration) for details.
 
 The priority for the services managed by a ClusterDeployment or MultiClusterService is set via `.spec.serviceSpec.provider.config.priority` (or the deprecated `.spec.serviceSpec.priority`).
 
